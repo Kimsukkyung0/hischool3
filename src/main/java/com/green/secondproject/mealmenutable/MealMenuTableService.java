@@ -1,4 +1,4 @@
 package com.green.secondproject.mealmenutable;
 
-public class MealMenuController {
+public class MealMenuTableService {
 }
