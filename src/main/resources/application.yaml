@@ -1,3 +1,9 @@
+springboot:
+  jwt:
+    access-secret: DeaguGreenArtAcademyClass502ForJavaSpringBootaaaasdf
+    refresh-secret: HelloWorldRefreshTokenCreateBySecretHaHaaasdfasdf
+    header-scheme-name: Authorization
+    token-type: Bearer
 spring:
   servlet:
     multipart:
@@ -8,10 +14,12 @@ spring:
     url: jdbc:mariadb://192.168.0.144:3306/team_c
     username: team_c
     password: green502
+
 # mybatis config
 mybatis:
   type-aliases-package: com.green.secondproject
   mapper-locations: classpath:mapper/**/*.xml
+
 # swagger
 springdoc:
   swagger-ui:
