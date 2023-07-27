@@ -5,15 +5,7 @@
 <mapper namespace="com.green.secondproject.teacher.subject.SubjectMapper">
 
 
-    <select id="sbjCate" resultType="SubjectVo">
-        SELECT nm FROM sbj_category
-        WHERE TYPE = 1
-    </select>
+<select id="">
 
-    <select id="subDetail">
-        SELECT * FROM subject A
-        INNER JOIN sbj_category B
-        ON A.category_id = B.category_id
-        WHERE A.category_id = #{category_id} AND TYPE =1
-    </select>
+</select>
 </mapper>

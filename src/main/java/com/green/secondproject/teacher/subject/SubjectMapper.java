@@ -8,8 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface SubjectMapper {
-    List<SubjectVo> sbjCate();
-    List<SubjectDetailVo> subDetail();
 
 
 }

@@ -23,16 +23,4 @@ public class SubjectController {
 
 
 
-
-    @GetMapping("/subCate")
-    @Operation(summary = "과목계열")
-    public List<SubjectVo> sbjCate(){
-        return serivce.sbjCate();
-    }
-
-    @GetMapping
-    @Operation(summary = "세부과목")
-    public List<SubjectDetailVo> subDetail() {
-        return serivce.subDetail();
-    }
 }

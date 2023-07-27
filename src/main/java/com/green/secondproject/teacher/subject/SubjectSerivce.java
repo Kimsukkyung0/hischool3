@@ -14,12 +14,7 @@ public class SubjectSerivce {
     private final SubjectMapper mapper;
 
 
-    public List<SubjectVo> sbjCate(){
-        return mapper.sbjCate();
+
     }
 
-    public List<SubjectDetailVo> subDetail() {
-        return mapper.subDetail();
-    }
 
-}
