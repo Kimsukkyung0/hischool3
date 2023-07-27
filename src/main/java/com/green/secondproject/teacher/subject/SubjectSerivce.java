@@ -12,7 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectSerivce {
     private final SubjectMapper mapper;
+    List<SubjectVo> subcate(){
 
+        return mapper.subcate();
+    }
 
 
     }

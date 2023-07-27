@@ -8,5 +8,4 @@ import lombok.Data;
 public class SubjectVo {
     private long category_id;
     private String nm;
-    private int type;
 }

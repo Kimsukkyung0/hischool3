@@ -5,7 +5,9 @@
 <mapper namespace="com.green.secondproject.teacher.subject.SubjectMapper">
 
 
-<select id="">
-
+<select id="subcate" resultType="SubjectVo">
+    SELECT category_id,nm
+    FROM sbj_category
+    WHERE TYPE = 1;
 </select>
 </mapper>
