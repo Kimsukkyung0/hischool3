@@ -1,7 +1,7 @@
 package com.green.secondproject.header;
 
-import com.green.secondproject.header.model.SelSchoolInfoDto;
 import com.green.secondproject.header.model.SelSchoolInfoVo;
+import com.green.secondproject.header.model.SelSchoolLogoVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +18,12 @@ public class HeaderController {
 
 
     @GetMapping
-    public List<SelSchoolInfoVo> SelectSchoolInfo(@RequestParam int studentId) {
-        return service.selSchoolInfo(studentId);
+    public List<SelSchoolInfoVo> SelectSchoolInfo(@RequestParam int userId) {
+        return service.selSchoolInfo(userId);
+    }
+
+    @GetMapping("/asdf")
+    public List<SelSchoolLogoVo> SelectSchoolLogo(@RequestParam int userId) {
+        return service.selSchoolLogo(userId);
     }
 }

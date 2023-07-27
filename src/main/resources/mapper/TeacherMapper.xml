@@ -3,5 +3,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.teacher.TeacherMapper">
+    
+    <select id="selSignedStudent">
+        SELECT class_id classId, apr_yn aprYn, nm unm, birth, phone, email
+        FROM user
+        WHERE role = "ROLE_STD"
+            AND apr_yn = 1
+            AND class_id = #{classId}
+    </select>
+
+
+    <select id="selUnsignedStudent">
+        SELECT class_id classId, apr_yn aprYn, nm unm, birth, phone, email
+        FROM user
+        WHERE role = "ROLE_STD"
+        AND apr_yn = 0
+        AND class_id = #{classId}
+    </select>
 
 </mapper>
