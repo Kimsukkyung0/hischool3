@@ -34,7 +34,7 @@ public class TimetableService {
     private final String myApiKey;
 
     //생성자로 private 필드에 값넣
-    public TimetableService(@Value("d79ab6b1aab04b20b66cc314fb32124f") String myApiKey){
+    public TimetableService(@Value("${my-api.key}") String myApiKey){
          this.myApiKey = myApiKey;
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
