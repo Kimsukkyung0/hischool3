@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserDetailsMapper {
     int save(UserEntity p);
-    UserEntity getByUid(String uid);
+    UserEntity getByEmail(String email);
 
 
     int updUserToken(UserTokenEntity p);

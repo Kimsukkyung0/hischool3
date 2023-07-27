@@ -25,5 +25,8 @@ springdoc:
   swagger-ui:
     path: /swagger.html
 
+file:
+  dir: /home/download
+
 my-api:
   key: 9a7b0b8f560b480abf0d0cb941af2bea

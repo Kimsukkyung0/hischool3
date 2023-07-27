@@ -18,7 +18,7 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity entity = mapper.getByUid(username);
+        UserEntity entity = mapper.getByEmail(username);
         return MyUserDetails.builder()
                 .email(entity.getEmail())
                 .userId(entity.getUserId())
