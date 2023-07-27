@@ -3,7 +3,6 @@ package com.green.secondproject.header.model;
 import lombok.Data;
 
 @Data
-public class SelSchoolInfoDto {
-    private int schoolId;
+public class SelSchoolLogoDto {
     private int userId;
 }

@@ -2,6 +2,8 @@ package com.green.secondproject.timetable;
 
 import com.green.secondproject.timetable.model.TimeTableContainerVo;
 import com.green.secondproject.timetable.model.TimeTableParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Slf4j
 @AllArgsConstructor
-@RequestMapping("/timetable")
+@RequestMapping("/api/timetable")
+@Tag(name = "시간표")
 public class TimetableController {
     private final TimetableService service;
 
     @GetMapping
+    @Operation(summary = "접속한 주의 시간표출력(월-금)", description = "요구값 : <br>" + "(1)sdSchulCode - 학교고유코드<br>"+"(2)grade - 학년 <br>"+
+            "classNm:학급번호<br><br>" +"출력값 : <br>" + "(1)schoolNm - 학교명<br>"+"(2)grade - 학년 <br>"+
+            "(3)classNm:학급번호<br>"+"(4)grade - 학년 <br>"+"(5)semester - 학기<br><br> "+"출력값 리스트세부내역 : <br> (1)period - 교시 <br> (2) class_contents : 수업명")
     public TimeTableContainerVo GetTimeTableByClassOfTheWeek(TimeTableParam timeTableParam){
         log.info("timetableParam : {}",timeTableParam);
         return service.getTimeTableByClassAndTheWeek(timeTableParam);

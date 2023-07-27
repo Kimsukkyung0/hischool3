@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.green.secondproject.config.security.UserDetailsMapper">
+    <insert id="save">
+        INSERT INTO user
+        SET email = #{email},
+            pw = #{pw},
+            nm = #{nm},
+            pic = #{pic},
+            birth = #{birth},
+            phone = #{phone},
+            address = #{address},
+            role = #{role},
+            apr_pic = #{aprPic}
+    </insert>
+
+    <select id="getByEmail">
+        SELECT user_id userId, email, pw, name, role
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <!-- ///////////////////////////////////////// user_token /////////-->
+    <insert id="updUserToken">
+        INSERT INTO user_token
+        (user_id, ip, access_token, refresh_token)
+        VALUES
+        (#{userId}, #{ip}, #{accessToken}, #{refreshToken})
+
+        ON DUPLICATE KEY UPDATE
+          access_token = #{accessToken}
+        , refresh_token = #{refreshToken}
+    </insert>
+
+    <select id="selUserToken">
+        SELECT user_id userId, ip, access_token accessToken, refresh_token refreshToken, created_at createdAt, updated_at updatedAt
+        FROM user_token
+        WHERE user_id = #{userId} AND ip = #{ip}
+    </select>
+
+</mapper>
