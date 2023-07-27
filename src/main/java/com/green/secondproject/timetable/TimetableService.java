@@ -23,6 +23,7 @@ import reactor.netty.tcp.TcpClient;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,13 +59,14 @@ public class TimetableService {
     }
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
-        LocalDate now = LocalDate.of(2023,4, 13);
+//        LocalDate now = LocalDate.of(2023,4, 13);
         //tmpnow
-//        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now();
+
         LocalDate StartDayOfTheWeek = null;
 //
-        String thisWeekStart = now.with(DayOfWeek.MONDAY).toString();
-        String thisWeekEnds = now.with(DayOfWeek.FRIDAY).toString();
+        String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         log.info("thisWeekStart : {}", thisWeekStart);
         log.info("thisWeekEnds : {}", thisWeekEnds);
 
