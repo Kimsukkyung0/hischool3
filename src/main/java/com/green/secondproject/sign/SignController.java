@@ -1,8 +1,8 @@
 //package com.green.secondproject.sign;
 //
-//import com.green.security.CommonRes;
-//import com.green.security.sign.model.SignInResultDto;
-//import com.green.security.sign.model.SignUpResultDto;
+//import com.green.secondproject.CommonRes;
+//import com.green.secondproject.sign.model.SignInResultDto;
+//import com.green.secondproject.sign.model.SignUpResultDto;
 //import jakarta.servlet.http.HttpServletRequest;
 //import lombok.RequiredArgsConstructor;
 //import lombok.extern.slf4j.Slf4j;

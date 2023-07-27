@@ -14,9 +14,9 @@
 //@Data
 //@Builder
 //public class MyUserDetails implements UserDetails {
-//    private Long iuser;
-//    private String uid;
-//    private String upw;
+//    private Long userId;
+//    private String email;
+//    private String pw;
 //    private String name;
 //
 //    @Builder.Default
@@ -29,10 +29,10 @@
 //    }
 //
 //    @Override
-//    public String getPassword() { return this.upw; }
+//    public String getPassword() { return this.pw; }
 //
 //    @Override
-//    public String getUsername() { return this.uid; }
+//    public String getUsername() { return this.email; }
 //
 //    @Override
 //    public boolean isAccountNonExpired() { return true; }

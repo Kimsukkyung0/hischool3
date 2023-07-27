@@ -1,7 +1,7 @@
 //package com.green.secondproject.config.security;
 //
 //import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.green.security.config.security.model.EntryPointErrorResponse;
+//import com.green.secondproject.config.security.model.EntryPointErrorResponse;
 //import jakarta.servlet.ServletException;
 //import jakarta.servlet.http.HttpServletRequest;
 //import jakarta.servlet.http.HttpServletResponse;

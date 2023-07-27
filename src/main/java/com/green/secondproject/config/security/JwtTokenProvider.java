@@ -1,6 +1,6 @@
 //package com.green.secondproject.config.security;
 //
-//import com.green.security.config.security.model.MyUserDetails;
+//import com.green.secondproject.config.security.model.MyUserDetails;
 //import io.jsonwebtoken.Claims;
 //import io.jsonwebtoken.Jwts;
 //import io.jsonwebtoken.io.Decoders;

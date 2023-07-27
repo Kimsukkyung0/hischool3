@@ -1,7 +1,7 @@
 //package com.green.secondproject.config.security;
 //
-//import com.green.security.config.security.model.MyUserDetails;
-//import com.green.security.config.security.model.UserEntity;
+//import com.green.secondproject.config.security.model.MyUserDetails;
+//import com.green.secondproject.config.security.model.UserEntity;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.security.core.userdetails.UserDetails;
 //import org.springframework.security.core.userdetails.UserDetailsService;
