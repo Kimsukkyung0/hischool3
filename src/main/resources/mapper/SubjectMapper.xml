@@ -8,6 +8,40 @@
 <select id="subcate" resultType="SubjectVo">
     SELECT category_id,nm
     FROM sbj_category
-    WHERE TYPE = 1;
+    WHERE TYPE = 1
 </select>
+
+    <select id="subject">
+        select *
+        from subject
+    </select>
+
+<insert id="instcsbj">
+    INSERT INTO tc_sbj
+    (user_id,subject_id)
+    VALUES
+    (#{user_id},#{subject_id})
+</insert>
+
+    <select id="tcslist" resultType="SubjectDetailVo2">
+        SELECT DISTINCT A.category_id,A.nm,C.user_id
+        FROM  sbj_category A
+        INNER JOIN subject B
+        ON A.category_id = B.category_id
+        INNER JOIN tc_sbj C
+        ON B.subject_id = C.subject_id
+        INNER JOIN user D
+        ON C.user_id = D.user_id
+        WHERE A.`type`= 1 AND C.user_id = #{user_id}
+    </select>
+    <select id="smalllist" resultType="SubjectVo2">
+        SELECT A.subject_id,A.nm,B.user_id
+        FROM subject A
+        INNER JOIN tc_sbj B
+        ON A.subject_id= B.subject_id
+        INNER JOIN user C
+        ON B.user_id = C.user_id
+        WHERE B.user_id = #{user_id};
+    </select>
 </mapper>
+

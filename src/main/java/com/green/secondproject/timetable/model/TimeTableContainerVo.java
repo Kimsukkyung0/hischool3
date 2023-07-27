@@ -1,11 +1,14 @@
 package com.green.secondproject.timetable.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
 
 @Data
+@ToString
 public class TimeTableContainerVo {
     private String schoolNm;
     private String grade; // 강동고등학교 1학년 1반 1학기 ()

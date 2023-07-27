@@ -36,7 +36,8 @@ public class TimetableService {
     //생성자로 private 필드에 값넣
     public TimetableService(@Value("${my-api.key}") String myApiKey){
          this.myApiKey = myApiKey;
-        TcpClient tcpClient = TcpClient.create()
+
+         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
                 .doOnDisconnected(connection ->{//연결해제되었을때 시도
                     connection.addHandlerLast(new ReadTimeoutHandler(5000));
@@ -50,7 +51,8 @@ public class TimetableService {
         //교환전략 무슨말임이게 일단 파트별로 어떤역할하는지만 짚고넘어가자
 
         //클라이언트(데이터요청보내는 주체) 만들기
-         this.webClient = WebClient.builder().exchangeStrategies(exchangeStrategies)
+         this.webClient = WebClient.builder()
+                 .exchangeStrategies(exchangeStrategies)
                  .baseUrl("https://open.neis.go.kr")
                  .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                  .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
