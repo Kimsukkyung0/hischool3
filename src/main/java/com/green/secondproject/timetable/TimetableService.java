@@ -34,7 +34,7 @@ public class TimetableService {
     private final String myApiKey;
 
     //생성자로 private 필드에 값넣
-    public TimetableService(@Value("d79ab6b1aab04b20b66cc314fb32124f") String myApiKey){
+    public TimetableService(@Value("${my-api.key}") String myApiKey){
          this.myApiKey = myApiKey;
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
@@ -58,11 +58,10 @@ public class TimetableService {
     }
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
-        LocalDate now = LocalDate.of(2023,4, 13);//tmpnow
+        LocalDate now = LocalDate.of(2023,4, 13);
+        //tmpnow
 //        LocalDate now = LocalDate.now();
         LocalDate StartDayOfTheWeek = null;
-
-
 //
         String thisWeekStart = now.with(DayOfWeek.MONDAY).toString();
         String thisWeekEnds = now.with(DayOfWeek.FRIDAY).toString();
@@ -95,6 +94,7 @@ public class TimetableService {
                 ).retrieve()
                 .bodyToMono(String.class)
                 .block();
+        log.info("json : {}",json);
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
         //원치않는 값은 받지않겠슈..
         //https://open.neis.go.kr/hub/hisTimetable?KEY=d79ab6b1aab04b20b66cc314fb32124f&Type=json&pIndex=1&pSize=50&ATPT_OFCDC_SC_CODE=D10&SD_SCHUL_CODE=7240073&GRADE=1&CLASS_NM=01&TI_FROM_YMD=20230524&TI_TO_YMD=20230528
