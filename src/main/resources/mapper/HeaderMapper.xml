@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.green.secondproject.header.HeaderMapper">
+
+    <select id = "selSchoolInfo">
+        SELECT A.logo, A.nm, B.class, B.grade
+        FROM school A
+        INNER JOIN van B
+        ON B.school_id = A.school_id
+        INNER JOIN user C
+        ON C.class_id = B.class_id
+        WHERE C.student_id = #{studentId}
+    </select>
+
+</mapper>
