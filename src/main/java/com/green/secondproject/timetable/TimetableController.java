@@ -1,4 +1,32 @@
 package com.green.secondproject.timetable;
 
+import com.green.secondproject.timetable.model.TimeTableContainerVo;
+import com.green.secondproject.timetable.model.TimeTableParam;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@Slf4j
+@AllArgsConstructor
+@RequestMapping("/timetable")
 public class TimetableController {
+    private final TimetableService service;
+
+    @GetMapping
+    public TimeTableContainerVo GetTimeTableByClassOfTheWeek(TimeTableParam timeTableParam){
+        log.info("timetableParam : {}",timeTableParam);
+        return service.getTimeTableByClassAndTheWeek(timeTableParam);
+    }
+
+
+
+
+    //현재일자기준으로 그 주의 월~금 시간표 표출
+/*KEY	  STRING(필수)	  인증키	  기본값 : sample key
+    Type	  STRING(필수)	  호출 문서(xml, json)	  기본값 : xml
+    pIndex	  INTEGER(필수)	  페이지 위치	  기본값 : 1(sample key는 1 고정)
+    pSize	  INTEGER(필수)	  페이지 당 신청 숫자	  기본값 : 100(sample key는 5 고정)*/
 }
