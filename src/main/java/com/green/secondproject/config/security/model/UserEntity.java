@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class UserEntity {
+    private Long userId;
     private String email;
     private String pw;
     private String nm;
@@ -16,4 +17,5 @@ public class UserEntity {
     private LocalDate birth;
     private String phone;
     private String address;
+    private String role;
 }
