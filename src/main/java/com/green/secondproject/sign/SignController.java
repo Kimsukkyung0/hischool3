@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ public class SignController {
         return dto;
     }
 
-    @PostMapping("/sign-up")
+    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SignUpResultDto signUp(@RequestPart SignUpParam dto, @RequestPart MultipartFile pic,
                                   @RequestPart(required = false) MultipartFile aprPic) {
         return SERVICE.signUp(dto, pic, aprPic);
