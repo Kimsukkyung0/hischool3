@@ -3,6 +3,19 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.myPage.MyPageMapper">
+
+
+    <update id="updTeacherInfo">
+        UPDATE user
+        SET nm = #{nm}
+        , phone = #{phone}
+        , address = #{address}
+        , pic = #{pic}
+        WHERE user_id = #{userId}
+        AND role = "ROLE_TC"
+    </update>
+
+
     <select id="selStudentMyPage">
         SELECT A.user_id userId, A.nm stdnm, A.email, A.pic, A.birth, A.phone, A.address
         , B.class_id classId, B.grade, B.class van, C.school_id schoolId, C.nm snm

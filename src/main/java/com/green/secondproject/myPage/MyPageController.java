@@ -2,11 +2,9 @@ package com.green.secondproject.myPage;
 
 import com.green.secondproject.myPage.model.SelStudentMyPageVo;
 import com.green.secondproject.myPage.model.SelTeacherMyPageVo;
+import com.green.secondproject.myPage.model.UpdTeacherInfoDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,6 +14,12 @@ import java.util.List;
 public class MyPageController {
     private final MyPageService serivce;
 
+//    @PatchMapping("/TeacherInfoUpdate")
+//    public int UpdTcInfo(@RequestParam int userId) {
+//        UpdTeacherInfoDto dto = new UpdTeacherInfoDto();
+//        dto.set
+//        return serivce.updTeacherInfo(dto);
+//    }
 
     @GetMapping("/StudentMypage")
     public List<SelStudentMyPageVo> selectStdMyPage(@RequestParam int userId) {

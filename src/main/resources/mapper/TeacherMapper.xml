@@ -22,6 +22,8 @@
     </select>
 
 
+
+
     <update id="delTeacher">
         UPDATE user
         SET del_yn = 1

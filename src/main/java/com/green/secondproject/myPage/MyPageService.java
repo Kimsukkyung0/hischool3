@@ -1,9 +1,6 @@
 package com.green.secondproject.myPage;
 
-import com.green.secondproject.myPage.model.SelStudentMyPageDto;
-import com.green.secondproject.myPage.model.SelStudentMyPageVo;
-import com.green.secondproject.myPage.model.SelTeacherMyPageDto;
-import com.green.secondproject.myPage.model.SelTeacherMyPageVo;
+import com.green.secondproject.myPage.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +11,9 @@ import java.util.List;
 public class MyPageService {
     private final MyPageMapper mapper;
 
+//    public int updTeacherInfo(int userID) {
+//        return mapper.updTeacherInfo(userId);
+//    }
 
     public List<SelStudentMyPageVo> selStudentMyPage(int userId) {
         SelStudentMyPageDto dto = new SelStudentMyPageDto();
