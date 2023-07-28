@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
 @Builder
 public class UserEntity {
     private Long userId;
+    private Long classId;
     private String email;
     private String pw;
     private String nm;
-    private String schoolNm;
-    private String grade;
-    private String classNm;
     private String pic;
     private LocalDate birth;
     private String phone;

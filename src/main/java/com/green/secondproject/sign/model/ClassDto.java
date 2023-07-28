@@ -6,7 +6,8 @@ import lombok.Data;
 @Data
 @Builder
 public class ClassDto {
-    private int year;
-    private int grade;
-    private int classNum;
+    private Long schoolId;
+    private String year;
+    private String grade;
+    private String classNum;
 }

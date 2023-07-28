@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.green.secondproject.config.security.UserMapper">
-    <insert id="save">
+    <insert id="save" useGeneratedKeys="true" keyProperty="userId">
         INSERT INTO user
         SET class_id = #{classId},
             email = #{email},
@@ -31,7 +31,7 @@
     <select id="selClassId">
         select class_id
         from van
-        where year = #{year} and grade = #{grade} and class = #{classNum}
+        where school_id = #{schoolId} and year = #{year} and grade = #{grade} and class = #{classNum}
     </select>
 
     <!-- ///////////////////////////////////////// user_token /////////-->

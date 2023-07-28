@@ -1,6 +1,5 @@
 package com.green.secondproject.sign.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ public class SignUpParam {
     private String nm;
     private String schoolNm;
     private String grade;
-    private String classNm;
+    private String classNum;
     private LocalDate birth;
     private String phone;
     private String address;
