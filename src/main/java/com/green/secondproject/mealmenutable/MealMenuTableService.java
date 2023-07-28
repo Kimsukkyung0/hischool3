@@ -62,62 +62,30 @@ public class MealMenuTableService {
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
-        String strthisMonthStart = thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String strthisMonthEnds = thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        log.info("strthisMonthstart : {}",strthisMonthStart);
-        log.info("strthisMonthEnds : {}",strthisMonthEnds);
+        MealTableDto dto = new MealTableDto();
+        dto.setSdSchulCode(p.getSdSchulCode());
+        dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
+        MealTableContainerVo result = getMealTableApi(dto);
+        return result;
+    }
 
-        LocalDate now = LocalDate.now();
-        String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-//        String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
-        log.info("thisWeekStart : {}", thisWeekStart);
-        log.info("thisWeekEnds : {}", thisWeekEnds);
+    public MealTableContainerVo GetMealTableBySchoolOfTheWeek(MealTableParam p) {
+//        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
+        LocalDate now = LocalDate.of(2023,7,1);
+        MealTableDto dto = new MealTableDto();
+        dto.setSdSchulCode(p.getSdSchulCode());
+        dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
+        dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
-
-        String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
-                        //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
-                        .queryParam("KEY", myApiKey)
-                        .queryParam("Type", "json")
-                        .queryParam("pIndex",1)
-                        .queryParam("pSize",50)
-                        .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                        .queryParam("SD_SCHUL_CODE",p.getSdSchulCode())
-                        .queryParam("MLSV_FROM_YMD",strthisMonthStart)//조회시작일 : 기준월의 1일
-                        .queryParam("MLSV_TO_YMD",strthisMonthEnds)//조회종료일 : 기준월의 마지막일
-                        .build()
-                ).retrieve()
-                .bodyToMono(String.class)
-                .block();
-        log.info("json : {}",json);
-
-        ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        List<MealTableVo> mealTableVo = null;
-        MealTableContainerVo result = null;
-
-        try{
-            JsonNode jsonNode = om.readTree(json); //자바객체
-            mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<List<MealTableVo>>() {});
-            for (MealTableVo f : mealTableVo) {
-                f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("[\\(0-9.\\)]","").replaceAll(" ",""));
-            }
-            Map<String,String> map = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row/0"), new TypeReference<Map<String, String>>() {});
-            String schoolNm = map.get("SCHUL_NM");
-            String strYearMonth = thisMonth.toString();
-            log.info("yearmonth : {}", strYearMonth);
-            log.info("mealTableVoList : {}", mealTableVo);
-            result = new MealTableContainerVo(schoolNm,strYearMonth,mealTableVo);
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
+        MealTableContainerVo result = getMealTableApi(dto);
         return result;
     }
 
 
     public MealTableContainerVo getMealTableApi(MealTableDto dto){
+
         String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
                         //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
                         .queryParam("KEY", myApiKey)
@@ -146,7 +114,7 @@ public class MealMenuTableService {
             }
             Map<String,String> map = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row/0"), new TypeReference<Map<String, String>>() {});
             String schoolNm = map.get("SCHUL_NM");
-            String strYearMonth = dto.getStartDate().toString();
+            String strYearMonth = dto.getStartDate().substring(0,6);
             log.info("yearmonth : {}", strYearMonth);
             log.info("mealTableVoList : {}", mealTableVo);
             result = new MealTableContainerVo(schoolNm,strYearMonth,mealTableVo);
@@ -154,5 +122,6 @@ public class MealMenuTableService {
         }catch(Exception e){
             e.printStackTrace();
         }
+        return result;
     }
 }

@@ -34,6 +34,6 @@ public class MealMenuTableController {
             "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)")
     public MealTableContainerVo GetMealTableBySchoolOfTheWeek(MealTableParam p){
         log.info("timetableParam : {}",p);
-        return service.GetMealTableBySchoolOfTheMonth(p);
+        return service.GetMealTableBySchoolOfTheWeek(p);
     }
 }
