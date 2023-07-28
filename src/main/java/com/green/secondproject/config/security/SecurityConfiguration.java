@@ -25,7 +25,17 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         httpSecurity.authorizeHttpRequests(authz ->
-                    authz.requestMatchers(mvc.pattern("/swagger.html")
+                    authz.requestMatchers(
+                                    mvc.pattern("/swagger.html"),
+                                    mvc.pattern("/swagger-ui/**"),
+                                    mvc.pattern("/v3/api-docs/**"),
+                                    mvc.pattern("/index.html"),
+                                    mvc.pattern("/"),
+                                    mvc.pattern("/static/**"),
+
+                                    mvc.pattern("/api/sign-in"),
+                                    mvc.pattern("/api/sign-up"),
+                                    mvc.pattern("**exception**")
                             ).permitAll()
                             .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/refresh-token")).permitAll()
                             .anyRequest().hasRole("ADMIN")
