@@ -36,6 +36,7 @@ public class SignController {
         if(dto.getCode() == CommonRes.SUCCESS.getCode()) {
             log.info("[signIn] 정상적으로 로그인 되었습니다. id: {}, token: {}", email, dto.getAccessToken());
         }
+
         return dto;
     }
 
