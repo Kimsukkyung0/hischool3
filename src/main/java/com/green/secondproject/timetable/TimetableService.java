@@ -61,12 +61,8 @@ public class TimetableService {
     }
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
-//        LocalDate now = LocalDate.of(2023,4, 13);
-        //tmpnow
         LocalDate now = LocalDate.now();
 
-        LocalDate StartDayOfTheWeek = null;
-//
         String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         log.info("thisWeekStart : {}", thisWeekStart);
@@ -100,9 +96,6 @@ public class TimetableService {
                 .block();
         log.info("json : {}",json);
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        //원치않는 값은 받지않겠슈..
-        //https://open.neis.go.kr/hub/hisTimetable?KEY=d79ab6b1aab04b20b66cc314fb32124f&Type=json&pIndex=1&pSize=50&ATPT_OFCDC_SC_CODE=D10&SD_SCHUL_CODE=7240073&GRADE=1&CLASS_NM=01&TI_FROM_YMD=20230524&TI_TO_YMD=20230528
-        //TEST용 주소(5월 한주,)
 
         List<TimeTableVo> timeTableVoList = null;
         TimeTableContainerVo result = null; //빈 배열 및 리턴타입 선언
@@ -115,11 +108,6 @@ public class TimetableService {
             String semester = map.get("SEM");
             String schoolNm = map.get("SCHUL_NM");
             result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester,timeTableVoList);
-//            private String schoolNm;
-//            private String grade; // 강동고등학교 1학년 1반 1학기 ()
-//            private String classNm;
-//            private String semester;
-//            private List<TimeTableVo> list;
         }catch(Exception e){
             e.printStackTrace();
         }

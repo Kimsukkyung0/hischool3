@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
+import com.green.secondproject.mealmenutable.model.MealTableDto;
 import com.green.secondproject.mealmenutable.model.MealTableParam;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
 import io.netty.channel.ChannelOption;
@@ -21,6 +22,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.tcp.TcpClient;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -55,19 +57,24 @@ public class MealMenuTableService {
                 .build();
     }
 
-    public MealTableContainerVo GetMealTableBySchoolOfTheWeek(MealTableParam p) {
+    public MealTableContainerVo GetMealTableBySchoolOfTheMonth(MealTableParam p) {
         YearMonth thisMonth = YearMonth.now();
-        log.info("thisMonth : {}",thisMonth);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
-        log.info("thisMonthstart : {}",thisMonthStart);
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
-        log.info("thisMonthEnds : {}",thisMonthEnds);
-
 
         String strthisMonthStart = thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String strthisMonthEnds = thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         log.info("strthisMonthstart : {}",strthisMonthStart);
         log.info("strthisMonthEnds : {}",strthisMonthEnds);
+
+
+        LocalDate now = LocalDate.now();
+        String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+//        String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        log.info("thisWeekStart : {}", thisWeekStart);
+        log.info("thisWeekEnds : {}", thisWeekEnds);
+
 
         String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
                         //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
@@ -77,8 +84,8 @@ public class MealMenuTableService {
                         .queryParam("pSize",50)
                         .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
                         .queryParam("SD_SCHUL_CODE",p.getSdSchulCode())
-                        .queryParam("TI_FROM_YMD",strthisMonthStart)//조회시작일 : 기준월의 1일
-                        .queryParam("TI_TO_YMD",strthisMonthEnds)//조회종료일 : 기준월의 마지막일
+                        .queryParam("MLSV_FROM_YMD",strthisMonthStart)//조회시작일 : 기준월의 1일
+                        .queryParam("MLSV_TO_YMD",strthisMonthEnds)//조회종료일 : 기준월의 마지막일
                         .build()
                 ).retrieve()
                 .bodyToMono(String.class)
@@ -86,7 +93,6 @@ public class MealMenuTableService {
         log.info("json : {}",json);
 
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        //tcp client
         List<MealTableVo> mealTableVo = null;
         MealTableContainerVo result = null;
 
@@ -94,26 +100,59 @@ public class MealMenuTableService {
             JsonNode jsonNode = om.readTree(json); //자바객체
             mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<List<MealTableVo>>() {});
             for (MealTableVo f : mealTableVo) {
-                f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("^[가-힣]*$_//.", ""));
-                //	^[가-힣]*$ 정규식
-//                f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("[0-9]", "").replaceAll("\\.",""));
+                f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("[\\(0-9.\\)]","").replaceAll(" ",""));
             }
             Map<String,String> map = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row/0"), new TypeReference<Map<String, String>>() {});
-//            String date = map.get("MLSV_YMD");
-//            String lunchOrDinner = map.get("MMEAL_SC_NM");
-//            String menuOftheDay = map.get("DDISH_NM");//메뉴이름
             String schoolNm = map.get("SCHUL_NM");
+            String strYearMonth = thisMonth.toString();
+            log.info("yearmonth : {}", strYearMonth);
             log.info("mealTableVoList : {}", mealTableVo);
-            result = new MealTableContainerVo(schoolNm,mealTableVo);
-//            private String schoolNm;
-//            private String grade; // 강동고등학교 1학년 1반 1학기 ()
-//            private String classNm;
-//            private String semester;
-//            private List<TimeTableVo> list;
+            result = new MealTableContainerVo(schoolNm,strYearMonth,mealTableVo);
+
         }catch(Exception e){
             e.printStackTrace();
         }
 
         return result;
+    }
+
+
+    public MealTableContainerVo getMealTableApi(MealTableDto dto){
+        String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
+                        //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
+                        .queryParam("KEY", myApiKey)
+                        .queryParam("Type", "json")
+                        .queryParam("pIndex",1)
+                        .queryParam("pSize",50)
+                        .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
+                        .queryParam("SD_SCHUL_CODE",dto.getSdSchulCode())
+                        .queryParam("MLSV_FROM_YMD",dto.getStartDate())//조회시작일 : 기준월의 1일
+                        .queryParam("MLSV_TO_YMD",dto.getEndDate())//조회종료일 : 기준월의 마지막일
+                        .build()
+                ).retrieve()
+                .bodyToMono(String.class)
+                .block();
+        log.info("json : {}",json);
+
+        ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        List<MealTableVo> mealTableVo = null;
+        MealTableContainerVo result = null;
+
+        try{
+            JsonNode jsonNode = om.readTree(json); //자바객체
+            mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<List<MealTableVo>>() {});
+            for (MealTableVo f : mealTableVo) {
+                f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("[\\(0-9.\\)]","").replaceAll(" ",""));
+            }
+            Map<String,String> map = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row/0"), new TypeReference<Map<String, String>>() {});
+            String schoolNm = map.get("SCHUL_NM");
+            String strYearMonth = dto.getStartDate().toString();
+            log.info("yearmonth : {}", strYearMonth);
+            log.info("mealTableVoList : {}", mealTableVo);
+            result = new MealTableContainerVo(schoolNm,strYearMonth,mealTableVo);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
