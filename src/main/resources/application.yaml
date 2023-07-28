@@ -2,7 +2,7 @@ springboot:
   jwt:
     access-secret: DeaguGreenArtAcademyClass502ForJavaSpringBootaaaasdf
     refresh-secret: HelloWorldRefreshTokenCreateBySecretHaHaaasdfasdf
-    header-scheme-name: Authorization
+    header-scheme-name: authorization
     token-type: Bearer
 spring:
   servlet:

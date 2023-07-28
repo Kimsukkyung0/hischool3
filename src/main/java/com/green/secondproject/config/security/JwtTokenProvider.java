@@ -79,7 +79,7 @@ public class JwtTokenProvider {
 
     public String resolveToken(HttpServletRequest req, String type) {
         log.info("JwtTokenProvider - resolveToken: HTTP 헤더에서 Token 값 추출");
-        String headerAuth = req.getHeader("Authorization");
+        String headerAuth = req.getHeader("authorization");
         return headerAuth == null ? null : headerAuth.substring(type.length()).trim();
     }
 

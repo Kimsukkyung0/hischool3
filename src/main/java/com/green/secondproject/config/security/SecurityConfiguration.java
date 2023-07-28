@@ -3,11 +3,15 @@ package com.green.secondproject.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 
 //spring security 5.7.0부터 WebSecurityConfigurerAdapter deprecated 됨
@@ -19,21 +23,11 @@ public class SecurityConfiguration {
 
     //webSecurityCustomizer를 제외한 모든 것, 시큐리티를 거친다. 보안과 연관
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         httpSecurity.authorizeHttpRequests(authz ->
-                    authz.requestMatchers(
-                                      "/swagger.html"
-                                    , "/swagger-ui/**"
-                                    , "/v3/api-docs/**"
-                                    , "/index.html"
-                                    , "/"
-                                    , "/static/**"
-
-                                    , "/api/sign-in"
-                                    , "/api/sign-up"
-                                    , "**exception**"
+                    authz.requestMatchers(mvc.pattern("/swagger.html")
                             ).permitAll()
-                            .requestMatchers(HttpMethod.GET, "/api/refresh-token").permitAll()
+                            .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/refresh-token")).permitAll()
                             .anyRequest().hasRole("ADMIN")
                 ) //사용 권한 체크
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 X
@@ -46,6 +40,12 @@ public class SecurityConfiguration {
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
+    }
+
+    @Scope("prototype")
+    @Bean
+    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
+        return new MvcRequestMatcher.Builder(introspector);
     }
 
     //시큐리티를 거치지 않는다. 보안과 전혀 상관없는 페이지 및 리소스
