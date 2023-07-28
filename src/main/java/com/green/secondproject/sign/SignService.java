@@ -2,16 +2,16 @@ package com.green.secondproject.sign;
 
 import com.green.secondproject.CommonRes;
 import com.green.secondproject.config.security.JwtTokenProvider;
-import com.green.secondproject.config.security.UserDetailsMapper;
+import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.UserEntity;
 import com.green.secondproject.config.security.model.UserTokenEntity;
+import com.green.secondproject.sign.model.ClassDto;
 import com.green.secondproject.sign.model.SignInResultDto;
 import com.green.secondproject.sign.model.SignUpResultDto;
 import com.green.secondproject.sign.model.SignUpParam;
 import com.green.secondproject.utils.MyFileUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,19 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Service
 public class SignService {
-    private final UserDetailsMapper MAPPER;
+    private final UserMapper MAPPER;
     private final JwtTokenProvider JWT_PROVIDER;
     private final PasswordEncoder PW_ENCODER;
     private final String FILE_DIR;
 
     @Autowired
-    public SignService(UserDetailsMapper mapper, JwtTokenProvider provider, PasswordEncoder encoder,
+    public SignService(UserMapper mapper, JwtTokenProvider provider, PasswordEncoder encoder,
                        @Value("${file.dir}") String fileDir) {
         MAPPER = mapper;
         JWT_PROVIDER = provider;
@@ -43,6 +44,10 @@ public class SignService {
 
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
         log.info("[getSignUpResult] signDataHandler로 회원 정보 요청");
+
+        Long schoolId = MAPPER.selSchoolIdByNm(p.getSchoolNm());
+        Long classId = MAPPER.selClassId(ClassDto.builder()
+                .year(LocalDate.now().getYear()).build());
 
         File tempDic = new File(FILE_DIR, "/temp");
         if (!tempDic.exists()) {
@@ -127,7 +132,7 @@ public class SignService {
         String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()), Collections.singletonList(user.getRole()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
         String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()), Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
         UserTokenEntity tokenEntity = UserTokenEntity.builder()
-                .iuser(user.getUserId())
+                .userId(user.getUserId())
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .ip(ip)
@@ -162,7 +167,7 @@ public class SignService {
         List<String> roles = (List<String>)claims.get("roles");
 
         UserTokenEntity p = UserTokenEntity.builder()
-                .iuser(iuser)
+                .userId(iuser)
                 .ip(ip)
                 .build();
         UserTokenEntity selResult = MAPPER.selUserToken(p);
@@ -172,7 +177,7 @@ public class SignService {
 
         String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles, JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
         UserTokenEntity tokenEntity = UserTokenEntity.builder()
-                .iuser(iuser)
+                .userId(iuser)
                 .ip(ip)
                 .accessToken(reAccessToken)
                 .refreshToken(refreshToken)

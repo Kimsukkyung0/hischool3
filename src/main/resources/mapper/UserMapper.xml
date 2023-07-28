@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.green.secondproject.config.security.UserDetailsMapper">
+<mapper namespace="com.green.secondproject.config.security.UserMapper">
     <insert id="save">
         INSERT INTO user
-        SET email = #{email},
+        SET class_id = #{classId},
+            email = #{email},
             pw = #{pw},
             nm = #{nm},
             pic = #{pic},
@@ -19,6 +20,18 @@
         SELECT user_id userId, email, pw, name, role
         FROM user
         WHERE email = #{email}
+    </select>
+
+    <select id="selSchoolIdByNm">
+        select school_id
+        from school
+        where nm = #{nm}
+    </select>
+    
+    <select id="selClassId">
+        select class_id
+        from van
+        where year = #{year} and grade = #{grade} and class = #{classNum}
     </select>
 
     <!-- ///////////////////////////////////////// user_token /////////-->

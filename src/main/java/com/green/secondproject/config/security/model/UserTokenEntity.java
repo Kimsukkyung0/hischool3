@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserTokenEntity {
-    private Long iuser;
+    private Long userId;
     private String ip;
     private String accessToken;
     private String refreshToken;
