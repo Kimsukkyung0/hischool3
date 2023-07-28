@@ -11,11 +11,11 @@ public class TimeTableVo {
     private String subject;
 
 
-
     @JsonProperty("period")
     public String getPerio() {
         return period;
     }
+
     @JsonProperty("PERIO")
     public void setPerio(String period) {
         this.period = period;
