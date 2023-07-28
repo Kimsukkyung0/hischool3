@@ -9,8 +9,13 @@ import java.util.List;
 
 public interface SubjectMapper {
     List<SubjectVo> subCate();
+
     List<SubjectDetailVo> subject();
+
     int insTcsbj(SubjectInsDto dto);
+
     List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
-    List<SubjectVo2> smalllist(SubjectDto dto);
+
+    List<SubjectVo2> smalllist(SubjectDto dto
+    );
 }

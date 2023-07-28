@@ -17,12 +17,15 @@ public class SubjectSerivce {
     List<SubjectVo> subcate(){
         return mapper.subCate();
     }
+
     List<SubjectDetailVo> subject(){
         return mapper.subject();
     }
+
     int instcsbj(SubjectInsDto dto){
         return mapper.insTcsbj(dto);
     }
+
     List<SubjectDetailVo2> tcslist(SubjectDetailDto dto){
         return mapper.tcslist(dto);
     }
