@@ -19,9 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class MealMenuTableController {
     private final MealMenuTableService service;
 
+
+//    @Operation(summary = "접속한 달의 급식표출력", description = "요구값 : <br>" + "sdSchulCode - 학교고유코드<br><br>"
+//            +"출력값 : <br>" + "(1)schoolNm - 학교명<br>"+"(2)strYearMonth - 접속한 달<br><br>"+
+//            "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)")
     @GetMapping
-    @Operation(summary = "접속한 달의 급식표출력", description = "요구값 : <br>" + "sdSchulCode - 학교고유코드<br><br>"
-            +"출력값 : <br>" + "(1)schoolNm - 학교명<br>"+"(2)strYearMonth - 접속한 달<br><br>"+
+    @Operation(summary = "접속한 달의 급식표출력",
+            description = "요구값 : <br> sdSchulCode - 학교고유코드<br><br>"+
+                        "출력값 : <br>(1)schoolNm - 학교명<br>(2)strYearMonth - 접속한 달<br><br>"+
             "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)")
     public MealTableContainerVo GetMealTableBySchoolOfTheMonth(MealTableParam p){
         log.info("timetableParam : {}",p);
