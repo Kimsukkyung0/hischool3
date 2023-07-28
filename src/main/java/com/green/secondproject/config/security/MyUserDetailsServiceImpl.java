@@ -14,7 +14,7 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class MyUserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserDetailsMapper mapper;
+    private final UserMapper mapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

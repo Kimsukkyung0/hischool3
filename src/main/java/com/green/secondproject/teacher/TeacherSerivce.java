@@ -1,9 +1,6 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.teacher.model.SelSignedStudentDto;
-import com.green.secondproject.teacher.model.SelSignedStudentVo;
-import com.green.secondproject.teacher.model.SelUnsignedStudentDto;
-import com.green.secondproject.teacher.model.SelUnsignedStudentVo;
+import com.green.secondproject.teacher.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +24,11 @@ public class TeacherSerivce {
         dto.setClassId(classId);
         return mapper.selUnsignedStudent(dto);
     }
+
+    public int delTeacher(int userId) {
+        TeacherDelDto dto = new TeacherDelDto();
+        dto.setUserId(userId);
+        return mapper.delTeacher(dto);
+    }
 }
+

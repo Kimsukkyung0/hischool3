@@ -21,4 +21,12 @@
         AND class_id = #{classId}
     </select>
 
+
+    <update id="delTeacher">
+        UPDATE user
+        SET del_yn = 1
+        WHERE user_id = #{userId}
+        AND role = "ROLE_TC"
+    </update>
+
 </mapper>
