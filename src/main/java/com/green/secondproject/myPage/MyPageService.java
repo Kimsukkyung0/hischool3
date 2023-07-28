@@ -11,9 +11,9 @@ import java.util.List;
 public class MyPageService {
     private final MyPageMapper mapper;
 
-//    public int updTeacherInfo(int userID) {
-//        return mapper.updTeacherInfo(userId);
-//    }
+    public int updTeacherInfo(UpdTeacherInfoDto dto) {
+        return mapper.updTeacherInfo(dto);
+    }
 
     public List<SelStudentMyPageVo> selStudentMyPage(int userId) {
         SelStudentMyPageDto dto = new SelStudentMyPageDto();
