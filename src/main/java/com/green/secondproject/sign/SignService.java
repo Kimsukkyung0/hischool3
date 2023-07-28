@@ -45,10 +45,6 @@ public class SignService {
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
         log.info("[getSignUpResult] signDataHandler로 회원 정보 요청");
 
-        Long schoolId = MAPPER.selSchoolIdByNm(p.getSchoolNm());
-        Long classId = MAPPER.selClassId(ClassDto.builder()
-                .year(LocalDate.now().getYear()).build());
-
         File tempDic = new File(FILE_DIR, "/temp");
         if (!tempDic.exists()) {
             tempDic.mkdirs();
@@ -63,24 +59,31 @@ public class SignService {
             e.printStackTrace();
         }
 
+        Long schoolId = MAPPER.selSchoolIdByNm(p.getSchoolNm());
+        Long classId = MAPPER.selClassId(ClassDto.builder()
+                .schoolId(schoolId)
+                .year(String.valueOf(LocalDate.now().getYear()))
+                .grade(p.getGrade())
+                .classNum(p.getClassNum())
+                .build());
+
         UserEntity entity = UserEntity.builder()
                 .email(p.getEmail())
                 .pw(PW_ENCODER.encode(p.getPw()))
                 .nm(p.getNm())
-                .schoolNm(p.getSchoolNm())
-                .grade(p.getGrade())
-                .classNm(p.getClassNm())
                 .pic(savedPicNm)
                 .birth(p.getBirth())
                 .phone(p.getPhone())
                 .address(p.getAddress())
                 .role(String.format("ROLE_%s", p.getRole().toUpperCase()))
+                .classId(classId)
                 .build();
 
         String savedAprPicNm = null;
+        File tempAprPic = null;
         if (aprPic != null) {
             savedAprPicNm = MyFileUtils.makeRandomFileNm(aprPic.getOriginalFilename());
-            File tempAprPic = new File(tempDic.getPath(), savedAprPicNm);
+            tempAprPic = new File(tempDic.getPath(), savedAprPicNm);
 
             try {
                 aprPic.transferTo(tempAprPic);
@@ -104,7 +107,7 @@ public class SignService {
 
             if (aprPic != null) {
                 File targetAprPic = new File(targetDicPath, savedAprPicNm);
-                tempPic.renameTo(targetAprPic);
+                tempAprPic.renameTo(targetAprPic);
             }
 
             setSuccessResult(resultDto);
