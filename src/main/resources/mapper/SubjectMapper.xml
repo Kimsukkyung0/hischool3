@@ -32,7 +32,7 @@
         ON B.subject_id = C.subject_id
         INNER JOIN user D
         ON C.user_id = D.user_id
-        WHERE A.`type`= 1 AND C.user_id = #{user_id}
+        WHERE A.`type`= 1 AND C.user_id = #{user_id} and D.apr_yn = 1
     </select>
     <select id="smalllist" resultType="SubjectVo2">
         SELECT A.subject_id,A.nm,B.user_id
@@ -41,7 +41,7 @@
         ON A.subject_id= B.subject_id
         INNER JOIN user C
         ON B.user_id = C.user_id
-        WHERE B.user_id = #{user_id};
+        WHERE B.user_id = #{user_id} and C.apr_yn = 1;
     </select>
 </mapper>
 
