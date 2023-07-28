@@ -14,8 +14,8 @@ public class SelTeacherMyPageVo {
     private String phone;
     private String Address;
     private int classId;
-    private int grade;
-    private int van;
+    private String grade;
+    private String van;
     private int schoolId;
     private String snm;
 }
