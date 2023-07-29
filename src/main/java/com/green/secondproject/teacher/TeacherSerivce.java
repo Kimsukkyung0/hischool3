@@ -25,6 +25,18 @@ public class TeacherSerivce {
         return mapper.selUnsignedStudent(dto);
     }
 
+    public List<SelAcaResultVo> selAcaResult(int userId) {
+        SelAcaResultDto dto = new SelAcaResultDto();
+        dto.setUserId(userId);
+        return mapper.selAcaResult(dto);
+    }
+
+    public List<SelMockResultVo> selMockResult(int userId) {
+        SelMockResultDto dto = new SelMockResultDto();
+        dto.setUserId(userId);
+        return mapper.selMockResult(dto);
+    }
+
     public int delTeacher(int userId) {
         TeacherDelDto dto = new TeacherDelDto();
         dto.setUserId(userId);

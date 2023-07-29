@@ -17,9 +17,8 @@ public class TimeTableContainerVo {
 //    private List<TimeTableVoList> list;
     private List<TimeTableVo> list;
 
-
-//수정
-//    public TimeTableContainerVo(String schoolNm, String semester, String grade, String classNm, List<TimeTableVoList> list){
+//    public TimeTableContainerVo(String schoolNm, String semester, String grade,
+//                                String classNm, List<TimeTableVoList> list){
 //        this.schoolNm = schoolNm;
 //        this.grade=grade;
 //        this.semester = semester;

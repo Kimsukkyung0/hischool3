@@ -61,9 +61,9 @@ public class TimetableService {
     }
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
-        LocalDate now = LocalDate.now();
+//        LocalDate now = LocalDate.now();
 
-//        LocalDate now = LocalDate.of(2023,5,6);
+        LocalDate now = LocalDate.of(2023,5,26);
 ////
 ////        int dayOfToday = now.getDayOfWeek().getValue();
 ////        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있게 ?
@@ -99,13 +99,38 @@ public class TimetableService {
         try{
             JsonNode jsonNode = om.readTree(json); //자바객체
             timeTableVoList = om.convertValue(jsonNode.at("/hisTimetable/1/row"), new TypeReference<List<TimeTableVo>>() {});
+
             Map<String,String> map = om.convertValue(jsonNode.at("/hisTimetable/1/row/0"), new TypeReference<HashMap<String, String>>() {});
             log.info("timeTableVoList : {}", timeTableVoList);
             String semester = map.get("SEM");
             String schoolNm = map.get("SCHUL_NM");
-            String date = map.get("ALL_TI_YMD");//일자
+//
+//            String date = map.get("ALL_TI_YMD");//일자
+//            //지금 여깃 2023.0626만뜨고있는 상황임
+//
+//
+//
+//            //날짜타입으로 변환하기
+//            StringBuffer sb = new StringBuffer(date);
+//            sb.insert(4,'-');
+//            sb.insert(7,'-');
+//
+//            LocalDate formLocalDate = LocalDate.parse(sb);
+//
+//            log.info("요일 기준 일자 : {}",formLocalDate);
+//
+//            //요일값 넘기기
+//            int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
+//
+//            for (int i = 0; i < timeTableVoList.size(); i++) {
+//                int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
+//                timeTableVoList.get(i).setDayMonToSun(dayMonToSun);
+//                log.info(dayMonToSun);
+//            }
+//
 
-            result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester,timeTableVoList);
+            result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester, timeTableVoList);
+
         }catch(Exception e){
             e.printStackTrace();
         }
