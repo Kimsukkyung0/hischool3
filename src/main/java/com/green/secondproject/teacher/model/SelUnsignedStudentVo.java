@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class SelUnsignedStudentVo {
     private int classId;
     private int aprYn;
-    private String unm;
+    private String snm;
     private LocalDate birth;
     private String phone;
     private String email;

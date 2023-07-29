@@ -5,7 +5,7 @@
 <mapper namespace="com.green.secondproject.myPage.MyPageMapper">
 
 
-    <update id="updTeacherInfo">
+    <update id="UpdTeacherInfo">
         UPDATE user
         SET nm = #{nm}
         , phone = #{phone}
@@ -13,6 +13,17 @@
         , pic = #{pic}
         WHERE user_id = #{userId}
         AND role = "ROLE_TC"
+    </update>
+
+
+    <update id="UpdStudentInfo">
+        UPDATE user
+        SET nm = #{nm}
+        , phone = #{phone}
+        , address = #{address}
+        , pic = #{pic}
+        WHERE user_id = #{userId}
+        AND role = "ROLE_STD"
     </update>
 
 

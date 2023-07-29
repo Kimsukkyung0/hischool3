@@ -7,8 +7,8 @@ import java.util.List;
 
 @Mapper
 public interface MyPageMapper {
-    int updTeacherInfo(UpdTeacherInfoDto dto);
-    int updStudentInfo(UpdStudentInfoDto dto);
+    int UpdTeacherInfo(UpdTeacherInfoDto dto);
+    int UpdStudentInfo(UpdStudentInfoDto dto);
     List<SelStudentMyPageVo> selStudentMyPage(SelStudentMyPageDto dto);
     List<SelTeacherMyPageVo> selTeacherMyPage(SelTeacherMyPageDto dto);
 }

@@ -5,7 +5,7 @@
 <mapper namespace="com.green.secondproject.teacher.TeacherMapper">
     
     <select id="selSignedStudent">
-        SELECT class_id classId, apr_yn aprYn, nm unm, birth, phone, email
+        SELECT class_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
         WHERE role = "ROLE_STD"
             AND apr_yn = 1
@@ -14,7 +14,7 @@
 
 
     <select id="selUnsignedStudent">
-        SELECT class_id classId, apr_yn aprYn, nm unm, birth, phone, email
+        SELECT class_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
         WHERE role = "ROLE_STD"
         AND apr_yn = 0
