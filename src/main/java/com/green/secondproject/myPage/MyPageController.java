@@ -27,7 +27,7 @@ public class MyPageController {
     }
 
 
-    @PatchMapping("/TeacherInfoUpdate")
+    @PatchMapping("/StudentInfoUpdate")
     @Operation(summary = "학생 정보 수정",
             description = "요구값 : <br> userId - 유저(학생) PK값<br> "+
                     "출력값 : <br>(1)strYearMonth - 접속한 달<br>"+
