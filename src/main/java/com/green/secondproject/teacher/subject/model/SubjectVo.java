@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 
 public class SubjectVo {
-    private long category_id;
+    private Long categoryid;
     private String nm;
 }

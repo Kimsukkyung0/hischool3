@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SubjectDetailDto {
-    private long user_id;
+    private Long userid;
 }

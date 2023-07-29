@@ -42,14 +42,14 @@ public class SubjectController {
     List<SubjectDetailVo2> tcslist(@RequestParam long user_id)
     {
         SubjectDetailDto dto = new SubjectDetailDto();
-        dto.setUser_id(user_id);
+        dto.setUserid(user_id);
         return serivce.tcslist(dto);
     }
     @GetMapping("/category/small")
     @Operation(summary = "등록후 세부과목 리스트")
     List<SubjectVo2> smalllist(@RequestParam long user_id){
         SubjectDto dto = new SubjectDto();
-        dto.setUser_id(user_id);
+        dto.setUserid(user_id);
         return serivce.smalllist(dto);
     }
 }

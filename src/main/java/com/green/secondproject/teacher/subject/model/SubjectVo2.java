@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SubjectVo2 {
-private Long subject_id;
+private Long subjectid;
 private String nm;
-private Long user_id;
+private Long userid;
 }
