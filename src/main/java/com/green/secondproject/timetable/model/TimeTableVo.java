@@ -17,7 +17,6 @@ public class TimeTableVo {
     private String subject;
 
 
-
 //    @JsonProperty("date")
 //    public String getDate() {
 //        return date;
@@ -28,23 +27,23 @@ public class TimeTableVo {
 //        this.date = date;
 //    }
 
-//    public int getDayMonToSun(String date) {
-////        StringBuffer sb = new StringBuffer(date);
-////        sb.insert(4,'-');
-////        sb.insert(7,'-');
-////
-////        LocalDate formLocalDate = LocalDate.parse(sb);
-////
-////        //요일값 넘기기
-////        int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
-//
-//        return dayMonToSun;
-//    }
-//
-//    public void setDayMonToSun(int dayMonToSun) {
-//        this.dayMonToSun = dayMonToSun;
-//    }
-//
+    public int getDayMonToSun(String date) {
+        return dayMonToSun;
+    }
+
+    public void setDayMonToSun(String date) {
+        StringBuffer sb = new StringBuffer(date);
+        sb.insert(4,'-');
+        sb.insert(7,'-');
+
+        LocalDate formLocalDate = LocalDate.parse(sb);
+
+        //요일값 넘기기
+        int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
+
+        this.dayMonToSun = dayMonToSun-1;
+    }
+
     @JsonProperty("date")
     public String getDate() { return date;}
 
