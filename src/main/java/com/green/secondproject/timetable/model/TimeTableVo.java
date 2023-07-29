@@ -15,7 +15,6 @@ public class TimeTableVo {
     public String getPerio() {
         return period;
     }
-
     @JsonProperty("PERIO")
     public void setPerio(String period) {
         this.period = period;

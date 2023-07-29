@@ -110,6 +110,12 @@ public class MealMenuTableService {
             JsonNode jsonNode = om.readTree(json); //자바객체
             mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<List<MealTableVo>>() {});
             for (MealTableVo f : mealTableVo) {
+                StringBuffer sb = new StringBuffer();
+                sb.append(f.getDate());
+                sb.insert(4,'-');
+                sb.insert(7,'-');
+                f.setDate(sb.toString());
+                log.info(sb.toString());
                 f.setMenuOftheDay(f.getMenuOftheDay().replaceAll("<br/>",",").replaceAll("[\\(0-9.\\)]","").replaceAll(" ",""));
             }
             Map<String,String> map = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row/0"), new TypeReference<Map<String, String>>() {});

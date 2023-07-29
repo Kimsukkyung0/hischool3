@@ -63,20 +63,16 @@ public class TimetableService {
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
         LocalDate now = LocalDate.now();
 
+//        LocalDate now = LocalDate.of(2023,5,6);
+////
+////        int dayOfToday = now.getDayOfWeek().getValue();
+////        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있게 ?
+////            now.plusDays((7-dayOfToday)+1);
+////        }
         String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         log.info("thisWeekStart : {}", thisWeekStart);
         log.info("thisWeekEnds : {}", thisWeekEnds);
-
-        // 접속한 날 주의 월요일: 처음엔 단순히 분기문을 이용해서 +- 를 하면 되는건가 생각햇는데. 메서드가 있을까봐 찾는중
-        //보통 localdate 쓰는게 아니라 calender 사용하는듯..
-        //localdate 를 사용하려면 , localdate.with (dayOfweek, 요일지정)
-        //접속한 날 주의 금요일
-//        int WhatDaysToday = now.getDayOfWeek().getValue(); //접속한날짜의 요일
-//
-//        if(WhatDaysToday<= 1){
-//            StartDayOfTheWeek = today.plusDays(-today.getDayOfWeek().getValue());}
-//        LocalDate EndDayOfTheWeek = StartDayOfTheWeek.plusDays(5);
 
         String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/hisTimetable")
                 //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
@@ -107,6 +103,8 @@ public class TimetableService {
             log.info("timeTableVoList : {}", timeTableVoList);
             String semester = map.get("SEM");
             String schoolNm = map.get("SCHUL_NM");
+            String date = map.get("ALL_TI_YMD");//일자
+
             result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester,timeTableVoList);
         }catch(Exception e){
             e.printStackTrace();
