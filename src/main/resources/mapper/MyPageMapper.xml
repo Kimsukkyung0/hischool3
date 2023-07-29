@@ -39,6 +39,7 @@
             AND role = "ROLE_STD"
     </select>
 
+
     <select id="selTeacherMyPage">
         SELECT A.user_id userId, A.nm tnm, A.email, A.pic, A.birth, A.phone, A.address
         , B.class_id, B.grade, B.class van, C.school_id schoolId, C.nm snm
