@@ -21,7 +21,8 @@ public class TimetableController {
     @GetMapping
     @Operation(summary = "접속한 주의 시간표출력(월-금)", description = "요구값 : <br>" + "(1)sdSchulCode - 학교고유코드<br>"+"(2)grade - 학년 <br>"+
             "classNm:학급번호<br><br>" +"출력값 : <br>" + "(1)schoolNm - 학교명<br>"+"(2)grade - 학년 <br>"+
-            "(3)classNm:학급번호<br>"+"(4)grade - 학년 <br>"+"(5)semester - 학기<br><br> "+"출력값 리스트세부내역 : <br> (1)period - 교시 <br> (2) class_contents : 수업명"+"" +
+            "(3)classNm:학급번호<br>"+"(4)grade - 학년 <br>"+"(5)semester - 학기<br><br> "+"출력값 리스트세부내역 : <br> (1)dayMonToSun - 요일정보<br> (2)date : 시간표기준일(0:월 1:화 2:수 3:목 4:금 5:토 6:일) <br> (3)period - 교시 <br> (4) class_contents : 수업명<br>"
+            +
             "※ 7월 둘째주 부로 고등학교가 방학기간이라 개발단계에서는 주단위 테스트시 날짜값이 6.25-6.30일로 고정되어있습니다.※<br>")
     public TimeTableContainerVo GetTimeTableByClassOfTheWeek(TimeTableParam timeTableParam){
         log.info("timetableParam : {}",timeTableParam);
