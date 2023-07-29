@@ -42,7 +42,7 @@ public class MyPageController {
             description = "요구값 : <br>(1)userId - 학생 PK값<br>(2)stdnm - 학생 이름<br>(3)email - 이메일<br>" +
                     "(4)pic - 사진(변경예정)<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)classId - 학급 PK값<br>" +
                     "(8)grade - 학년<br>(9)van - 반<br>(10)schoolId - 학교 PK값<br>(11)snm - 학교 이름<br>(12)address - 주소")
-    public List<SelStudentMyPageVo> selectStdMyPage(@RequestParam int userId) {
+    public List<SelStudentMyPageVo> selectStdMyPage(@RequestParam Long userId) {
         return serivce.selStudentMyPage(userId);
     }
 
@@ -52,7 +52,7 @@ public class MyPageController {
             description = "요구값 : <br>(1)userId - 선생님 PK값<br>(2)tnm - 선생님 이름<br>(3)email - 이메일<br>" +
                     "(4)pic - 사진(변경예정)<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)classId - 학급 PK값<br>" +
                     "(8)grade - 학년<br>(9)van - 반<br>(10)schoolId - 학교 PK값<br>(11)snm - 학교 이름<br>(12)address - 주소")
-    public List<SelTeacherMyPageVo> selectTcMyPage(@RequestParam int userId) {
+    public List<SelTeacherMyPageVo> selectTcMyPage(@RequestParam Long userId) {
         return serivce.selTeacherMyPage(userId);
     }
 }

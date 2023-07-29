@@ -21,14 +21,14 @@ public class MyPageService {
     }
 
 
-    public List<SelStudentMyPageVo> selStudentMyPage(int userId) {
+    public List<SelStudentMyPageVo> selStudentMyPage(Long userId) {
         SelStudentMyPageDto dto = new SelStudentMyPageDto();
         dto.setUserId(userId);
         return mapper.selStudentMyPage(dto);
     }
 
 
-    public List<SelTeacherMyPageVo> selTeacherMyPage(int userId) {
+    public List<SelTeacherMyPageVo> selTeacherMyPage(Long userId) {
         SelTeacherMyPageDto dto = new SelTeacherMyPageDto();
         dto.setUserId(userId);
         return mapper.selTeacherMyPage(dto);

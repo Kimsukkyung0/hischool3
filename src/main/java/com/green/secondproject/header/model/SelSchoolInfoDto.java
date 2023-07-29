@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class SelSchoolInfoDto {
-    private int schoolId;
-    private int userId;
+    private Long schoolId;
+    private Long userId;
 }

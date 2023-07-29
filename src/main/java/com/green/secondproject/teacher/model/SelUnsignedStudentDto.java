@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SelUnsignedStudentDto {
-    private int classId;
+    private Long classId;
 }

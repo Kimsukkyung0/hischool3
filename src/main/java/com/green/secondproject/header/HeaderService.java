@@ -16,13 +16,13 @@ public class HeaderService {
     private final HeaderMapper mapper;
 
 
-    public List<SelSchoolInfoVo> selSchoolInfo(int userId) {
+    public List<SelSchoolInfoVo> selSchoolInfo(Long userId) {
         SelSchoolInfoDto dto = new SelSchoolInfoDto();
         dto.setUserId(userId);
         return mapper.selSchoolInfo(dto);
     }
 
-    public List<SelSchoolLogoVo> selSchoolLogo(int userId) {
+    public List<SelSchoolLogoVo> selSchoolLogo(Long userId) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();
         dto.setUserId(userId);
         return mapper.selSchoolLogo(dto);

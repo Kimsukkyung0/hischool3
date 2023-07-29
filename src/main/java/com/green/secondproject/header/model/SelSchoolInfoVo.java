@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class SelSchoolInfoVo {
-    private int userId;
-    private int schoolId;
+    private Long userId;
+    private Long schoolId;
     private String logo;
     private String nm;
     private String grade;

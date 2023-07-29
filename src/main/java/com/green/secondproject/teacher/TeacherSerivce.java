@@ -12,32 +12,32 @@ public class TeacherSerivce {
     private final TeacherMapper mapper;
 
 
-    public List<SelSignedStudentVo> selSignedStudent(int classId) {
+    public List<SelSignedStudentVo> selSignedStudent(Long classId) {
         SelSignedStudentDto dto = new SelSignedStudentDto();
         dto.setClassId(classId);
         return mapper.selSignedStudent(dto);
     }
 
 
-    public List<SelUnsignedStudentVo> selUnsignedStudent(int classId) {
+    public List<SelUnsignedStudentVo> selUnsignedStudent(Long classId) {
         SelUnsignedStudentDto dto = new SelUnsignedStudentDto();
         dto.setClassId(classId);
         return mapper.selUnsignedStudent(dto);
     }
 
-    public List<SelAcaResultVo> selAcaResult(int userId) {
+    public List<SelAcaResultVo> selAcaResult(Long userId) {
         SelAcaResultDto dto = new SelAcaResultDto();
         dto.setUserId(userId);
         return mapper.selAcaResult(dto);
     }
 
-    public List<SelMockResultVo> selMockResult(int userId) {
+    public List<SelMockResultVo> selMockResult(Long userId) {
         SelMockResultDto dto = new SelMockResultDto();
         dto.setUserId(userId);
         return mapper.selMockResult(dto);
     }
 
-    public int delTeacher(int userId) {
+    public int delTeacher(Long userId) {
         TeacherDelDto dto = new TeacherDelDto();
         dto.setUserId(userId);
         return mapper.delTeacher(dto);

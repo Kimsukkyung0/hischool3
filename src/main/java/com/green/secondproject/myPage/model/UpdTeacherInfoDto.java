@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class UpdTeacherInfoDto {
-    private int userId;
+    private Long userId;
     private String nm;
     private String phone;
     private String address;

@@ -6,16 +6,16 @@ import java.time.LocalDate;
 
 @Data
 public class SelTeacherMyPageVo {
-    private int userId;
+    private Long userId;
     private String tnm;
     private String email;
     private String pic;
     private LocalDate birth;
     private String phone;
     private String Address;
-    private int classId;
+    private Long classId;
     private String grade;
     private String van;
-    private int schoolId;
+    private Long schoolId;
     private String snm;
 }
