@@ -12,7 +12,7 @@
 </select>
 
     <select id="subject">
-        select *
+        select subject_id subjectid,nm,category_id categoryid
         from subject
     </select>
 
