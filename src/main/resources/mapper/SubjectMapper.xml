@@ -6,7 +6,7 @@
 
 
 <select id="subCate" resultType="SubjectVo">
-    SELECT category_id,nm
+    SELECT category_id categoryid,nm
     FROM sbj_category
     WHERE TYPE = 1
 </select>
@@ -20,11 +20,11 @@
     INSERT INTO tc_sbj
     (user_id,subject_id)
     VALUES
-    (#{userid},#{subjectid})
+    (#{user_id},#{subject_id})
 </insert>
 
     <select id="tcslist" resultType="SubjectDetailVo2">
-        SELECT DISTINCT A.category_id,A.nm,C.user_id
+        SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
         FROM  sbj_category A
         INNER JOIN subject B
         ON A.category_id = B.category_id
@@ -35,13 +35,13 @@
         WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
     </select>
     <select id="smalllist" resultType="SubjectVo2">
-        SELECT A.subject_id,A.nm,B.user_id
+        SELECT A.subject_id subjectid,A.nm,B.user_id userid
         FROM subject A
         INNER JOIN tc_sbj B
         ON A.subject_id= B.subject_id
         INNER JOIN user C
         ON B.user_id = C.user_id
-        WHERE B.user_id = #{userid} and C.apr_yn = 1;
+        WHERE B.user_id = #{userid} and C.apr_yn = 1
     </select>
 </mapper>
 
