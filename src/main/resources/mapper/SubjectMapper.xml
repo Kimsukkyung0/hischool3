@@ -5,15 +5,43 @@
 <mapper namespace="com.green.secondproject.teacher.subject.SubjectMapper">
 
 
-    <select id="sbjCate" resultType="SubjectVo">
-        SELECT nm FROM sbj_category
-        WHERE TYPE = 1
+<select id="subCate" resultType="SubjectVo">
+    SELECT category_id categoryid,nm
+    FROM sbj_category
+    WHERE TYPE = 1
+</select>
+
+    <select id="subject">
+        select subject_id subjectid,nm,category_id categoryid
+        from subject
     </select>
 
-    <select id="subDetail">
-        SELECT * FROM subject A
-        INNER JOIN sbj_category B
+<insert id="instcsbj">
+    INSERT INTO tc_sbj
+    (user_id,subject_id)
+    VALUES
+    (#{user_id},#{subject_id})
+</insert>
+
+    <select id="tcslist" resultType="SubjectDetailVo2">
+        SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
+        FROM  sbj_category A
+        INNER JOIN subject B
         ON A.category_id = B.category_id
-        WHERE A.category_id = #{category_id} AND TYPE =1
+        INNER JOIN tc_sbj C
+        ON B.subject_id = C.subject_id
+        INNER JOIN user D
+        ON C.user_id = D.user_id
+        WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
+    </select>
+    <select id="smalllist" resultType="SubjectVo2">
+        SELECT A.subject_id subjectid,A.nm,B.user_id userid
+        FROM subject A
+        INNER JOIN tc_sbj B
+        ON A.subject_id= B.subject_id
+        INNER JOIN user C
+        ON B.user_id = C.user_id
+        WHERE B.user_id = #{userid} and C.apr_yn = 1
     </select>
 </mapper>
+

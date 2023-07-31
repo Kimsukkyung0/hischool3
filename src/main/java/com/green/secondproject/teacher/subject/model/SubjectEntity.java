@@ -5,8 +5,8 @@ import lombok.Data;
 
 @Data
 public class SubjectEntity {
-    private long subject_id;
+    private Long subjectid;
     private String nm;
-    private String category_id;
+    private String categoryid;
 
 }
