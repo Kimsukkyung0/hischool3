@@ -1,4 +1,4 @@
-spring:
+jhspring:
   servlet:
     multipart:
       max-file-size: 3MB
