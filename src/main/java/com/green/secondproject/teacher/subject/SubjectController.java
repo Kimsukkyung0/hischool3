@@ -69,4 +69,27 @@ public class SubjectController {
         dto.setUserid(userid);
         return serivce.smalllist(dto);
     }
+    @GetMapping("/classnum")
+    @Operation(summary = "반석차 반전체인원") //근데이거 calss id 19번인가 넘어가야 2번째학교 나옴 흠; 애매 차라리 컬럼을 늘리는게 이쁘긴할듯
+    int classnum(@RequestParam Long classid,@RequestParam Long schoolid){
+        StudentClassDto dto = new StudentClassDto();
+        dto.setClassid(classid);
+        dto.setSchoolid(schoolid);
+        return serivce.classnum(dto);
+    }
+
+    @GetMapping("/schoolsnum")
+    @Operation(summary = "학교 학년전체인원")
+    int schoolnum(@RequestParam char grade,@RequestParam Long schoolid){
+        StudentSchoolDto dto = new StudentSchoolDto();
+        dto.setSchoolid(schoolid);
+        dto.setGrade(grade);
+        return serivce.schoolnum(dto);
+    }
+    @PostMapping
+    @Operation(summary = "학생별 내신성적등록")
+    int acasubject(@RequestBody AcaSubjectDto dto){
+        return serivce.acasubject(dto);
+    }
+
 }

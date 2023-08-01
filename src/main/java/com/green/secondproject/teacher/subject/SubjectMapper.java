@@ -18,4 +18,9 @@ public interface SubjectMapper {
 
     List<SubjectVo2> smalllist(SubjectDto dto
     );
+    int classnum(StudentClassDto dto);
+
+    int schoolnum(StudentSchoolDto dto);
+
+    int acasubject(AcaSubjectDto dto);
 }
