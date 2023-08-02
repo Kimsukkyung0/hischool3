@@ -10,7 +10,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface UserMapper {
     int save(UserEntity p);
     UserVo selUserByEmail(String email);
-
+    UserVo selUserById(Long userId);
 
     int updUserToken(UserTokenEntity p);
     UserTokenEntity selUserToken(UserTokenEntity p);

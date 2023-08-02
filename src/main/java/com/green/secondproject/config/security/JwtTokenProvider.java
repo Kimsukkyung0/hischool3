@@ -1,6 +1,7 @@
 package com.green.secondproject.config.security;
 
 import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.sign.model.UserVo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -14,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -25,16 +27,19 @@ public class JwtTokenProvider {
     public final String TOKEN_TYPE;
     public final long ACCESS_TOKEN_VALID_MS = 3_600_000L; // 1000L * 60 * 60 -> 1시간
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
+    private final UserMapper mapper;
 
     public JwtTokenProvider(@Value("${springboot.jwt.access-secret}") String accessSecretKey
                             , @Value("${springboot.jwt.refresh-secret}") String refreshSecretKey
-                            , @Value("${springboot.jwt.token-type}") String tokenType) {
+                            , @Value("${springboot.jwt.token-type}") String tokenType,
+                            UserMapper mapper) {
         byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecretKey);
         this.ACCESS_KEY = Keys.hmacShaKeyFor(accessKeyBytes);
 
         byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecretKey);
         this.REFRESH_KEY = Keys.hmacShaKeyFor(refreshKeyBytes);
         this.TOKEN_TYPE = tokenType;
+        this.mapper = mapper;
     }
 
     public String generateJwtToken(String strIuser, List<String> roles, long token_valid_ms, Key key) {
@@ -70,9 +75,17 @@ public class JwtTokenProvider {
         Claims claims = getClaims(token, key);
         String strIuser = claims.getSubject();
         List<String> roles = (List<String>)claims.get("roles");
-        return MyUserDetails
-                .builder()
-                .userId(Long.valueOf(strIuser))
+        UserVo vo = mapper.selUserById(Long.valueOf(strIuser));
+
+        return MyUserDetails.builder()
+                .userId(vo.getUserId())
+                .email(vo.getEmail())
+                .pw(vo.getPw())
+                .nm(vo.getNm())
+                .schoolNm(vo.getSchoolNm())
+                .grade(vo.getGrade())
+                .classNum(vo.getClassNum())
+                .pic(vo.getPic())
                 .roles(roles)
                 .build();
     }

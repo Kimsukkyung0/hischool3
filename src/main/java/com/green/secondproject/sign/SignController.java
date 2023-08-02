@@ -1,6 +1,7 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.CommonRes;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.sign.model.SignInResultDto;
 import com.green.secondproject.sign.model.SignUpParam;
 import com.green.secondproject.sign.model.SignUpResultDto;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -69,6 +71,11 @@ public class SignController {
     public ResponseEntity<SignUpResultDto> refreshToken(HttpServletRequest req, @RequestParam String refreshToken) {
         SignUpResultDto dto = SERVICE.refreshToken(req, refreshToken);
         return dto == null ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null) : ResponseEntity.ok(dto);
+    }
 
+    @GetMapping("/test")
+    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
+        log.info("userDetails: {}", userDetails);
+        return userDetails;
     }
 }
