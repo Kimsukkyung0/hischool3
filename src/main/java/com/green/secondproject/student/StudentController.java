@@ -16,6 +16,7 @@ public class StudentController {
     private final StudentService service;
 
 
+
     @DeleteMapping("/delete")
     @Operation(summary = "학생 탈퇴 처리")
     public int deleteStudent(@RequestParam int userId) {
