@@ -41,4 +41,15 @@ public class SubjectSerivce {
     int acasubject(AcaSubjectDto dto){
         return mapper.acasubject(dto);
     }
+    
+    //모의고사 시작
+    List<MockSubjectBigVo> mockbiglist(){
+        return mapper.mockbiglist();
+    }
+    List<MockSubjcetSmallVo> mocksmalllist(){
+        return mapper.mocksmalllist();
+    }
+    int mockins(MockSubjectDto dto){
+        return mapper.mockins(dto);
+    }
 }
