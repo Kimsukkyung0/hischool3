@@ -1,9 +1,6 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.teacher.model.SelAcaResultVo;
-import com.green.secondproject.teacher.model.SelMockResultVo;
-import com.green.secondproject.teacher.model.SelSignedStudentVo;
-import com.green.secondproject.teacher.model.SelUnsignedStudentVo;
+import com.green.secondproject.teacher.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -65,5 +62,19 @@ public class TeacherController {
                             "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
     public int deleteTeacher(@RequestParam Long userId) {
         return service.delTeacher(userId);
+    }
+
+    @GetMapping("/classStudent")
+    @Operation(summary = "반 학생총원")
+    public int classStudent(@RequestParam Long classid){
+        ClassStudentDto dto = new ClassStudentDto();
+        dto.setClassid(classid);
+
+        return service.classStudent(dto);
+    }
+    @GetMapping("/aprStudent")
+    @Operation(summary = "승인 대기 인원(n명)")
+    public int aprStudent(@RequestParam Long classid){
+        return service.aprStudent(classid);
     }
 }
