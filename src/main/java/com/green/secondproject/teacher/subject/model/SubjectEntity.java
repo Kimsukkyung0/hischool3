@@ -7,6 +7,6 @@ import lombok.Data;
 public class SubjectEntity {
     private Long subjectid;
     private String nm;
-    private String categoryid;
+    private Long categoryid;
 
 }

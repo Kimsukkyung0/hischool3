@@ -12,4 +12,6 @@ public interface TeacherMapper {
     List<SelAcaResultVo> selAcaResult(SelAcaResultDto dto);
     List<SelMockResultVo> selMockResult(SelMockResultDto dto);
     int delTeacher(TeacherDelDto dto);
+    int classStudent(ClassStudentDto dto);
+    int aprStudent(ClassStudentDto dto);
 }

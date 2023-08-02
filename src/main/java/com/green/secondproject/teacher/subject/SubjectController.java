@@ -1,13 +1,16 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.context.annotation.Description;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -24,18 +27,17 @@ public class SubjectController {
     @Operation(summary = "선생님 과목계열 리스트",
             description = "nm - 학생이름"+
                     "<br>categoryid - category 테이블에 카테고리pk값")
-
     List<SubjectVo> subcate(){
         return serivce.subcate();
     }
 
     @GetMapping()
-    @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정예정" ,
+    @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정" ,
             description = "subjectid - subject 테이블에 과목 PK값" +
                     "<br>nm - 학생이름"+
                     "<br>categoryid - category 테이블에 카테고리pk값")
-    List<SubjectDetailVo> subject(){
-        return serivce.subject();
+    List<SubjectDetailVo> subject(@RequestParam Long categoryid){
+        return serivce.subject(categoryid);
     }
 
     @PostMapping
@@ -54,6 +56,7 @@ public class SubjectController {
             "<br>userid - 학생 pk값")
     List<SubjectDetailVo2> tcslist(@RequestParam Long userid)
     {
+
         SubjectDetailDto dto = new SubjectDetailDto();
         dto.setUserid(userid);
         return serivce.tcslist(dto);
@@ -64,17 +67,15 @@ public class SubjectController {
             "categoryid - category 테이블에 세부과목 PK값" +
             "<br>nm - 학생이름"+
             "<br>입력값 : " +"<br>userid - 학생 pk값")
-    List<SubjectVo2> smalllist(@RequestParam Long userid){
-        SubjectDto dto = new SubjectDto();
-        dto.setUserid(userid);
-        return serivce.smalllist(dto);
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long userid){
+
+        return serivce.smalllist(userid);
     }
     @GetMapping("/classnum")
     @Operation(summary = "반석차 반전체인원") //근데이거 calss id 19번인가 넘어가야 2번째학교 나옴 흠; 애매 차라리 컬럼을 늘리는게 이쁘긴할듯
-    int classnum(@RequestParam Long classid,@RequestParam Long schoolid){
+    int classnum(@RequestParam Long classid){
         StudentClassDto dto = new StudentClassDto();
         dto.setClassid(classid);
-        dto.setSchoolid(schoolid);
         return serivce.classnum(dto);
     }
 
@@ -98,9 +99,9 @@ public class SubjectController {
         return serivce.mockbiglist();
     }
     @GetMapping("/mocksmalllist")
-    @Operation(summary = "모의고사 세부과목선택List 과목계열선택되면 그조건에 맞는것만 되도록 수정예정")
-    List<MockSubjcetSmallVo> mocksmalllist(){
-        return serivce.mocksmalllist();
+    @Operation(summary = "모의고사 세부과목선택List 과목계열선택되면 그조건에 맞는것만 되도록 수정")
+    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
+        return serivce.mocksmalllist(categoryid);
     }
     @PostMapping("/mockins")
     @Operation(summary = "모의고사 성적등록")

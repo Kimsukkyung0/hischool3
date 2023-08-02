@@ -10,14 +10,14 @@ import java.util.List;
 public interface SubjectMapper {
     List<SubjectVo> subCate();
 
-    List<SubjectDetailVo> subject();
+    List<SubjectDetailVo> subject(Long categoryid);
 
-    int insTcsbj(SubjectInsDto dto);
+    int instcsbj(SubjectInsDto dto);
 
     List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
 
-    List<SubjectVo2> smalllist(SubjectDto dto
-    );
+    List<SubjectVo2> smalllist(SubjectDto dto);
+
     int classnum(StudentClassDto dto);
 
     int schoolnum(StudentSchoolDto dto);
@@ -27,7 +27,7 @@ public interface SubjectMapper {
     //모의고사 시작
     List<MockSubjectBigVo> mockbiglist();
 
-    List<MockSubjcetSmallVo> mocksmalllist();
+    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
 
     int mockins(MockSubjectDto dto);
 }

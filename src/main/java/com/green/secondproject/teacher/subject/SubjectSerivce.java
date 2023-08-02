@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.Subject;
 import java.util.List;
 
 @Service
@@ -18,18 +19,22 @@ public class SubjectSerivce {
         return mapper.subCate();
     }
 
-    List<SubjectDetailVo> subject(){
-        return mapper.subject();
+    List<SubjectDetailVo> subject(Long categoryid){
+
+        return mapper.subject(categoryid);
     }
 
     int instcsbj(SubjectInsDto dto){
-        return mapper.insTcsbj(dto);
+        return mapper.instcsbj(dto);
     }
 
     List<SubjectDetailVo2> tcslist(SubjectDetailDto dto){
         return mapper.tcslist(dto);
     }
-    List<SubjectVo2> smalllist(SubjectDto dto){
+    List<SubjectVo2> smalllist(Long userid){
+        SubjectDto dto = new SubjectDto();
+        dto.setUserid(userid);
+
         return mapper.smalllist(dto);
     }
     int classnum(StudentClassDto dto){
@@ -46,8 +51,8 @@ public class SubjectSerivce {
     List<MockSubjectBigVo> mockbiglist(){
         return mapper.mockbiglist();
     }
-    List<MockSubjcetSmallVo> mocksmalllist(){
-        return mapper.mocksmalllist();
+    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
+        return mapper.mocksmalllist(categoryid);
     }
     int mockins(MockSubjectDto dto){
         return mapper.mockins(dto);

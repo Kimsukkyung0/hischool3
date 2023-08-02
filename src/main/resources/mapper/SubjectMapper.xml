@@ -16,17 +16,17 @@
         subject A
         INNER JOIN sbj_category B
         ON A.category_id = B.category_id
-        WHERE B.`type` =1;
+        WHERE B.`type` =1 and A.category_id = #{categoryid};
     </select>
 
 <insert id="instcsbj">
     INSERT INTO tc_sbj
     (user_id,subject_id)
     VALUES
-    (#{user_id},#{subject_id})
+    (#{userid},#{subjectid})
 </insert>
 
-    <select id="tcslist" resultType="SubjectDetailVo2">
+    <select id="tcslist" resultType="SubjectVo2">
         SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
         FROM  sbj_category A
         INNER JOIN subject B
@@ -38,7 +38,7 @@
         WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
     </select>
     <select id="smalllist" resultType="SubjectVo2">
-        SELECT A.subject_id subjectid,A.nm,B.user_id userid
+        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid
         FROM subject A
         INNER JOIN tc_sbj B
         ON A.subject_id= B.subject_id
@@ -52,7 +52,7 @@
         ON A.school_id = B.school_id
         INNER JOIN user C
         ON A.class_id = C.class_id
-        WHERE C.class_id =#{classid} and B.school_id = #{schoolid} AND C.role ="ROLE_STD"
+        WHERE C.class_id = #{classid} AND C.role ="ROLE_STD" AND C.apr_yn = 1;
     </select>
 
     <select id="schoolnum">
@@ -82,8 +82,7 @@
     SELECT A.subject_id subjectid ,A.nm ,A.category_id categoryid  FROM  subject A
     INNER JOIN sbj_category B
     ON A.category_id = B.category_id
-    WHERE B.`type` = 2 ;
-
+    WHERE B.`type` = 2 AND  A.category_id = #{categoryid};
 </select>
     <insert id="mockins">
         INSERT INTO mock_result
