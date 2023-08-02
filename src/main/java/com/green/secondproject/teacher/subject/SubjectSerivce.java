@@ -32,4 +32,24 @@ public class SubjectSerivce {
     List<SubjectVo2> smalllist(SubjectDto dto){
         return mapper.smalllist(dto);
     }
+    int classnum(StudentClassDto dto){
+        return mapper.classnum(dto);
+    }
+    int schoolnum(StudentSchoolDto dto){
+        return mapper.schoolnum(dto);
+    }
+    int acasubject(AcaSubjectDto dto){
+        return mapper.acasubject(dto);
+    }
+    
+    //모의고사 시작
+    List<MockSubjectBigVo> mockbiglist(){
+        return mapper.mockbiglist();
+    }
+    List<MockSubjcetSmallVo> mocksmalllist(){
+        return mapper.mocksmalllist();
+    }
+    int mockins(MockSubjectDto dto){
+        return mapper.mockins(dto);
+    }
 }
