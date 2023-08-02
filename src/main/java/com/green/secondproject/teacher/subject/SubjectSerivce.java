@@ -19,6 +19,7 @@ public class SubjectSerivce {
     }
 
     List<SubjectDetailVo> subject(){
+
         return mapper.subject();
     }
 

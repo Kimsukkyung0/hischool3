@@ -16,7 +16,7 @@
         subject A
         INNER JOIN sbj_category B
         ON A.category_id = B.category_id
-        WHERE B.`type` =1;
+        WHERE B.`type` =1 and category_id = #{categoryid};
     </select>
 
 <insert id="instcsbj">
