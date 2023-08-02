@@ -73,9 +73,9 @@ public class SignController {
         return dto == null ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null) : ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/test")
-    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
-        log.info("userDetails: {}", userDetails);
-        return userDetails;
-    }
+//    @GetMapping("/test")
+//    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
+//        log.info("userDetails: {}", userDetails);
+//        return userDetails;
+//    }
 }
