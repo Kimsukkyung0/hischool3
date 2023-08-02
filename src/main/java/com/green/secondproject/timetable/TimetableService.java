@@ -64,11 +64,11 @@ public class TimetableService {
 //        LocalDate now = LocalDate.now();
 
         LocalDate now = LocalDate.of(2023,5,26);
-////
-////        int dayOfToday = now.getDayOfWeek().getValue();
-////        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있게 ?
-////            now.plusDays((7-dayOfToday)+1);
-////        }
+
+//        int dayOfToday = now.getDayOfWeek().getValue(); //요일값 구하기
+//        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있게 ?
+//            now.plusDays((7-dayOfToday)+1);
+//        }
         String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         String thisWeekEnds = now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));
         log.info("thisWeekStart : {}", thisWeekStart);
@@ -106,7 +106,6 @@ public class TimetableService {
             String schoolNm = map.get("SCHUL_NM");
             for (int i = 0; i < timeTableVoList.size(); i++) {
                 timeTableVoList.get(i).setDayMonToSun(timeTableVoList.get(i).getDate());
-
             }
 //            for (int i = 0; i < timeTableVoList.size(); i++) {
 //                String date = map.get("ALL_TI_YMD");//일자
