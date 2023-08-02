@@ -86,7 +86,7 @@ public class SubjectController {
         dto.setGrade(grade);
         return serivce.schoolnum(dto);
     }
-    @PostMapping
+    @PostMapping("/acains")
     @Operation(summary = "학생별 내신성적등록")
     int acasubject(@RequestBody AcaSubjectDto dto){
         return serivce.acasubject(dto);
