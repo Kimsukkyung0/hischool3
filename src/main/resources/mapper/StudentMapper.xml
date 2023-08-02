@@ -12,20 +12,21 @@
         AND role = "ROLE_STD"
     </update>
 
-    <select id = "selMockTestResultByValues">
-        SELECT A.year, A.mon, B.nm, B.cateName, A.standard_score, A.rating, A.percent
+    <select id = "selMockTestResultByDates">
+        SELECT A.year, A.mon,  B.nm,B.cateName,
+        A.standard_score standardScore, A.rating, A.percent
         FROM mock_result A
         INNER JOIN(select C.nm, D.nm cateName
         from subject C
         INNER JOIN sbj_category D
         ON C.category_id = D.category_id
         where type = 1) B
-        where A.user_id = 1
+        where A.user_id = #{userId}
         <if test='year != null and year != ""'>
-            AND year = #{year}
+            AND A.year = #{year}
         </if>
         <if test='mon != null and mon != ""'>
-        AND mon = #{mon}
+        AND A.mon = #{mon}
     </if>
     ORDER BY A.year desc, A.mon desc;
     </select>
