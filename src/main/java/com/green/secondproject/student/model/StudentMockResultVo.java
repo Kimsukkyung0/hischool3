@@ -6,8 +6,8 @@ import lombok.Data;
 public class StudentMockResultVo {
     private String year;
     private String mon;
-    private String nm;
     private String cateName;
+    private String nm;
     private String standardScore;
     private String rating;
     private String percent;

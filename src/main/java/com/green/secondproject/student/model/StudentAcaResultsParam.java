@@ -3,8 +3,10 @@ package com.green.secondproject.student.model;
 import lombok.Data;
 
 @Data
-public class StudentMockResultsParam {
+public class StudentAcaResultsParam {
     private String year;
-    private String mon;
+    private int semester;
+    private int midFinal;
     private Long userId;
+
 }

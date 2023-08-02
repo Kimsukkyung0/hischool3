@@ -13,22 +13,42 @@
     </update>
 
     <select id = "selMockTestResultByDates">
-        SELECT A.year, A.mon,  B.nm,B.cateName,
+        SELECT A.year, A.mon, C.nm cateName, B.nm,
         A.standard_score standardScore, A.rating, A.percent
         FROM mock_result A
-        INNER JOIN(select C.nm, D.nm cateName
-        from subject C
-        INNER JOIN sbj_category D
-        ON C.category_id = D.category_id
-        where type = 1) B
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
         where A.user_id = #{userId}
         <if test='year != null and year != ""'>
             AND A.year = #{year}
         </if>
         <if test='mon != null and mon != ""'>
-        AND A.mon = #{mon}
+            AND A.mon = #{mon}
     </if>
     ORDER BY A.year desc, A.mon desc;
+    </select>
+
+    <select id = "selAcaTestResultByDatesAndPeriod">
+        SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
+        A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
+        FROM aca_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
+        where A.user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='semester != null and semester != ""'>
+            AND A.semester = #{semester}
+        </if>
+        <if test='midFinal != null and midFinal != ""'>
+            AND A.mid_final = #{midFinal}
+        </if>
+        ORDER BY A.year desc, A.semester desc, A.mid_final asc;
     </select>
 
 

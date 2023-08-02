@@ -1,8 +1,6 @@
 package com.green.secondproject.student;
 
-import com.green.secondproject.student.model.StudentDelDto;
-import com.green.secondproject.student.model.StudentMockResultVo;
-import com.green.secondproject.student.model.StudentMockResultsParam;
+import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,4 +20,7 @@ public class StudentService {
     public List<StudentMockResultVo> selMockTestResultByDates(StudentMockResultsParam param){
         return mapper.selMockTestResultByDates(param);
     }
+    public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param){
+        return mapper.selAcaTestResultByDatesAndPeriod(param);
+    };
 }
