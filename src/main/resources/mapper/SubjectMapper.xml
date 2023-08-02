@@ -26,7 +26,7 @@
     (#{userid},#{subjectid})
 </insert>
 
-    <select id="tcslist" resultType="SubjectDetailVo2">
+    <select id="tcslist" resultType="SubjectVo2">
         SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
         FROM  sbj_category A
         INNER JOIN subject B

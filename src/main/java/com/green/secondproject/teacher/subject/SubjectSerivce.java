@@ -25,7 +25,6 @@ public class SubjectSerivce {
     }
 
     int instcsbj(SubjectInsDto dto){
-
         return mapper.instcsbj(dto);
     }
 
