@@ -84,7 +84,7 @@ public class TimetableService {
                 .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
                 .queryParam("SD_SCHUL_CODE",timeTableParam.getSdSchulCode())
                 .queryParam("GRADE",timeTableParam.getGrade())
-                .queryParam("classNm",timeTableParam.getClassNm())
+                .queryParam("CLASS_NM",timeTableParam.getClassNm())
                 .queryParam("TI_FROM_YMD",thisWeekStart)//조회시작일 : 월
                 .queryParam("TI_TO_YMD",thisWeekEnds)//조회종료일 : 금
                 .build()
@@ -108,27 +108,6 @@ public class TimetableService {
             for (int i = 0; i < timeTableVoList.size(); i++) {
                 timeTableVoList.get(i).setDayMonToSun(timeTableVoList.get(i).getDate());
             }
-//            for (int i = 0; i < timeTableVoList.size(); i++) {
-//                String date = map.get("ALL_TI_YMD");//일자
-//                //지금 여깃 2023.0626만뜨고있는 상황임
-//                //날짜타입으로 변환하기
-//                StringBuffer sb = new StringBuffer(date);
-//                sb.insert(4,'-');
-//                sb.insert(7,'-');
-//
-//                LocalDate formLocalDate = LocalDate.parse(sb);
-//                log.info("요일 기준 일자 : {}",formLocalDate);
-//                //요일값 넘기기
-//                int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
-//
-//                for (int i = 0; i < timeTableVoList.size(); i++) {
-//                    int dayMonToSun = formLocalDate.getDayOfWeek().getValue();
-//                    timeTableVoList.get(i).setDayMonToSun(dayMonToSun);
-//                    log.info(dayMonToSun);
-//                }
-//
-//            }
-
             result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester, timeTableVoList);
 
         }catch(Exception e){
