@@ -5,10 +5,7 @@ import com.green.secondproject.config.security.JwtTokenProvider;
 import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.UserEntity;
 import com.green.secondproject.config.security.model.UserTokenEntity;
-import com.green.secondproject.sign.model.ClassDto;
-import com.green.secondproject.sign.model.SignInResultDto;
-import com.green.secondproject.sign.model.SignUpResultDto;
-import com.green.secondproject.sign.model.SignUpParam;
+import com.green.secondproject.sign.model.*;
 import com.green.secondproject.utils.MyFileUtils;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
@@ -118,22 +115,28 @@ public class SignService {
         return resultDto;
     }
 
-    public SignInResultDto signIn(String id, String password, String ip) throws RuntimeException {
+    public SignInResultDto signIn(String email, String password, String ip) throws RuntimeException {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
-        UserEntity user = MAPPER.getByEmail(id);
+        UserVo user = MAPPER.selUserByEmail(email);
 
-        log.info("[getSignInResult] id: {}", id);
+        if (user == null) {
+            throw new RuntimeException("존재하지 않는 이메일");
+        }
+        log.info("[getSignInResult] id: {}", email);
 
         log.info("[getSignInResult] 패스워드 비교");
         if(!PW_ENCODER.matches(password, user.getPw())) {
-            throw new RuntimeException("비밀번호 다름");
+            throw new RuntimeException("비밀번호 불일치");
         }
         log.info("[getSignInResult] 패스워드 일치");
 
 
         log.info("[getSignInResult] access_token 객체 생성");
-        String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()), Collections.singletonList(user.getRole()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
-        String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()), Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
+        String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
+                Collections.singletonList(user.getRole()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+        String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
+                Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
+
         UserTokenEntity tokenEntity = UserTokenEntity.builder()
                 .userId(user.getUserId())
                 .accessToken(accessToken)
@@ -155,16 +158,13 @@ public class SignService {
     }
 
     public SignInResultDto refreshToken(HttpServletRequest req, String refreshToken) throws RuntimeException {
-        if(!(JWT_PROVIDER.isValidateToken(refreshToken, JWT_PROVIDER.REFRESH_KEY))) {
-            return null;
-        }
+        if(!(JWT_PROVIDER.isValidateToken(refreshToken, JWT_PROVIDER.REFRESH_KEY))) { return null; }
 
         String ip = req.getRemoteAddr();
         String accessToken = JWT_PROVIDER.resolveToken(req, JWT_PROVIDER.TOKEN_TYPE);
         Claims claims = JWT_PROVIDER.getClaims(refreshToken, JWT_PROVIDER.REFRESH_KEY);
-        if(claims == null) {
-            return null;
-        }
+        if(claims == null) { return null; }
+
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
         List<String> roles = (List<String>)claims.get("roles");
@@ -173,12 +173,14 @@ public class SignService {
                 .userId(iuser)
                 .ip(ip)
                 .build();
-        UserTokenEntity selResult = MAPPER.selUserToken(p);
-        if(selResult == null || !(selResult.getAccessToken().equals(accessToken) && selResult.getRefreshToken().equals(refreshToken))) {
-            return null;
-        }
 
-        String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles, JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+        UserTokenEntity selResult = MAPPER.selUserToken(p);
+        if(selResult == null || !(selResult.getAccessToken().equals(accessToken)
+                && selResult.getRefreshToken().equals(refreshToken))) { return null; }
+
+        String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles,
+                JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+
         UserTokenEntity tokenEntity = UserTokenEntity.builder()
                 .userId(iuser)
                 .ip(ip)

@@ -2,6 +2,7 @@ package com.green.secondproject.config.security;
 
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.config.security.model.UserEntity;
+import com.green.secondproject.sign.model.UserVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,12 +19,12 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity entity = mapper.getByEmail(username);
+        UserVo vo = mapper.selUserByEmail(username);
         return MyUserDetails.builder()
-                .email(entity.getEmail())
-                .userId(entity.getUserId())
-                .pw(entity.getPw())
-                .roles(Collections.singletonList(entity.getRole()))
+                .email(vo.getEmail())
+                .userId(vo.getUserId())
+                .pw(vo.getPw())
+                .roles(Collections.singletonList(vo.getRole()))
                 .build();
     }
 }
