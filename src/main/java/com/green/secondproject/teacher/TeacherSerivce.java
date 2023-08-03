@@ -42,5 +42,13 @@ public class TeacherSerivce {
         dto.setUserId(userId);
         return mapper.delTeacher(dto);
     }
+    public int classStudent(ClassStudentDto dto){
+        return mapper.classStudent(dto);
+    }
+    public int aprStudent(Long classid){
+        ClassStudentDto dto = new ClassStudentDto();
+        dto.setClassid(classid);
+        return mapper.aprStudent(dto);
+    }
 }
 

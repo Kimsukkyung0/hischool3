@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class SubjectInsDto {
-    private List<SubjectInsVo> list;
+public class mockDto {
+    private List<MockSubjectVo> list;
 }

@@ -27,7 +27,7 @@ public class TimeTableVo {
 //        this.date = date;
 //    }
 
-    public int getDayMonToSun(String date) {
+    public int getDayMonToSun(int date) {
         return dayMonToSun;
     }
 

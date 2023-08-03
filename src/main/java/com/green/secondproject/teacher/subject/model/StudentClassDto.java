@@ -2,9 +2,8 @@ package com.green.secondproject.teacher.subject.model;
 
 import lombok.Data;
 
-import java.util.List;
-
 @Data
-public class SubjectDto {
-private Long userid;
+public class StudentClassDto {
+    private Long classid;
+    private Long schoolid;
 }

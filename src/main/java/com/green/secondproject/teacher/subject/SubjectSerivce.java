@@ -18,18 +18,43 @@ public class SubjectSerivce {
         return mapper.subCate();
     }
 
-    List<SubjectDetailVo> subject(){
-        return mapper.subject();
+    List<SubjectDetailVo> subject(Long categoryid){
+
+        return mapper.subject(categoryid);
     }
 
     int instcsbj(SubjectInsDto dto){
-        return mapper.insTcsbj(dto);
+        return mapper.instcsbj(dto.getList());
     }
 
     List<SubjectDetailVo2> tcslist(SubjectDetailDto dto){
         return mapper.tcslist(dto);
     }
-    List<SubjectVo2> smalllist(SubjectDto dto){
+    List<SubjectVo2> smalllist(Long userid){
+        SubjectDto dto = new SubjectDto();
+        dto.setUserid(userid);
+
         return mapper.smalllist(dto);
+    }
+    int classnum(StudentClassDto dto){
+        return mapper.classnum(dto);
+    }
+    int schoolnum(StudentSchoolDto dto){
+        return mapper.schoolnum(dto);
+    }
+    int acasubject(AcalistDto dto){
+        return mapper.acasubject(dto.getList());
+    }
+    
+    //모의고사 시작
+    List<MockSubjectBigVo> mockbiglist(){
+        return mapper.mockbiglist();
+    }
+
+    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
+        return mapper.mocksmalllist(categoryid);
+    }
+    int mockins(mockDto dto){
+        return mapper.mockins(dto.getList());
     }
 }

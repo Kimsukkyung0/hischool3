@@ -1,5 +1,6 @@
 package com.green.secondproject.config.security.model;
 
+import com.green.secondproject.sign.model.UserVo;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -17,11 +18,14 @@ public class MyUserDetails implements UserDetails {
     private Long userId;
     private String email;
     private String pw;
-    private String name;
+    private String nm;
+    private String schoolNm;
+    private String grade;
+    private String classNum;
+    private String pic;
 
     @Builder.Default
     private List<String> roles = new ArrayList<>();
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -32,7 +36,7 @@ public class MyUserDetails implements UserDetails {
     public String getPassword() { return this.pw; }
 
     @Override
-    public String getUsername() { return this.email; }
+    public String getUsername() { return String.valueOf(this.userId); }
 
     @Override
     public boolean isAccountNonExpired() { return true; }

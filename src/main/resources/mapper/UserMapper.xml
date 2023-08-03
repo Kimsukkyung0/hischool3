@@ -16,10 +16,20 @@
             apr_pic = #{aprPic}
     </insert>
 
-    <select id="getByEmail">
-        SELECT user_id userId, email, pw, name, role
-        FROM user
+    <select id="selUserByEmail">
+        SELECT user_id userId, email, pw, u.nm, s.nm schoolNm, v.grade, v.class classNum, pic, role
+        FROM user u
+        inner join van v on u.class_id = v.class_id
+        inner join school s on v.school_id = s.school_id
         WHERE email = #{email}
+    </select>
+
+    <select id="selUserById">
+        SELECT user_id userId, email, pw, u.nm, s.nm schoolNm, v.grade, v.class classNum, pic, role
+        FROM user u
+        inner join van v on u.class_id = v.class_id
+        inner join school s on v.school_id = s.school_id
+        WHERE user_id = #{userId}
     </select>
 
     <select id="selSchoolIdByNm">
@@ -44,10 +54,12 @@
         ON DUPLICATE KEY UPDATE
           access_token = #{accessToken}
         , refresh_token = #{refreshToken}
+        , updated_at = current_timestamp
     </insert>
 
     <select id="selUserToken">
-        SELECT user_id userId, ip, access_token accessToken, refresh_token refreshToken, created_at createdAt, updated_at updatedAt
+        SELECT user_id userId, ip, access_token accessToken, refresh_token refreshToken,
+            created_at createdAt, updated_at updatedAt
         FROM user_token
         WHERE user_id = #{userId} AND ip = #{ip}
     </select>

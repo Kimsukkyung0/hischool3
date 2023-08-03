@@ -5,27 +5,24 @@
 <mapper namespace="com.green.secondproject.teacher.subject.SubjectMapper">
 
 
-<select id="subCate" resultType="SubjectVo">
-    SELECT category_id categoryid,nm
-    FROM sbj_category
-    WHERE TYPE = 1
-</select>
-
-    <select id="subject">
-        select *
-        from subject
+    <select id="subCate" resultType="SubjectVo">
+        SELECT category_id categoryid,nm
+        FROM sbj_category
+        WHERE TYPE = 1
     </select>
 
-<insert id="instcsbj">
-    INSERT INTO tc_sbj
-    (user_id,subject_id)
-    VALUES
-    (#{user_id},#{subject_id})
-</insert>
+    <select id="subject">
+        select DISTINCT A.subject_id subjectid ,A.nm ,A.category_id categoryid FROM
+        subject A
+        INNER JOIN sbj_category B
+        ON A.category_id = B.category_id
+        WHERE B.`type` =1 and A.category_id = #{categoryid};
+    </select>
 
-    <select id="tcslist" resultType="SubjectDetailVo2">
+
+    <select id="tcslist" resultType="SubjectVo2">
         SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
-        FROM  sbj_category A
+        FROM sbj_category A
         INNER JOIN subject B
         ON A.category_id = B.category_id
         INNER JOIN tc_sbj C
@@ -35,7 +32,7 @@
         WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
     </select>
     <select id="smalllist" resultType="SubjectVo2">
-        SELECT A.subject_id subjectid,A.nm,B.user_id userid
+        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid
         FROM subject A
         INNER JOIN tc_sbj B
         ON A.subject_id= B.subject_id
@@ -43,5 +40,64 @@
         ON B.user_id = C.user_id
         WHERE B.user_id = #{userid} and C.apr_yn = 1
     </select>
+    <select id="classnum">
+        SELECT COUNT(C.class_id) classid FROM van A
+        INNER JOIN school B
+        ON A.school_id = B.school_id
+        INNER JOIN user C
+        ON A.class_id = C.class_id
+        WHERE C.class_id = #{classid} AND C.role ="ROLE_STD" AND C.apr_yn = 1;
+    </select>
+
+    <select id="schoolnum">
+        SELECT COUNT(B.school_id) schoolid FROM van A
+        INNER JOIN school B
+        ON A.school_id = B.school_id
+        INNER JOIN user C
+        ON A.class_id = C.class_id
+        WHERE B.school_id = #{schoolid} and A.grade = #{grade} AND C.role ="ROLE_STD"
+    </select>
+
+
+    <select id="mockbiglist" resultType="MockSubjectBigVo">
+        SELECT DISTINCT B.category_id categoryid,B.nm
+        from subject A
+        INNER JOIN sbj_category B
+        ON A.category_id = B.category_id
+        WHERE B.`type` = 2
+    </select>
+    <select id="mocksmalllist">
+        SELECT A.subject_id subjectid ,A.nm ,A.category_id categoryid FROM subject A
+        INNER JOIN sbj_category B
+        ON A.category_id = B.category_id
+        WHERE B.`type` = 2 AND A.category_id = #{categoryid};
+    </select>
+
+    <insert id="instcsbj">
+        INSERT INTO tc_sbj
+        (user_id,subject_id)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (#{item.userid},#{item.subjectid})
+        </foreach>
+    </insert>
+
+    <insert id="acasubject">
+        INSERT INTO aca_result
+        (user_id,subject_id,YEAR,semester,MID_final,score,rating,class_rank,whole_rank)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.semester},#{item.midfinal},#{item.score},#{item.rating},#{item.classrank},#{item.wholerank})
+        </foreach>
+    </insert>
+
+    <insert id="mockins">
+        INSERT INTO mock_result
+        (user_id,student_id,subject_id,year,mon,standard_score,rating,percent)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.userid},#{item.studentid},#{item.subjectid},YEAR(NOW()),#{item.mon},#{item.standardscore},#{item.rating},#{item.percent})
+        </foreach>
+    </insert>
 </mapper>
 
