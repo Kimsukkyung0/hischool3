@@ -63,7 +63,6 @@ public class ScheduleService {
                         .queryParam("pSize", 100)
                         .queryParam("ATPT_OFCDC_SC_CODE", "D10")
                         .queryParam("SD_SCHUL_CODE", p.getSdSchulCode())
-                        .queryParam("AY", p.getAy())
                         .queryParam("AA_FROM_YMD",p.getAaFromYmd())
                         .queryParam("AA_TO_YMD",p.getAaToYmd())
                         .build()

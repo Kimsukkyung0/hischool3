@@ -8,7 +8,6 @@ import org.springframework.security.web.PortResolverImpl;
 @ToString
 public class ScheduleParam {
     private String sdSchulCode; //학교코드
-    private String ay;
     private String aaFromYmd;
     private String aaToYmd;
 }
