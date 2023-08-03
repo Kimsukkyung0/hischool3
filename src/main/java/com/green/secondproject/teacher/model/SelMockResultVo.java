@@ -4,8 +4,11 @@ import lombok.Data;
 
 @Data
 public class SelMockResultVo {
-    private int year;
+    private Long resultId;
+    private char year;
     private int mon;
+    private String categoryId;
+    private String nm;
     private int sc;
     private int rating;
     private int percent;
