@@ -1,11 +1,13 @@
 package com.green.secondproject.sign;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.CommonRes;
 import com.green.secondproject.config.RedisService;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.JwtTokenProvider;
 import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.config.security.model.RedisJwtVo;
 import com.green.secondproject.config.security.model.UserEntity;
 import com.green.secondproject.config.security.model.UserTokenEntity;
 import com.green.secondproject.sign.model.*;
@@ -37,16 +39,19 @@ public class SignService {
     private final String FILE_DIR;
     private final AuthenticationFacade facade;
     private final RedisService redisService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public SignService(UserMapper mapper, JwtTokenProvider provider, PasswordEncoder encoder,
-                       @Value("${file.dir}") String fileDir, AuthenticationFacade facade, RedisService redisService) {
+                       @Value("${file.dir}") String fileDir, AuthenticationFacade facade, RedisService redisService,
+                       ObjectMapper objectMapper) {
         MAPPER = mapper;
         JWT_PROVIDER = provider;
         PW_ENCODER = encoder;
         FILE_DIR = MyFileUtils.getAbsolutePath(fileDir);
         this.facade = facade;
         this.redisService = redisService;
+        this.objectMapper = objectMapper;
     }
 
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
@@ -125,7 +130,7 @@ public class SignService {
         return resultDto;
     }
 
-    public SignInResultDto signIn(SignInParam p, String ip) throws RuntimeException {
+    public SignInResultDto signIn(SignInParam p, String ip) throws Exception {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
         UserVo user = MAPPER.selUserByEmail(p.getEmail());
 
@@ -140,6 +145,10 @@ public class SignService {
         }
         log.info("[getSignInResult] 패스워드 일치");
 
+        String redisKey = String.format("RT(%s):%s:%s", "Server", user.getUserId(), ip);
+        if (redisService.getData(redisKey) != null) {
+            redisService.deleteData(redisKey);
+        }
 
         log.info("[getSignInResult] access_token 객체 생성");
         String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
@@ -147,14 +156,13 @@ public class SignService {
         String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
                 Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
 
-        UserTokenEntity tokenEntity = UserTokenEntity.builder()
-                .userId(user.getUserId())
+        RedisJwtVo redisJwtVo = RedisJwtVo.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
-                .ip(ip)
                 .build();
 
-        int result = MAPPER.updUserToken(tokenEntity);
+        String value = objectMapper.writeValueAsString(redisJwtVo);
+        redisService.setData(redisKey, value);
 
         log.info("[getSignInResult] SignInResultDto 객체 생성");
         SignInResultDto dto = SignInResultDto.builder()
@@ -177,33 +185,37 @@ public class SignService {
 
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
-        List<String> roles = (List<String>)claims.get("roles");
 
-        UserTokenEntity p = UserTokenEntity.builder()
-                .userId(iuser)
-                .ip(ip)
-                .build();
+        String redisKey = String.format("RT(%s):%s:%s", "Server", iuser, ip);
+        String value = redisService.getData(redisKey);
+        if (value == null) {
+            return null;
+        }
 
-        UserTokenEntity selResult = MAPPER.selUserToken(p);
-        if(selResult == null || !(selResult.getAccessToken().equals(accessToken)
-                && selResult.getRefreshToken().equals(refreshToken))) { return null; }
+        try {
+            RedisJwtVo redisJwtVo = objectMapper.readValue(value, RedisJwtVo.class);
+            if (!redisJwtVo.getAccessToken().equals(accessToken) || !redisJwtVo.getRefreshToken().equals(refreshToken)) {
+                return null;
+            }
 
-        String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles,
-                JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+            List<String> roles = (List<String>)claims.get("roles");
+            String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles, JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
 
-        UserTokenEntity tokenEntity = UserTokenEntity.builder()
-                .userId(iuser)
-                .ip(ip)
-                .accessToken(reAccessToken)
-                .refreshToken(refreshToken)
-                .build();
+            RedisJwtVo updateRedisJwtVo = RedisJwtVo.builder()
+                    .accessToken(reAccessToken)
+                    .refreshToken(redisJwtVo.getRefreshToken())
+                    .build();
+            String updateValue = objectMapper.writeValueAsString(updateRedisJwtVo);
+            redisService.setData(redisKey, updateValue);
 
-        int updResult = MAPPER.updUserToken(tokenEntity);
-
-        return SignInResultDto.builder()
-                .accessToken(reAccessToken)
-                .refreshToken(refreshToken)
-                .build();
+            return SignInResultDto.builder()
+                    .accessToken(reAccessToken)
+                    .refreshToken(refreshToken)
+                    .build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void logout(HttpServletRequest req) {

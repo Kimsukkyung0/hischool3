@@ -18,6 +18,8 @@ public class RedisService {
         return valueOperations.get(key);
     }
 
+    public void setData(String key, String value) { stringRedisTemplate.opsForValue().set(key, value); }
+
     // 유효 시간 동안(key, value)저장
     public void setDataExpire(String key, String value, long duration) {
         ValueOperations<String, String> valueOperations = stringRedisTemplate.opsForValue();
