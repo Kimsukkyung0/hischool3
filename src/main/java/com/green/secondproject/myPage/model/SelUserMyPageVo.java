@@ -5,9 +5,9 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
-public class SelTeacherMyPageVo {
+public class SelUserMyPageVo {
     private Long userId;
-    private String tnm;
+    private String unm;
     private String email;
     private String pic;
     private LocalDate birth;
@@ -17,5 +17,5 @@ public class SelTeacherMyPageVo {
     private String grade;
     private String van;
     private Long schoolId;
-    private String snm;
+    private String schnm;
 }

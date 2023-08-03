@@ -3,7 +3,7 @@ package com.green.secondproject.teacher.subject.model;
 import lombok.Data;
 
 @Data
-public class MockSubjectDto {
+public class MockSubjectVo {
     private Long userid;
     private Long subjectid;
     private int mon;

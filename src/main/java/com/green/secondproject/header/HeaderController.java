@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/header")
@@ -29,7 +30,8 @@ public class HeaderController {
 
     @GetMapping("/school_logo")
     @Operation(summary = "학생의 소속 학교 로고 표기",
-            description = "요구값 : <br> userId - 학생 PK값<br>")
+            description = "요구값 : <br> userId - 학생 PK값<br>"+
+                        "")
     public List<SelSchoolLogoVo> SelectSchoolLogo(@RequestParam Long userId) {
         return service.selSchoolLogo(userId);
     }

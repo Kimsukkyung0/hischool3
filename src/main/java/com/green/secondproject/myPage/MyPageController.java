@@ -1,7 +1,6 @@
 package com.green.secondproject.myPage;
 
-import com.green.secondproject.myPage.model.SelStudentMyPageVo;
-import com.green.secondproject.myPage.model.SelTeacherMyPageVo;
+import com.green.secondproject.myPage.model.SelUserMyPageVo;
 import com.green.secondproject.myPage.model.UpdStudentInfoDto;
 import com.green.secondproject.myPage.model.UpdTeacherInfoDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,22 +36,14 @@ public class MyPageController {
     }
 
 
-    @GetMapping("/student_mypage")
-    @Operation(summary = "학생 마이페이지",
-            description = "요구값 : <br>(1)userId - 학생 PK값<br>(2)stdnm - 학생 이름<br>(3)email - 이메일<br>" +
-                    "(4)pic - 사진(변경예정)<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)classId - 학급 PK값<br>" +
-                    "(8)grade - 학년<br>(9)van - 반<br>(10)schoolId - 학교 PK값<br>(11)snm - 학교 이름<br>(12)address - 주소")
-    public List<SelStudentMyPageVo> selectStdMyPage(@RequestParam Long userId) {
-        return serivce.selStudentMyPage(userId);
-    }
 
 
-    @GetMapping("/teacher_mypage")
-    @Operation(summary = "선생님 마이페이지",
-            description = "요구값 : <br>(1)userId - 선생님 PK값<br>(2)tnm - 선생님 이름<br>(3)email - 이메일<br>" +
+    @GetMapping("/user_mypage")
+    @Operation(summary = "마이페이지",
+            description = "요구값 : <br>(1)userId - 유저 PK값<br>(2)unm - 유저 이름<br>(3)email - 이메일<br>" +
                     "(4)pic - 사진(변경예정)<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)classId - 학급 PK값<br>" +
-                    "(8)grade - 학년<br>(9)van - 반<br>(10)schoolId - 학교 PK값<br>(11)snm - 학교 이름<br>(12)address - 주소")
-    public List<SelTeacherMyPageVo> selectTcMyPage(@RequestParam Long userId) {
-        return serivce.selTeacherMyPage(userId);
+                    "(8)grade - 학년<br>(9)van - 반<br>(10)schoolId - 학교 PK값<br>(11)schnm - 학교 이름<br>(12)address - 주소")
+    public List<SelUserMyPageVo> selectTcMyPage(@RequestParam Long userId) {
+        return serivce.selUserMyPage(userId);
     }
 }
