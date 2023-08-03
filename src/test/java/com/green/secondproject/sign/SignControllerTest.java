@@ -1,46 +1,49 @@
-//package com.green.secondproject.sign;
-//
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.databind.SerializationFeature;
-//import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-//import com.green.secondproject.sign.model.SignUpParam;
-//import com.green.secondproject.sign.model.SignUpResultDto;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-//import org.springframework.boot.test.mock.mockito.MockBean;
-//import org.springframework.mock.web.MockMultipartFile;
-//import org.springframework.test.web.servlet.MockMvc;
-//
-//import java.io.FileInputStream;
-//import java.nio.charset.StandardCharsets;
-//import java.time.LocalDate;
-//
-//import static org.mockito.ArgumentMatchers.any;
-//import static org.mockito.BDDMockito.given;
-//import static org.mockito.Mockito.verify;
-//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-//import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-//
-//@WebMvcTest(SignController.class)
-//class SignControllerTest {
-//
-//    @Autowired
-//    private MockMvc mvc;
-//
-//    @MockBean
-//    private SignService service;
-//
-//    @Test
-//    void signIn() {
-//    }
-//
-//    @Test
-//    @DisplayName("선생님 회원가입")
-//    void signUp() throws Exception {
+package com.green.secondproject.sign;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.green.secondproject.sign.model.SignUpParam;
+import com.green.secondproject.sign.model.SignUpResultDto;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(SignController.class)
+class SignControllerTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @MockBean
+    private SignService service;
+
+    @MockBean
+    private EmailService emailService;
+
+    @Test
+    void signIn() {
+    }
+
+    @Test
+    @DisplayName("선생님 회원가입")
+    void signUp() throws Exception {
 //        SignUpResultDto resultDto = new SignUpResultDto();
 //        resultDto.setSuccess(true);
 //        resultDto.setCode(0);
@@ -89,9 +92,17 @@
 //        .andDo(print());
 //
 //        verify(service).signUp(any(),any(),any());
-//    }
-//
-//    @Test
-//    void refreshToken() {
-//    }
-//}
+    }
+
+    @Test
+    void refreshToken() {
+    }
+
+    @Test
+    void mailConfirm() {
+    }
+
+    @Test
+    void codeConfirm() {
+    }
+}

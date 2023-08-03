@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "로그인/회원가입")
 public class SignController {
     private final SignService SERVICE;
+    private final EmailService emailService;
 
     //ApiParam은 문서 자동화를 위한 Swagger에서 쓰이는 어노테이션이고
     //RequestParam은 http 로부터 요청 온 정보를 받아오기 위한 스프링 어노테이션이다.
@@ -68,9 +70,27 @@ public class SignController {
     }
 
     @GetMapping("/refresh-token")
+    @Operation(summary = "accessToken 재발행")
     public ResponseEntity<SignUpResultDto> refreshToken(HttpServletRequest req, @RequestParam String refreshToken) {
         SignUpResultDto dto = SERVICE.refreshToken(req, refreshToken);
         return dto == null ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null) : ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/mail-confirm")
+    @Operation(summary = "이메일 인증")
+    public String mailConfirm(@RequestParam String email) throws Exception {
+        String code = emailService.sendSimpleMessage(email);
+        log.info("인증코드 : " + code);
+        return code;
+    }
+
+    @PostMapping("/code-confirm")
+    @Operation(summary = "인증코드 확인", description = """
+            인증 성공(1), 실패(0)<br>
+            인증 코드는 1분간 유효
+            """)
+    public int codeConfirm(@RequestParam String code) throws ChangeSetPersister.NotFoundException {
+        return emailService.verifyEmail(code);
     }
 
 //    @GetMapping("/test")
