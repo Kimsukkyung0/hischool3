@@ -25,7 +25,8 @@ public class JwtTokenProvider {
     public final Key ACCESS_KEY;
     public final Key REFRESH_KEY;
     public final String TOKEN_TYPE;
-    public final long ACCESS_TOKEN_VALID_MS = 3_600_000L; // 1000L * 60 * 60 -> 1시간
+    //public final long ACCESS_TOKEN_VALID_MS = 3_600_000L; // 1000L * 60 * 60 -> 1시간
+    public final long ACCESS_TOKEN_VALID_MS = 300000L;
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
     private final UserMapper mapper;
 
@@ -93,7 +94,8 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest req, String type) {
         log.info("JwtTokenProvider - resolveToken: HTTP 헤더에서 Token 값 추출");
         String headerAuth = req.getHeader("authorization");
-        return headerAuth == null ? null : headerAuth.substring(type.length()).trim();
+        return headerAuth != null &&
+                headerAuth.startsWith(String.format("%s ", type)) ? headerAuth.substring(type.length()).trim() : null;
     }
 
     public Claims getClaims(String token, Key key) {

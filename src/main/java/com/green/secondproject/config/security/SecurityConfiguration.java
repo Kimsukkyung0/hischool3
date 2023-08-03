@@ -1,5 +1,6 @@
 package com.green.secondproject.config.security;
 
+import com.green.secondproject.config.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 public class SecurityConfiguration {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final RedisService service;
 
     //webSecurityCustomizer를 제외한 모든 것, 시큐리티를 거친다. 보안과 연관
     @Bean
@@ -47,7 +49,7 @@ public class SecurityConfiguration {
                     except.accessDeniedHandler(new CustomAccessDeniedHandler());
                     except.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
                 })
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, service), UsernamePasswordAuthenticationFilter.class);
 
         return httpSecurity.build();
     }

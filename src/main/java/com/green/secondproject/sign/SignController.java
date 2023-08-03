@@ -32,7 +32,7 @@ public class SignController {
             "email": ex) "test@gmail.com"<br>
             "pw": ex) "1111"
             """)
-    public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) throws RuntimeException {
+    public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) throws Exception {
         String ip = req.getRemoteAddr();
         log.info("[signIn] 로그인을 시도하고 있습니다. email: {}, pw: {}, ip: {}", p.getEmail(), p.getPw(), ip);
 
@@ -89,6 +89,7 @@ public class SignController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
     public ResponseEntity<?> logout(HttpServletRequest req) {
         SERVICE.logout(req);
         ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
