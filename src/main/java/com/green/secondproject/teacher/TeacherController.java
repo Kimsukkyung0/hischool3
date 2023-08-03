@@ -19,8 +19,9 @@ public class TeacherController {
     @GetMapping("/signed")
     @Operation(summary = "승인된 학생 리스트",
             description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
-                            "출력값 : <br>(1)classId - 학급 PK값<br>(2)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
-                                    "<br>(3)snm - 학생 이름<br>(4)birth - 생일<br>(5)phone - 연락처<br>(6)email - 이메일")
+                    "출력값 : <br>(1)userId - 학생 PK값<br>(2)classId - 학급 PK값<br>" +
+                    "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)<br>(4)snm - 학생 이름<br>" +
+                    "(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
     public List<SelSignedStudentVo> SelectSignedStudent(@RequestParam Long classId) {
         return service.selSignedStudent(classId);
     }
@@ -29,8 +30,9 @@ public class TeacherController {
     @GetMapping("/unsigned")
     @Operation(summary = "승인된 대기 명단",
             description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
-                    "출력값 : <br>(1)classId - 학급 PK값<br>(2)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
-                    "<br>(3)snm - 학생 이름<br>(4)birth - 생일<br>(5)phone - 연락처<br>(6)email - 이메일")
+                    "출력값 : <br>(1)userId - 학생 PK값<br>(2)classId - 학급 PK값<br>" +
+                    "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
+                    "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
     public List<SelUnsignedStudentVo> SelectUnsignedStudent(@RequestParam Long classId) {
         return service.selUnsignedStudent(classId);
     }
