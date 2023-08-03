@@ -23,4 +23,12 @@ public class StudentService {
     public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param){
         return mapper.selAcaTestResultByDatesAndPeriod(param);
     };
+
+    public StudentSummarySubjectVo getHighestRatingsOfMockTest(StudentSummaryParam param){
+        return mapper.getHighestRatingsOfMockTest(param);
+    }
+
+    public StudentSummarySubjectVo getLatestRatingsOfMockTest(StudentSummaryParam param){
+        return mapper.getLatestRatingsOfMockTest(param);
+    }
 }

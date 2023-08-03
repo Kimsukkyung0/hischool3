@@ -51,6 +51,28 @@
         ORDER BY A.year desc, A.semester desc, A.mid_final asc;
     </select>
 
+    <select id="getHighestRatingsOfMockTest">
+        select C.nm nm, MIN(A.rating) rating
+        from mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        WHERE A.user_id = #{userId} and B.category_id in(2,5,4,8)
+        group by C.nm
+    </select>
+
+    <select id="getLatestRatingsOfMockTest">
+        select C.nm nm, MIN(A.rating) rating, MAX(concat(year+mon)) as st_date
+        from mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        where A.user_id = #{userId} and B.category_id in(2,5,4,8)
+        group by C.nm
+    </select>
+
 
 
 </mapper>

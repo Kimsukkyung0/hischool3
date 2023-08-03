@@ -1,9 +1,6 @@
 package com.green.secondproject.student;
 
-import com.green.secondproject.student.model.StudentAcaResultVo;
-import com.green.secondproject.student.model.StudentAcaResultsParam;
-import com.green.secondproject.student.model.StudentMockResultVo;
-import com.green.secondproject.student.model.StudentMockResultsParam;
+import com.green.secondproject.student.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -46,4 +43,18 @@ public class StudentController {
     public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(@RequestBody StudentAcaResultsParam param){
         return service.selAcaTestResultByDatesAndPeriod(param);
     }
+
+    @GetMapping("/highrating")
+    @Operation(summary = "모의고사-학생별 가장 높은 등급",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
+            "출력값 : <br>" + "(1)year - 연도<br>"+"(2)semester - 학기(1,2)<br>"+"※※국어,수학,영어,한국사 4과목으로 고정되어있습니다.※※")
+    public StudentSummarySubjectVo getHighestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
+        return service.getHighestRatingsOfMockTest(param);
+    }
+
+    @GetMapping("/laterating")
+    public StudentSummarySubjectVo getLatestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
+        return service.getLatestRatingsOfMockTest(param);
+    }
+
+
 }
