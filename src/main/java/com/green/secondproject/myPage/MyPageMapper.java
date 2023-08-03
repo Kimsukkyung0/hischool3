@@ -9,6 +9,5 @@ import java.util.List;
 public interface MyPageMapper {
     int UpdTeacherInfo(UpdTeacherInfoDto dto);
     int UpdStudentInfo(UpdStudentInfoDto dto);
-    List<SelStudentMyPageVo> selStudentMyPage(SelStudentMyPageDto dto);
-    List<SelTeacherMyPageVo> selTeacherMyPage(SelTeacherMyPageDto dto);
+    List<SelUserMyPageVo> selUserMyPage(SelUserMyPageDto dto);
 }
