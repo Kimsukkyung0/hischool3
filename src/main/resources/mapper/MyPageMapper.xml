@@ -4,6 +4,17 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.myPage.MyPageMapper">
 
+    <select id="selUserMyPage">
+        SELECT A.user_id userId, A.nm unm, A.email, A.role, A.pic, A.birth, A.phone, A.address
+        , B.class_id classId, B.grade, B.class van, C.school_id schoolId, C.nm schnm
+        FROM user A
+        INNER JOIN van B
+        ON B.class_id = A.class_id
+        INNER JOIN school C
+        ON C.school_id = B.school_id
+        WHERE user_id = #{userId}
+    </select>
+
 
     <update id="UpdTeacherInfo">
         UPDATE user
@@ -27,15 +38,9 @@
     </update>
 
 
-
-    <select id="selUserMyPage">
-        SELECT A.user_id userId, A.nm unm, A.email, A.role, A.pic, A.birth, A.phone, A.address
-        , B.class_id classId, B.grade, B.class van, C.school_id schoolId, C.nm schnm
-        FROM user A
-        INNER JOIN van B
-        ON B.class_id = A.class_id
-        INNER JOIN school C
-        ON C.school_id = B.school_id
+    <update id="updUserPic">
+        UPDATE user
+        SET pic = #{pic}
         WHERE user_id = #{userId}
-    </select>
+    </update>
 </mapper>

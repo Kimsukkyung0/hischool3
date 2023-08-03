@@ -3,10 +3,13 @@ package com.green.secondproject.myPage;
 import com.green.secondproject.myPage.model.SelUserMyPageVo;
 import com.green.secondproject.myPage.model.UpdStudentInfoDto;
 import com.green.secondproject.myPage.model.UpdTeacherInfoDto;
+import com.green.secondproject.myPage.model.UserPicDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,6 +39,15 @@ public class MyPageController {
     }
 
 
+    @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "유저 프로필 사진 추가",
+            description = "요구값 : <br>(1)userId - 유저 PK값<br>" +
+                    "(2)pic - 사진파일<br>")
+    public String patchPicUser(@RequestPart MultipartFile pic, @RequestParam Long userId) {
+        UserPicDto dto = new UserPicDto();
+        dto.setUserId(userId);
+        return serivce.updUserPic(pic, dto);
+    }
 
 
     @GetMapping("/user_mypage")
