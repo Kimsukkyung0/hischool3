@@ -2,18 +2,14 @@ package com.green.secondproject.sign;
 
 import com.green.secondproject.CommonRes;
 import com.green.secondproject.config.security.model.MyUserDetails;
-import com.green.secondproject.sign.model.SignInResultDto;
-import com.green.secondproject.sign.model.SignUpParam;
-import com.green.secondproject.sign.model.SignUpResultDto;
+import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.crossstore.ChangeSetPersister;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,14 +32,13 @@ public class SignController {
             "email": ex) "test@gmail.com"<br>
             "pw": ex) "1111"
             """)
-    public SignInResultDto signIn(HttpServletRequest req, @RequestParam String email, @RequestParam String pw) throws RuntimeException {
-
+    public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) throws RuntimeException {
         String ip = req.getRemoteAddr();
-        log.info("[signIn] 로그인을 시도하고 있습니다. id: {}, pw: {}, ip: {}", email, pw, ip);
+        log.info("[signIn] 로그인을 시도하고 있습니다. email: {}, pw: {}, ip: {}", p.getEmail(), p.getPw(), ip);
 
-        SignInResultDto dto = SERVICE.signIn(email, pw, ip);
+        SignInResultDto dto = SERVICE.signIn(p, ip);
         if(dto.getCode() == CommonRes.SUCCESS.getCode()) {
-            log.info("[signIn] 정상적으로 로그인 되었습니다. id: {}, token: {}", email, dto.getAccessToken());
+            log.info("[signIn] 정상적으로 로그인 되었습니다. email: {}, token: {}", p.getEmail(), dto.getAccessToken());
         }
 
         return dto;
@@ -69,10 +64,10 @@ public class SignController {
         return SERVICE.signUp(p, pic, aprPic);
     }
 
-    @GetMapping("/refresh-token")
+    @PostMapping("/refresh-token")
     @Operation(summary = "accessToken 재발행")
-    public ResponseEntity<SignUpResultDto> refreshToken(HttpServletRequest req, @RequestParam String refreshToken) {
-        SignUpResultDto dto = SERVICE.refreshToken(req, refreshToken);
+    public ResponseEntity<SignUpResultDto> refreshToken(HttpServletRequest req, @RequestBody TokenDto token) {
+        SignUpResultDto dto = SERVICE.refreshToken(req, token.getRefreshToken());
         return dto == null ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null) : ResponseEntity.ok(dto);
     }
 
@@ -93,9 +88,29 @@ public class SignController {
         return emailService.verifyEmail(code);
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest req) {
+        SERVICE.logout(req);
+        ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
+                .maxAge(0)
+                .path("/")
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .build();
+    }
+
 //    @GetMapping("/test")
 //    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
 //        log.info("userDetails: {}", userDetails);
 //        return userDetails;
+//    }
+
+//    @GetMapping("/test")
+//    public MyUserDetails test() {
+//        log.info("userDetails: {}", SERVICE.test());
+//        return SERVICE.test();
 //    }
 }

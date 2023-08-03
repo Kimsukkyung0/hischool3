@@ -1,8 +1,11 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.CommonRes;
+import com.green.secondproject.config.RedisService;
+import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.JwtTokenProvider;
 import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.config.security.model.UserEntity;
 import com.green.secondproject.config.security.model.UserTokenEntity;
 import com.green.secondproject.sign.model.*;
@@ -19,7 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -29,14 +35,18 @@ public class SignService {
     private final JwtTokenProvider JWT_PROVIDER;
     private final PasswordEncoder PW_ENCODER;
     private final String FILE_DIR;
+    private final AuthenticationFacade facade;
+    private final RedisService redisService;
 
     @Autowired
     public SignService(UserMapper mapper, JwtTokenProvider provider, PasswordEncoder encoder,
-                       @Value("${file.dir}") String fileDir) {
+                       @Value("${file.dir}") String fileDir, AuthenticationFacade facade, RedisService redisService) {
         MAPPER = mapper;
         JWT_PROVIDER = provider;
         PW_ENCODER = encoder;
         FILE_DIR = MyFileUtils.getAbsolutePath(fileDir);
+        this.facade = facade;
+        this.redisService = redisService;
     }
 
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
@@ -115,17 +125,17 @@ public class SignService {
         return resultDto;
     }
 
-    public SignInResultDto signIn(String email, String password, String ip) throws RuntimeException {
+    public SignInResultDto signIn(SignInParam p, String ip) throws RuntimeException {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
-        UserVo user = MAPPER.selUserByEmail(email);
+        UserVo user = MAPPER.selUserByEmail(p.getEmail());
 
         if (user == null) {
             throw new RuntimeException("존재하지 않는 이메일");
         }
-        log.info("[getSignInResult] id: {}", email);
+        log.info("[getSignInResult] email: {}", p.getEmail());
 
         log.info("[getSignInResult] 패스워드 비교");
-        if(!PW_ENCODER.matches(password, user.getPw())) {
+        if(!PW_ENCODER.matches(p.getPw(), user.getPw())) {
             throw new RuntimeException("비밀번호 불일치");
         }
         log.info("[getSignInResult] 패스워드 일치");
@@ -196,6 +206,25 @@ public class SignService {
                 .build();
     }
 
+    public void logout(HttpServletRequest req) {
+        String accessToken = JWT_PROVIDER.resolveToken(req, JWT_PROVIDER.TOKEN_TYPE);
+        Long iuser = facade.getLoginUserPk();
+        String ip = req.getRemoteAddr();
+
+        String redisKey = String.format("RT(%s):%s:%s", "Server", iuser, ip);
+        String refreshTokenInRedis = redisService.getData(redisKey);
+        if (refreshTokenInRedis != null) {
+            redisService.deleteData(redisKey);
+        }
+
+        long expiration = JWT_PROVIDER.getTokenExpirationTime(accessToken, JWT_PROVIDER.ACCESS_KEY) -
+                LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        log.info("date-getTime(): {}", new Date().getTime());
+        log.info("localDateTime-getTime(): {}", LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+
+        redisService.setDataExpire(accessToken, "logout", expiration);
+    }
+
     private void setSuccessResult(SignUpResultDto result) {
         result.setSuccess(true);
         result.setCode(CommonRes.SUCCESS.getCode());
@@ -207,5 +236,9 @@ public class SignService {
         result.setCode(CommonRes.FAIL.getCode());
         result.setMsg(CommonRes.FAIL.getMsg());
     }
+
+//    public MyUserDetails test() {
+//        return facade.getLoginUser();
+//    }
 }
 

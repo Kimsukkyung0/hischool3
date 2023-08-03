@@ -1,6 +1,6 @@
 package com.green.secondproject.sign;
 
-import com.green.secondproject.utils.RedisUtil;
+import com.green.secondproject.config.RedisService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -22,7 +22,7 @@ import java.util.Random;
 @PropertySource("classpath:mail.properties")
 public class EmailService {
     private final JavaMailSender javaMailSender;
-    private final RedisUtil redisUtil;
+    private final RedisService redisService;
     private String ePw;
 
     @Value("${spring.mail.username}")
@@ -71,7 +71,7 @@ public class EmailService {
     public String sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try{
-            redisUtil.setDataExpire(ePw, to, 60);
+            redisService.setDataExpire(ePw, to, 60);
             javaMailSender.send(message); // 메일 발송
         }catch(MailException es){
             es.printStackTrace();
@@ -81,11 +81,11 @@ public class EmailService {
     }
 
     public int verifyEmail(String key) throws ChangeSetPersister.NotFoundException {
-        String memberEmail = redisUtil.getData(key);
+        String memberEmail = redisService.getData(key);
         if (memberEmail == null) {
             return 0;
         }
-        redisUtil.deleteData(key);
+        redisService.deleteData(key);
         return 1;
     }
 }

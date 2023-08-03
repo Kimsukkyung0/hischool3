@@ -1,4 +1,4 @@
-package com.green.secondproject.utils;
+package com.green.secondproject.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -9,7 +9,7 @@ import java.time.Duration;
 
 @RequiredArgsConstructor
 @Service
-public class RedisUtil {
+public class RedisService {
     private final StringRedisTemplate stringRedisTemplate;
 
     // key를 통해 value 리턴

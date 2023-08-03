@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                                     mvc.pattern("/api/sign-up"),
                                     mvc.pattern("**exception**")
                             ).permitAll()
-                            .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/refresh-token")).permitAll()
+                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/refresh-token")).permitAll()
                             .anyRequest().permitAll()
                 ) //사용 권한 체크
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 X

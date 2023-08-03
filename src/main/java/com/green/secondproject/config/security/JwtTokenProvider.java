@@ -114,4 +114,13 @@ public class JwtTokenProvider {
             return false;
         }
     }
+
+    public Long getTokenExpirationTime(String accessToken, Key accessKey) {
+        try {
+            return getClaims(accessToken, accessKey).getExpiration().getTime();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0L;
+    }
 }
