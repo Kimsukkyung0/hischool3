@@ -2,7 +2,7 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.green.secondproject.myPage.MyPageMapper">
+<mapper namespace="com.green.secondproject.mypage.MyPageMapper">
 
     <select id="selUserMyPage">
         SELECT A.user_id userId, A.nm unm, A.email, A.role, A.pic, A.birth, A.phone, A.address
@@ -21,7 +21,6 @@
         SET nm = #{nm}
         , phone = #{phone}
         , address = #{address}
-        , pic = #{pic}
         WHERE user_id = #{userId}
         AND role = "ROLE_TC"
     </update>
@@ -32,7 +31,6 @@
         SET nm = #{nm}
         , phone = #{phone}
         , address = #{address}
-        , pic = #{pic}
         WHERE user_id = #{userId}
         AND role = "ROLE_STD"
     </update>
@@ -41,6 +39,12 @@
     <update id="updUserPic">
         UPDATE user
         SET pic = #{pic}
+        WHERE user_id = #{userId}
+    </update>
+
+    <update id="updUserPw">
+        UPDATE user
+        SET pw = #{pw}
         WHERE user_id = #{userId}
     </update>
 </mapper>

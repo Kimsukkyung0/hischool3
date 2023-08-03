@@ -1,4 +1,4 @@
-package com.green.secondproject.myPage.model;
+package com.green.secondproject.mypage.model;
 
 import lombok.Data;
 
