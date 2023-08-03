@@ -89,6 +89,7 @@ public class SignController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
     public ResponseEntity<?> logout(HttpServletRequest req) {
         SERVICE.logout(req);
         ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
