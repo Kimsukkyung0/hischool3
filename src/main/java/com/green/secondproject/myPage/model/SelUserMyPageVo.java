@@ -9,6 +9,7 @@ public class SelUserMyPageVo {
     private Long userId;
     private String unm;
     private String email;
+    private String role;
     private String pic;
     private LocalDate birth;
     private String phone;

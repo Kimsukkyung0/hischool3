@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 @Data
 public class SelSignedStudentVo {
+    private Long userId;
     private Long classId;
     private int aprYn;
     private String snm;
