@@ -1,22 +1,30 @@
-package com.green.secondproject.myPage;
+package com.green.secondproject.mypage;
 
-import com.green.secondproject.myPage.model.*;
+import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.utils.MyFileUtils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MyPageService {
     private final MyPageMapper mapper;
+    private final PasswordEncoder PW_ENCODER;
 
     @Value("/home/download")
     private String fileDir;
+
+    public int updUserPw(UpdUserPwDto dto) {
+        return mapper.updUserPw(dto);
+    }
 
     public List<SelUserMyPageVo> selUserMyPage(Long userId) {
         SelUserMyPageDto dto = new SelUserMyPageDto();

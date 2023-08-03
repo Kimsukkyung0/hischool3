@@ -1,4 +1,4 @@
-package com.green.secondproject.myPage.model;
+package com.green.secondproject.mypage.model;
 
 import lombok.Data;
 
@@ -8,5 +8,4 @@ public class UpdTeacherInfoDto {
     private String nm;
     private String phone;
     private String address;
-    private String pic;
 }

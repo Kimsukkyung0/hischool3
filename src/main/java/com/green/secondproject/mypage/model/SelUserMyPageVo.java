@@ -1,14 +1,15 @@
-package com.green.secondproject.myPage.model;
+package com.green.secondproject.mypage.model;
 
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Data
-public class SelStudentMyPageVo {
+public class SelUserMyPageVo {
     private Long userId;
-    private String stdnm;
+    private String unm;
     private String email;
+    private String role;
     private String pic;
     private LocalDate birth;
     private String phone;
@@ -16,6 +17,6 @@ public class SelStudentMyPageVo {
     private Long classId;
     private String grade;
     private String van;
-    private int schoolId;
-    private String snm;
+    private Long schoolId;
+    private String schnm;
 }
