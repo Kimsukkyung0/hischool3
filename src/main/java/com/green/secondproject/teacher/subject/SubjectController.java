@@ -6,11 +6,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.springframework.context.annotation.Description;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -89,7 +87,7 @@ public class SubjectController {
     }
     @PostMapping("/acains")
     @Operation(summary = "학생별 내신성적등록")
-    int acasubject(@RequestBody AcaSubjectDto dto){
+    int acasubject(@RequestBody AcalistDto dto){
         return serivce.acasubject(dto);
     }
     //모의고사 시작
@@ -105,7 +103,7 @@ public class SubjectController {
     }
     @PostMapping("/mockins")
     @Operation(summary = "모의고사 성적등록")
-    int mockins(@RequestBody MockSubjectDto dto){
+    int mockins(@RequestBody mockDto dto){
         return serivce.mockins(dto);
     }
 }
