@@ -2,6 +2,7 @@ package com.green.secondproject.schedule;
 
 import com.green.secondproject.schedule.model.ScheduleContainerVo;
 import com.green.secondproject.schedule.model.ScheduleParam;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ public class ScheduleController {
 
 
     @GetMapping
+    @Operation(summary = "학사일정")
     public ScheduleContainerVo getTimetable(ScheduleParam p){
         log.info("p : {}",p);
         return service.getSchedule(p);
