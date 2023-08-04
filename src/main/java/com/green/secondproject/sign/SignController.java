@@ -84,7 +84,7 @@ public class SignController {
             인증 성공(1), 실패(0)<br>
             인증 코드는 1분간 유효
             """)
-    public int codeConfirm(@RequestParam String code) throws ChangeSetPersister.NotFoundException {
+    public int codeConfirm(@RequestParam String code) {
         return emailService.verifyEmail(code);
     }
 

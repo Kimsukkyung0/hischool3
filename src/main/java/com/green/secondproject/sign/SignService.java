@@ -231,7 +231,7 @@ public class SignService {
 
         long expiration = JWT_PROVIDER.getTokenExpirationTime(accessToken, JWT_PROVIDER.ACCESS_KEY) -
                 LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        log.info("date-getTime(): {}", new Date().getTime());
+        log.info("expiration: {}", expiration);
         log.info("localDateTime-getTime(): {}", LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 
         redisService.setDataExpire(accessToken, "logout", expiration);
