@@ -44,6 +44,13 @@
         where school_id = #{schoolId} and year = #{year} and grade = #{grade} and class = #{classNum}
     </select>
 
+    <select id="selSchoolCdByNm">
+        select school_cd
+        from school
+        where nm = #{nm}
+    </select>
+
+
     <!-- ///////////////////////////////////////// user_token /////////-->
     <insert id="updUserToken">
         INSERT INTO user_token

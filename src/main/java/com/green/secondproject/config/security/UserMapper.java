@@ -15,6 +15,7 @@ public interface UserMapper {
     int updUserToken(UserTokenEntity p);
     UserTokenEntity selUserToken(UserTokenEntity p);
 
+    Long selSchoolCdByNm(String nm);
     Long selSchoolIdByNm(String nm);
     Long selClassId(ClassDto dto);
 }
