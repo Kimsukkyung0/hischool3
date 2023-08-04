@@ -11,7 +11,8 @@
         ON B.school_id = A.school_id
         INNER JOIN user C
         ON C.class_id = B.class_id
-        WHERE 
+        WHERE C.user_id = #{userId}
+
     </select>
 
     <select id = "selSchoolInfo">

@@ -34,8 +34,7 @@ public class HeaderController {
 
     @GetMapping("/school-logo")
     @Operation(summary = "학생의 소속 학교 로고 표기",
-            description = "요구값 : <br> userId - 학생 PK값<br>"+
-                        "출력값 : <br>(1)userId - 학생 PK값<br>(2)logo - 학교 로고")
+            description = "출력값 : <br>(1)logo - 학교 로고")
     public List<SelSchoolLogoVo> SelectSchoolLogo(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.selSchoolLogo(myuser);
     }

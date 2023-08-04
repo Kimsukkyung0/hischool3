@@ -25,7 +25,7 @@ public class HeaderService {
 
     public List<SelSchoolLogoVo> selSchoolLogo(MyUserDetails myuser) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();
-        dto.setLogo(myuser.getSchoolNm());
+        dto.setUserId(myuser.getUserId());
         return mapper.selSchoolLogo(dto);
     }
 }
