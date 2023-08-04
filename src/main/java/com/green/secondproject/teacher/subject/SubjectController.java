@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,7 @@ import java.util.List;
 public class SubjectController {
 
     private final SubjectSerivce serivce;
+    private final AuthenticationFacade facade;
 
 
     @GetMapping("/category")
@@ -93,15 +95,14 @@ public class SubjectController {
     //===================================Post====================================
     @PostMapping("/mock-ins")
     @Operation(summary = "모의고사 성적등록")
-    int mockins(@RequestBody mockDto dto){
+    int mockins(@RequestBody mockDto2 dto,@AuthenticationPrincipal MyUserDetails user){
         return serivce.mockins(dto);
     }
 
     @PostMapping
     @Operation(summary = "과목 등록",
             description =     "subjectid - 과목 번호<br>")
-    int instcsbj(@AuthenticationPrincipal MyUserDetails user,@RequestBody SubjectInsDto dto){
-
+    int instcsbj(@RequestBody SubjectInsDto dto){
         return serivce.instcsbj(dto);
     }
 
