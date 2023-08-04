@@ -8,11 +8,15 @@ import java.util.List;
 @Mapper
 public interface StudentMapper {
     int delStudent(StudentDelDto dto);
-    List<StudentMockResultVo> selMockTestResultByDates(StudentMockResultsParam param);
-    List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param);
-    List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(StudentSummaryParam param);
+    List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
+    List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId);
     List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto);
-    List<StudentMockSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto);
+    List<StudentTestSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto);
+
+
+    List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param);
+    List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto);
+    List<StudentSummarySubjectVo> getLatestRatingsOfAcaTest(StudentSummarySubjectDto dto);
 
 
 }
