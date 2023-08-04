@@ -168,6 +168,7 @@ public class SignService {
         SignInResultDto dto = SignInResultDto.builder()
                                 .accessToken(accessToken)
                                 .refreshToken(refreshToken)
+                                .role(user.getRole())
                                 .build();
 
         log.info("[getSignInResult] SignInResultDto 객체 값 주입");

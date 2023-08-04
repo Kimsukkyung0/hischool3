@@ -10,4 +10,5 @@ import lombok.ToString;
 public class SignInResultDto extends SignUpResultDto {
     private String accessToken;
     private String refreshToken;
+    private String role;
 }
