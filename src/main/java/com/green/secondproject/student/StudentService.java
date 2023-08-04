@@ -1,13 +1,13 @@
 package com.green.secondproject.student;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cglib.core.Local;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.*;
 
 @Service
@@ -22,22 +22,19 @@ public class StudentService {
         return mapper.delStudent(dto);
     }
 
-    public List<StudentMockResultVo> selMockTestResultByDates(StudentMockResultsParam param){
-        return mapper.selMockTestResultByDates(param);
-    }
-    public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param){
-        return mapper.selAcaTestResultByDatesAndPeriod(param);
-    };
-
-    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(StudentSummaryParam param){
-        return mapper.getHighestRatingsOfMockTest(param);
+    public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
+        return mapper.selMockTestResultByDates(dto);
     }
 
-    public List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto){
+    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
+        return mapper.getHighestRatingsOfMockTest(userId);
+    }
+
+    public List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
-        log.info("mon : {}" , now.getMonthValue());
+        log.info("mon : {}", now.getMonthValue());
         return mapper.getLatestRatingsOfMockTest(dto);
     }
 
@@ -58,12 +55,19 @@ public class StudentService {
 //        return result;
 //    }
 
-    public List<StudentMockSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto){
+    public List<StudentTestSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto) {
         //dto로 날짜 전달
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
+        List<StudentTestSumGraphVo> sub =  mapper.getMockTestGraph(dto);
+        List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
+        for (StudentTestSumGraphVo vo : sub) {
 
+            StringBuffer sb = new StringBuffer(vo.getDate());
+            vo.setDate(sb.insert('-',3).toString());
+            result.add(vo);
+        }
 //
 //        //controller로 원하는 값 전달
 //
@@ -89,6 +93,25 @@ public class StudentService {
 //            StudentSummaryContainerVo tmpresult = new StudentSummaryContainerVo(tmpDate,sublist);
 //            result.add(tmpresult);
 //        }
-        return mapper.getMockTestGraph(dto);
+        return result;
+    }
+
+    //내신 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param) {
+        return mapper.selAcaTestResultByDatesAndPeriod(param);
+    }
+
+    ;
+
+    public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
+        LocalDate now = LocalDate.now();
+        dto.setYear(String.valueOf(now.getYear()));
+        return mapper.getHighestRatingsOfAcaTest(dto);
+    }
+
+    public List<StudentSummarySubjectVo> getLatestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
+        LocalDate now = LocalDate.now();
+        dto.setYear(String.valueOf(now.getYear()));
+        return mapper.getLatestRatingsOfAcaTest(dto);
     }
 }

@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class StudentAcaResultsParam {
     private String year;
-    private int semester;
-    private int midFinal;
+    private Integer semester;
+    private Integer midFinal;
     private Long userId;
 
 }
