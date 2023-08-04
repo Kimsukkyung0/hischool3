@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -58,28 +58,37 @@ public class StudentService {
 //        return result;
 //    }
 
-    public List<StudentSummaryContainerVo> getMockTestGraph(StudentSummarySubjectDto dto){
+    public List<StudentMockSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto){
+        //dto로 날짜 전달
+        LocalDate now = LocalDate.now();
+        dto.setYear(String.valueOf(now.getYear()));
+        dto.setMon(String.valueOf(now.getMonthValue()));
 
-        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(dto);
-        List<StudentSummarySubjectVo> sublist = null;
-        List<StudentSummaryContainerVo> result = null; //일자 + 과목이름
-
-                loop:
-                for (int i = 0; i < tmp.size(); i++) {
-                 StudentSummarySubjectVo vo = new StudentSummarySubjectVo(tmp.get(i).getNm(),tmp.get(i).getRating());
-                 log.info("vo : {}",vo);
-                 sublist.add(vo);
-                 if(tmp.get(i).getDate() != tmp.get(i+1).getDate())////검사
-                     continue loop;
-                }//시험응시월 수로 studentsummarysubjectVo 가 만들어짐
-
-        for (int i = 0; i < sublist.size(); i++) {
-            //날짜형식 변경 후 데이터 보내주기
-            StringBuffer sb = new StringBuffer(tmp.get(i).getDate());
-            String tmpDate = sb.insert(3,"-").toString();
-            StudentSummaryContainerVo tmpresult = new StudentSummaryContainerVo(tmpDate,sublist);
-            result.add(tmpresult);
-        }
-        return result;
+//
+//        //controller로 원하는 값 전달
+//
+//        //날자, 이름, 등급만 담은 리스트
+//        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(dto);
+//
+//        List<StudentSummarySubjectVo> sublist = new ArrayList<StudentSummarySubjectVo>();
+//        List<StudentSummaryContainerVo> result = new ArrayList<StudentSummaryContainerVo>(); //일자 + 과목이름
+//
+//                loop:
+//                for (int i = 0; i < tmp.size(); i++) {
+//                 StudentSummarySubjectVo vo = new StudentSummarySubjectVo(tmp.get(i).getNm(),tmp.get(i).getRating());
+//                 log.info("vo : {}",vo);
+//                 sublist.add(vo);
+//                 if(tmp.get(i).getDate() != tmp.get(i+1).getDate())////검사
+//                     continue loop;
+//                }//시험응시월 수로 studentsummarysubjectVo 가 만들어짐
+//
+//        for (int i = 0; i < sublist.size(); i++) {
+//            //날짜형식 변경 후 데이터 보내주기
+//            StringBuffer sb = new StringBuffer(tmp.get(i).getDate());
+//            String tmpDate = sb.insert(3,"-").toString();
+//            StudentSummaryContainerVo tmpresult = new StudentSummaryContainerVo(tmpDate,sublist);
+//            result.add(tmpresult);
+//        }
+        return mapper.getMockTestGraph(dto);
     }
 }

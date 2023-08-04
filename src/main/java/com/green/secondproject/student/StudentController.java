@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class StudentController {
         return service.delStudent(userId);
     }
 
-    @GetMapping("/mocktable")
+    @GetMapping("/mock-table")
     @Operation(summary = "모의고사성적관리 테이블(메인하단)",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br>"+"(2)year - 조회기준연도(yyyy) <br>"+"(3)mon - 조회기준월(1~12)<br><br>"
             +"※※요구값 입력시 year, mon없이 학생번호로만 조회하려면 \"\" 형태로 입력해주셔야합니다※※"+
             "출력값 : <br>" + "(1)year - 연도<br>"+"(2)mon - 월<br>"+
@@ -34,7 +35,7 @@ public class StudentController {
     }
 
 
-    @GetMapping("/acatable")
+    @GetMapping("/aca-table")
     @Operation(summary = "내신성적관리 테이블",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br>"+"(2)year - 조회기준연도(yyyy) <br>"+"(3)semester - 학기(1,2)<br>"+"(4)midFinal - (1:중간,2:기말)<br><br>"
             +"※※학생id외 요구값들은 선택사항입니다. 요구값없이 학생성적 조회를 원하시면 \"\" 형태로 요청해야합니다※※"+
             "출력값 : <br>" + "(1)year - 연도<br>"+"(2)semester - 학기(1,2)<br>"+
@@ -44,14 +45,17 @@ public class StudentController {
         return service.selAcaTestResultByDatesAndPeriod(param);
     }
 
-    @GetMapping("/mhighrating")
+    @GetMapping("/mock-highrating")
     @Operation(summary = "모의고사-학생별 가장 높은 등급",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"+"※국어,수학,영어 한국사※")
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
         return service.getHighestRatingsOfMockTest(param);
     }
 
-    @GetMapping("/mlaterating" )
+
+
+
+    @GetMapping("/mock-currentrating" )
     @Operation(summary = "모의고사- 최근응시 시험 등급",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
             +"※국어,수학,영어 한국사※")
@@ -61,15 +65,13 @@ public class StudentController {
         return service.getLatestRatingsOfMockTest(dto);
     }
 
-    @GetMapping("/mockGraph")
+    @GetMapping("/mock-graph")
     @Operation(summary = "모의고사그래프-올해응시시험성적리스트",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
             +"※국어,수학,영어 한국사※")
-    public List<StudentSummaryContainerVo> getMockTestSumGraph(@RequestBody StudentSummaryParam param){
+    public List<StudentMockSumGraphVo> getMockTestSumGraph(@RequestBody StudentSummaryParam param){
         StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
         dto.setUserId(param.getUserId());
         return service.getMockTestGraph(dto);
     }
-
-
 }

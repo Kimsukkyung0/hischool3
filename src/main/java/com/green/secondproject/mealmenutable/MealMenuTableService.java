@@ -4,14 +4,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableDto;
-import com.green.secondproject.mealmenutable.model.MealTableParam;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,7 +28,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,10 @@ import java.util.Map;
 public class MealMenuTableService {
     private final WebClient webClient;
     private final String myApiKey;
+
+    @Autowired
+    private UserMapper USERMAPPER;
+
 
     public MealMenuTableService(@Value("${my-api.key}") String myApiKey) {
         this.myApiKey = myApiKey;
@@ -59,14 +64,18 @@ public class MealMenuTableService {
                 .build();
     }
 
-    public MealTableContainerVo GetMealTableBySchoolOfTheMonth(MealTableParam p) {
+    public MealTableContainerVo getMealTableBySchoolOfTheMonth(MyUserDetails myuser) {
 //        YearMonth thisMonth = YearMonth.now();
         YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
+
+        Long sdSchulCode = USERMAPPER.selSchoolIdByNm(myuser.getSchoolNm());
+
+
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(p.getSdSchulCode());
+        dto.setSdSchulCode(String.valueOf(sdSchulCode));
         dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -74,14 +83,17 @@ public class MealMenuTableService {
         return result;
     }
 
-    public MealTableContainerVo GetMealTableBySchoolOfTheWeek(MealTableParam p) {
+    public MealTableContainerVo getMealTableBySchoolOfTheWeek(MyUserDetails myuser) {
 //        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
         LocalDate now = LocalDate.of(2023,7,1);
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(p.getSdSchulCode());
+
+        Long sdSchulCode = USERMAPPER.selSchoolIdByNm(myuser.getSchoolNm());
+        dto.setSdSchulCode(String.valueOf(sdSchulCode));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
+        log.info("dto : {}", dto);
         MealTableContainerVo result = getMealTableApi(dto);
         return result;
     }
