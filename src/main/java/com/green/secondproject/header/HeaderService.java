@@ -17,9 +17,9 @@ public class HeaderService {
     private final HeaderMapper mapper;
 
 
-    public List<SelSchoolInfoVo> selSchoolInfo(Long userId) {
+    public List<SelSchoolInfoVo> selSchoolInfo(MyUserDetails myuser) {
         SelSchoolInfoDto dto = new SelSchoolInfoDto();
-        dto.setUserId(userId);
+        dto.setUserId(myuser.getUserId());
         return mapper.selSchoolInfo(dto);
     }
 
