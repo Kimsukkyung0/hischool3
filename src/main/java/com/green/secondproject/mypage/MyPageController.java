@@ -34,19 +34,17 @@ public class MyPageController {
 
     @PatchMapping("/teacher-info-update")
     @Operation(summary = "선생님 정보 수정",
-            description = "요구값 : <br>(1)userId - 유저(선생님) PK값<br>"+
-                    "(2)nm - 이름<br>(3)phone - 연락처<br>(4)address - 주소<br>")
-    public int UpdTcInfo(@RequestBody UpdTeacherInfoDto dto) {
-        return serivce.UpdTeacherInfo(dto);
+            description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>")
+    public int updTcInfo(@RequestBody UpdTeacherInfoDto dtoNoPk) {
+        return serivce.updTeacherInfo(dtoNoPk);
     }
 
 
     @PatchMapping("/student-info-update")
     @Operation(summary = "학생 정보 수정",
-            description = "요구값 : <br>(1)userId - 유저(학생) PK값<br>"+
-                    "(2)nm - 이름<br>(3)phone - 연락처<br>(4)address - 주소<br>")
-    public int UpdStdInfo(@RequestBody UpdStudentInfoDto dto) {
-        return serivce.UpdStudentInfo(dto);
+            description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>")
+    public int updStdInfo(@RequestBody UpdStudentInfoDto dtoNoPk) {
+        return serivce.updStudentInfo(dtoNoPk);
     }
 
 

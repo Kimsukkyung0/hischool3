@@ -1,5 +1,6 @@
 package com.green.secondproject.mypage;
 
+import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.utils.MyFileUtils;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MyPageService {
     private final MyPageMapper mapper;
-    private final PasswordEncoder PW_ENCODER;
+    private final AuthenticationFacade facade;
 
     @Value("/home/download")
     private String fileDir;
@@ -34,12 +35,23 @@ public class MyPageService {
     }
 
 
-    public int UpdTeacherInfo(UpdTeacherInfoDto dto) {
+    public int updTeacherInfo(UpdTeacherInfoDto dtoNoPk) {
+        UpdTeacherInfoDto2 dto = new UpdTeacherInfoDto2();
+        dto.setNm(dtoNoPk.getNm());
+        dto.setAddress(dtoNoPk.getAddress());
+        dto.setPhone(dtoNoPk.getPhone());
+        dto.setUserId(facade.getLoginUserPk());
         return mapper.updTeacherInfo(dto);
     }
 
 
-    public int UpdStudentInfo(UpdStudentInfoDto dto) {
+    public int updStudentInfo(UpdStudentInfoDto dtoNoPk) {
+        //여기서 dto에 userId값 받아오기
+        UpdStudentInfoDto2 dto = new UpdStudentInfoDto2();
+        dto.setNm(dtoNoPk.getNm());
+        dto.setAddress(dtoNoPk.getAddress());
+        dto.setPhone(dtoNoPk.getPhone());
+        dto.setUserId(facade.getLoginUserPk());
         return mapper.updStudentInfo(dto);
     }
 
