@@ -5,6 +5,7 @@
 <mapper namespace="com.green.secondproject.student.StudentMapper">
 
 
+
     <update id="delStudent">
         UPDATE user
         SET del_yn = 1
@@ -96,4 +97,4 @@
         group by C.nm
     </select>
 
-
+</mapper>

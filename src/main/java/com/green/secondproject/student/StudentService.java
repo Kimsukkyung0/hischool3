@@ -63,9 +63,9 @@ public class StudentService {
         List<StudentTestSumGraphVo> sub =  mapper.getMockTestGraph(dto);
         List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
         for (StudentTestSumGraphVo vo : sub) {
-
+            log.info("vo : {}",vo);
             StringBuffer sb = new StringBuffer(vo.getDate());
-            vo.setDate(sb.insert('-',3).toString());
+            vo.setDate(sb.insert(4,"-").toString());
             result.add(vo);
         }
 //
