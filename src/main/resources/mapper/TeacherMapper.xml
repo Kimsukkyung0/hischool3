@@ -34,8 +34,8 @@
     </select>
 
 
-    <select id="selMockResult">
-        SELECT A.result_id resultId, A.year, A.mon, B.category_id categoryId
+    <select id="selMockResult" resultType="SelMockResultVo">
+        SELECT A.result_id resultId, A.`year`, A.mon, B.category_id categoryId
                 , B.nm , A.standard_score sc, A.rating , A.percent
         FROM mock_result A
         INNER JOIN subject B
