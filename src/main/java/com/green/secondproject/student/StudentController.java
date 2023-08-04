@@ -19,7 +19,7 @@ public class StudentController {
 
 
 
-    @DeleteMapping("/delete")
+    @DeleteMapping
     @Operation(summary = "학생 탈퇴 처리")
     public int deleteStudent(@RequestParam int userId) {
         return service.delStudent(userId);

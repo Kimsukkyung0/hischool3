@@ -1,5 +1,6 @@
 package com.green.secondproject.mypage;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.utils.MyFileUtils;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,9 @@ public class MyPageService {
         return mapper.updUserPw(dto);
     }
 
-    public List<SelUserMyPageVo> selUserMyPage(Long userId) {
+    public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
-        dto.setUserId(userId);
+        dto.setUserId(myuser.getUserId());
         return mapper.selUserMyPage(dto);
     }
 

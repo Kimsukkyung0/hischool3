@@ -29,7 +29,6 @@ public class MealMenuTableController {
             "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)"
     +"※ 날짜가 2023년 6월로 고정되어있습니다.※<br>")
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(@AuthenticationPrincipal MyUserDetails myuser){
-
         log.info("myuser : {}",myuser);
 
         return service.getMealTableBySchoolOfTheMonth(myuser);

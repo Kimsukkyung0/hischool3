@@ -59,7 +59,7 @@ public class TeacherController {
     }
 
 
-    @DeleteMapping("/delete-teacher")
+    @DeleteMapping
     @Operation(summary = "선생님 탈퇴 처리",
             description = "요구값 : <br>(1)userId - 유저(선생님) PK값<br><br>"+
                             "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
@@ -67,7 +67,7 @@ public class TeacherController {
         return service.delTeacher(userId);
     }
 
-    @GetMapping("/classStudent")
+    @GetMapping("/class-student")
     @Operation(summary = "반 학생총원")
     public int classStudent(@RequestParam Long classid){
         ClassStudentDto dto = new ClassStudentDto();
@@ -76,7 +76,7 @@ public class TeacherController {
         return service.classStudent(dto);
     }
 
-    @GetMapping("/aprStudent")
+    @GetMapping("/apr-student")
     @Operation(summary = "승인 대기 인원(n명)")
     public int aprStudent(@RequestParam Long classid){
         return service.aprStudent(classid);

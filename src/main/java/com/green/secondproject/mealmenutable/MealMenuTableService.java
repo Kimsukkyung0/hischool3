@@ -71,7 +71,7 @@ public class MealMenuTableService {
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
 
-        Long sdSchulCode = USERMAPPER.selSchoolIdByNm(myuser.getSchoolNm());
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(myuser.getSchoolNm());
 
 
         MealTableDto dto = new MealTableDto();
@@ -88,7 +88,7 @@ public class MealMenuTableService {
         LocalDate now = LocalDate.of(2023,7,1);
         MealTableDto dto = new MealTableDto();
 
-        Long sdSchulCode = USERMAPPER.selSchoolIdByNm(myuser.getSchoolNm());
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(myuser.getSchoolNm());
         dto.setSdSchulCode(String.valueOf(sdSchulCode));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));

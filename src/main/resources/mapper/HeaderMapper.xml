@@ -4,6 +4,17 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.header.HeaderMapper">
 
+    <select id = "selSchoolInfo">
+        SELECT C.user_id userId, A.school_id schoolId , A.nm, B.class, B.grade, B.class van
+        FROM school A
+        INNER JOIN van B
+        ON B.school_id = A.school_id
+        INNER JOIN user C
+        ON C.class_id = B.class_id
+        WHERE C.user_id = #{userId}
+    </select>
+
+
     <select id="selSchoolLogo">
         SELECT A.logo
         FROM school A
@@ -15,14 +26,5 @@
 
     </select>
 
-    <select id = "selSchoolInfo">
-        SELECT C.user_id userId, A.school_id schoolId , A.nm, B.class, B.grade, B.class van
-        FROM school A
-        INNER JOIN van B
-        ON B.school_id = A.school_id
-        INNER JOIN user C
-        ON C.class_id = B.class_id
-        WHERE C.user_id = #{userId}
-    </select>
 
 </mapper>
