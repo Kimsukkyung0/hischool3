@@ -4,14 +4,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.timetable.model.TimeTableContainerVo;
-import com.green.secondproject.timetable.model.TimeTableParam;
 import com.green.secondproject.timetable.model.TimeTableVo;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,6 +35,9 @@ import java.util.Map;
 public class TimetableService {
     private final WebClient webClient;
     private final String myApiKey;
+
+    @Autowired
+    private UserMapper USERMAPPER;
 
 //    생성자로 private 필드에 값넣
     public TimetableService(@Value("${my-api.key}") String myApiKey){
@@ -61,7 +65,7 @@ public class TimetableService {
                  .build();
     }
 
-    public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableParam timeTableParam){
+    public TimeTableContainerVo getTimeTableByClassAndTheWeek(MyUserDetails myuser){
 //        LocalDate now = LocalDate.now();
 
         LocalDate now = LocalDate.of(2023,5,26);
@@ -75,6 +79,8 @@ public class TimetableService {
         log.info("thisWeekStart : {}", thisWeekStart);
         log.info("thisWeekEnds : {}", thisWeekEnds);
 
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(myuser.getSchoolNm());
+
         String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/hisTimetable")
                 //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
                 .queryParam("KEY", myApiKey)
@@ -82,9 +88,9 @@ public class TimetableService {
                 .queryParam("pIndex",1)
                 .queryParam("pSize",50)
                 .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                .queryParam("SD_SCHUL_CODE",timeTableParam.getSdSchulCode())
-                .queryParam("GRADE",timeTableParam.getGrade())
-                .queryParam("CLASS_NM",timeTableParam.getClassNm())
+                .queryParam("SD_SCHUL_CODE",sdSchulCode)
+                .queryParam("GRADE",myuser.getGrade())
+                .queryParam("CLASS_NM",myuser.getClassNum())
                 .queryParam("TI_FROM_YMD",thisWeekStart)//조회시작일 : 월
                 .queryParam("TI_TO_YMD",thisWeekEnds)//조회종료일 : 금
                 .build()
@@ -108,7 +114,7 @@ public class TimetableService {
             for (int i = 0; i < timeTableVoList.size(); i++) {
                 timeTableVoList.get(i).setDayMonToSun(timeTableVoList.get(i).getDate());
             }
-            result = new TimeTableContainerVo(schoolNm,timeTableParam.getGrade(),timeTableParam.getClassNm(),semester, timeTableVoList);
+            result = new TimeTableContainerVo(schoolNm,myuser.getGrade(),myuser.getClassNum(),semester, timeTableVoList);
 
         }catch(Exception e){
             e.printStackTrace();
