@@ -50,7 +50,6 @@ public class SubjectController {
             "<br>nm - 학생이름")
     List<SubjectDetailVo2> tcslist(@RequestParam Long userid)
     {
-
         SubjectDetailDto dto = new SubjectDetailDto();
         dto.setUserid(userid);
         return serivce.tcslist(dto);
@@ -75,7 +74,6 @@ public class SubjectController {
     @GetMapping("/school-snum")
     @Operation(summary = "학교 학년전체인원")
     int schoolnum(@AuthenticationPrincipal MyUserDetails user){
-
         return serivce.schoolnum(user);
     }
     @PostMapping("/aca-ins")
@@ -83,17 +81,21 @@ public class SubjectController {
     int acasubject(@RequestBody AcalistDto dto){
         return serivce.acasubject(dto);
     }
+
     //모의고사 시작
+
     @GetMapping("/mockbig-list")
     @Operation(summary = "모의고사 계열선택List")
     List<MockSubjectBigVo> mockbiglist(){
         return serivce.mockbiglist();
     }
+
     @GetMapping("/mocksmall-list")
     @Operation(summary = "모의고사 세부과목선택List 과목계열선택되면 그조건에 맞는것만 되도록 수정")
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
         return serivce.mocksmalllist(categoryid);
     }
+
     @PostMapping("/mock-ins")
     @Operation(summary = "모의고사 성적등록")
     int mockins(@RequestBody mockDto dto){
