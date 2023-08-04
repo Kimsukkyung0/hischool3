@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -39,7 +40,10 @@ public class SubjectSerivce {
     int classnum(StudentClassDto dto){
         return mapper.classnum(dto);
     }
-    int schoolnum(StudentSchoolDto dto){
+    int schoolnum(MyUserDetails user){
+        StudentSchoolDto dto = new StudentSchoolDto();
+        dto.setGrade(user.getGrade());
+        dto.setSchoolNm(user.getSchoolNm());
         return mapper.schoolnum(dto);
     }
     int acasubject(AcalistDto dto){

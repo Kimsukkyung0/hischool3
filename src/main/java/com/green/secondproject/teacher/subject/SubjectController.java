@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -79,11 +80,9 @@ public class SubjectController {
 
     @GetMapping("/schoolsnum")
     @Operation(summary = "학교 학년전체인원")
-    int schoolnum(@RequestParam char grade,@RequestParam Long schoolid){
-        StudentSchoolDto dto = new StudentSchoolDto();
-        dto.setSchoolid(schoolid);
-        dto.setGrade(grade);
-        return serivce.schoolnum(dto);
+    int schoolnum(@AuthenticationPrincipal MyUserDetails user){
+
+        return serivce.schoolnum(user);
     }
     @PostMapping("/acains")
     @Operation(summary = "학생별 내신성적등록")
