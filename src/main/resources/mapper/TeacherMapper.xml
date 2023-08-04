@@ -24,13 +24,14 @@
 
 
     <select id="selAcaResult">
-        SELECT A.result_id resultId, A.year, A.semester , A.mid_final mf
+        SELECT A.result_id resultId, A.`year`, A.semester , A.mid_final mf
                 , B.category_id categoryId, B.nm, A.score, A.rating
                 , A.class_rank cr, A.whole_rank wr
         FROM aca_result A
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
         WHERE user_id = #{userId}
+        ORDER BY A.semester DESC
     </select>
 
 

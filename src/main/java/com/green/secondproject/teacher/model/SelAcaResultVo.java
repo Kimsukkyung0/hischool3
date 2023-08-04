@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SelAcaResultVo {
     private Long resultId;
-    private char year;
+    private String year;
     private int semester;
     private String categoryId;
     private String nm;
