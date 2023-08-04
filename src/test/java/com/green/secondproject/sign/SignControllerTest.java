@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.green.secondproject.sign.model.SignInResultDto;
-import com.green.secondproject.sign.model.SignUpParam;
-import com.green.secondproject.sign.model.SignUpResultDto;
-import com.green.secondproject.sign.model.TokenDto;
+import com.green.secondproject.sign.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +35,9 @@ class SignControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private ObjectMapper mapper;
+
     @MockBean
     private SignService service;
 
@@ -45,7 +45,30 @@ class SignControllerTest {
     private EmailService emailService;
 
     @Test
-    void signIn() {
+    @DisplayName("로그인")
+    void signIn() throws Exception {
+        SignInResultDto dto = SignInResultDto.builder()
+                .refreshToken("rt")
+                .accessToken("at")
+                .build();
+
+        SignInParam p = new SignInParam();
+        p.setEmail("test@gmail.com");
+        p.setPw("1111");
+
+        String json = mapper.writeValueAsString(p);
+        String resultJson = mapper.writeValueAsString(dto);
+
+        given(service.signIn(any(), any())).willReturn(dto);
+
+        mvc.perform(post("/api/sign-in")
+                .content(json)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(resultJson))
+                .andDo(print());
+
+        verify(service).signIn(any(), any());
     }
 
     @Test
@@ -102,6 +125,7 @@ class SignControllerTest {
     }
 
     @Test
+    @DisplayName("토큰 재발행")
     void refreshToken() throws Exception {
         SignInResultDto resultDto = SignInResultDto.builder()
                         .refreshToken("updateRt")
@@ -127,6 +151,7 @@ class SignControllerTest {
     }
 
     @Test
+    @DisplayName("메일 인증")
     void mailConfirm() throws Exception {
         String code = "123456";
         given(emailService.sendSimpleMessage(any())).willReturn(code);
@@ -141,6 +166,23 @@ class SignControllerTest {
     }
 
     @Test
-    void codeConfirm() {
+    @DisplayName("인증코드 확인")
+    void codeConfirm() throws Exception {
+        int expect = 1;
+        given(emailService.verifyEmail(any())).willReturn(expect);
+
+        mvc.perform(post("/api/code-confirm")
+                        .param("code", "123456"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("1"))
+                .andDo(print());
+
+        verify(emailService).verifyEmail(any());
+    }
+
+    @Test
+    @DisplayName("로그아웃")
+    void logout() {
+
     }
 }
