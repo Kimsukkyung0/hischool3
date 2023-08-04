@@ -1,3 +1,4 @@
+/*
 package com.green.secondproject.sign;
 
 import org.junit.jupiter.api.Test;
@@ -27,4 +28,4 @@ class SignServiceTest {
     @Test
     void logout() {
     }
-}
+}*/

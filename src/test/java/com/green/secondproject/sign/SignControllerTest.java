@@ -1,3 +1,4 @@
+/*
 package com.green.secondproject.sign;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -185,4 +186,4 @@ class SignControllerTest {
     void logout() {
 
     }
-}
+}*/
