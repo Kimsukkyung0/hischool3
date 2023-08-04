@@ -34,12 +34,12 @@ public class MyPageService {
 
 
     public int UpdTeacherInfo(UpdTeacherInfoDto dto) {
-        return mapper.UpdTeacherInfo(dto);
+        return mapper.updTeacherInfo(dto);
     }
 
 
     public int UpdStudentInfo(UpdStudentInfoDto dto) {
-        return mapper.UpdStudentInfo(dto);
+        return mapper.updStudentInfo(dto);
     }
 
 

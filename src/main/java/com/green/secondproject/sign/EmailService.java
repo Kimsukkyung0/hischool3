@@ -71,16 +71,16 @@ public class EmailService {
     public String sendSimpleMessage(String to) throws Exception {
         MimeMessage message = createMessage(to);
         try{
-            redisService.setDataExpire(ePw, to, 60);
+            redisService.setDataExpire(ePw, to, 60000);
             javaMailSender.send(message); // 메일 발송
         }catch(MailException es){
             es.printStackTrace();
-            throw new IllegalArgumentException();
+            return "유효하지 않은 이메일";
         }
         return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
     }
 
-    public int verifyEmail(String key) throws ChangeSetPersister.NotFoundException {
+    public int verifyEmail(String key) {
         String memberEmail = redisService.getData(key);
         if (memberEmail == null) {
             return 0;

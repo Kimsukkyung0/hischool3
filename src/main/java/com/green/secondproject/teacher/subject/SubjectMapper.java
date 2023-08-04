@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import org.apache.ibatis.annotations.Mapper;
 

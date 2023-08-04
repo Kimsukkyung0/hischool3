@@ -145,7 +145,7 @@ public class SignService {
         }
         log.info("[getSignInResult] 패스워드 일치");
 
-        String redisKey = String.format("RT(%s):%s:%s", "Server", user.getUserId(), ip);
+        String redisKey = String.format("c:RT(%s):%s:%s", "Server", user.getUserId(), ip);
         if (redisService.getData(redisKey) != null) {
             redisService.deleteData(redisKey);
         }
@@ -186,7 +186,7 @@ public class SignService {
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
 
-        String redisKey = String.format("RT(%s):%s:%s", "Server", iuser, ip);
+        String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
         String value = redisService.getData(redisKey);
         if (value == null) {
             return null;
@@ -223,7 +223,7 @@ public class SignService {
         Long iuser = facade.getLoginUserPk();
         String ip = req.getRemoteAddr();
 
-        String redisKey = String.format("RT(%s):%s:%s", "Server", iuser, ip);
+        String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
         String refreshTokenInRedis = redisService.getData(redisKey);
         if (refreshTokenInRedis != null) {
             redisService.deleteData(redisKey);
@@ -231,7 +231,7 @@ public class SignService {
 
         long expiration = JWT_PROVIDER.getTokenExpirationTime(accessToken, JWT_PROVIDER.ACCESS_KEY) -
                 LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        log.info("date-getTime(): {}", new Date().getTime());
+        log.info("expiration: {}", expiration);
         log.info("localDateTime-getTime(): {}", LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
 
         redisService.setDataExpire(accessToken, "logout", expiration);

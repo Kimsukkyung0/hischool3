@@ -1,5 +1,6 @@
 package com.green.secondproject.header;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.header.model.SelSchoolInfoDto;
 import com.green.secondproject.header.model.SelSchoolInfoVo;
 import com.green.secondproject.header.model.SelSchoolLogoDto;
@@ -22,9 +23,9 @@ public class HeaderService {
         return mapper.selSchoolInfo(dto);
     }
 
-    public List<SelSchoolLogoVo> selSchoolLogo(Long userId) {
+    public List<SelSchoolLogoVo> selSchoolLogo(MyUserDetails myuser) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();
-        dto.setUserId(userId);
+        dto.setLogo(myuser.getSchoolNm());
         return mapper.selSchoolLogo(dto);
     }
 }
