@@ -16,7 +16,7 @@ spring:
     password: green502
   data:
     redis:
-      host: 192.168.0.144
+      host: localhost
       port: 6379
 
 # mybatis config
@@ -30,7 +30,22 @@ springdoc:
     path: /swagger.html
 
 file:
-  dir: /home/download
+  dir: D:/home/download
 
 my-api:
   key: 9a7b0b8f560b480abf0d0cb941af2bea
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: "prod"
+  data:
+    redis:
+      host: 192.168.0.144
+  datasource:
+    url: jdbc:mariadb://192.168.0.144:3306/team_c
+
+file:
+  dir: /home/download
