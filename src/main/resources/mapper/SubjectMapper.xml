@@ -21,7 +21,7 @@
 
 
     <select id="tcslist" resultType="SubjectVo2">
-        SELECT DISTINCT A.category_id categoryid,A.nm,C.user_id userid
+        SELECT DISTINCT B.subject_id subjectid,A.nm,C.user_id userid
         FROM sbj_category A
         INNER JOIN subject B
         ON A.category_id = B.category_id

@@ -29,6 +29,8 @@ public class SubjectController {
         return serivce.subcate();
     }
 
+
+
     @GetMapping()
     @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정" ,
             description =   "<br>nm - 학생이름")
@@ -36,39 +38,32 @@ public class SubjectController {
         return serivce.subject(categoryid);
     }
 
-    @PostMapping
-    @Operation(summary = "과목 등록",
-    description =     "subjectid - 과목 번호<br>")
-    int instcsbj(@RequestBody SubjectInsDto dto){
-        return serivce.instcsbj(dto);
-    }
-
     @GetMapping("/category/big")
     @Operation(summary = "등록후 과목계열 리스트"
-    ,description =
+            ,description =
             "출력값 : subjectid - subject 테이블에 과목 PK값" +
-            "<br>nm - 학생이름")
-    List<SubjectDetailVo2> tcslist(@RequestParam Long userid)
+                    "<br>nm - 학생이름")
+    List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user)
     {
-        SubjectDetailDto dto = new SubjectDetailDto();
-        dto.setUserid(userid);
-        return serivce.tcslist(dto);
+
+        return serivce.tcslist(user);
     }
+
     @GetMapping("/category/small")
     @Operation(summary = "등록후 세부과목 리스트"
             ,description =
             "categoryid - category 테이블에 세부과목 PK값" +
             "<br>nm - 학생이름")
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long userid){
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user){
 
-        return serivce.smalllist(userid);
+        return serivce.smalllist(user);
     }
+
     @GetMapping("/class-num")
-    @Operation(summary = "반석차 반전체인원") //근데이거 calss id 19번인가 넘어가야 2번째학교 나옴 흠; 애매 차라리 컬럼을 늘리는게 이쁘긴할듯
-    int classnum(@RequestParam Long classid){
-        StudentClassDto dto = new StudentClassDto();
-        dto.setClassid(classid);
-        return serivce.classnum(dto);
+    @Operation(summary = "반석차 반전체인원")
+    int classnum(@AuthenticationPrincipal MyUserDetails user){
+
+        return serivce.classnum(user);
     }
 
     @GetMapping("/school-snum")
@@ -76,11 +71,7 @@ public class SubjectController {
     int schoolnum(@AuthenticationPrincipal MyUserDetails user){
         return serivce.schoolnum(user);
     }
-    @PostMapping("/aca-ins")
-    @Operation(summary = "학생별 내신성적등록")
-    int acasubject(@RequestBody AcalistDto dto){
-        return serivce.acasubject(dto);
-    }
+
 
     //모의고사 시작
 
@@ -96,9 +87,29 @@ public class SubjectController {
         return serivce.mocksmalllist(categoryid);
     }
 
+
+
+
+    //===================================Post====================================
     @PostMapping("/mock-ins")
     @Operation(summary = "모의고사 성적등록")
     int mockins(@RequestBody mockDto dto){
         return serivce.mockins(dto);
     }
+
+    @PostMapping
+    @Operation(summary = "과목 등록",
+            description =     "subjectid - 과목 번호<br>")
+    int instcsbj(@AuthenticationPrincipal MyUserDetails user,@RequestBody SubjectInsDto dto){
+
+        return serivce.instcsbj(dto);
+    }
+
+    @PostMapping("/aca-ins")
+    @Operation(summary = "학생별 내신성적등록")
+    int acasubject(@RequestBody AcalistDto dto){
+        return serivce.acasubject(dto);
+    }
+
 }
+
