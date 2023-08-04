@@ -24,35 +24,30 @@ public class SubjectController {
 
     @GetMapping("/category")
     @Operation(summary = "선생님 과목계열 리스트",
-            description = "nm - 학생이름"+
-                    "<br>categoryid - category 테이블에 카테고리pk값")
+            description = "nm - 학생이름")
     List<SubjectVo> subcate(){
         return serivce.subcate();
     }
 
     @GetMapping()
     @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정" ,
-            description = "subjectid - subject 테이블에 과목 PK값" +
-                    "<br>nm - 학생이름"+
-                    "<br>categoryid - category 테이블에 카테고리pk값")
+            description =   "<br>nm - 학생이름")
     List<SubjectDetailVo> subject(@RequestParam Long categoryid){
         return serivce.subject(categoryid);
     }
 
     @PostMapping
     @Operation(summary = "과목 등록",
-    description = "입력값 : userid - 유저고유번호<br>" +
-    "subjectid - 과목 번호<br>")
+    description =     "subjectid - 과목 번호<br>")
     int instcsbj(@RequestBody SubjectInsDto dto){
         return serivce.instcsbj(dto);
     }
 
     @GetMapping("/category/big")
     @Operation(summary = "등록후 과목계열 리스트"
-    ,description = "입력값 : userid - 유저 pk값<br> "+
+    ,description =
             "출력값 : subjectid - subject 테이블에 과목 PK값" +
-            "<br>nm - 학생이름"+
-            "<br>userid - 학생 pk값")
+            "<br>nm - 학생이름")
     List<SubjectDetailVo2> tcslist(@RequestParam Long userid)
     {
 
@@ -62,10 +57,9 @@ public class SubjectController {
     }
     @GetMapping("/category/small")
     @Operation(summary = "등록후 세부과목 리스트"
-            ,description = "출력값 : userid - 유저 pk값<br> "+
+            ,description =
             "categoryid - category 테이블에 세부과목 PK값" +
-            "<br>nm - 학생이름"+
-            "<br>입력값 : " +"<br>userid - 학생 pk값")
+            "<br>nm - 학생이름")
     List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long userid){
 
         return serivce.smalllist(userid);
