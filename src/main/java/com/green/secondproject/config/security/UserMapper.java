@@ -12,9 +12,6 @@ public interface UserMapper {
     UserVo selUserByEmail(String email);
     UserVo selUserById(Long userId);
 
-    int updUserToken(UserTokenEntity p);
-    UserTokenEntity selUserToken(UserTokenEntity p);
-
     Long selSchoolCdByNm(String nm);
     Long selSchoolIdByNm(String nm);
     Long selClassId(ClassDto dto);
