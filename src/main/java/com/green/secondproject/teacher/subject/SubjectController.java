@@ -70,7 +70,7 @@ public class SubjectController {
 
         return serivce.smalllist(userid);
     }
-    @GetMapping("/classnum")
+    @GetMapping("/class-num")
     @Operation(summary = "반석차 반전체인원") //근데이거 calss id 19번인가 넘어가야 2번째학교 나옴 흠; 애매 차라리 컬럼을 늘리는게 이쁘긴할듯
     int classnum(@RequestParam Long classid){
         StudentClassDto dto = new StudentClassDto();
@@ -78,29 +78,29 @@ public class SubjectController {
         return serivce.classnum(dto);
     }
 
-    @GetMapping("/schoolsnum")
+    @GetMapping("/school-snum")
     @Operation(summary = "학교 학년전체인원")
     int schoolnum(@AuthenticationPrincipal MyUserDetails user){
 
         return serivce.schoolnum(user);
     }
-    @PostMapping("/acains")
+    @PostMapping("/aca-ins")
     @Operation(summary = "학생별 내신성적등록")
     int acasubject(@RequestBody AcalistDto dto){
         return serivce.acasubject(dto);
     }
     //모의고사 시작
-    @GetMapping("/mockbiglist")
+    @GetMapping("/mockbig-list")
     @Operation(summary = "모의고사 계열선택List")
     List<MockSubjectBigVo> mockbiglist(){
         return serivce.mockbiglist();
     }
-    @GetMapping("/mocksmalllist")
+    @GetMapping("/mocksmall-list")
     @Operation(summary = "모의고사 세부과목선택List 과목계열선택되면 그조건에 맞는것만 되도록 수정")
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
         return serivce.mocksmalllist(categoryid);
     }
-    @PostMapping("/mockins")
+    @PostMapping("/mock-ins")
     @Operation(summary = "모의고사 성적등록")
     int mockins(@RequestBody mockDto dto){
         return serivce.mockins(dto);
