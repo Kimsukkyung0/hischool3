@@ -16,7 +16,7 @@
     </select>
 
 
-    <update id="UpdTeacherInfo">
+    <update id="updTeacherInfo">
         UPDATE user
         SET nm = #{nm}
         , phone = #{phone}
@@ -26,7 +26,7 @@
     </update>
 
 
-    <update id="UpdStudentInfo">
+    <update id="updStudentInfo">
         UPDATE user
         SET nm = #{nm}
         , phone = #{phone}

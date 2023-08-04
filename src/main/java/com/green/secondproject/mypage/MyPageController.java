@@ -17,7 +17,7 @@ import java.util.List;
 public class MyPageController {
     private final MyPageService serivce;
 
-    @PatchMapping("/update_password")
+    @PatchMapping("/update-password")
     public int updatePassword(@RequestParam Long userId, @RequestBody String Password
                                  ,@RequestBody String newPassword) {
         UpdUserPwDto dto = new UpdUserPwDto();
@@ -29,7 +29,7 @@ public class MyPageController {
     }
 
 
-    @PatchMapping("/teacher_info_update")
+    @PatchMapping("/teacher-info-update")
     @Operation(summary = "선생님 정보 수정",
             description = "요구값 : <br>(1)userId - 유저(선생님) PK값<br>"+
                     "(2)nm - 이름<br>(3)phone - 연락처<br>(4)address - 주소<br>")
@@ -38,7 +38,7 @@ public class MyPageController {
     }
 
 
-    @PatchMapping("/student_info_update")
+    @PatchMapping("/student-info-update")
     @Operation(summary = "학생 정보 수정",
             description = "요구값 : <br>(1)userId - 유저(학생) PK값<br>"+
                     "(2)nm - 이름<br>(3)phone - 연락처<br>(4)address - 주소<br>")
@@ -58,7 +58,7 @@ public class MyPageController {
     }
 
 
-    @GetMapping("/user_mypage")
+    @GetMapping("/user-mypage")
     @Operation(summary = "마이페이지",
             description = "요구값 : <br>(1)userId - 유저 PK값<br><br>" +
                     "출력값 : <br>(1)userId - 유저 PK값<br>(2)unm - 유저 이름<br>(3)email - 이메일<br>" +
