@@ -50,25 +50,4 @@
         where nm = #{nm}
     </select>
 
-
-    <!-- ///////////////////////////////////////// user_token /////////-->
-    <insert id="updUserToken">
-        INSERT INTO user_token
-        (user_id, ip, access_token, refresh_token)
-        VALUES
-        (#{userId}, #{ip}, #{accessToken}, #{refreshToken})
-
-        ON DUPLICATE KEY UPDATE
-          access_token = #{accessToken}
-        , refresh_token = #{refreshToken}
-        , updated_at = current_timestamp
-    </insert>
-
-    <select id="selUserToken">
-        SELECT user_id userId, ip, access_token accessToken, refresh_token refreshToken,
-            created_at createdAt, updated_at updatedAt
-        FROM user_token
-        WHERE user_id = #{userId} AND ip = #{ip}
-    </select>
-
 </mapper>
