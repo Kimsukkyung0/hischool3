@@ -63,14 +63,25 @@
     </select>
 
     <select id="getLatestRatingsOfMockTest">
-        select C.nm nm, MIN(A.rating) rating, MAX(concat(year+mon)) as st_date
+        select C.nm nm, A.rating rating
         from mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
-        where A.user_id = #{userId} and B.category_id in(2,5,4,8)
-        group by C.nm
+        where A.user_id = #{userId} and B.category_id in(2,4,5,8) and A.year<![CDATA[<=]]>#{year} and A.mon<![CDATA[<=]]> #{mon}
+        order by mon desc
+        limit 4
+    </select>
+    <select id="getMockTestGraph">
+        select concat(A.year,'0',A.mon) date, C.nm,A.rating,
+        from mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        where A.user_id = #{userId} and B.category_id in(2,5,4,8)and A.year = #{year} and A.mon<![CDATA[<=]]> #{mon}
+        ORDER BY A.year,A.mon,C.nm
     </select>
 
 

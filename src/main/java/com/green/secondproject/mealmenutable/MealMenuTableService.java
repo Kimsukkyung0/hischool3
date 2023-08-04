@@ -31,6 +31,8 @@ import java.util.List;
 import java.util.Map;
 
 //https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=9a7b0b8f560b480abf0d0cb941af2bea&Type=json&pIndex=1&pSize=50&ATPT_OFCDC_SC_CODE=D10&SD_SCHUL_CODE=7240099&MLSV_FROM_YMD=20230506&MLSV_TO_YMD=20230512
+//https://open.neis.go.kr/hub/mealServiceDietInfo?KEY=9a7b0b8f560b480abf0d0cb941af2bea&Type=json&pIndex=1&pSize=50&ATPT_OFCDC_SC_CODE=D10&SD_SCHUL_CODE=7240273&MLSV_FROM_YMD=20230601&MLSV_TO_YMD=20230630
+//함지고
 //test용 주소
 @Service
 @Slf4j

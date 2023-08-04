@@ -44,16 +44,31 @@ public class StudentController {
         return service.selAcaTestResultByDatesAndPeriod(param);
     }
 
-    @GetMapping("/highrating")
+    @GetMapping("/mhighrating")
     @Operation(summary = "모의고사-학생별 가장 높은 등급",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
-            "출력값 : <br>" + "(1)year - 연도<br>"+"(2)semester - 학기(1,2)<br>"+"※※국어,수학,영어,한국사 4과목으로 고정되어있습니다.※※")
-    public StudentSummarySubjectVo getHighestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
+            "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"+"※국어,수학,영어 한국사※")
+    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
         return service.getHighestRatingsOfMockTest(param);
     }
 
-    @GetMapping("/laterating")
-    public StudentSummarySubjectVo getLatestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
-        return service.getLatestRatingsOfMockTest(param);
+    @GetMapping("/mlaterating" )
+    @Operation(summary = "모의고사- 최근응시 시험 등급",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
+            "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
+            +"※국어,수학,영어 한국사※")
+    public List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(@RequestBody StudentSummaryParam param){
+        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+        dto.setUserId(param.getUserId());
+        return service.getLatestRatingsOfMockTest(dto);
+    }
+
+    @GetMapping("/mockGraph")
+    @Operation(summary = "모의고사그래프-올해응시시험성적리스트",  description = "요구값 : <br>" + "(1)userId - 학생고유코드<br><br>+" +
+            "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
+            +"※국어,수학,영어 한국사※")
+    public List<StudentSummaryContainerVo> getMockTestSumGraph(@RequestBody StudentSummaryParam param){
+        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+        dto.setUserId(param.getUserId());
+        return service.getMockTestGraph(dto);
     }
 
 
