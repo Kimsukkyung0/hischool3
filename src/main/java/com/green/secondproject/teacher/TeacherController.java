@@ -54,6 +54,7 @@ public class TeacherController {
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)mon - 월<br>" +
                     "(4)categoryId - 과목 계열<br>(5)nm - 세부 과목<br>(6)sc - 표준 점수<br>" +
                     "(7)rating - 등급<br>(8)percent - 백분위")
+
     public List<SelMockResultVo> selectMockResult(@RequestParam Long userId) {
         return service.selMockResult(userId);
     }
