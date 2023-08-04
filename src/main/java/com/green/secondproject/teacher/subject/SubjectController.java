@@ -95,20 +95,20 @@ public class SubjectController {
     //===================================Post====================================
     @PostMapping("/mock-ins")
     @Operation(summary = "모의고사 성적등록")
-    int mockins(@RequestBody mockDto2 dto,@AuthenticationPrincipal MyUserDetails user){
+    int mockins(@RequestBody mockDto2 dto){
         return serivce.mockins(dto);
     }
 
     @PostMapping
     @Operation(summary = "과목 등록",
             description =     "subjectid - 과목 번호<br>")
-    int instcsbj(@RequestBody SubjectInsDto dto){
+    int instcsbj(@RequestBody SubjectInsDto2 dto){
         return serivce.instcsbj(dto);
     }
 
     @PostMapping("/aca-ins")
     @Operation(summary = "학생별 내신성적등록")
-    int acasubject(@RequestBody AcalistDto dto){
+    int acasubject(@RequestBody AcalistDto2 dto){
         return serivce.acasubject(dto);
     }
 

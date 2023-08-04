@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.security.auth.Subject;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -83,13 +84,33 @@ public class SubjectSerivce {
         return mapper.mockins(list);
     }
 
-    int instcsbj(SubjectInsDto dto) {
+    int instcsbj(SubjectInsDto2 dto) {
+        List<SubjectInsVo> list = new LinkedList<>();
 
-        return mapper.instcsbj(dto.getList());
+        for (int i = 0; i < dto.getList().size(); i++) {
+            SubjectInsVo vo = new SubjectInsVo();
+            vo.setSubjectid(dto.getList().get(i).getSubjectid());
+            vo.setUserid(facade.getLoginUserPk());
+            list.add(vo);
+        }
+        return mapper.instcsbj(list);
     }
 
-    int acasubject(AcalistDto dto) {
-        return mapper.acasubject(dto.getList());
+    int acasubject(AcalistDto2 dto) {
+    List<AcaSubjectVo> list = new LinkedList<>();
+        for (int i = 0; i <dto.getList().size() ; i++) {
+            AcaSubjectVo vo = new AcaSubjectVo();
+            vo.setMidfinal(dto.getList().get(i).getMidfinal());
+            vo.setClassrank(dto.getList().get(i).getClassrank());
+            vo.setScore(dto.getList().get(i).getScore());
+            vo.setSemester(dto.getList().get(i).getSemester());
+            vo.setSubjectid(dto.getList().get(i).getSubjectid());
+            vo.setRating(dto.getList().get(i).getRating());
+            vo.setWholerank(dto.getList().get(i).getWholerank());
+            vo.setUserid(facade.getLoginUserPk());
+            list.add(vo);
+        }
+        return mapper.acasubject(list);
     }
 
 }
