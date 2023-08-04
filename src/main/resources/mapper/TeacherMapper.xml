@@ -41,6 +41,7 @@
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
         WHERE user_id = #{userId}
+        ORDER BY A.mon
     </select>
 
 
