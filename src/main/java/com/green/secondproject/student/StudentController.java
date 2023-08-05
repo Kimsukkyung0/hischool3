@@ -97,4 +97,12 @@ public class StudentController {
         Long userId =  myuser.getUserId();
         return service.getLatestRatingsOfAcaTest(userId);
     }
+
+    @GetMapping("/aca-graph")
+    List<StudentTestSumGraphVo> getAcaTestGraph(@AuthenticationPrincipal MyUserDetails myuser){
+        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+        Long userId =  myuser.getUserId();
+        dto.setUserId(userId);
+        return service.getAcaTestGraph(dto);
+    }
 }
