@@ -99,6 +99,7 @@ public class StudentController {
     }
 
     @GetMapping("/aca-graph")
+    @Operation(summary = "내신그래프:올해 응시시험 성적",  description ="출력값 : <br>"+ "(1)date - (연도)-(학기) (중간/기말)<br> (2)nm - 과목계열이름<br>(3)rating - 등급<br>※수정완료※<br>")
     List<StudentTestSumGraphVo> getAcaTestGraph(@AuthenticationPrincipal MyUserDetails myuser){
         StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
         Long userId =  myuser.getUserId();

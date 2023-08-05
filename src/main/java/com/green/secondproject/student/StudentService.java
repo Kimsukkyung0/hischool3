@@ -139,10 +139,6 @@ public class StudentService {
             subResult.setRating(vo.getRating());
             result.add(subResult);
         }
-
-
-
-
         return result;
     }
 
