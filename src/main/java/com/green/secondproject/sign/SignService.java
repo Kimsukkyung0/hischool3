@@ -196,12 +196,14 @@ public class SignService {
 
         try {
             RedisJwtVo redisJwtVo = objectMapper.readValue(value, RedisJwtVo.class);
-            if (!redisJwtVo.getAccessToken().equals(accessToken) || !redisJwtVo.getRefreshToken().equals(refreshToken)) {
+            if (!redisJwtVo.getAccessToken().equals(accessToken) ||
+                    !redisJwtVo.getRefreshToken().equals(refreshToken)) {
                 return error;
             }
 
             List<String> roles = (List<String>)claims.get("roles");
-            String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles, JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+            String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles,
+                    JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
 
             RedisJwtVo updateRedisJwtVo = RedisJwtVo.builder()
                     .accessToken(reAccessToken)

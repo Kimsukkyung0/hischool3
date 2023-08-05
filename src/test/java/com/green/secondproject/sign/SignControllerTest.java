@@ -1,4 +1,4 @@
-/*
+
 package com.green.secondproject.sign;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -128,24 +128,20 @@ class SignControllerTest {
     @Test
     @DisplayName("토큰 재발행")
     void refreshToken() throws Exception {
-        SignInResultDto resultDto = SignInResultDto.builder()
-                        .refreshToken("updateRt")
-                        .accessToken("at")
-                        .build();
-        given(service.refreshToken(any(),any())).willReturn(resultDto);
+        String token = "token";
+        given(service.refreshToken(any(),any())).willReturn(token);
 
         TokenDto dto = new TokenDto();
         dto.setRefreshToken("rt");
 
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(dto);
-        String resultJson = mapper.writeValueAsString(resultDto);
 
         mvc.perform(post("/api/refresh-token")
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().string(resultJson))
+                .andExpect(content().string(token))
                 .andDo(print());
 
         verify(service).refreshToken(any(), any());
@@ -186,4 +182,4 @@ class SignControllerTest {
     void logout() {
 
     }
-}*/
+}
