@@ -28,7 +28,7 @@
         <if test='mon != null and mon != ""'>
             AND A.mon = #{mon}
     </if>
-    ORDER BY A.year desc, A.mon desc;
+    ORDER BY A.year desc, A.mon desc, cateName asc
     </select>
 
     <select id="getHighestRatingsOfMockTest">
@@ -43,14 +43,14 @@
     </select>
 
     <select id="getLatestRatingsOfMockTest">
-        select C.nm nm, A.rating rating
+        select C.nm, A.rating
         from mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
         where A.user_id = #{userId} and B.category_id in(2,4,5,8) and A.year<![CDATA[<=]]>#{year} and A.mon<![CDATA[<=]]> #{mon}
-        order by mon desc
+        order by C.nm , A.mon desc
         limit 4
     </select>
 
@@ -83,7 +83,7 @@
         <if test='midFinal != null and midFinal != ""'>
             AND A.mid_final = #{midFinal}
         </if>
-        ORDER BY A.year desc, A.semester desc, A.mid_final asc;
+        ORDER BY A.year desc, A.semester desc, A.mid_final desc;
     </select>
 
     <select id="getHighestRatingsOfAcaTest">
