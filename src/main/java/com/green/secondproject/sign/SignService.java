@@ -176,13 +176,14 @@ public class SignService {
         return dto;
     }
 
-    public SignInResultDto refreshToken(HttpServletRequest req, String refreshToken) throws RuntimeException {
-        if(!(JWT_PROVIDER.isValidateToken(refreshToken, JWT_PROVIDER.REFRESH_KEY))) { return null; }
+    public String refreshToken(HttpServletRequest req, String refreshToken) throws RuntimeException {
+        String error = "유효하지 않은 토큰";
+        if(!(JWT_PROVIDER.isValidateToken(refreshToken, JWT_PROVIDER.REFRESH_KEY))) { return error; }
 
         String ip = req.getRemoteAddr();
         String accessToken = JWT_PROVIDER.resolveToken(req, JWT_PROVIDER.TOKEN_TYPE);
         Claims claims = JWT_PROVIDER.getClaims(refreshToken, JWT_PROVIDER.REFRESH_KEY);
-        if(claims == null) { return null; }
+        if(claims == null) { return error; }
 
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
@@ -190,13 +191,13 @@ public class SignService {
         String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
         String value = redisService.getData(redisKey);
         if (value == null) {
-            return null;
+            return error;
         }
 
         try {
             RedisJwtVo redisJwtVo = objectMapper.readValue(value, RedisJwtVo.class);
             if (!redisJwtVo.getAccessToken().equals(accessToken) || !redisJwtVo.getRefreshToken().equals(refreshToken)) {
-                return null;
+                return error;
             }
 
             List<String> roles = (List<String>)claims.get("roles");
@@ -209,14 +210,11 @@ public class SignService {
             String updateValue = objectMapper.writeValueAsString(updateRedisJwtVo);
             redisService.setData(redisKey, updateValue);
 
-            return SignInResultDto.builder()
-                    .accessToken(reAccessToken)
-                    .refreshToken(refreshToken)
-                    .build();
+            return reAccessToken;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return error;
     }
 
     public void logout(HttpServletRequest req) {
