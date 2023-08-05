@@ -43,7 +43,7 @@
     </select>
 
     <select id="getLatestRatingsOfMockTest">
-        select C.nm, A.rating
+        select C.nm, A.rating, concat(A.year,A.mon) date
         from mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id

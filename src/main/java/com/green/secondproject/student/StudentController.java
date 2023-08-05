@@ -49,7 +49,7 @@ public class StudentController {
     @Operation(summary = "모의고사- 최근응시 시험 등급",  description =
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
             +"※국어,수학,영어 한국사※")
-    public List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser){
+    public StudentSumContainerVo getLatestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser){
         StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
         dto.setUserId(myuser.getUserId());
         return service.getLatestRatingsOfMockTest(dto);

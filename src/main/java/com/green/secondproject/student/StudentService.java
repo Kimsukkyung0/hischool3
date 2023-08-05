@@ -28,13 +28,27 @@ public class StudentService {
         return mapper.getHighestRatingsOfMockTest(userId);
     }
 
-    public List<StudentSummarySubjectVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
+    public StudentSumContainerVo getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
         log.info("mon : {}", now.getMonthValue());
-        return mapper.getLatestRatingsOfMockTest(dto);
+        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
+        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
+
+        for (StudentTestSumGraphVo vo : sub) {
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            result.add(tmpVo);
+        }
+        log.info("sub : {}",sub);
+
+
+        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
+
+        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);
     }
+
+
 
 //    public List<StudentSummaryContainerVo> getMockTestGraph(StudentSummaryParam param){
 //        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(param);
@@ -65,7 +79,10 @@ public class StudentService {
             StringBuffer sb = new StringBuffer(vo.getDate());
             vo.setDate(sb.insert(4,"-").toString());
             result.add(vo);
+        } return result;
         }
+
+
 //
 //        //controller로 원하는 값 전달
 //
@@ -91,10 +108,10 @@ public class StudentService {
 //            StudentSummaryContainerVo tmpresult = new StudentSummaryContainerVo(tmpDate,sublist);
 //            result.add(tmpresult);
 //        }
-        return result;
-    }
+
 
     //내신 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param) {
         return mapper.selAcaTestResultByDatesAndPeriod(param);
     }
