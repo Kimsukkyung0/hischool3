@@ -4,6 +4,7 @@ import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
@@ -109,9 +110,42 @@ public class StudentService {
         return mapper.getHighestRatingsOfAcaTest(dto);
     }
 
-    public List<StudentSummarySubjectVo> getLatestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-        return mapper.getLatestRatingsOfAcaTest(dto);
+    public StudentSumContainerVo getLatestRatingsOfAcaTest(Long userId) {
+        //결과값 : List<2023 2-2 국수영한 등급>
+        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
+
+        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
+
+        for(StudentTestSumGraphVo vo : subList){
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            tmp.add(tmpVo);
+        }
+
+         String date = getmidFinalFormOfDate(subList.get(0).getDate());
+
+         return new StudentSumContainerVo(date,tmp);
+    }
+
+
+    private String getmidFinalFormOfDate(String date){
+
+        StringBuffer sb = new StringBuffer(date);
+        String dateStrTmp = sb.insert(4,'-').toString();
+        log.info("dateStrTmp : {}",dateStrTmp);
+
+        int len = dateStrTmp.length()-1;
+        if(dateStrTmp.endsWith("1")){
+            //중간고사
+            dateStrTmp = dateStrTmp.substring(0,len);
+            dateStrTmp += " 중간";
+        }
+
+        else if(dateStrTmp.endsWith("2")){
+            //기말일때
+//            StringUtils.removeEnd(dateStrTmp, "2");
+            dateStrTmp = dateStrTmp.substring(0,len);
+            dateStrTmp += " 기말";
+        }
+        return dateStrTmp;
     }
 }

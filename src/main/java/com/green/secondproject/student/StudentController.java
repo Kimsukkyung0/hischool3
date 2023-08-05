@@ -94,10 +94,8 @@ public class StudentController {
     @GetMapping("/aca-latest")
     @Operation(summary = "내신:학생별 최신성적(수정중)",  description ="출력값 : <br>"+
             "(1)nm - 과목계열이름<br>(2)rating - 등급<br>")
-    public List<StudentSummarySubjectVo> getLatestRatingsOfAcaTest(@AuthenticationPrincipal MyUserDetails myuser){
-
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(myuser.getUserId());
-        return service.getLatestRatingsOfAcaTest(dto);
+    public StudentSumContainerVo getLatestRatingsOfAcaTest(@AuthenticationPrincipal MyUserDetails myuser){
+        Long userId =  myuser.getUserId();
+        return service.getLatestRatingsOfAcaTest(userId);
     }
 }
