@@ -66,9 +66,8 @@ public class SignController {
 
     @PostMapping("/refresh-token")
     @Operation(summary = "accessToken 재발행")
-    public ResponseEntity<SignInResultDto> refreshToken(HttpServletRequest req, @RequestBody TokenDto token) {
-        SignInResultDto dto = SERVICE.refreshToken(req, token.getRefreshToken());
-        return dto == null ? ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null) : ResponseEntity.ok(dto);
+    public String refreshToken(HttpServletRequest req, @RequestBody TokenDto token) {
+        return SERVICE.refreshToken(req, token.getRefreshToken());
     }
 
     @PostMapping("/mail-confirm")
