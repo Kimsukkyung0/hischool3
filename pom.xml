@@ -108,6 +108,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-test -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<version>5.7.10</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
