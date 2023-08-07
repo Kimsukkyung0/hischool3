@@ -50,5 +50,10 @@ public class TeacherSerivce {
         dto.setClassid(classid);
         return mapper.aprStudent(dto);
     }
+
+    public List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto){
+
+        return mapper.teacherGrap(dto);
+    }
 }
 
