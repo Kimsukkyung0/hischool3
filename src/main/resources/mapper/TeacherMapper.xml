@@ -79,4 +79,15 @@
         SELECT count(user_id) userid FROM user
         WHERE apr_yn =0 AND class_id = #{classid} AND role = "ROLE_STD";
     </select>
+
+    <select id="teacherGrap">
+        SELECT COUNT(B.rating) rating,A.class_id classid,D.category_id categoryid  FROM `user` A
+        INNER JOIN aca_result B
+        ON A.user_id = B.user_id
+        INNER JOIN subject C
+        ON C.subject_id = B.subject_id
+        INNER JOIN sbj_category D
+        WHERE B.rating = #{rating} AND A.class_id = #{classid} AND D.category_id = #{categoryid} and D.type =1;
+
+    </select>
 </mapper>

@@ -14,4 +14,5 @@ public interface TeacherMapper {
     int delTeacher(TeacherDelDto dto);
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
+    List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto);
 }
