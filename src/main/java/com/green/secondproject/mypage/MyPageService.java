@@ -6,6 +6,7 @@ import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.utils.MyFileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +17,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class MyPageService {
     private final MyPageMapper mapper;
     private final AuthenticationFacade facade;
@@ -24,6 +25,40 @@ public class MyPageService {
 
     @Value("/home/download")
     private String fileDir;
+
+    @Autowired
+    public MyPageService(MyPageMapper mapper, AuthenticationFacade facade, PasswordEncoder passwordEncoder) {
+        this.mapper = mapper;
+        this.facade = facade;
+        this.PW_ENCODER = passwordEncoder;
+    }
+
+//    public int updUserPw(UpdUserPwDto dto) {
+//        String upw = dto.getPw();
+//        String verifypw = dto.getVerifypw();
+//        String encodedPassword = PW_ENCODER.encode(upw);
+//
+//        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
+//        dto2.setUserId(facade.getLoginUserPk());
+//        dto2.setPw(encodedPassword);
+//
+//        if (PW_ENCODER.matches(upw, verifypw)) {
+//            return mapper.updUserPw(dto2);
+//        } else {
+//            throw new RuntimeException("비밀번호가 일치하지 않습니다");
+//        }
+//    }
+
+    public int updUserPw(UpdUserPwDto dto) {
+        String upw = dto.getPw();
+        String encodedPassword = PW_ENCODER.encode(upw);
+
+        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
+        dto2.setUserId(facade.getLoginUserPk());
+        dto2.setPw(encodedPassword);
+
+        return mapper.updUserPw(dto2);
+    }
 
     public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
@@ -41,17 +76,6 @@ public class MyPageService {
         return mapper.updTeacherInfo(dto2);
     }
 
-
-    public int updUserPw(UpdUserPwDto dto) {
-        String upw = dto.getPw();
-        String encodedPassword = PW_ENCODER.encode(upw);
-
-        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
-        dto2.setUserId(facade.getLoginUserPk());
-        dto2.setPw(encodedPassword);
-
-        return mapper.updUserPw(dto2);
-    }
 
 
     public int updStudentInfo(UpdStudentInfoDto dto) {
