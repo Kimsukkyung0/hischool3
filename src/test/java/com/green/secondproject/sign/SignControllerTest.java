@@ -82,14 +82,11 @@ class SignControllerTest {
 
         given(service.signUp(any(),any(),any())).willReturn(resultDto);
 
-        String originalFileNm = "9084c915-39f8-410f-9934-22ac5b573426.png";
+        String originalFileNm = "test1.png";
         String contentType = "png";
-        String filePath = "D:/home/download/todo/18/" + originalFileNm;
-        FileInputStream fileInputStream = new FileInputStream(filePath);
-        FileInputStream fileInputStream2 = new FileInputStream(filePath);
 
-        MockMultipartFile pic = new MockMultipartFile("pic", originalFileNm, contentType, fileInputStream);
-        MockMultipartFile aprPic = new MockMultipartFile("aprPic", originalFileNm, contentType, fileInputStream2);
+        MockMultipartFile pic = new MockMultipartFile("pic", originalFileNm, contentType, "pic".getBytes());
+        MockMultipartFile aprPic = new MockMultipartFile("aprPic", originalFileNm, contentType, "aprPic".getBytes());
         SignUpParam param = SignUpParam.builder()
                 .nm("test")
                 .email("test@gmail.com")
