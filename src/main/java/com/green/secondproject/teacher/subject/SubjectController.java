@@ -63,18 +63,18 @@ public class SubjectController {
         return serivce.smalllist(user,categoryid);
     }
 
-    @GetMapping("/class-num")
-    @Operation(summary = "반석차 반전체인원")
-    int classnum(@AuthenticationPrincipal MyUserDetails user){
-
-        return serivce.classnum(user);
-    }
-
-    @GetMapping("/school-snum")
-    @Operation(summary = "학교 학년전체인원")
-    int schoolnum(@AuthenticationPrincipal MyUserDetails user){
-        return serivce.schoolnum(user);
-    }
+//    @GetMapping("/class-num")
+//    @Operation(summary = "반석차 반전체인원")
+//    int classnum(@AuthenticationPrincipal MyUserDetails user){
+//
+//        return serivce.classnum(user);
+//    }
+//
+//    @GetMapping("/school-snum")
+//    @Operation(summary = "학교 학년전체인원")
+//    int schoolnum(@AuthenticationPrincipal MyUserDetails user){
+//        return serivce.schoolnum(user);
+//    }
 
     //모의고사 시작
 
