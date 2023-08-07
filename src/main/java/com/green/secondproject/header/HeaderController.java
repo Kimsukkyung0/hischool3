@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class HeaderController {
     @GetMapping("/school-logo")
     @Operation(summary = "학생의 소속 학교 로고 표기",
             description = "출력값 : <br>(1)logo - 학교 로고")
-    public List<SelSchoolLogoVo> SelectSchoolLogo(@AuthenticationPrincipal MyUserDetails myuser) {
+    public SelSchoolLogoVo SelectSchoolLogo(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.selSchoolLogo(myuser);
     }
 }

@@ -25,6 +25,9 @@ public class MyPageService {
     private String fileDir;
 
     public int updUserPw(UpdUserPwDto dto) {
+        // 비밀번호 확인
+        // 확인 후 설정한 비밀번호 암호화해서 저장 흠
+
         return mapper.updUserPw(dto);
     }
 
@@ -35,30 +38,36 @@ public class MyPageService {
     }
 
 
-    public int updTeacherInfo(UpdTeacherInfoDto dtoNoPk) {
-        UpdTeacherInfoDto2 dto = new UpdTeacherInfoDto2();
-        dto.setNm(dtoNoPk.getNm());
-        dto.setAddress(dtoNoPk.getAddress());
-        dto.setPhone(dtoNoPk.getPhone());
-        dto.setUserId(facade.getLoginUserPk());
-        return mapper.updTeacherInfo(dto);
+    public int updTeacherInfo(UpdTeacherInfoDto dto) {
+        UpdTeacherInfoDto2 dto2 = new UpdTeacherInfoDto2();
+        dto2.setNm(dto.getNm());
+        dto2.setAddress(dto.getAddress());
+        dto2.setPhone(dto.getPhone());
+        dto2.setUserId(facade.getLoginUserPk());
+        return mapper.updTeacherInfo(dto2);
     }
 
 
-    public int updStudentInfo(UpdStudentInfoDto dtoNoPk) {
-        //여기서 dto에 userId값 받아오기
-        UpdStudentInfoDto2 dto = new UpdStudentInfoDto2();
-        dto.setNm(dtoNoPk.getNm());
-        dto.setAddress(dtoNoPk.getAddress());
-        dto.setPhone(dtoNoPk.getPhone());
-        dto.setUserId(facade.getLoginUserPk());
-        return mapper.updStudentInfo(dto);
+    public int updStudentInfo(UpdStudentInfoDto dto) {
+        UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
+        dto2.setNm(dto.getNm());
+        dto2.setAddress(dto.getAddress());
+        dto2.setPhone(dto.getPhone());
+        dto2.setUserId(facade.getLoginUserPk());
+        return mapper.updStudentInfo(dto2);
     }
 
 
-    public String updUserPic(MultipartFile pic, UserPicDto dto) {
+
+    public String updUserPic(MultipartFile pic, MyUserDetails myuser) {
+        UserPicDto2 dto2 = new UserPicDto2();
+        UserPicDto dto = new UserPicDto();
+        dto2.setPic(dto.getPic());
+        dto2.setUserId(facade.getLoginUserPk());
+
+
         String temp = "0";
-        String centerPath = String.format("user/%d", dto.getUserId());
+        String centerPath = String.format("user/%d", myuser.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
         File dic = new File(dicPath);
@@ -76,9 +85,9 @@ public class MyPageService {
         }catch (Exception e) {
             return temp;
         }
-        dto.setPic(savedFilePath);
+        myuser.setPic(savedFilePath);
         try {
-            int result = mapper.updUserPic(dto);
+            int result = mapper.updUserPic(dto2);
             if(result == Integer.parseInt(temp)) {
                 throw new Exception("프로필 사진을 등록할 수 없습니다.");
             }

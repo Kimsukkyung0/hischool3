@@ -11,5 +11,5 @@ import java.util.List;
 @Mapper
 public interface HeaderMapper {
     List<SelSchoolInfoVo> selSchoolInfo(SelSchoolInfoDto dto);
-    List<SelSchoolLogoVo> selSchoolLogo(SelSchoolLogoDto dto);
+    SelSchoolLogoVo selSchoolLogo(SelSchoolLogoDto dto);
 }

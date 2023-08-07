@@ -35,27 +35,25 @@ public class MyPageController {
     @PatchMapping("/teacher-info-update")
     @Operation(summary = "선생님 정보 수정",
             description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>")
-    public int updTcInfo(@RequestBody UpdTeacherInfoDto dtoNoPk) {
-        return serivce.updTeacherInfo(dtoNoPk);
+    public int updTcInfo(@RequestBody UpdTeacherInfoDto dto) {
+        return serivce.updTeacherInfo(dto);
     }
 
 
     @PatchMapping("/student-info-update")
     @Operation(summary = "학생 정보 수정",
             description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>")
-    public int updStdInfo(@RequestBody UpdStudentInfoDto dtoNoPk) {
-        return serivce.updStudentInfo(dtoNoPk);
+    public int updStdInfo(@RequestBody UpdStudentInfoDto dto) {
+        return serivce.updStudentInfo(dto);
     }
 
 
     @PatchMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "유저 프로필 사진 추가",
+    @Operation(summary = "유저 프로필 사진 수정",
             description = "요구값 : <br>(1)userId - 유저 PK값<br>" +
                     "(2)pic - 사진파일<br>")
-    public String patchPicUser(@RequestPart MultipartFile pic, @RequestParam Long userId) {
-        UserPicDto dto = new UserPicDto();
-        dto.setUserId(userId);
-        return serivce.updUserPic(pic, dto);
+    public String patchPicUser(@RequestPart MultipartFile pic,@AuthenticationPrincipal MyUserDetails myuser) {
+        return serivce.updUserPic(pic,myuser);
     }
 
 

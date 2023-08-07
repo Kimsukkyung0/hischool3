@@ -23,7 +23,7 @@ public class HeaderService {
         return mapper.selSchoolInfo(dto);
     }
 
-    public List<SelSchoolLogoVo> selSchoolLogo(MyUserDetails myuser) {
+    public SelSchoolLogoVo selSchoolLogo(MyUserDetails myuser) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();
         dto.setUserId(myuser.getUserId());
         return mapper.selSchoolLogo(dto);
