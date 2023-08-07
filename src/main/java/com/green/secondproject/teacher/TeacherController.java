@@ -1,11 +1,11 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,18 +24,18 @@ public class TeacherController {
                     "출력값 : <br>(1)userId - 학생 PK값<br>(2)classId - 학급 PK값<br>" +
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)<br>(4)snm - 학생 이름<br>" +
                     "(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
-    public List<SelSignedStudentVo> selectSignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.selSignedStudent(myuser);
+    public List<SelSignedStudentVo> selectSignedStudent(@RequestParam Long classId) {
+        return service.selSignedStudent(classId);
     }
 
 
     @GetMapping("/unsigned")
-    @Operation(summary = "승인 대기 명단",
+    @Operation(summary = "승인된 대기 명단",
             description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
                     "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
-    public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.selUnsignedStudent(myuser);
+    public List<SelUnsignedStudentVo> selectUnsignedStudent(@RequestParam Long classId) {
+        return service.selUnsignedStudent(classId);
     }
 
 
@@ -83,5 +83,15 @@ public class TeacherController {
     @Operation(summary = "승인 대기 인원(n명)")
     public int aprStudent(@RequestParam Long classid){
         return service.aprStudent(classid);
+    }
+
+    @GetMapping("/aca-grape")
+    @Operation(summary = "등급 출력")
+    public List<TeacherGrapeVo> teacherGrap(@RequestParam int count,@RequestParam Long classid, @RequestParam Long categoryid ){
+        TeacherVanGrapeDto dto = new TeacherVanGrapeDto();
+        dto.setCategoryid(categoryid);
+        dto.setCount(count);
+        dto.setClassid(classid);
+        return service.teacherGrap(dto);
     }
 }
