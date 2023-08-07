@@ -10,6 +10,7 @@ public class UserVo {
     private String email;
     private String pw;
     private String nm;
+    private Long classId;
     private String schoolNm;
     private String grade;
     private String classNum;

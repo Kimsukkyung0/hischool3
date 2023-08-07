@@ -4,6 +4,8 @@ import com.green.secondproject.teacher.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -81,5 +83,15 @@ public class TeacherController {
     @Operation(summary = "승인 대기 인원(n명)")
     public int aprStudent(@RequestParam Long classid){
         return service.aprStudent(classid);
+    }
+
+    @GetMapping("/aca-grape")
+    @Operation(summary = "등급 출력")
+    public List<TeacherGrapeVo> teacherGrap(@RequestParam int count,@RequestParam Long classid, @RequestParam Long categoryid ){
+        TeacherVanGrapeDto dto = new TeacherVanGrapeDto();
+        dto.setCategoryid(categoryid);
+        dto.setCount(count);
+        dto.setClassid(classid);
+        return service.teacherGrap(dto);
     }
 }

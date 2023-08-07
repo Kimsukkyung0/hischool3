@@ -4,7 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.teacher.TeacherMapper">
     
-    <select id="selSignedStudent">
+    <select id="selSignedStudent" resultType="SelSignedStudentVo">
         SELECT user_id userId, class_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
         WHERE role = "ROLE_STD"
@@ -46,9 +46,16 @@
     </select>
 
 
-    <update id="studentSign">
+    <update id="acceptStudent">
         UPDATE user
         SET apr_yn = 1
+        WHERE user_id = #{userid}
+    </update>
+
+
+    <update id="rejectStudent">
+        UPDATE user
+        SET apr_yn = 0
         WHERE user_id = #{userid}
     </update>
 
@@ -78,5 +85,16 @@
     <select id="aprStudent">
         SELECT count(user_id) userid FROM user
         WHERE apr_yn =0 AND class_id = #{classid} AND role = "ROLE_STD";
+    </select>
+
+    <select id="teacherGrap">
+        SELECT COUNT(B.rating) count FROM `user` A
+        INNER JOIN aca_result B
+        ON A.user_id = B.user_id
+        INNER JOIN subject C
+        ON C.subject_id = B.subject_id
+        INNER JOIN sbj_category D
+        WHERE B.rating = #{count} AND A.class_id = #{classid} AND D.category_id = #{categoryid} and D.type =1;
+
     </select>
 </mapper>

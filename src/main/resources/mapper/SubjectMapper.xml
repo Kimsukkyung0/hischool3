@@ -30,6 +30,7 @@
         INNER JOIN user D
         ON C.user_id = D.user_id
         WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
+        GROUP BY nm
     </select>
     <select id="smalllist" resultType="SubjectVo2">
         SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid
@@ -79,6 +80,7 @@
         VALUES
         <foreach collection="list" item="item" separator=",">
         (#{item.userid},#{item.subjectid})
+
         </foreach>
     </insert>
 

@@ -1,5 +1,7 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.config.security.AuthenticationFacade;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.model.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,20 +12,22 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherSerivce {
     private final TeacherMapper mapper;
+    private final AuthenticationFacade facade;
 
 
-    public List<SelSignedStudentVo> selSignedStudent(Long classId) {
+    public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         SelSignedStudentDto dto = new SelSignedStudentDto();
-        dto.setClassId(classId);
+        dto.setClassId(myuser.getClassId());
         return mapper.selSignedStudent(dto);
     }
 
 
-    public List<SelUnsignedStudentVo> selUnsignedStudent(Long classId) {
+    public List<SelUnsignedStudentVo> selUnsignedStudent(MyUserDetails myuser) {
         SelUnsignedStudentDto dto = new SelUnsignedStudentDto();
-        dto.setClassId(classId);
+        dto.setClassId(myuser.getClassId());
         return mapper.selUnsignedStudent(dto);
     }
+
 
     public List<SelAcaResultVo> selAcaResult(Long userId) {
         SelAcaResultDto dto = new SelAcaResultDto();
@@ -31,11 +35,13 @@ public class TeacherSerivce {
         return mapper.selAcaResult(dto);
     }
 
+
     public List<SelMockResultVo> selMockResult(Long userId) {
         SelMockResultDto dto = new SelMockResultDto();
         dto.setUserId(userId);
         return mapper.selMockResult(dto);
     }
+
 
     public int delTeacher(Long userId) {
         TeacherDelDto dto = new TeacherDelDto();
@@ -49,6 +55,11 @@ public class TeacherSerivce {
         ClassStudentDto dto = new ClassStudentDto();
         dto.setClassid(classid);
         return mapper.aprStudent(dto);
+    }
+
+    public List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto){
+
+        return mapper.teacherGrap(dto);
     }
 }
 

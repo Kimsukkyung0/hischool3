@@ -83,6 +83,7 @@ public class JwtTokenProvider {
                 .email(vo.getEmail())
                 .pw(vo.getPw())
                 .nm(vo.getNm())
+                .classId(vo.getClassId())
                 .schoolNm(vo.getSchoolNm())
                 .grade(vo.getGrade())
                 .classNum(vo.getClassNum())
