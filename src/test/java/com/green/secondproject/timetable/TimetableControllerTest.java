@@ -88,7 +88,7 @@
 //
 //        SecurityContextHolder.getContext().setAuthentication(new PreAuthenticatedAuthenticationToken
 //                (null, null, Arrays.asList(new SimpleGrantedAuthority("ROLE_STD"))));
-
+//
 //        //null이 아니라면, 검사한다.
 //        if(vo != null){
 //
@@ -123,17 +123,17 @@
 //        else{
 //            assertNull(vo);
 //        }
-
-        //실제리스트와 전체비교가 힘들다
-        // result action /status ok /넘어오는 데이터 타입만 확인
-
-
+//
+//        실제리스트와 전체비교가 힘들다
+//         result action /status ok /넘어오는 데이터 타입만 확인
+//
+//
 //        ResultActions ra = mvc.perform(get("/api/timetable")
 //                                .contentType(MediaType.APPLICATION_JSON_UTF8));
 //
 ////        ra.andExpect(status().isOk())//200을 기대하면..안되나
 ////                            .andDo(print());
-
+//
 //
 //    }
 //}
