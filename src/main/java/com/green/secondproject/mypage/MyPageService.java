@@ -59,9 +59,12 @@ public class MyPageService {
 
 
 
-    public String updUserPic(MultipartFile pic, UserPicDto2 dto2) {
-        UserPicDto dto = new UserPicDto();
-        dto2.setPic(dto.getPic());
+    public String updUserPic(MultipartFile pic) {
+
+
+        UserPicDto2 dto2 = new UserPicDto2();
+
+        dto2.setPic(String.valueOf(pic));
         dto2.setUserId(facade.getLoginUserPk());
 
 
@@ -84,7 +87,7 @@ public class MyPageService {
         }catch (Exception e) {
             return temp;
         }
-        dto.setPic(savedFilePath);
+        dto2.setPic(savedFilePath);
         try {
             int result = mapper.updUserPic(dto2);
             if(result == Integer.parseInt(temp)) {
