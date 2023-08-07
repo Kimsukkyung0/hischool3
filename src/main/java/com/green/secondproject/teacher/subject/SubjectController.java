@@ -50,7 +50,6 @@ public class SubjectController {
     "<br> userid - 유저 pk값")
     List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user)
     {
-
         return serivce.tcslist(user);
     }
 
@@ -59,8 +58,9 @@ public class SubjectController {
             ,description =
             "categoryid - category 테이블에 세부과목 PK값" +
             "<br>nm - 학생이름")
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user){
-        return serivce.smalllist(user);
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user,@RequestParam Long categoryid){
+
+        return serivce.smalllist(user,categoryid);
     }
 
     @GetMapping("/class-num")
@@ -76,7 +76,6 @@ public class SubjectController {
         return serivce.schoolnum(user);
     }
 
-
     //모의고사 시작
 
     @GetMapping("/mockbig-list")
@@ -91,8 +90,6 @@ public class SubjectController {
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid){
         return serivce.mocksmalllist(categoryid);
     }
-
-
 
 
     //===================================Post====================================

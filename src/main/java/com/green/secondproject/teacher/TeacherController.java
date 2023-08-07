@@ -103,11 +103,11 @@ public class TeacherController {
 
     @GetMapping("/aca-grape")
     @Operation(summary = "등급 출력")
-    public List<TeacherGrapeVo> teacherGrap(@RequestParam int count,@RequestParam Long classid, @RequestParam Long categoryid ){
+    public List<TeacherGrapeVo> teacherGrap(@RequestParam Long categoryid ,@RequestParam int count,@AuthenticationPrincipal MyUserDetails myuser){
         TeacherVanGrapeDto dto = new TeacherVanGrapeDto();
         dto.setCategoryid(categoryid);
         dto.setCount(count);
-        dto.setClassid(classid);
+        dto.setClassid(myuser.getClassId());
         return service.teacherGrap(dto);
     }
 

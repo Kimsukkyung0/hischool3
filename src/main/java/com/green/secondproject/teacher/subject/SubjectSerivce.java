@@ -8,7 +8,6 @@ import lombok.ToString;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,9 +36,10 @@ public class SubjectSerivce {
         return mapper.tcslist(dto);
     }
 
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user) {
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user,Long categoryid) {
         SubjectDto dto = new SubjectDto();
         dto.setUserid(user.getUserId());
+        dto.setCategoryid(categoryid);
         return mapper.smalllist(dto);
     }
 
