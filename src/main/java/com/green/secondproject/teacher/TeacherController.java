@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,8 +25,8 @@ public class TeacherController {
                     "출력값 : <br>(1)userId - 학생 PK값<br>(2)classId - 학급 PK값<br>" +
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)<br>(4)snm - 학생 이름<br>" +
                     "(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
-    public List<SelSignedStudentVo> selectSignedStudent(@RequestParam Long classId) {
-        return service.selSignedStudent(classId);
+    public List<SelSignedStudentVo> selectSignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.selSignedStudent(myuser);
     }
 
 
@@ -34,8 +35,8 @@ public class TeacherController {
             description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
                     "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
-    public List<SelUnsignedStudentVo> selectUnsignedStudent(@RequestParam Long classId) {
-        return service.selUnsignedStudent(classId);
+    public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.selUnsignedStudent(myuser);
     }
 
 
