@@ -72,7 +72,7 @@ public class TeacherSerivce {
     }
 
     public List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto){
-
+        
         return mapper.teacherGrap(dto);
     }
 }

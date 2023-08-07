@@ -30,16 +30,18 @@
         INNER JOIN user D
         ON C.user_id = D.user_id
         WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
-        GROUP BY nm
+
     </select>
     <select id="smalllist" resultType="SubjectVo2">
-        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid
+        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid,A.category_id categoryid
         FROM subject A
         INNER JOIN tc_sbj B
         ON A.subject_id= B.subject_id
         INNER JOIN user C
         ON B.user_id = C.user_id
-        WHERE B.user_id = #{userid} and C.apr_yn = 1
+        inner JOIN sbj_category sc
+        on A.category_id = sc.category_id
+        WHERE B.user_id = #{userid} and C.apr_yn = 1 AND A.category_id = #{categoryid}
     </select>
     <select id="classnum">
         SELECT COUNT(C.class_id) classid FROM van A
