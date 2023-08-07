@@ -62,6 +62,16 @@ public class TeacherController {
         return service.selMockResult(userId);
     }
 
+    @PatchMapping("/accept-student")
+    public int acceptStudent(@RequestParam Long userId) {
+        return service.acceptStudent(userId);
+    }
+
+    @PatchMapping("/reject-student")
+    public int rejectStudent(@RequestParam Long userId) {
+        return service.acceptStudent(userId);
+    }
+
 
     @DeleteMapping
     @Operation(summary = "선생님 탈퇴 처리",

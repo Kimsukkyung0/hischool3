@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class AcceptStudentDto {
-    private String aprYn;
+    private Long userId;
 }
