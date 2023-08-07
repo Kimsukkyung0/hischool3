@@ -28,17 +28,20 @@ public class TeacherSerivce {
         return mapper.selUnsignedStudent(dto);
     }
 
+
     public List<SelAcaResultVo> selAcaResult(Long userId) {
         SelAcaResultDto dto = new SelAcaResultDto();
         dto.setUserId(userId);
         return mapper.selAcaResult(dto);
     }
 
+
     public List<SelMockResultVo> selMockResult(Long userId) {
         SelMockResultDto dto = new SelMockResultDto();
         dto.setUserId(userId);
         return mapper.selMockResult(dto);
     }
+
 
     public int delTeacher(Long userId) {
         TeacherDelDto dto = new TeacherDelDto();

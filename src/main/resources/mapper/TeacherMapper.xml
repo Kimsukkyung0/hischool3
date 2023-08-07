@@ -46,9 +46,16 @@
     </select>
 
 
-    <update id="studentSign">
+    <update id="acceptStudent">
         UPDATE user
         SET apr_yn = 1
+        WHERE user_id = #{userid}
+    </update>
+
+
+    <update id="rejectStudent">
+        UPDATE user
+        SET apr_yn = 0
         WHERE user_id = #{userid}
     </update>
 
