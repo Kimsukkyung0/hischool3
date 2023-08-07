@@ -20,16 +20,10 @@ import java.util.List;
 public class MyPageService {
     private final MyPageMapper mapper;
     private final AuthenticationFacade facade;
+    private final PasswordEncoder PW_ENCODER;
 
     @Value("/home/download")
     private String fileDir;
-
-    public int updUserPw(UpdUserPwDto dto) {
-        // 비밀번호 확인
-        // 확인 후 설정한 비밀번호 암호화해서 저장 흠
-
-        return mapper.updUserPw(dto);
-    }
 
     public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
@@ -40,11 +34,23 @@ public class MyPageService {
 
     public int updTeacherInfo(UpdTeacherInfoDto dto) {
         UpdTeacherInfoDto2 dto2 = new UpdTeacherInfoDto2();
+        dto2.setUserId(facade.getLoginUserPk());
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
         dto2.setPhone(dto.getPhone());
-        dto2.setUserId(facade.getLoginUserPk());
         return mapper.updTeacherInfo(dto2);
+    }
+
+
+    public int updUserPw(UpdUserPwDto dto) {
+        String upw = dto.getPw();
+        String encodedPassword = PW_ENCODER.encode(upw);
+
+        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
+        dto2.setUserId(facade.getLoginUserPk());
+        dto2.setPw(encodedPassword);
+
+        return mapper.updUserPw(dto2);
     }
 
 
