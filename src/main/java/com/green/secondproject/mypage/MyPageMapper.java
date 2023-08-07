@@ -10,6 +10,6 @@ public interface MyPageMapper {
     int updTeacherInfo(UpdTeacherInfoDto2 dto2);
     int updStudentInfo(UpdStudentInfoDto2 dto2);
     int updUserPic(UserPicDto2 dto2);
-    int updUserPw(UpdUserPwDto dto);
+    int updUserPw(UpdUserPwDto2 dto2);
     List<SelUserMyPageVo> selUserMyPage(SelUserMyPageDto dto);
 }
