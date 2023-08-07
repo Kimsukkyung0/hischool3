@@ -57,8 +57,6 @@ public class MyPageService {
         return mapper.updStudentInfo(dto2);
     }
 
-
-
     public String updUserPic(MultipartFile pic) {
 
 

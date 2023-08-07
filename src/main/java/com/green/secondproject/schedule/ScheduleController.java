@@ -20,7 +20,10 @@ public class ScheduleController {
 
 
     @GetMapping
-    @Operation(summary = "학사일정")
+    @Operation(summary = "학사일정",description = 
+            " <br> sdSchulCode - 학교코드" +
+            "  <br>aaFromYmd - 시작날짜" +
+            " <br> aaToYmd - 끝날짜")
     public ScheduleContainerVo getTimetable(ScheduleParam p){
         log.info("p : {}",p);
         return service.getSchedule(p);
