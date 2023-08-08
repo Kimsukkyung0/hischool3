@@ -50,7 +50,7 @@
         ON A.school_id = B.school_id
         INNER JOIN user C
         ON A.class_id = C.class_id
-        WHERE C.class_id = #{classid} AND C.role ="ROLE_STD" AND C.apr_yn = 1;
+        WHERE C.class_id = #{classid} AND C.role ="ROLE_STD" AND C.apr_yn = 1
     </select>
 
     <select id="schoolnum">
