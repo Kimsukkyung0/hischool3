@@ -33,7 +33,7 @@
 
     </select>
     <select id="smalllist" resultType="SubjectVo2">
-        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid,A.category_id categoryid
+        SELECT DISTINCT A.subject_id subjectid,A.nm,B.user_id userid
         FROM subject A
         INNER JOIN tc_sbj B
         ON A.subject_id= B.subject_id
@@ -41,7 +41,7 @@
         ON B.user_id = C.user_id
         inner JOIN sbj_category sc
         on A.category_id = sc.category_id
-        WHERE B.user_id = #{userid} and C.apr_yn = 1 AND A.category_id = #{categoryid}
+        WHERE B.user_id = #{userid} and C.apr_yn = 1
     </select>
     <select id="classnum">
         SELECT COUNT(C.class_id) classid FROM van A
@@ -103,8 +103,19 @@
             (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.mon},#{item.standardscore},#{item.rating},#{item.percent})
         </foreach>
     </insert>
-    <select id="maingrape">
+    <select id="mocktotal">
+        SELECT count(concat(A.year,'0',A.mon)) count
+        from mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        INNER JOIN user D
+        ON A.user_id = D.user_id
+        where D.class_id = #{classid} and B.category_id in(2,5,4,8) and A.year = year(NOW()) and A.mon = #{mon} AND A.rating = #{rating}
+        <if test = 'mon>9'>
 
+        </if>
 
     </select>
 </mapper>

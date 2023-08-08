@@ -3,6 +3,7 @@ package com.green.secondproject.teacher.subject;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,10 +37,10 @@ public class SubjectSerivce {
         return mapper.tcslist(dto);
     }
 
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user,Long categoryid) {
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user) {
         SubjectDto dto = new SubjectDto();
         dto.setUserid(user.getUserId());
-        dto.setCategoryid(categoryid);
+
         return mapper.smalllist(dto);
     }
 
@@ -112,6 +113,10 @@ public class SubjectSerivce {
             list.add(vo);
         }
         return mapper.acasubject(list);
+    }
+
+    int mocktotal(MockGraphDto dto){
+        return mapper.mocktotal(dto);
     }
 
 }

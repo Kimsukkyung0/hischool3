@@ -1,7 +1,7 @@
 package com.green.secondproject.teacher.subject;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -31,4 +31,6 @@ public interface SubjectMapper {
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
 
     int mockins(List<MockSubjectVo> list);
+
+    int mocktotal(MockGraphDto dto);
 }
