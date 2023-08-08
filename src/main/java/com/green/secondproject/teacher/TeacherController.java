@@ -116,7 +116,7 @@ public class TeacherController {
     }
 
 
-    @DeleteMapping("/delete-mock")
+    @DeleteMapping("/eli-mock")
     @Operation(summary = "모의고사 성적 삭제",
             description = "요구값 : <br>(1)resultId - 모의고사 성적 PK값<br><br>")
     public int delMockResult(@RequestParam Long resultId) {
@@ -124,7 +124,7 @@ public class TeacherController {
     }
 
 
-    @DeleteMapping("/delete-aca")
+    @DeleteMapping("/eli-aca")
     @Operation(summary = "내신 성적 삭제",
             description = "요구값 : <br>(1)resultId - 내신 성적 PK값<br><br>")
     public int delAcaResult(@RequestParam Long resultId) {
