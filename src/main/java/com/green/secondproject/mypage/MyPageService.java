@@ -101,7 +101,7 @@ public class MyPageService {
 
 
         String temp = "0";
-        String centerPath = String.format("user/%d", dto2.getUserId());
+        String centerPath = String.format("hischool/%d", dto2.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
         File dic = new File(dicPath);
