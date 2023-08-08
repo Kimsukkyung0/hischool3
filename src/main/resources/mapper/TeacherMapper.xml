@@ -49,16 +49,22 @@
     <update id="acceptStudent">
         UPDATE user
         SET apr_yn = 1
-        WHERE user_id = #{userid}
+        WHERE user_id = #{userId}
     </update>
 
 
 <!--    <update id="rejectStudent">-->
 <!--        UPDATE user-->
 <!--        SET apr_yn = 2-->
-<!--        WHERE user_id = #{userid}-->
+<!--        WHERE user_id = #{userId}-->
 <!--    </update>-->
 
+
+    <update id="cancelAcceptStd">
+        UPDATE user
+        SET apr_yn = 0
+        WHERE user_id = #{userId}
+    </update>
 
     <update id="updMockResult">
         UPDATE mock_result

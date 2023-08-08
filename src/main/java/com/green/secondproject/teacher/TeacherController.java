@@ -81,6 +81,14 @@ public class TeacherController {
 //    }
 
 
+    @PatchMapping("/cancel-std")
+    @Operation(summary = "학생 가입 승인 취소",
+            description = "요구값 : <br>(1)userId - 학생 PK값")
+    public int cancelAcceptStd(@RequestParam Long userId) {
+        return service.cancelAcceptStd(userId);
+    }
+
+
     @PatchMapping("/update-mock")
     @Operation(summary = "모의고사 성적 수정",
             description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +

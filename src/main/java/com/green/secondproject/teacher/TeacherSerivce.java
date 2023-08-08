@@ -57,6 +57,13 @@ public class TeacherSerivce {
 //    }
 
 
+    public int cancelAcceptStd(Long userId) {
+        AcceptStudentDto dto = new AcceptStudentDto();
+        dto.setUserId(userId);
+        return mapper.cancelAcceptStd(dto);
+    }
+
+
     public int updMockResult(UpdMockResultDto dto) {
         dto.setResultId(dto.getResultId());
         return mapper.updMockResult(dto);
