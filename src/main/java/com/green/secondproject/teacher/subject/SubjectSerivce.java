@@ -6,9 +6,11 @@ import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.List;
 @Service
 @ToString
 @RequiredArgsConstructor
+@Slf4j
 public class SubjectSerivce {
     private final SubjectMapper mapper;
     private final AuthenticationFacade facade;
@@ -116,6 +119,7 @@ public class SubjectSerivce {
     }
 
     int mocktotal(MockGraphDto dto){
+
         return mapper.mocktotal(dto);
     }
 
