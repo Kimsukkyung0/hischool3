@@ -12,7 +12,7 @@
             birth = #{birth},
             phone = #{phone},
             address = #{address},
-            detail_addr = #{detailAddr},
+            detail_addr = #{detailAddress},
             role = #{role},
             apr_pic = #{aprPic}
     </insert>
