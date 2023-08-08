@@ -60,8 +60,27 @@
     </update>
 
 
+    <update id="updMockResult">
+        UPDATE mock_result
+        SET year = #{year}
+            , mon = #{mon}
+            , standard_score = #{standardScore}
+            , rating = #{rating}
+            , percent = #{percent}
+        WHERE result_id = #{resultId}
+    </update>
 
 
+    <update id="updAcaResult">
+        UPDATE aca_result
+        SET year = #{year}
+        , semester = #{semester}
+        , mind_final = #{mf}
+        , score = #{score}
+        , rating = #{rating}
+        , class_rank = #{classRank}
+        , whole_rank = #{wholeRank}
+    </update>
 
 
     <update id="delTeacher">
@@ -70,6 +89,20 @@
         WHERE user_id = #{userId}
         AND role = "ROLE_TC"
     </update>
+
+
+    <delete id="delMockResult">
+        DELETE
+        FROM mock_result
+        WHERE result_id = #{resultId}
+    </delete>
+
+
+    <delete id="delAcaResult">
+        DELETE
+        FROM aca_result
+        WHERE result_id = #{resultId}
+    </delete>
 
 
         <!--  학급현황 // 성수천 작업  이거 service단에서 class_id 자동받기 가능?-->

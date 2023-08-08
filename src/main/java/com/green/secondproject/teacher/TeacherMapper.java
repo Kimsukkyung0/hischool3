@@ -14,6 +14,8 @@ public interface TeacherMapper {
     int acceptStudent(AcceptStudentDto dto);
     int rejectStudent(AcceptStudentDto dto);
     int delTeacher(TeacherDelDto dto);
+    int delMockResult(DelResultDto dto);
+    int delAcaResult(DelResultDto dto);
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
     List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto);

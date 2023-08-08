@@ -62,6 +62,22 @@ public class TeacherSerivce {
         dto.setUserId(userId);
         return mapper.delTeacher(dto);
     }
+
+
+    public int delMockRusult(Long resultId) {
+        DelResultDto dto = new DelResultDto();
+        dto.setResultId(resultId);
+        return mapper.delMockResult(dto);
+    }
+
+
+    public int delAcaRusult(Long resultId) {
+        DelResultDto dto = new DelResultDto();
+        dto.setResultId(resultId);
+        return mapper.delAcaResult(dto);
+    }
+
+
     public int classStudent(ClassStudentDto dto){
         return mapper.classStudent(dto);
     }
