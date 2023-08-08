@@ -36,8 +36,8 @@ public class TeacherController {
 
 
     @GetMapping("/unsigned")
-    @Operation(summary = "승인된 대기 명단",
-            description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
+    @Operation(summary = "승인 대기 명단",
+            description = "출력값 : <br>(1)classId - 학급 PK값<br><br>"+
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
                     "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
     public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
@@ -47,7 +47,7 @@ public class TeacherController {
 
     @GetMapping("/acaresult")
     @Operation(summary = "학생 내신 성적 조회",
-            description = "요구값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
+            description = "출력값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)semester - 학기<br>" +
                     "(4)categoryId - 과목 계열<br>(5)nm - 세부 과목<br>(6)mf - 시험구분[1-중간/2-기말]<br>" +
                     "(7)score - 점수<br>(8)rating - 등급<br>(9)cr - 반 석차<br>(10)wr - 전교석차")
@@ -110,14 +110,13 @@ public class TeacherController {
 
     @DeleteMapping
     @Operation(summary = "선생님 탈퇴 처리",
-            description = "요구값 : <br>(1)userId - 유저(선생님) PK값<br><br>"+
-                            "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
-    public int deleteTeacher(@RequestParam Long userId) {
-        return service.delTeacher(userId);
+            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
+    public int deleteTeacher(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.delTeacher(myuser);
     }
 
 
-    @DeleteMapping("/delete-mock")
+    @DeleteMapping("/eli-mock")
     @Operation(summary = "모의고사 성적 삭제",
             description = "요구값 : <br>(1)resultId - 모의고사 성적 PK값<br><br>")
     public int delMockResult(@RequestParam Long resultId) {
@@ -125,7 +124,7 @@ public class TeacherController {
     }
 
 
-    @DeleteMapping("/delete-aca")
+    @DeleteMapping("/eli-aca")
     @Operation(summary = "내신 성적 삭제",
             description = "요구값 : <br>(1)resultId - 내신 성적 PK값<br><br>")
     public int delAcaResult(@RequestParam Long resultId) {

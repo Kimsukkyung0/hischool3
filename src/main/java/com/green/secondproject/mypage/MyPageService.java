@@ -53,6 +53,10 @@ public class MyPageService {
         String upw = dto.getPw();
         String encodedPassword = PW_ENCODER.encode(upw);
 
+        if (!upw.equals(dto.getConfirmpw())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
         UpdUserPwDto2 dto2 = new UpdUserPwDto2();
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setPw(encodedPassword);
@@ -72,6 +76,7 @@ public class MyPageService {
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         return mapper.updTeacherInfo(dto2);
     }
@@ -82,6 +87,7 @@ public class MyPageService {
         UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         dto2.setUserId(facade.getLoginUserPk());
         return mapper.updStudentInfo(dto2);
@@ -97,7 +103,7 @@ public class MyPageService {
 
 
         String temp = "0";
-        String centerPath = String.format("user/%d", dto2.getUserId());
+        String centerPath = String.format("hischool/%d", dto2.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
         File dic = new File(dicPath);

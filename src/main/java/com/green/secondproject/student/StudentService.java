@@ -1,5 +1,6 @@
 package com.green.secondproject.student;
 
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,9 +15,9 @@ import java.util.*;
 public class StudentService {
     private final StudentMapper mapper;
 
-    public int delStudent(int userId) {
+    public int delStudent(MyUserDetails myuser) {
         StudentDelDto dto = new StudentDelDto();
-        dto.setUserId(userId);
+        dto.setUserId(myuser.getUserId());
         return mapper.delStudent(dto);
     }
 

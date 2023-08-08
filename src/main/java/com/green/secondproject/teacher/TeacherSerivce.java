@@ -76,9 +76,9 @@ public class TeacherSerivce {
     }
 
 
-    public int delTeacher(Long userId) {
+    public int delTeacher(MyUserDetails myuser) {
         TeacherDelDto dto = new TeacherDelDto();
-        dto.setUserId(userId);
+        dto.setUserId(myuser.getUserId());
         return mapper.delTeacher(dto);
     }
 

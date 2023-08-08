@@ -14,6 +14,7 @@ public class SelUserMyPageVo {
     private LocalDate birth;
     private String phone;
     private String Address;
+    private String detailAddr;
     private Long classId;
     private String grade;
     private String van;
