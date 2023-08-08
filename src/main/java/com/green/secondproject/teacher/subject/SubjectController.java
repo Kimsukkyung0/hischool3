@@ -3,6 +3,7 @@ package com.green.secondproject.teacher.subject;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -58,9 +59,9 @@ public class SubjectController {
             ,description =
             "categoryid - category 테이블에 세부과목 PK값" +
             "<br>nm - 학생이름")
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user,@RequestParam Long categoryid){
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user){
 
-        return serivce.smalllist(user,categoryid);
+        return serivce.smalllist(user);
     }
 
 //    @GetMapping("/class-num")
@@ -126,6 +127,14 @@ public class SubjectController {
     int acasubject(@RequestBody AcalistDto2 dto){
         return serivce.acasubject(dto);
     }
-
+    @GetMapping("/mock-total")
+    @Operation(summary = "모의고사 등급별 인원수")
+    int mocktotal(@AuthenticationPrincipal MyUserDetails user,@RequestParam int mon,@RequestParam int rating){
+        MockGraphDto dto = new MockGraphDto();
+        dto.setClassid(user.getClassId());
+        dto.setMon(mon);
+        dto.setRating(rating);
+        return serivce.mocktotal(dto);
+    }
 }
 
