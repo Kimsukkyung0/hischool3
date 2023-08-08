@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.green.secondproject.config.security.AuthenticationFacade;
+import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.schedule.model.ScheduleContainerVo;
 import com.green.secondproject.schedule.model.ScheduleInfoVo;
 import com.green.secondproject.schedule.model.ScheduleParam;
@@ -13,6 +16,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -32,6 +36,9 @@ import java.util.Map;
 public class ScheduleService {
     private final String myApiKey;
     private final WebClient webClient;
+
+    @Autowired
+    private UserMapper USERMAPPER;
 
     public ScheduleService(@Value("${my-api.key}") String myApiKey) {
         this.myApiKey = myApiKey;
@@ -55,14 +62,16 @@ public class ScheduleService {
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
-    public ScheduleContainerVo getSchedule(ScheduleParam p) {
+    public ScheduleContainerVo getSchedule(MyUserDetails user,ScheduleParam p) {
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(user.getSchoolNm());
+
         String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/SchoolSchedule")
                         .queryParam("KEY", myApiKey)
                         .queryParam("Type", "json")
                         .queryParam("pIndex", 1)
                         .queryParam("pSize", 100)
                         .queryParam("ATPT_OFCDC_SC_CODE", "D10")
-                        .queryParam("SD_SCHUL_CODE", p.getSdSchulCode())
+                        .queryParam("SD_SCHUL_CODE", sdSchulCode)
                         .queryParam("AA_FROM_YMD",p.getAaFromYmd())
                         .queryParam("AA_TO_YMD",p.getAaToYmd())
                         .build()

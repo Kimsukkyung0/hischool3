@@ -103,5 +103,9 @@
             (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.mon},#{item.standardscore},#{item.rating},#{item.percent})
         </foreach>
     </insert>
+    <select id="maingrape">
+
+
+    </select>
 </mapper>
 
