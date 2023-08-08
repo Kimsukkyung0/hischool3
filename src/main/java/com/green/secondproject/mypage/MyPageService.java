@@ -53,6 +53,10 @@ public class MyPageService {
         String upw = dto.getPw();
         String encodedPassword = PW_ENCODER.encode(upw);
 
+        if (!upw.equals(dto.getConfirmpw())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
         UpdUserPwDto2 dto2 = new UpdUserPwDto2();
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setPw(encodedPassword);

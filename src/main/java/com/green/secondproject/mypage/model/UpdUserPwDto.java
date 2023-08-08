@@ -5,4 +5,5 @@ import lombok.Data;
 @Data
 public class UpdUserPwDto {
     private String pw;
+    private String confirmpw;
 }
