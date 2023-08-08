@@ -90,7 +90,7 @@ public class SubjectSerivce {
         for (int i = 0; i < dto.getList().size(); i++) {
             SubjectInsVo vo = new SubjectInsVo();
             vo.setSubjectid(dto.getList().get(i).getSubjectid());
-            vo.setUserid(facade.getLoginUserPk());
+            vo.setUserid(dto.getList().get(i).getUserid());
             list.add(vo);
         }
         return mapper.instcsbj(list);
