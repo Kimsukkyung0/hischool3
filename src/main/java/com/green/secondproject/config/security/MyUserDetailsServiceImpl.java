@@ -16,21 +16,8 @@ import java.util.Collections;
 @Slf4j
 public class MyUserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserMapper mapper;
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserVo vo = mapper.selUserByEmail(username);
-        log.info("vo: {}", vo);
-        return MyUserDetails.builder()
-                .userId(vo.getUserId())
-                .email(vo.getEmail())
-                .pw(vo.getPw())
-                .schoolNm(vo.getSchoolNm())
-                .grade(vo.getGrade())
-                .classNum(vo.getClassNum())
-                .pic(vo.getPic())
-                .roles(Collections.singletonList(vo.getRole()))
-                .build();
+        return null;
     }
 }
