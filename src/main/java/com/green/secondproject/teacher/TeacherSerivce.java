@@ -50,11 +50,11 @@ public class TeacherSerivce {
     }
 
 
-    public int rejectStudent(Long userId) {
-        AcceptStudentDto dto = new AcceptStudentDto();
-        dto.setUserId(userId);
-        return mapper.rejectStudent(dto);
-    }
+//    public int rejectStudent(Long userId) {
+//        AcceptStudentDto dto = new AcceptStudentDto();
+//        dto.setUserId(userId);
+//        return mapper.rejectStudent(dto);
+//    }
 
 
     public int updMockResult(UpdMockResultDto dto) {

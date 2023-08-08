@@ -53,11 +53,11 @@
     </update>
 
 
-    <update id="rejectStudent">
-        UPDATE user
-        SET apr_yn = 2
-        WHERE user_id = #{userid}
-    </update>
+<!--    <update id="rejectStudent">-->
+<!--        UPDATE user-->
+<!--        SET apr_yn = 2-->
+<!--        WHERE user_id = #{userid}-->
+<!--    </update>-->
 
 
     <update id="updMockResult">
