@@ -113,7 +113,8 @@ public class MyPageService {
 
         String originFileName = pic.getOriginalFilename();
         String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
-        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+//        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+        String savedFilePath = String.format("%s", savedFileName);
         String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
         File target = new File(targetPath);
         try {
