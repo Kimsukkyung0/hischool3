@@ -1,16 +1,12 @@
 //package com.green.secondproject.timetable;
 //
-//import com.fasterxml.jackson.databind.DeserializationFeature;
-//import com.fasterxml.jackson.databind.JsonNode;
-//import com.fasterxml.jackson.databind.ObjectMapper;
+//import com.green.secondproject.config.security.model.MyUserDetails;
 //import com.green.secondproject.timetable.model.TimeTableContainerVo;
-//import com.green.secondproject.timetable.model.TimeTableParam;
 //import com.green.secondproject.timetable.model.TimeTableVo;
 //import io.netty.channel.ChannelOption;
 //import io.netty.handler.timeout.ReadTimeoutHandler;
 //import io.netty.handler.timeout.WriteTimeoutHandler;
-//import io.swagger.v3.core.util.Json;
-//import lombok.extern.slf4j.Slf4j;
+//
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
 //import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,10 +19,8 @@
 //import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 //import org.springframework.test.context.junit.jupiter.SpringExtension;
 //import org.springframework.test.web.servlet.MockMvc;
-//import org.springframework.test.web.servlet.ResultActions;
 //import org.springframework.web.reactive.function.client.ExchangeStrategies;
 //import org.springframework.web.reactive.function.client.WebClient;
-//import org.springframework.web.util.UriComponentsBuilder;
 //import reactor.netty.http.client.HttpClient;
 //import reactor.netty.tcp.TcpClient;
 //
@@ -48,8 +42,9 @@
 //    private WebClient webClient;
 //
 //    @MockBean
-//    private TimetableService service;
+//    private TimetableServiceTest service;
 //
+//    private TestUserDetailsService testUserService;
 //
 //    @Autowired
 //    public void TimetableService(@Value("${my-api.key}") String myApiKey){
@@ -77,19 +72,14 @@
 //    }
 //
 //    @Test
-//    @DisplayName("GetTimeTableServiceTEST : 5.22 오성고 1-1(월)")
+//    @DisplayName("GetTimeTableServiceTEST")
 //    void getTimeTableByClassAndTheWeek() {
-//
-//        TimeTableParam p = new TimeTableParam();
-//        p.setSdSchulCode("7240099");
-//        p.setGrade("1");
-//        p.setClassNm("1");
-//
+//        MyUserDetails myUser = testUserService.getAuthUserStd();
 //        //암튼 timetablecontainer vo 형식으로 리턴할 것이다.
-//        when(service.getTimeTableByClassAndTheWeek(p)).thenReturn(any(TimeTableContainerVo.class));
+//        when(service.getTimeTableByClassAndTheWeek()).thenReturn(any(TimeTableContainerVo.class));
 //
 //        //실제 넘어오는 값
-//        TimeTableContainerVo result = service.getTimeTableByClassAndTheWeek(p);
+//        TimeTableContainerVo result = service.getTimeTableByClassAndTheWeek(myUser);
 //
 //        List<TimeTableVo> mockSubVo = null;
 //        TimeTableVo timeTableListOfOhseongGo = new TimeTableVo();

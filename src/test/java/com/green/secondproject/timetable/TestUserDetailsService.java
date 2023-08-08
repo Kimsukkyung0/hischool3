@@ -3,17 +3,21 @@ package com.green.secondproject.timetable;
 import com.green.secondproject.config.security.MyUserDetailsServiceImpl;
 import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.MyUserDetails;
+import jakarta.annotation.Priority;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collections;
 
 @Profile("userTest")
+@Primary
 public class TestUserDetailsService extends MyUserDetailsServiceImpl {
 
     public TestUserDetailsService(UserMapper mapper) {
         super(mapper);
     }
+
 
     public MyUserDetails getUnAuthUser() throws UsernameNotFoundException {
         return MyUserDetails.builder()

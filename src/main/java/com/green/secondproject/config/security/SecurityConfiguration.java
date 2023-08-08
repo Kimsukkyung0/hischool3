@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                             .requestMatchers(mvc.pattern("/api/mypage/**")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/header/**")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/timetable")).hasAnyRole("TC", "STD")
+                            .requestMatchers(mvc.pattern("/api/subject/**")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/logout")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/teacher/**")).hasRole("TC")
                             .requestMatchers(mvc.pattern("/api/schedule")).hasRole("TC")
