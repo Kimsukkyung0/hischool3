@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class TeacherDelDto {
-    Long userId;
+    private Long userId;
 }

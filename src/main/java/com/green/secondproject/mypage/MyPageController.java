@@ -47,8 +47,6 @@ public class MyPageController {
             description = "요구값 : <br>(1)userId - 유저 PK값<br>" +
                     "(2)pic - 사진파일<br>")
     public String patchPicUser(@RequestPart MultipartFile pic,@AuthenticationPrincipal MyUserDetails myuser) {
-
-
         return serivce.updUserPic(pic);
     }
 

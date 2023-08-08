@@ -112,8 +112,8 @@ public class TeacherController {
     @Operation(summary = "선생님 탈퇴 처리",
             description = "요구값 : <br>(1)userId - 유저(선생님) PK값<br><br>"+
                             "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
-    public int deleteTeacher(@RequestParam Long userId) {
-        return service.delTeacher(userId);
+    public int deleteTeacher(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.delTeacher(myuser);
     }
 
 

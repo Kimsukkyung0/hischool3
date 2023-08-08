@@ -21,8 +21,8 @@ public class StudentController {
 
     @DeleteMapping
     @Operation(summary = "학생 탈퇴 처리")
-    public int deleteStudent(@RequestParam int userId) {
-        return service.delStudent(userId);
+    public int deleteStudent(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.delStudent(myuser);
     }
 
     @GetMapping("/mock-table")
