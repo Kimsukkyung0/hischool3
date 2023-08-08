@@ -20,7 +20,8 @@ public class StudentController {
 
 
     @DeleteMapping
-    @Operation(summary = "학생 탈퇴 처리")
+    @Operation(summary = "학생 탈퇴 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
     public int deleteStudent(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.delStudent(myuser);
     }
