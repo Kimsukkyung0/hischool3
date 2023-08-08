@@ -20,7 +20,7 @@ public class MyPageController {
     private final MyPageService serivce;
 
     @PatchMapping("/update-password")
-    @Operation(summary = "비밀번호 변경(미완성입니다..수정중(비밀번호 확인 단계 필요))")
+    @Operation(summary = "비밀번호 변경")
     public int updatePassword(@RequestBody UpdUserPwDto dto) {
         return serivce.updUserPw(dto);
     }
