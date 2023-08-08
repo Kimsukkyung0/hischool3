@@ -17,5 +17,6 @@ public class SignUpParam {
     private LocalDate birth;
     private String phone;
     private String address;
+    private String detailAddress;
     private String role;
 }
