@@ -50,10 +50,17 @@ public class TeacherSerivce {
     }
 
 
-    public int rejectStudent(Long userId) {
+//    public int rejectStudent(Long userId) {
+//        AcceptStudentDto dto = new AcceptStudentDto();
+//        dto.setUserId(userId);
+//        return mapper.rejectStudent(dto);
+//    }
+
+
+    public int cancelAcceptStd(Long userId) {
         AcceptStudentDto dto = new AcceptStudentDto();
         dto.setUserId(userId);
-        return mapper.rejectStudent(dto);
+        return mapper.cancelAcceptStd(dto);
     }
 
 

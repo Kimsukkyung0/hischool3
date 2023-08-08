@@ -68,15 +68,24 @@ public class TeacherController {
     }
 
     @PatchMapping("/accept-student")
-    @Operation(summary = "학생 가입 승인")
+    @Operation(summary = "학생 가입 승인",
+            description = "요구값 : <br>(1)userId - 학생 PK값")
     public int acceptStudent(@RequestParam Long userId) {
         return service.acceptStudent(userId);
     }
 
-    @PatchMapping("/reject-student")
-    @Operation(summary = "학생 가입 거절")
-    public int rejectStudent(@RequestParam Long userId) {
-        return service.rejectStudent(userId);
+//    @PatchMapping("/reject-student")
+//    @Operation(summary = "학생 가입 거절")
+//    public int rejectStudent(@RequestParam Long userId) {
+//        return service.rejectStudent(userId);
+//    }
+
+
+    @PatchMapping("/cancel-std")
+    @Operation(summary = "학생 가입 승인 취소",
+            description = "요구값 : <br>(1)userId - 학생 PK값")
+    public int cancelAcceptStd(@RequestParam Long userId) {
+        return service.cancelAcceptStd(userId);
     }
 
 
