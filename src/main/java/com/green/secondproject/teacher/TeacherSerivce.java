@@ -57,6 +57,18 @@ public class TeacherSerivce {
     }
 
 
+    public int updMockResult(UpdMockResultDto dto) {
+        dto.setResultId(dto.getResultId());
+        return mapper.updMockResult(dto);
+    }
+
+
+    public int updAcaResult(UpdAcaResultDto dto) {
+        dto.setResultId(dto.getResultId());
+        return mapper.updAcaResult(dto);
+    }
+
+
     public int delTeacher(Long userId) {
         TeacherDelDto dto = new TeacherDelDto();
         dto.setUserId(userId);

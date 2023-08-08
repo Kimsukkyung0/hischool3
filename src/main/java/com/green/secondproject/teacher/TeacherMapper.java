@@ -13,6 +13,8 @@ public interface TeacherMapper {
     List<SelMockResultVo> selMockResult(SelMockResultDto dto);
     int acceptStudent(AcceptStudentDto dto);
     int rejectStudent(AcceptStudentDto dto);
+    int updMockResult(UpdMockResultDto dto);
+    int updAcaResult(UpdAcaResultDto dto);
     int delTeacher(TeacherDelDto dto);
     int delMockResult(DelResultDto dto);
     int delAcaResult(DelResultDto dto);

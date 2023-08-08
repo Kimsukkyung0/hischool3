@@ -68,17 +68,35 @@ public class TeacherController {
     }
 
     @PatchMapping("/accept-student")
+    @Operation(summary = "학생 가입 승인")
     public int acceptStudent(@RequestParam Long userId) {
         return service.acceptStudent(userId);
     }
 
     @PatchMapping("/reject-student")
+    @Operation(summary = "학생 가입 거절")
     public int rejectStudent(@RequestParam Long userId) {
-        return service.acceptStudent(userId);
+        return service.rejectStudent(userId);
     }
 
 
+    @PatchMapping("/update-mock")
+    @Operation(summary = "모의고사 성적 수정",
+            description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +
+                    "<br>(3)mon - 월<br>(4)standardScore - 표준점수<br>(5)rating - 등급<br>(6)percent - 백분위")
+    public int updMockResult(@RequestBody UpdMockResultDto dto) {
+        return service.updMockResult(dto);
+    }
 
+
+    @PatchMapping("/update-aca")
+    @Operation(summary = "내신 성적 수정",
+            description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +
+                            "<br>(3)semester - 학기<br>(4)mf - [0 = 중간/1 = 기말]<br>" +
+                            "(5)score - 점수<br>(6)rating - 등급<br>(7)classRank - 반 석차<br>(8)wholeRank - 전교 석차")
+    public int updAcaResult(@RequestBody UpdAcaResultDto dto) {
+        return service.updAcaResult(dto);
+    }
 
 
     @DeleteMapping

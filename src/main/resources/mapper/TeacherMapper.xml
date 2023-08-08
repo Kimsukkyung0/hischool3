@@ -55,7 +55,7 @@
 
     <update id="rejectStudent">
         UPDATE user
-        SET apr_yn = 0
+        SET apr_yn = 2
         WHERE user_id = #{userid}
     </update>
 
