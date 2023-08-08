@@ -78,7 +78,7 @@ public class SubjectSerivce {
             vo.setStandardscore(dto.getList().get(i).getStandardscore());
             vo.setSubjectid(dto.getList().get(i).getSubjectid());
             vo.setPercent(dto.getList().get(i).getPercent());
-            vo.setUserid(facade.getLoginUserPk());
+            vo.setUserid(dto.getList().get(i).getUserid());
             list.add(vo);
         }
         return mapper.mockins(list);
@@ -100,6 +100,7 @@ public class SubjectSerivce {
     List<AcaSubjectVo> list = new LinkedList<>();
         for (int i = 0; i <dto.getList().size() ; i++) {
             AcaSubjectVo vo = new AcaSubjectVo();
+
             vo.setMidfinal(dto.getList().get(i).getMidfinal());
             vo.setClassrank(dto.getList().get(i).getClassrank());
             vo.setScore(dto.getList().get(i).getScore());
@@ -107,7 +108,7 @@ public class SubjectSerivce {
             vo.setSubjectid(dto.getList().get(i).getSubjectid());
             vo.setRating(dto.getList().get(i).getRating());
             vo.setWholerank(dto.getList().get(i).getWholerank());
-            vo.setUserid(facade.getLoginUserPk());
+            vo.setUserid(dto.getList().get(i).getUserid());
             list.add(vo);
         }
         return mapper.acasubject(list);
