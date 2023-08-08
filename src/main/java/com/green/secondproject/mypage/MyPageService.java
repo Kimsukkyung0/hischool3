@@ -76,6 +76,7 @@ public class MyPageService {
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         return mapper.updTeacherInfo(dto2);
     }
@@ -86,6 +87,7 @@ public class MyPageService {
         UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         dto2.setUserId(facade.getLoginUserPk());
         return mapper.updStudentInfo(dto2);
