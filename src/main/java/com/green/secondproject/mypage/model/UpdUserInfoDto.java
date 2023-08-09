@@ -8,4 +8,6 @@ public class UpdUserInfoDto {
     private String phone;
     private String address;
     private String detailAddr;
+    private String pw;
+    private String confirmPw;
 }

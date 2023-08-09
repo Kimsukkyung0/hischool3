@@ -18,7 +18,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     // RuntimeException 처리
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<Object> handleCustomException(RestApiException e) {
-        return handleExceptionInternal(e.getErrorCode());
+        return handleExceptionInternal(e.getErrorCode(), e.getMessage());
     }
 
     // IllegalArgumentException 에러 처리
@@ -32,7 +32,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({Exception.class})
     public ResponseEntity<Object> handleAllException(Exception ex) {
         log.warn("handleAllException", ex);
-        return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR);
+        return handleExceptionInternal(CommonErrorCode.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 
     // RuntimeException과 대부분의 에러 처리 메세지를 보내기 위한 메소드

@@ -19,12 +19,7 @@ public class StudentController {
 
 
 
-    @DeleteMapping
-    @Operation(summary = "학생 탈퇴 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
-    public int deleteStudent(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.delStudent(myuser);
-    }
+
 
     @GetMapping("/mock-table")
     @Operation(summary = "모의고사성적관리 테이블",  description = "요구값 : <br>" + "(1)year - 조회기준연도(yyyy) <br>"+"(2)mon - 조회기준월(1~12)<br><br>"+

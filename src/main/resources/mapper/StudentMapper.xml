@@ -6,13 +6,6 @@
 
 
 
-    <update id="delStudent">
-        UPDATE user
-        SET del_yn = 1
-        WHERE user_id = #{userId}
-        AND role = "ROLE_STD"
-    </update>
-
     <select id = "selMockTestResultByDates">
         SELECT A.year, A.mon, C.nm cateName, B.nm,
         A.standard_score standardScore, A.rating, A.percent

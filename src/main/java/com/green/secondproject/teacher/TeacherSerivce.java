@@ -80,11 +80,6 @@ public class TeacherSerivce {
     }
 
 
-    public int delTeacher(MyUserDetails myuser) {
-        TeacherDelDto dto = new TeacherDelDto();
-        dto.setUserId(myuser.getUserId());
-        return mapper.delTeacher(dto);
-    }
 
 
     public int delMockRusult(Long resultId) {

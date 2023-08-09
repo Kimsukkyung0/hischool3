@@ -108,12 +108,6 @@ public class TeacherController {
     }
 
 
-    @DeleteMapping
-    @Operation(summary = "선생님 탈퇴 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
-    public int deleteTeacher(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.delTeacher(myuser);
-    }
 
 
     @DeleteMapping("/eli-mock")

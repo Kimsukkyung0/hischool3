@@ -39,5 +39,7 @@ public interface SubjectMapper {
 
     int mocktotal(Long classId);
 
-    int mockrating();
+    List<ResultAcaVo> selaca(ResultAcaDto dto);
+
+    List<ResultMockVo> selmock(ResultMockDto dto);
 }

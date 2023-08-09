@@ -154,5 +154,23 @@
         GROUP BY B.nm, rating
         ) AS derived_table;
     </select>
+
+    <select id="selaca">
+        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank wholeRank FROM
+        aca_result A
+        INNER JOIN
+        subject B
+        ON A.subject_id = B.subject_id
+        WHERE result_id = #{resultId}
+    </select>
+    <select id="selmock">
+        SELECT B.category_id categoryId , A.subject_id subjectId,A.standard_score standardScore,A.rating,A.percent
+        FROM
+        mock_result A
+        INNER join
+        subject B
+        ON A.subject_id = B.subject_id
+        WHERE result_id = #{resultId};
+    </select>
 </mapper>
 
