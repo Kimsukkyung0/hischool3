@@ -1,17 +1,17 @@
 //package com.green.secondproject.timetable;
 //
+//import com.green.secondproject.config.security.JwtTokenProvider;
+//import com.green.secondproject.config.security.SecurityConfiguration;
 //import com.green.secondproject.config.security.model.MyUserDetails;
 //import com.green.secondproject.timetable.model.TimeTableContainerVo;
 //import lombok.extern.slf4j.Slf4j;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.jupiter.api.TestInstance;
+//import org.junit.jupiter.api.*;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 //import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 //import org.springframework.boot.test.mock.mockito.MockBean;
 //
+//import org.springframework.context.annotation.Import;
 //import org.springframework.http.MediaType;
 //import org.springframework.mock.web.MockHttpServletRequest;
 //import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,24 +36,28 @@
 //import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 //import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 //
-//
-//@WebMvcTest(TimetableController.class)
-//@AutoConfigureMockMvc
+////@AutoConfigureMockMvc // 아래 init 이랑 중복
+////@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@Import({SecurityConfiguration.class, JwtTokenProvider.class})
 //@WebAppConfiguration
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+//@WebMvcTest(controllers = TimetableController.class)
+//
 //@Slf4j
 //class TimetableControllerTest {
 //
 //    @Autowired
 //    private MockMvc mvc;
+//
 //    @Autowired
 //    protected WebApplicationContext context;
 //
 //    @MockBean
 //    private TimetableService service;
+//
+//    @MockBean
 //    private TestUserDetailsService testUser;
 //
-//    @BeforeAll
+//    @BeforeEach
 //    @DisplayName("init-mvc")
 //    void init() throws Exception {
 //        mvc = MockMvcBuilders
@@ -110,3 +114,6 @@
 //        }
 //    }
 //}
+//
+//
+//

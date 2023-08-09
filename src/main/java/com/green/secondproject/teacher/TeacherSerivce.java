@@ -4,12 +4,16 @@ import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TeacherSerivce {
     private final TeacherMapper mapper;
     private final AuthenticationFacade facade;
@@ -106,9 +110,35 @@ public class TeacherSerivce {
         return mapper.aprStudent(dto);
     }
 
-    public List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto){
-        
-        return mapper.teacherGrap(dto);
+    public List<TeacherGraphVo2> teacherAcaGraph(Long classId){
+        //DB쪽에 올해연도 및 반 아이디전달
+//        LocalDate now = LocalDate.now();
+//        String year = String.valueOf(now.getYear());
+//        List<TeacherGraphVo> tmpList = mapper.teacherAcaGraph(classId,year);
+//        log.info(" tmpList : {}",tmpList);
+//        //반학급 총 인원
+//        ClassStudentDto classStudentDto = new ClassStudentDto();
+//        classStudentDto.setClassid(classId);
+//        int numberOfClassMembers = classStudent(classStudentDto);
+//
+//        //퍼센트/subjectNm
+//        List<TeacherGraphVo2> result = new ArrayList<>();
+//        for(TeacherGraphVo vo : tmpList){
+//            int percent = getPercentage(vo.getCount(),numberOfClassMembers);
+//            TeacherGraphVo2 vo2 = TeacherGraphVo2.builder()
+//                    .date(vo.getDate())
+//                    .subjectNm(vo.getSubjectNm())
+//                    .percent(percent)
+//                    .rating(vo.getRating()).build();
+//            result.add(vo2);
+//        }
+//
+//        return result;
+        return null;
+    }
+
+    private int getPercentage (int count,int numberOfClassMembers){
+        return (int) Math.round((numberOfClassMembers*0.1) * count);
     }
 }
 

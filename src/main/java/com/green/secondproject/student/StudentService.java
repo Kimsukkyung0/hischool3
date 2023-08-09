@@ -148,14 +148,16 @@ public class StudentService {
         List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
         //날짜수정,출력할 리스트 선언
         List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
-
-        //for문에서 날짜수정작업
-        for(StudentTestSumGraphVo vo : subList){
-            StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-            subResult.setDate(getmidFinalFormOfDate(vo.getDate()));
-            subResult.setNm(vo.getNm());
-            subResult.setRating(vo.getRating());
-            result.add(subResult);
+        if(subList == null){return result;}
+        else {
+            //for문에서 날짜수정작업
+            for (StudentTestSumGraphVo vo : subList) {
+                StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
+                subResult.setDate(getmidFinalFormOfDate(vo.getDate()));
+                subResult.setNm(vo.getNm());
+                subResult.setRating(vo.getRating());
+                result.add(subResult);
+            }
         }
         return result;
     }

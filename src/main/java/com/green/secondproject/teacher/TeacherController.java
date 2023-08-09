@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -149,14 +148,10 @@ public class TeacherController {
     }
 
 
-    @GetMapping("/aca-grape")
-    @Operation(summary = "등급 출력")
-    public List<TeacherGrapeVo> teacherGrap(@RequestParam Long categoryid ,@RequestParam int count,@AuthenticationPrincipal MyUserDetails myuser){
-        TeacherVanGrapeDto dto = new TeacherVanGrapeDto();
-        dto.setCategoryid(categoryid);
-        dto.setCount(count);
-        dto.setClassid(myuser.getClassId());
-        return service.teacherGrap(dto);
+    @GetMapping("/aca-graph")
+    @Operation(summary = "선생님 - 담당학급 2학기 기말 등급비율 출력")
+    public List<TeacherGraphVo2> teacherAcaGraph(@AuthenticationPrincipal MyUserDetails myuser){
+        return service.teacherAcaGraph(myuser.getClassId());
     }
 
     @GetMapping("/aca/{id}")

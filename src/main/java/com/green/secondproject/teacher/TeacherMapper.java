@@ -21,5 +21,5 @@ public interface TeacherMapper {
     int delAcaResult(DelResultDto dto);
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
-    List<TeacherGrapeVo> teacherGrap(TeacherVanGrapeDto dto);
+    List<TeacherGraphVo> teacherAcaGraph(Long classId,String year);
 }

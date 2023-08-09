@@ -14,9 +14,11 @@
 //@Primary
 //public class TestUserDetailsService extends MyUserDetailsServiceImpl {
 //
-//    public TestUserDetailsService(UserMapper mapper) {
-//        super(mapper);
+//    public TestUserDetailsService() {
+//        super();
 //    }
+//
+//    //USERMAPPER왜넣었더라....
 //
 //
 //    public MyUserDetails getUnAuthUser() throws UsernameNotFoundException {
