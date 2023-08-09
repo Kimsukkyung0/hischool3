@@ -48,20 +48,22 @@ public class MyPageService {
 //        }
 //    }
 
-    public int updUserPw(UpdUserPwDto dto) {
-        String upw = dto.getPw();
-        String encodedPassword = PW_ENCODER.encode(upw);
+//    public int updUserPw(UpdUserPwDto dto) {
+//        String upw = dto.getPw();
+//        String encodedPassword = PW_ENCODER.encode(upw);
+//
+//        if (!upw.equals(dto.getConfirmpw())) {
+//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+//        }
+//
+//
+//        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
+//        dto2.setUserId(facade.getLoginUserPk());
+//        dto2.setPw(encodedPassword);
+//
+//        return mapper.updUserPw(dto2);
+//    }
 
-        if (!upw.equals(dto.getConfirmpw())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
-        dto2.setUserId(facade.getLoginUserPk());
-        dto2.setPw(encodedPassword);
-
-        return mapper.updUserPw(dto2);
-    }
 
     public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
@@ -70,15 +72,17 @@ public class MyPageService {
     }
 
 
-//    public int updTeacherInfo(UpdUserInfoDto dto) {
+//    public int updUserInfo(UpdUserInfoDto dto) {
 //        UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
 //        dto2.setUserId(facade.getLoginUserPk());
 //        dto2.setNm(dto.getNm());
 //        dto2.setAddress(dto.getAddress());
 //        dto2.setDetailAddr(dto.getDetailAddr());
 //        dto2.setPhone(dto.getPhone());
-//        return mapper.updTeacherInfo(dto2);
-//    }
+//        return mapper.updUserInfo(dto2);
+//    }@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
 
     public int updUserInfo(UpdUserInfoDto dto) {
         UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
@@ -87,20 +91,22 @@ public class MyPageService {
         dto2.setAddress(dto.getAddress());
         dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
+
+
+        String upw = dto.getPw();
+        String encodedPassword = PW_ENCODER.encode(upw);
+
+        if (!upw.equals(dto.getConfirmPw())) {
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+
+
+        dto2.setPw(encodedPassword);
         return mapper.updUserInfo(dto2);
+
     }
 
 
-
-//    public int updStudentInfo(UpdStudentInfoDto dto) {
-//        UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
-//        dto2.setNm(dto.getNm());
-//        dto2.setAddress(dto.getAddress());
-//        dto2.setDetailAddr(dto.getDetailAddr());
-//        dto2.setPhone(dto.getPhone());
-//        dto2.setUserId(facade.getLoginUserPk());
-//        return mapper.updStudentInfo(dto2);
-//    }
 
     public String updUserPic(MultipartFile pic) {
         UserPicDto2 dto2 = new UserPicDto2();

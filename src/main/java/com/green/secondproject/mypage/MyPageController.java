@@ -19,12 +19,12 @@ import java.util.List;
 public class MyPageController {
     private final MyPageService serivce;
 
-    @PatchMapping("/update-password")
-    @Operation(summary = "비밀번호 변경"
-            , description = "요구값<br><br>(1)pw - 변경할 비밀번호<br>(2)confirmpw - 비밀번호 확인")
-    public int updatePassword(@RequestBody UpdUserPwDto dto) {
-        return serivce.updUserPw(dto);
-    }
+//    @PatchMapping("/update-password")
+//    @Operation(summary = "비밀번호 변경"
+//            , description = "요구값<br><br>(1)pw - 변경할 비밀번호<br>(2)confirmpw - 비밀번호 확인")
+//    public int updatePassword(@RequestBody UpdUserPwDto dto) {
+//        return serivce.updUserPw(dto);
+//    }
 
 
 //    @PatchMapping("/teacher-info-update")
@@ -36,10 +36,12 @@ public class MyPageController {
 
     @PatchMapping("/userr-info-update")
     @Operation(summary = "유저 정보 수정",
-            description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>(4)detailAddr - 상세 주소")
+            description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>(4)detailAddr - 상세 주소<br>" +
+                            "(5)pw - 비밀번호<br>(6)confirmPw - 비밀번호 확인")
     public int updUserInfo(@RequestBody UpdUserInfoDto dto) {
         return serivce.updUserInfo(dto);
     }
+
 
 
 //    @PatchMapping("/student-info-update")

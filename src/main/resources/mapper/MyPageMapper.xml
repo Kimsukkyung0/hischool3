@@ -17,36 +17,15 @@
     </select>
 
 
-<!--    <update id="updTeacherInfo">-->
-<!--        UPDATE user-->
-<!--        SET nm = #{nm}-->
-<!--        , phone = #{phone}-->
-<!--        , address = #{address}-->
-<!--        , detail_addr = #{detailAddr}-->
-<!--        WHERE user_id = #{userId}-->
-<!--        AND role = "ROLE_TC"-->
-<!--    </update>-->
-
-
     <update id="updUserInfo">
         UPDATE user
         SET nm = #{nm}
         , phone = #{phone}
         , address = #{address}
         , detail_addr = #{detailAddr}
+        , pw = #{pw}
         WHERE user_id = #{userId}
     </update>
-
-
-<!--    <update id="updStudentInfo">-->
-<!--        UPDATE user-->
-<!--        SET nm = #{nm}-->
-<!--        , phone = #{phone}-->
-<!--        , address = #{address}-->
-<!--        , detail_addr = #{detailAddr}-->
-<!--        WHERE user_id = #{userId}-->
-<!--        AND role = "ROLE_STD"-->
-<!--    </update>-->
 
 
     <update id="updUserPic">
@@ -56,9 +35,9 @@
     </update>
 
 
-    <update id="updUserPw">
-        UPDATE user
-        SET pw = #{pw}
-        WHERE user_id = #{userId}
-    </update>
+<!--    <update id="updUserPw">-->
+<!--        UPDATE user-->
+<!--        SET pw = #{pw}-->
+<!--        WHERE user_id = #{userId}-->
+<!--    </update>-->
 </mapper>
