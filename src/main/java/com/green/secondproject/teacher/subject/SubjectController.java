@@ -4,14 +4,17 @@ import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -127,14 +130,13 @@ public class SubjectController {
     int acasubject(@RequestBody AcalistDto2 dto){
         return serivce.acasubject(dto);
     }
-    @GetMapping("/mock-total")
-    @Operation(summary = "모의고사 등급별 인원수")
-    int mocktotal(@AuthenticationPrincipal MyUserDetails user,@RequestParam int mon,@RequestParam int rating){
+    @GetMapping("/mock-graph")
+    List<MockGraphVo> mockgraph(@AuthenticationPrincipal MyUserDetails user){
         MockGraphDto dto = new MockGraphDto();
         dto.setClassid(user.getClassId());
-        dto.setMon(mon);
-        dto.setRating(rating);
-        return serivce.mocktotal(dto);
+
+
+        return serivce.mockgraph(dto);
     }
 }
 
