@@ -5,13 +5,14 @@ import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,11 +27,11 @@ public class SubjectSerivce {
     private final AuthenticationFacade facade;
 
 
-    List<SubjectVo> subcate() {
+   public List<SubjectVo> subcate() {
         return mapper.subCate();
     }
 
-    List<SubjectDetailVo> subject(Long categoryid) {
+    public List<SubjectDetailVo> subject(Long categoryid) {
 
         return mapper.subject(categoryid);
     }
@@ -119,10 +120,19 @@ public class SubjectSerivce {
         return mapper.acasubject(list);
     }
 
-    List<MockGraphVo> mockgraph(MockGraphDto dto){
+  public List<MockGraphVo2> mockgraph(@AuthenticationPrincipal MyUserDetails user){
+        MockGraphVo2 vo2 = new MockGraphVo2();
+        int mocktotal =mapper.mocktotal();
+        vo2.setCount(vo2.getCount()/mocktotal);
 
-        return mapper.mockgraph(dto);
+        return mapper.mockgraph();
     }
+
+    public List<StudentListVo> stulist(StudentListDto dto){
+       return mapper.stulist(dto);
+    };
+
+
 
 }
 

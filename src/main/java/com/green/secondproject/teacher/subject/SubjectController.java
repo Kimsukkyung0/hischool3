@@ -5,6 +5,7 @@ import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -130,13 +131,19 @@ public class SubjectController {
     int acasubject(@RequestBody AcalistDto2 dto){
         return serivce.acasubject(dto);
     }
+
     @GetMapping("/mock-graph")
-    List<MockGraphVo> mockgraph(@AuthenticationPrincipal MyUserDetails user){
-        MockGraphDto dto = new MockGraphDto();
+    @Operation(summary = "6월 모의고사 성적조회")
+    List<MockGraphVo2> mockgraph(@AuthenticationPrincipal MyUserDetails user){
+
+        return serivce.mockgraph(user);
+    }
+    @GetMapping("/stulist")
+    @Operation(summary = "학생pk값과 이름")
+    List<StudentListVo> stulist(@AuthenticationPrincipal MyUserDetails user){
+        StudentListDto dto = new StudentListDto();
         dto.setClassid(user.getClassId());
-
-
-        return serivce.mockgraph(dto);
+        return serivce.stulist(dto);
     }
 }
 
