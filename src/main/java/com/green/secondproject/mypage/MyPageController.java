@@ -70,4 +70,12 @@ public class MyPageController {
     public List<SelUserMyPageVo> selectTcMyPage(@AuthenticationPrincipal MyUserDetails myuser) {
         return serivce.selUserMyPage(myuser);
     }
+
+
+    @DeleteMapping
+    @Operation(summary = "유저 탈퇴 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
+    public int deleteTeacher(@AuthenticationPrincipal MyUserDetails myuser) {
+        return serivce.delUser(myuser);
+    }
 }

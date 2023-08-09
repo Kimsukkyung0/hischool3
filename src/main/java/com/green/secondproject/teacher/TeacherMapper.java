@@ -16,7 +16,6 @@ public interface TeacherMapper {
     int cancelAcceptStd(AcceptStudentDto dto);
     int updMockResult(UpdMockResultDto dto);
     int updAcaResult(UpdAcaResultDto dto);
-    int delTeacher(TeacherDelDto dto);
     int delMockResult(DelResultDto dto);
     int delAcaResult(DelResultDto dto);
     int classStudent(ClassStudentDto dto);

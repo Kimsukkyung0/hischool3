@@ -3,6 +3,7 @@ package com.green.secondproject.mypage;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
+import com.green.secondproject.teacher.model.TeacherDelDto;
 import com.green.secondproject.utils.MyFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,5 +147,13 @@ public class MyPageService {
             return temp;
         }
         return savedFilePath;
+    }
+
+
+
+    public int delUser(MyUserDetails myuser) {
+        DelUserDto dto = new DelUserDto();
+        dto.setUserId(myuser.getUserId());
+        return mapper.delUser(dto);
     }
 }

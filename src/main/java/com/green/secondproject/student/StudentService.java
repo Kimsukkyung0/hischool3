@@ -15,11 +15,7 @@ import java.util.*;
 public class StudentService {
     private final StudentMapper mapper;
 
-    public int delStudent(MyUserDetails myuser) {
-        StudentDelDto dto = new StudentDelDto();
-        dto.setUserId(myuser.getUserId());
-        return mapper.delStudent(dto);
-    }
+
 
     public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mapper.selMockTestResultByDates(dto);

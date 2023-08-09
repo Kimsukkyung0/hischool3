@@ -35,6 +35,13 @@
     </update>
 
 
+    <update id="delUser">
+        UPDATE user
+        SET del_yn = 1
+        WHERE user_id = #{userId}
+    </update>
+
+
 <!--    <update id="updUserPw">-->
 <!--        UPDATE user-->
 <!--        SET pw = #{pw}-->

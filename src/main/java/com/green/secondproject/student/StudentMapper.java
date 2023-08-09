@@ -7,7 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface StudentMapper {
-    int delStudent(StudentDelDto dto);
     List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
     List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId);
     List<StudentTestSumGraphVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto);
