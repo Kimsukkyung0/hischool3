@@ -110,51 +110,45 @@ public class TeacherSerivce {
         return mapper.aprStudent(dto);
     }
 
-    public List<TeacherGraphVo2> teacherAcaGraph(Long classId) {
-        final int SUBNUM = 4;
-        final int RATINGNUM = 9;
+    public TeacherGraphContainerVo teacherAcaGraph(Long classId) {
+        Long koCateId = 1L;
+        Long maCateId = 3L;
+        Long enCateId = 6L;
+        Long htCateId = 8L;
+        List<TeacherGraphVo> koList = mapper.teacherAcaGraph(classId,koCateId);
+        List<TeacherGraphVo> maList = mapper.teacherAcaGraph(classId,maCateId);
+        List<TeacherGraphVo> enList = mapper.teacherAcaGraph(classId,enCateId);
+        List<TeacherGraphVo> htList = mapper.teacherAcaGraph(classId,htCateId);
 
-        //DB쪽에 올해연도 및 반 아이디전달
-        LocalDate now = LocalDate.now();
-        String year = String.valueOf(now.getYear());
-        List<TeacherGraphVo> tmpList = mapper.teacherAcaGraph(classId);
-        log.info(" tmpList : {}", tmpList);
-        //반학급 총 인원
-        ClassStudentDto classStudentDto = new ClassStudentDto();
-        classStudentDto.setClassid(classId);
-        int numberOfClassMembers = classStudent(classStudentDto);
+        List<List<TeacherGraphVo>> subResult = new ArrayList<>();
 
-        //등급값
-        int[][] list = new int[SUBNUM][RATINGNUM];
+        //그래프 형식
+        subResult.add(getSubResult(koList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(koCateId).classId(classId).build())));
+        subResult.add(getSubResult(maList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(maCateId).classId(classId).build())));
+        subResult.add(getSubResult(enList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(enCateId).classId(classId).build())));
+        subResult.add(getSubResult(htList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(htCateId).classId(classId).build())));
 
-        for (TeacherGraphVo vo : tmpList) {
-            switch (vo.getCategoryId()) {
-                case 1:
-                    list[0][vo.getRating() - 1]++;
-                case 2:
-                    list[1][vo.getRating() - 1]++;
-                case 3:
-                    list[2][vo.getRating() - 1]++;
-                case 4:
-                    list[3][vo.getRating() - 1]++;
-            }
-        }
-        log.info(Arrays.deepToString(list));
-        //퍼센트 구하는 for문
-        for (int i = 0; i < SUBNUM; i++) {
-            int[]  subList = list[i];
-            for (int j = 0; j < RATINGNUM; j++) {
-                subList[j] = getPercentage(subList[RATINGNUM]+1, numberOfClassMembers);
-            }
-        }
-        log.info(Arrays.deepToString(list));
-
-        return null;
+        return TeacherGraphContainerVo.builder().date("2023-2 기말").list(subResult).build();
     }
 
 
-    private int getPercentage (int count,int numberOfClassMembers){
-        return (int) Math.round((numberOfClassMembers*0.1) * count);
+    private double getPercentage (double count, double numberOfClassMembers) {
+        log.info("numberOfClassMembers : {}",numberOfClassMembers);
+        log.info("count : {}",count);
+        double tmp = (count /numberOfClassMembers)*100;
+        log.info("tmp : {}",tmp);
+        return tmp;
+    }
+
+    private List<TeacherGraphVo> getSubResult(List<TeacherGraphVo> vo, double numberOfClassMembers){
+            for (int i = 0; i < vo.size(); i++) {
+            TeacherGraphVo subList = vo.get(i);
+            log.info("subList : {}" ,subList);
+
+            subList.setPercentage(getPercentage(subList.getPercentage(),numberOfClassMembers));
+                log.info("subListpercentage : {}" ,subList.getPercentage());
+        }
+        return vo;
     }
 }
 

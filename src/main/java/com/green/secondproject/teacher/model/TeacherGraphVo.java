@@ -6,8 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class TeacherGraphVo {
-    private String date;
-    private int categoryId;
-    private String subjectNm;
+    private String cateNm;
     private int rating;
+    private double percentage;
 }

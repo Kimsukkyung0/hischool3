@@ -131,14 +131,21 @@
     </select>
 
     <select id="teacherAcaGraph">
-        select concat(year,semester,mid_final) date, B.rating, D.category_id as categoryId, D.nm
+        select D.nm cateNm,B.rating rating, count(B.rating) as percentage
         from user A
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id in (1,3,7,6) and A.class_id = #{classId} and (year,semester,mid_final) in (
-        SELECT YEAR, semester, mid_final FROM aca_result
-        WHERE result_id = (SELECT MAX(result_id)
-        FROM aca_result));
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and year=2023 and semester=2 and mid_final=2
+        group by rating
+    </select>
+
+    <select id="getNumberOfStudentByCate">
+        select count(C.nm)
+        from user A
+        INNER JOIN aca_result B ON A.user_id = B.user_id
+        INNER JOIN subject C ON B.subject_id = C.subject_id
+        INNER JOIN sbj_category D on C.category_id = D.category_id
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and year=2023 and semester=2 and mid_final=2
     </select>
 </mapper>
