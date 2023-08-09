@@ -96,6 +96,13 @@ public class SubjectController {
         return serivce.mocksmalllist(categoryid);
     }
 
+    @GetMapping("/stulist")
+    @Operation(summary = "학생pk값과 이름")
+    List<StudentListVo> stulist(@AuthenticationPrincipal MyUserDetails user){
+        StudentListDto dto = new StudentListDto();
+        dto.setClassid(user.getClassId());
+        return serivce.stulist(dto);
+    }
 
     //===================================Post====================================
     @PostMapping("/mock-ins")
@@ -134,16 +141,8 @@ public class SubjectController {
 
     @GetMapping("/mock-graph")
     @Operation(summary = "6월 모의고사 성적조회")
-    List<MockGraphVo2> mockgraph(@AuthenticationPrincipal MyUserDetails user){
-
+    MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
         return serivce.mockgraph(user);
-    }
-    @GetMapping("/stulist")
-    @Operation(summary = "학생pk값과 이름")
-    List<StudentListVo> stulist(@AuthenticationPrincipal MyUserDetails user){
-        StudentListDto dto = new StudentListDto();
-        dto.setClassid(user.getClassId());
-        return serivce.stulist(dto);
     }
 }
 
