@@ -49,3 +49,13 @@ spring:
 
 file:
   dir: /home/download
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: test
+  datasource:
+    url: jdbc:mariadb://localhost:3306/hi_school_test
+    username: root

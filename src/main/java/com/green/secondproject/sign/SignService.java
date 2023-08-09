@@ -87,6 +87,7 @@ public class SignService {
                 .birth(p.getBirth())
                 .phone(p.getPhone())
                 .address(p.getAddress())
+                .detailAddress(p.getDetailAddress())
                 .role(String.format("ROLE_%s", p.getRole().toUpperCase()))
                 .classId(classId)
                 .build();
