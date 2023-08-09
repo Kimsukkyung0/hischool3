@@ -7,6 +7,7 @@ import lombok.ToString;
 @ToString
 public class TeacherGraphVo {
     private String date;
+    private int categoryId;
     private String subjectNm;
-    private String rating;
+    private int rating;
 }

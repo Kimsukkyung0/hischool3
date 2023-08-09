@@ -8,8 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -110,32 +109,48 @@ public class TeacherSerivce {
         return mapper.aprStudent(dto);
     }
 
-    public List<TeacherGraphVo2> teacherAcaGraph(Long classId){
+    public List<TeacherGraphVo2> teacherAcaGraph(Long classId) {
+        final int SUBNUM = 4;
+        final int RATINGNUM = 9;
+
         //DB쪽에 올해연도 및 반 아이디전달
-//        LocalDate now = LocalDate.now();
-//        String year = String.valueOf(now.getYear());
-//        List<TeacherGraphVo> tmpList = mapper.teacherAcaGraph(classId,year);
-//        log.info(" tmpList : {}",tmpList);
-//        //반학급 총 인원
-//        ClassStudentDto classStudentDto = new ClassStudentDto();
-//        classStudentDto.setClassid(classId);
-//        int numberOfClassMembers = classStudent(classStudentDto);
-//
-//        //퍼센트/subjectNm
-//        List<TeacherGraphVo2> result = new ArrayList<>();
-//        for(TeacherGraphVo vo : tmpList){
-//            int percent = getPercentage(vo.getCount(),numberOfClassMembers);
-//            TeacherGraphVo2 vo2 = TeacherGraphVo2.builder()
-//                    .date(vo.getDate())
-//                    .subjectNm(vo.getSubjectNm())
-//                    .percent(percent)
-//                    .rating(vo.getRating()).build();
-//            result.add(vo2);
-//        }
-//
-//        return result;
+        LocalDate now = LocalDate.now();
+        String year = String.valueOf(now.getYear());
+        List<TeacherGraphVo> tmpList = mapper.teacherAcaGraph(classId);
+        log.info(" tmpList : {}", tmpList);
+        //반학급 총 인원
+        ClassStudentDto classStudentDto = new ClassStudentDto();
+        classStudentDto.setClassid(classId);
+        int numberOfClassMembers = classStudent(classStudentDto);
+
+        //등급값
+        int[][] list = new int[SUBNUM][RATINGNUM];
+
+        for (TeacherGraphVo vo : tmpList) {
+            switch (vo.getCategoryId()) {
+                case 1:
+                    list[0][vo.getRating() - 1]++;
+                case 2:
+                    list[1][vo.getRating() - 1]++;
+                case 3:
+                    list[2][vo.getRating() - 1]++;
+                case 4:
+                    list[3][vo.getRating() - 1]++;
+            }
+        }
+        log.info(Arrays.deepToString(list));
+        //퍼센트 구하는 for문
+        for (int i = 0; i < SUBNUM; i++) {
+            int[]  subList = list[i];
+            for (int j = 0; j < RATINGNUM; j++) {
+                subList[j] = getPercentage(subList[RATINGNUM]+1, numberOfClassMembers);
+            }
+        }
+        log.info(Arrays.deepToString(list));
+
         return null;
     }
+
 
     private int getPercentage (int count,int numberOfClassMembers){
         return (int) Math.round((numberOfClassMembers*0.1) * count);
