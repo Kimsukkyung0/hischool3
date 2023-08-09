@@ -4,7 +4,6 @@ import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.utils.MyFileUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -71,31 +70,39 @@ public class MyPageService {
     }
 
 
-    public int updTeacherInfo(UpdTeacherInfoDto dto) {
-        UpdTeacherInfoDto2 dto2 = new UpdTeacherInfoDto2();
+//    public int updTeacherInfo(UpdUserInfoDto dto) {
+//        UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
+//        dto2.setUserId(facade.getLoginUserPk());
+//        dto2.setNm(dto.getNm());
+//        dto2.setAddress(dto.getAddress());
+//        dto2.setDetailAddr(dto.getDetailAddr());
+//        dto2.setPhone(dto.getPhone());
+//        return mapper.updTeacherInfo(dto2);
+//    }
+
+    public int updUserInfo(UpdUserInfoDto dto) {
+        UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
         dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
-        return mapper.updTeacherInfo(dto2);
+        return mapper.updUserInfo(dto2);
     }
 
 
 
-    public int updStudentInfo(UpdStudentInfoDto dto) {
-        UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
-        dto2.setNm(dto.getNm());
-        dto2.setAddress(dto.getAddress());
-        dto2.setDetailAddr(dto.getDetailAddr());
-        dto2.setPhone(dto.getPhone());
-        dto2.setUserId(facade.getLoginUserPk());
-        return mapper.updStudentInfo(dto2);
-    }
+//    public int updStudentInfo(UpdStudentInfoDto dto) {
+//        UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
+//        dto2.setNm(dto.getNm());
+//        dto2.setAddress(dto.getAddress());
+//        dto2.setDetailAddr(dto.getDetailAddr());
+//        dto2.setPhone(dto.getPhone());
+//        dto2.setUserId(facade.getLoginUserPk());
+//        return mapper.updStudentInfo(dto2);
+//    }
 
     public String updUserPic(MultipartFile pic) {
-
-
         UserPicDto2 dto2 = new UserPicDto2();
 
         dto2.setPic(String.valueOf(pic));

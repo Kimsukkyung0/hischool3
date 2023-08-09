@@ -39,6 +39,7 @@ public class TeacherSerivce {
     public List<SelMockResultVo> selMockResult(Long userId) {
         SelMockResultDto dto = new SelMockResultDto();
         dto.setUserId(userId);
+
         return mapper.selMockResult(dto);
     }
 

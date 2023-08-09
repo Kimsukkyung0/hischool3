@@ -49,8 +49,9 @@ public class TeacherController {
     @Operation(summary = "학생 내신 성적 조회",
             description = "출력값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)semester - 학기<br>" +
-                    "(4)categoryId - 과목 계열<br>(5)nm - 세부 과목<br>(6)mf - 시험구분[1-중간/2-기말]<br>" +
-                    "(7)score - 점수<br>(8)rating - 등급<br>(9)cr - 반 석차<br>(10)wr - 전교석차")
+                    "(4)cateId - 과목 계열 PK<br>(5)nm - 과목 계열명<br>(6)detailCateId - 세부과목 PK<br>(7)detailNm - 세부과목명<br>" +
+                    "(8)mf - 시험구분[1-중간/2-기말]<br>(9)score - 점수<br>(10)rating - 등급<br>" +
+                    "(11)cr - 반 석차<br>(12)wr - 전교석차")
     public List<SelAcaResultVo> selectAcaResult(@RequestParam Long userId) {
         return service.selAcaResult(userId);
     }
@@ -60,8 +61,8 @@ public class TeacherController {
     @Operation(summary = "학생 모의고사 성적 조회",
             description = "요구값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)mon - 월<br>" +
-                    "(4)categoryId - 과목 계열<br>(5)nm - 세부 과목<br>(6)sc - 표준 점수<br>" +
-                    "(7)rating - 등급<br>(8)percent - 백분위")
+                    "(4)cateId - 과목 계열 PK<br>(5)nm - 과목 계열명<br>(6)detailCateId - 세부과목 PK<br>" +
+                    "(7)detailNm - 세부 과목명<br>(8)sc - 표준 점수<br>(9)rating - 등급<br>(10)percent - 백분위")
 
     public List<SelMockResultVo> selectMockResult(@RequestParam Long userId) {
         return service.selMockResult(userId);

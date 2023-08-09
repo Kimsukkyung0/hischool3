@@ -7,8 +7,10 @@ public class SelAcaResultVo {
     private Long resultId;
     private String year;
     private int semester;
-    private String categoryId;
+    private String cateId;
     private String nm;
+    private String detailCateId;
+    private String detailNm;
     private int mf;
     private int score;
     private int rating;
