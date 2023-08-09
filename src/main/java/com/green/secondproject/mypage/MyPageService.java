@@ -76,6 +76,7 @@ public class MyPageService {
         dto2.setUserId(facade.getLoginUserPk());
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         return mapper.updTeacherInfo(dto2);
     }
@@ -86,6 +87,7 @@ public class MyPageService {
         UpdStudentInfoDto2 dto2 = new UpdStudentInfoDto2();
         dto2.setNm(dto.getNm());
         dto2.setAddress(dto.getAddress());
+        dto2.setDetailAddr(dto.getDetailAddr());
         dto2.setPhone(dto.getPhone());
         dto2.setUserId(facade.getLoginUserPk());
         return mapper.updStudentInfo(dto2);
@@ -101,7 +103,7 @@ public class MyPageService {
 
 
         String temp = "0";
-        String centerPath = String.format("user/%d", dto2.getUserId());
+        String centerPath = String.format("hischool/%d", dto2.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
         File dic = new File(dicPath);
@@ -111,7 +113,8 @@ public class MyPageService {
 
         String originFileName = pic.getOriginalFilename();
         String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
-        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+//        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+        String savedFilePath = String.format("%s", savedFileName);
         String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
         File target = new File(targetPath);
         try {

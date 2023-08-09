@@ -54,7 +54,8 @@ public class SignController {
             "classNum": ex) "1"<br>
             "birth": ex) "2003-08-02"<br>
             "phone": ex) "010-2739-3928"<br>
-            "address": ex) "대구시 북구"<br>
+            "address": ex) "대구광역시 중구 중앙대로 394"<br>
+            "detailAddress": ex) "제일빌딩 5F"<br>
             "role": ex) 선생님이면 TC, 학생이면 STD<br><br>
             "pic": 프로필 사진<br>
             "aprPic": 선생님 인증사진

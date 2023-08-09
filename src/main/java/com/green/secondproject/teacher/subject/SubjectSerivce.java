@@ -4,6 +4,7 @@ import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -118,9 +119,9 @@ public class SubjectSerivce {
         return mapper.acasubject(list);
     }
 
-    int mocktotal(MockGraphDto dto){
+    List<MockGraphVo> mockgraph(MockGraphDto dto){
 
-        return mapper.mocktotal(dto);
+        return mapper.mockgraph(dto);
     }
 
 }

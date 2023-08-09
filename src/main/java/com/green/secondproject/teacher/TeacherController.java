@@ -35,8 +35,8 @@ public class TeacherController {
 
 
     @GetMapping("/unsigned")
-    @Operation(summary = "승인된 대기 명단",
-            description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
+    @Operation(summary = "승인 대기 명단",
+            description = "출력값 : <br>(1)classId - 학급 PK값<br><br>"+
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
                     "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
     public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
@@ -46,7 +46,7 @@ public class TeacherController {
 
     @GetMapping("/acaresult")
     @Operation(summary = "학생 내신 성적 조회",
-            description = "요구값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
+            description = "출력값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)semester - 학기<br>" +
                     "(4)categoryId - 과목 계열<br>(5)nm - 세부 과목<br>(6)mf - 시험구분[1-중간/2-기말]<br>" +
                     "(7)score - 점수<br>(8)rating - 등급<br>(9)cr - 반 석차<br>(10)wr - 전교석차")
