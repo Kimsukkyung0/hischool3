@@ -92,6 +92,12 @@ public class SignService {
                 .classId(classId)
                 .build();
 
+        if ("TC".equalsIgnoreCase(p.getRole())) {
+            entity.setAprYn(1);
+        } else {
+            entity.setAprYn(0);
+        }
+
         String savedAprPicNm = null;
         File tempAprPic = null;
         if (aprPic != null) {
@@ -145,6 +151,10 @@ public class SignService {
             throw new RuntimeException("비밀번호 불일치");
         }
         log.info("[getSignInResult] 패스워드 일치");
+
+        if (user.getAprYn() == 0) {
+            throw new RuntimeException("미승인 계정");
+        }
 
         String redisKey = String.format("c:RT(%s):%s:%s", "Server", user.getUserId(), ip);
         if (redisService.getData(redisKey) != null) {

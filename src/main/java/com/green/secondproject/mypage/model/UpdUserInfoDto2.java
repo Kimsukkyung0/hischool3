@@ -9,4 +9,5 @@ public class UpdUserInfoDto2 {
     private String phone;
     private String address;
     private String detailAddr;
+    private String pw;
 }

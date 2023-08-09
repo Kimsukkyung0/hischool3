@@ -20,4 +20,5 @@ public class UserEntity {
     private String detailAddress;
     private String role;
     private String aprPic;
+    private int aprYn;
 }
