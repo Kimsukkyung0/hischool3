@@ -16,4 +16,5 @@ public class UserVo {
     private String classNum;
     private String pic;
     private String role;
+    private int aprYn;
 }

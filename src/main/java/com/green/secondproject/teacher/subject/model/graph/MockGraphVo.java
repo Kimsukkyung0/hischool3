@@ -4,11 +4,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+import java.util.List;
+
 
 @Data
+@Builder
 public class MockGraphVo {
-
-    private int rating; // 과목등급(1~9)
-    private int per;
-
+    private List<MockGraphVo2> koList;
+    private List<MockGraphVo2> mtList;
+    private List<MockGraphVo2> enList;
+    private List<MockGraphVo2> hiList;
 }
