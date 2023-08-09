@@ -4,6 +4,7 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.mypage.MyPageMapper">
 
+
     <select id="selUserMyPage">
         SELECT A.user_id userId, A.nm unm, A.email, A.role, A.pic, A.birth, A.phone, A.address, A.detail_addr detailAddr
         , B.class_id classId, B.grade, B.class van, C.school_id schoolId, C.nm schnm
@@ -16,26 +17,36 @@
     </select>
 
 
-    <update id="updTeacherInfo">
+<!--    <update id="updTeacherInfo">-->
+<!--        UPDATE user-->
+<!--        SET nm = #{nm}-->
+<!--        , phone = #{phone}-->
+<!--        , address = #{address}-->
+<!--        , detail_addr = #{detailAddr}-->
+<!--        WHERE user_id = #{userId}-->
+<!--        AND role = "ROLE_TC"-->
+<!--    </update>-->
+
+
+    <update id="updUserInfo">
         UPDATE user
         SET nm = #{nm}
         , phone = #{phone}
         , address = #{address}
         , detail_addr = #{detailAddr}
         WHERE user_id = #{userId}
-        AND role = "ROLE_TC"
     </update>
 
 
-    <update id="updStudentInfo">
-        UPDATE user
-        SET nm = #{nm}
-        , phone = #{phone}
-        , address = #{address}
-        , detail_addr = #{detailAddr}
-        WHERE user_id = #{userId}
-        AND role = "ROLE_STD"
-    </update>
+<!--    <update id="updStudentInfo">-->
+<!--        UPDATE user-->
+<!--        SET nm = #{nm}-->
+<!--        , phone = #{phone}-->
+<!--        , address = #{address}-->
+<!--        , detail_addr = #{detailAddr}-->
+<!--        WHERE user_id = #{userId}-->
+<!--        AND role = "ROLE_STD"-->
+<!--    </update>-->
 
 
     <update id="updUserPic">
