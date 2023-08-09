@@ -8,5 +8,5 @@ import java.util.List;
 public class MockGraphVo2 {
     private String nm;  // 과목이름
     private int rating;
-    private int count;
+    private double ratio;
 }

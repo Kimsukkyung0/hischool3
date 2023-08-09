@@ -112,7 +112,7 @@
 
 
     <select id="mockgraph">
-        SELECT B.nm, rating, COUNT(rating) count
+        SELECT B.nm, rating, COUNT(rating) ratio
         FROM mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
@@ -120,7 +120,7 @@
         on B.category_id = c.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
-        WHERE D.class_id = 2 and B.category_id = 2
+        WHERE D.class_id = #{classId} and B.category_id = #{categoryId}
         and A.year = year(NOW()) and mon = 6
         GROUP BY B.nm, rating;
     </select>
@@ -149,7 +149,7 @@
         ON B.category_id = c.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
-        WHERE D.class_id = 2 AND B.category_id = 2 AND A.year = YEAR(NOW())
+        WHERE D.class_id = #{classId} AND B.category_id = 2 AND A.year = YEAR(NOW())
         AND mon = 6
         GROUP BY B.nm, rating
         ) AS derived_table;

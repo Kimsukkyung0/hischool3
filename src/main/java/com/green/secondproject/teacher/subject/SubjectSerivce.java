@@ -120,12 +120,33 @@ public class SubjectSerivce {
         return mapper.acasubject(list);
     }
 
-  public List<MockGraphVo2> mockgraph(@AuthenticationPrincipal MyUserDetails user){
-        MockGraphVo2 vo2 = new MockGraphVo2();
-        int mocktotal =mapper.mocktotal();
-        vo2.setCount(vo2.getCount()/mocktotal);
+  public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
+       Long classId = user.getClassId();
+       int mockTotal = mapper.mocktotal(classId);
+      List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId, 2L));
+      List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));
+      List<MockGraphVo2> enList = mapper.mockgraph(new MockGraphDto(classId, 5L));
+      List<MockGraphVo2> hiList = mapper.mockgraph(new MockGraphDto(classId, 8L));
+      for (MockGraphVo2 vo : koList) {
+          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      }
+      for (MockGraphVo2 vo : mtList) {
+          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      }
+      for (MockGraphVo2 vo : enList) {
+          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      }
+      for (MockGraphVo2 vo : hiList) {
+          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      }
 
-        return mapper.mockgraph();
+
+        return MockGraphVo.builder()
+                .koList(koList)
+                .mtList(mtList)
+                .enList(enList)
+                .hiList(hiList)
+                .build();
     }
 
     public List<StudentListVo> stulist(StudentListDto dto){
