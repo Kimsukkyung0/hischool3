@@ -130,7 +130,8 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and year=2023 and semester=2 and mid_final=2
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and concat(year,semester,mid_final) = (
+        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
         group by rating
     </select>
 
@@ -140,6 +141,7 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and year=2023 and semester=2 and mid_final=2
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and concat(year,semester,mid_final) = (
+        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
     </select>
 </mapper>

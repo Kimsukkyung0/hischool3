@@ -128,20 +128,14 @@ public class TeacherSerivce {
 
 
     private double getPercentage (double count, double numberOfClassMembers) {
-        log.info("numberOfClassMembers : {}",numberOfClassMembers);
-        log.info("count : {}",count);
         double tmp = (count /numberOfClassMembers)*100;
-        log.info("tmp : {}",tmp);
         return tmp;
     }
 
     private List<TeacherGraphVo> getSubResult(List<TeacherGraphVo> vo, double numberOfClassMembers){
             for (int i = 0; i < vo.size(); i++) {
             TeacherGraphVo subList = vo.get(i);
-            log.info("subList : {}" ,subList);
-
             subList.setPercentage(getPercentage(subList.getPercentage(),numberOfClassMembers));
-                log.info("subListpercentage : {}" ,subList.getPercentage());
         }
         return vo;
     }
