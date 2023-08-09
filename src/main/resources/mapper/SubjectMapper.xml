@@ -104,16 +104,55 @@
             (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.mon},#{item.standardscore},#{item.rating},#{item.percent})
         </foreach>
     </insert>
+
+    <select id="stulist">
+        SELECT user_id userid,nm FROM user
+        WHERE role = "ROLE_STD" AND class_id = #{classid} and apr_yn =1;
+    </select>
+
+
     <select id="mockgraph">
-        SELECT  B.nm,A.rating
-        from mock_result A
+        SELECT B.nm, rating, COUNT(rating) count
+        FROM mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
-        where D.class_id = #{classid} and B.category_id in(2,5,4,8) and A.year = year(NOW()) and mon = 6
+        WHERE D.class_id = 2 and B.category_id = 2
+        and A.year = year(NOW()) and mon = 6
+        GROUP BY B.nm, rating;
+    </select>
+
+    <select id="mockrating">
+        SELECT COUNT(rating)
+        FROM mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        INNER JOIN user D
+        ON A.user_id = D.user_id
+        WHERE D.class_id = #{classid} and B.category_id IN(2,4,5,8)
+        and A.year = year(NOW()) and mon = 6
+    </select>
+
+    <select id="mocktotal">
+        SELECT SUM(cnt_rating)
+        FROM (
+        SELECT COUNT(rating) AS cnt_rating
+        FROM mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON B.category_id = c.category_id
+        INNER JOIN user D
+        ON A.user_id = D.user_id
+        WHERE D.class_id = 2 AND B.category_id = 2 AND A.year = YEAR(NOW())
+        AND mon = 6
+        GROUP BY B.nm, rating
+        ) AS derived_table;
     </select>
 </mapper>
 
