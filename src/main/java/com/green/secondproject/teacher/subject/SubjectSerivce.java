@@ -157,5 +157,9 @@ public class SubjectSerivce {
         return mapper.selaca(dto);
     }
 
+    public List<ResultMockVo> selmock(ResultMockDto dto){
+        return mapper.selmock(dto);
+    }
+
 }
 
