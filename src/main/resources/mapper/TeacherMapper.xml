@@ -25,22 +25,26 @@
 
     <select id="selAcaResult">
         SELECT A.result_id resultId, A.`year`, A.semester , A.mid_final mf
-                , B.category_id categoryId, B.nm, A.score, A.rating
-                , A.class_rank cr, A.whole_rank wr
+                , B.category_id detailCateId, B.nm detailNm, C.category_id cateId
+                ,C.nm nm , A.score, A.rating , A.class_rank cr, A.whole_rank wr
         FROM aca_result A
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
         WHERE user_id = #{userId}
         ORDER BY A.semester DESC
     </select>
 
 
     <select id="selMockResult" resultType="SelMockResultVo">
-        SELECT A.result_id resultId, A.`year`, A.mon, B.category_id categoryId
-                , B.nm , A.standard_score sc, A.rating , A.percent
+        SELECT A.result_id resultId, A.`year`, A.mon, B.category_id detailCateId , B.nm detailNm
+                , C.category_id cateId, C.nm nm, A.standard_score sc, A.rating , A.percent
         FROM mock_result A
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
         WHERE user_id = #{userId}
         ORDER BY A.mon desc;
     </select>
