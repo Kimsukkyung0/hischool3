@@ -140,7 +140,6 @@ public class SubjectSerivce {
           vo.setRatio(vo.getRatio() / mockTotal * 100);
       }
 
-
         return MockGraphVo.builder()
                 .koList(koList)
                 .mtList(mtList)
@@ -153,7 +152,10 @@ public class SubjectSerivce {
        return mapper.stulist(dto);
     };
 
+    public List<ResultAcaVo> selaca(ResultAcaDto dto){
 
+        return mapper.selaca(dto);
+    }
 
 }
 

@@ -144,5 +144,17 @@ public class SubjectController {
     MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
         return serivce.mockgraph(user);
     }
+
+    @GetMapping("/aca-result")
+    @Operation(summary = "내신성적 출력")
+    List<ResultAcaVo> selaca(@AuthenticationPrincipal MyUserDetails user,@RequestParam Long resultId){
+        ResultAcaDto dto = new ResultAcaDto();
+        dto.setResultId(resultId);
+
+
+
+        return serivce.selaca(dto);
+
+    }
 }
 
