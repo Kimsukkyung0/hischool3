@@ -1,7 +1,9 @@
 package com.green.secondproject.subject;
 
 import com.green.secondproject.teacher.subject.SubjectMapper;
+import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
 import com.green.secondproject.teacher.subject.model.SubjectVo;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +26,14 @@ public class SubjectMapperTest {
     List<SubjectVo> list = mapper.subCate();
     SubjectVo vo = list.get(0);
 
-    assertEquals(1,list.size());
+    assertEquals(2,list.size());
     assertEquals(1,vo.getCategoryid());
     assertEquals("국어",vo.getNm());
+
+}
+@Test
+    void subject(){
+
 
 }
 
