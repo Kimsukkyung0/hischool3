@@ -145,6 +145,7 @@ public class SubjectController {
     @Operation(summary = "내신성적 출력")
     List<ResultAcaVo> selaca(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long resultId) {
         ResultAcaDto dto = new ResultAcaDto();
+        dto.setUserId(user.getUserId());
         dto.setResultId(resultId);
         return serivce.selaca(dto);
     }
@@ -154,6 +155,8 @@ public class SubjectController {
     List<ResultMockVo> selmock(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long resultId) {
 
         ResultMockDto dto = new ResultMockDto();
+        dto.setUserId(user.getUserId()
+        );
         dto.setResultId(resultId);
 
                 return serivce.selmock(dto);

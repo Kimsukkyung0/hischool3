@@ -109,7 +109,7 @@
     </delete>
 
 
-        <!--  학급현황 // 성수천 작업  이거 service단에서 class_id 자동받기 가능?-->
+
 <select id="classStudent">
     SELECT  COUNT(C.class_id) classid FROM van A
     INNER JOIN school B
