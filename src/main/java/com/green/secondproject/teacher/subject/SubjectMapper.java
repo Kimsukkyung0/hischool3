@@ -37,7 +37,7 @@ public interface SubjectMapper {
 
     List<StudentListVo> stulist(StudentListDto dto);
 
-    int mocktotal(Long classId);
+    int mocktotal(Long classId); // 모의고사 퍼센트 계산용
 
     List<ResultAcaVo> selaca(ResultAcaDto dto);
 

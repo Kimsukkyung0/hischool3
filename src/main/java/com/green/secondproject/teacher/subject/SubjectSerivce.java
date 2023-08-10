@@ -123,7 +123,7 @@ public class SubjectSerivce {
   public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
        Long classId = user.getClassId();
        int mockTotal = mapper.mocktotal(classId);
-      List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId, 2L));
+      List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId,2L));
       List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));
       List<MockGraphVo2> enList = mapper.mockgraph(new MockGraphDto(classId, 5L));
       List<MockGraphVo2> hiList = mapper.mockgraph(new MockGraphDto(classId, 8L));
