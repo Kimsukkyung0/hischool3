@@ -6,6 +6,6 @@ import lombok.Data;
 public class SelAcaResultDto {
     private Long userId;
     private String year;
-    private int semester;
+    private Integer semester;
     private String mf;
 }

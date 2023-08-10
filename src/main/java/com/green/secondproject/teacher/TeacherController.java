@@ -46,33 +46,49 @@ public class TeacherController {
 
     @GetMapping("/acaresult")
     @Operation(summary = "학생 내신 성적 조회",
-            description = "출력값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
+            description = "요구값 : <br>(1)userId - 유저(학생) PK값" +
+                    "<br>(2)year - 조회기준연도(yyyy)" +
+                    "<br>(3)semester - 학기(1,2)<br>" +
+                    "(4)midFinal - (1:중간,2:기말)<br><br>" +
+                    "※※요구값들은 선택사항입니다(PK값 제외). 요구값없이 학생성적 조회시 전체조회※※<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)semester - 학기<br>" +
                     "(4)cateId - 과목 계열 PK<br>(5)nm - 과목 계열명<br>(6)detailCateId - 세부과목 PK<br>(7)detailNm - 세부과목명<br>" +
                     "(8)mf - 시험구분[1-중간/2-기말]<br>(9)score - 점수<br>(10)rating - 등급<br>" +
                     "(11)cr - 반 석차<br>(12)wr - 전교석차")
     public List<SelAcaResultVo> selectAcaResult(@RequestParam Long userId
                                 , @RequestParam(required = false)String year
-                                , @RequestParam(required = false)int semester
+                                , @RequestParam(required = false)Integer semester
                                 , @RequestParam(required = false)String mf) {
         SelAcaResultDto dto = new SelAcaResultDto();
+        dto.setUserId(userId);
         dto.setYear(year);
         dto.setSemester(semester);
         dto.setMf(mf);
-        return service.selAcaResult(userId);
+        return service.selAcaResult(dto);
     }
 
 
     @GetMapping("/mockresult")
     @Operation(summary = "학생 모의고사 성적 조회",
-            description = "요구값 : <br>(1)userId - 유저(학생) PK값<br><br>"+
+            description = "출력값 : <br>(1)userId - 유저(학생) PK값" +
+                    "<br>(2)year - 조회기준연도(yyyy)" +
+                    "<br>(3)mon - 월" +
+                    "<br><br>※※요구값들은 선택사항입니다(PK값 제외). 요구값없이 학생성적 조회시 전체조회※※<br><br>"+
                     "출력값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도<br>(3)mon - 월<br>" +
                     "(4)cateId - 과목 계열 PK<br>(5)nm - 과목 계열명<br>(6)detailCateId - 세부과목 PK<br>" +
                     "(7)detailNm - 세부 과목명<br>(8)sc - 표준 점수<br>(9)rating - 등급<br>(10)percent - 백분위")
-
-    public List<SelMockResultVo> selectMockResult(@RequestParam Long userId) {
-        return service.selMockResult(userId);
+    public List<SelMockResultVo> selectMockResult(@RequestParam Long userId
+                                , @RequestParam(required = false)String year
+                                , @RequestParam(required = false)Integer mon) {
+        SelMockResultDto dto = new SelMockResultDto();
+        dto.setUserId(userId);
+        dto.setYear(year);
+        dto.setMon(mon);
+        return service.selMockResult(dto);
     }
+
+
+
 
     @PatchMapping("/accept-student")
     @Operation(summary = "학생 가입 승인",

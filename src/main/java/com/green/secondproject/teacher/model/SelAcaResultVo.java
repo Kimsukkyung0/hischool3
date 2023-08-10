@@ -6,7 +6,7 @@ import lombok.Data;
 public class SelAcaResultVo {
     private Long resultId;
     private String year;
-    private int semester;
+    private Integer semester;
     private String cateId;
     private String nm;
     private String detailCateId;
