@@ -13,7 +13,7 @@
     </select>
 
 
-    <select id="selUnsignedStudent">
+    <select id="selUnsignedStudent" resultType="SelUnsignedStudentVo">
         SELECT user_id userId, class_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
         WHERE role = "ROLE_STD"
@@ -23,7 +23,7 @@
     
 
 
-    <select id="selAcaResult">
+    <select id="selAcaResult" resultType="SelAcaResultVo">
         SELECT A.result_id resultId, A.`year`, A.semester , A.mid_final mf
                 , B.category_id detailCateId, B.nm detailNm, C.category_id cateId
                 ,C.nm nm , A.score, A.rating , A.class_rank cr, A.whole_rank wr
