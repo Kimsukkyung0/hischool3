@@ -37,7 +37,7 @@ public class MyPageController {
     @PatchMapping("/user-info-update")
     @Operation(summary = "유저 정보 수정",
             description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>(4)detailAddr - 상세 주소<br>" +
-                            "(5)pw - 비밀번호<br>(6)confirmPw - 비밀번호 확인")
+                    "(5)pw - 비밀번호<br>(6)confirmPw - 비밀번호 확인")
     public int updUserInfo(@RequestBody UpdUserInfoDto dto) {
         return serivce.updUserInfo(dto);
     }

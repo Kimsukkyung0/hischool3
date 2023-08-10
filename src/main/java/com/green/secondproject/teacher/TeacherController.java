@@ -51,7 +51,14 @@ public class TeacherController {
                     "(4)cateId - 과목 계열 PK<br>(5)nm - 과목 계열명<br>(6)detailCateId - 세부과목 PK<br>(7)detailNm - 세부과목명<br>" +
                     "(8)mf - 시험구분[1-중간/2-기말]<br>(9)score - 점수<br>(10)rating - 등급<br>" +
                     "(11)cr - 반 석차<br>(12)wr - 전교석차")
-    public List<SelAcaResultVo> selectAcaResult(@RequestParam Long userId) {
+    public List<SelAcaResultVo> selectAcaResult(@RequestParam Long userId
+                                , @RequestParam(required = false)String year
+                                , @RequestParam(required = false)int semester
+                                , @RequestParam(required = false)String mf) {
+        SelAcaResultDto dto = new SelAcaResultDto();
+        dto.setYear(year);
+        dto.setSemester(semester);
+        dto.setMf(mf);
         return service.selAcaResult(userId);
     }
 
