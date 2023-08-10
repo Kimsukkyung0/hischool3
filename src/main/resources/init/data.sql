@@ -32,3 +32,4 @@ INSERT INTO `mock_result` VALUES
 INSERT INTO `tc_sbj` VALUES
                          (1,1),
                          (1,2);
+

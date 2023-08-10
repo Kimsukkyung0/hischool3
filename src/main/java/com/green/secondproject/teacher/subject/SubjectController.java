@@ -153,11 +153,9 @@ public class SubjectController {
     List<ResultMockVo> selmock(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long resultId) {
 
         ResultMockDto dto = new ResultMockDto();
-        dto.setUserId(user.getUserId()
-        );
+        dto.setUserId(user.getUserId());
         dto.setResultId(resultId);
-
-                return serivce.selmock(dto);
+        return serivce.selmock(dto);
     }
 }
 

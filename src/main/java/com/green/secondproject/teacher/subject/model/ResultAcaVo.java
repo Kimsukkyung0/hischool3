@@ -10,4 +10,7 @@ public class ResultAcaVo {
     private int rating;
     private int classRank;
     private int wholeRank;
+    private int semester;
+    private int midfinal;
+
 }

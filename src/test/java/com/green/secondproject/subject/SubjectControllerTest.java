@@ -45,7 +45,7 @@ public class SubjectControllerTest {
 
     private UserDetails createUserDetails() {
         List<String> roles = new ArrayList<>();
-        roles.add("ROLE_USER");
+        roles.add("ROLE_TC");
         //roles.add("ROLE_ADMIN");
 
         UserDetails userDetails = MyUserDetails.builder()
