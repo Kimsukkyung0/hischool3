@@ -11,7 +11,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +21,7 @@ import java.util.List;
 @ToString
 @RequiredArgsConstructor
 @Slf4j
-public class SubjectSerivce {
+public class SubjectService {
     private final SubjectMapper mapper;
     private final AuthenticationFacade facade;
 
@@ -123,7 +122,7 @@ public class SubjectSerivce {
   public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
        Long classId = user.getClassId();
        int mockTotal = mapper.mocktotal(classId);
-      List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId, 2L));
+      List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId,2L));
       List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));
       List<MockGraphVo2> enList = mapper.mockgraph(new MockGraphDto(classId, 5L));
       List<MockGraphVo2> hiList = mapper.mockgraph(new MockGraphDto(classId, 8L));

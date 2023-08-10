@@ -1,8 +1,11 @@
 package com.green.secondproject;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class Test {
     @org.junit.jupiter.api.Test
-    public void test() {
-        System.out.println(18 / 4.0);
+    void test() throws JsonProcessingException {
+
     }
 }

@@ -20,7 +20,7 @@
     </select>
 
 
-    <select id="tcslist" resultType="SubjectVo2">
+    <select id="tcslist" resultType="SubjectDetailVo2">
         SELECT DISTINCT B.subject_id subjectid,A.nm,C.user_id userid
         FROM sbj_category A
         INNER JOIN subject B
@@ -125,19 +125,6 @@
         GROUP BY B.nm, rating;
     </select>
 
-    <select id="mockrating">
-        SELECT COUNT(rating)
-        FROM mock_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        on B.category_id = c.category_id
-        INNER JOIN user D
-        ON A.user_id = D.user_id
-        WHERE D.class_id = #{classid} and B.category_id IN(2,4,5,8)
-        and A.year = year(NOW()) and mon = 6
-    </select>
-
     <select id="mocktotal">
         SELECT SUM(cnt_rating)
         FROM (
@@ -156,7 +143,7 @@
     </select>
 
     <select id="selaca">
-        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank wholeRank FROM
+        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank wholeRank, A.semester,A.mid_final midfinal FROM
         aca_result A
         INNER JOIN
         subject B
@@ -164,7 +151,7 @@
         WHERE result_id = #{resultId}
     </select>
     <select id="selmock">
-        SELECT B.category_id categoryId , A.subject_id subjectId,A.standard_score standardScore,A.rating,A.percent
+        SELECT B.category_id categoryId , A.subject_id subjectId,A.standard_score standardScore,A.rating,A.percent,A.mon
         FROM
         mock_result A
         INNER join

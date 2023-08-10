@@ -9,4 +9,5 @@ public class ResultMockVo {
     private int standardScore;
     private int rating;
     private int percent;
+    private int mon;
 }

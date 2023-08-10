@@ -42,9 +42,9 @@
     </update>
 
 
-<!--    <update id="updUserPw">-->
-<!--        UPDATE user-->
-<!--        SET pw = #{pw}-->
-<!--        WHERE user_id = #{userId}-->
-<!--    </update>-->
+    <!--    <update id="updUserPw">-->
+    <!--        UPDATE user-->
+    <!--        SET pw = #{pw}-->
+    <!--        WHERE user_id = #{userId}-->
+    <!--    </update>-->
 </mapper>

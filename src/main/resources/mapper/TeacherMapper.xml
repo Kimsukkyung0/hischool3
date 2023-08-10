@@ -33,6 +33,15 @@
         INNER JOIN sbj_category C
         ON C.category_id = B.category_id
         WHERE user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='semester != null and semester != ""'>
+            AND A.semester = #{semester}
+        </if>
+        <if test='mf != null and mf != ""'>
+            AND A.mid_final = #{mf}
+        </if>
         ORDER BY A.semester DESC
     </select>
 
@@ -45,7 +54,13 @@
         ON B.subject_id = A.subject_id
         INNER JOIN sbj_category C
         ON C.category_id = B.category_id
-        WHERE user_id = #{userId}
+        WHERE  A.user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='mon != null and mon != ""'>
+            AND A.mon = #{mon}
+        </if>
         ORDER BY A.mon desc;
     </select>
 
@@ -109,7 +124,7 @@
     </delete>
 
 
-        <!--  학급현황 // 성수천 작업  이거 service단에서 class_id 자동받기 가능?-->
+
 <select id="classStudent">
     SELECT  COUNT(C.class_id) classid FROM van A
     INNER JOIN school B

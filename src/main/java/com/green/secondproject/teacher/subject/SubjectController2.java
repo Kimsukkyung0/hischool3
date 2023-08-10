@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/subject")
 @Tag(name = "학급 및 학교 학생수")
 public class SubjectController2 {
-    private final SubjectSerivce serivce;
+    private final SubjectService serivce;
 
 
     @GetMapping("/class-num")

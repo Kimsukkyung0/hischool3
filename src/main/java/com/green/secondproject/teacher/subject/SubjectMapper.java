@@ -14,9 +14,11 @@ public interface SubjectMapper {
 
     List<SubjectDetailVo> subject(Long categoryid);
 
+    List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
+
     int instcsbj(List<SubjectInsVo> list);
 
-    List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
+
 
     List<SubjectVo2> smalllist(SubjectDto dto);
 
@@ -37,7 +39,7 @@ public interface SubjectMapper {
 
     List<StudentListVo> stulist(StudentListDto dto);
 
-    int mocktotal(Long classId);
+    int mocktotal(Long classId); // 모의고사 퍼센트 계산용
 
     List<ResultAcaVo> selaca(ResultAcaDto dto);
 

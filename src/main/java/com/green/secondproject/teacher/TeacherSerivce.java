@@ -34,17 +34,12 @@ public class TeacherSerivce {
     }
 
 
-    public List<SelAcaResultVo> selAcaResult(Long userId) {
-        SelAcaResultDto dto = new SelAcaResultDto();
-        dto.setUserId(userId);
+    public List<SelAcaResultVo> selAcaResult(SelAcaResultDto dto) {
         return mapper.selAcaResult(dto);
     }
 
 
-    public List<SelMockResultVo> selMockResult(Long userId) {
-        SelMockResultDto dto = new SelMockResultDto();
-        dto.setUserId(userId);
-
+    public List<SelMockResultVo> selMockResult(SelMockResultDto dto) {
         return mapper.selMockResult(dto);
     }
 
