@@ -3,19 +3,14 @@ package com.green.secondproject.teacher.subject;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
-import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
-import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,7 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectController {
 
-    private final SubjectSerivce serivce;
+    private final SubjectService serivce;
     private final AuthenticationFacade facade;
 
 
@@ -136,7 +131,10 @@ public class SubjectController {
     }
 
     @GetMapping("/mock-graph")
-    @Operation(summary = "6월 모의고사 성적조회")
+    @Operation(summary = "6월 모의고사 성적조회",
+    description = "nm - 과목이름<br>"+
+    "rating - 등급" +
+    "ratio - 등급별 인원 퍼센트(100%기준)")
     MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user) {
         return serivce.mockgraph(user);
     }

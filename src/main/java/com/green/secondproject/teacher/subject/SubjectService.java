@@ -11,7 +11,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -22,7 +21,7 @@ import java.util.List;
 @ToString
 @RequiredArgsConstructor
 @Slf4j
-public class SubjectSerivce {
+public class SubjectService {
     private final SubjectMapper mapper;
     private final AuthenticationFacade facade;
 
