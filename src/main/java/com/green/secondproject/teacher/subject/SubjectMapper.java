@@ -14,9 +14,11 @@ public interface SubjectMapper {
 
     List<SubjectDetailVo> subject(Long categoryid);
 
+    List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
+
     int instcsbj(List<SubjectInsVo> list);
 
-    List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
+
 
     List<SubjectVo2> smalllist(SubjectDto dto);
 
