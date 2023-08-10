@@ -144,4 +144,8 @@
         where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and concat(year,semester,mid_final) = (
         SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
     </select>
+
+    <select id = "getLatestTest">
+        select MAX(concat(year,semester,mid_final)) from aca_result
+    </select>
 </mapper>

@@ -146,7 +146,7 @@ public class StudentService {
             tmp.add(tmpVo);
         }
 
-         String date = getmidFinalFormOfDate(subList.get(0).getDate());
+         String date = getMidFinalFormOfDate(subList.get(0).getDate());
 
          return new StudentSumContainerVo(date,tmp);}
         catch (Exception e){
@@ -168,7 +168,7 @@ public class StudentService {
                 //for문에서 날짜수정작업
                 for (StudentTestSumGraphVo vo : subList) {
                     StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-                    subResult.setDate(getmidFinalFormOfDate(vo.getDate()));
+                    subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
                     subResult.setNm(vo.getNm());
                     subResult.setRating(vo.getRating());
                     result.add(subResult);
@@ -182,7 +182,7 @@ public class StudentService {
     }
 
 
-    private String getmidFinalFormOfDate(String date){
+    public String getMidFinalFormOfDate(String date){
 
         StringBuffer sb = new StringBuffer(date);
         String dateStrTmp = sb.insert(4,'-').toString();

@@ -22,4 +22,5 @@ public interface TeacherMapper {
     int aprStudent(ClassStudentDto dto);
     List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
     double getNumberOfStudentByCate(TeacherGraphDto dto);
+    String getLatestTest();
 }
