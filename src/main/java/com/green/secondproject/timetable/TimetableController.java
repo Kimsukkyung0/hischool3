@@ -2,6 +2,7 @@ package com.green.secondproject.timetable;
 
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.timetable.model.TimeTableContainerVo;
+import com.green.secondproject.timetable.model.TimeTableGetDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
@@ -25,7 +26,11 @@ public class TimetableController {
             + "※ 7월 둘째주 부로 고등학교가 방학기간이라 개발단계에서는 주단위 테스트시 날짜값이 5.22-5.26일로 고정되어있습니다.※<br>"
             +"※일자 및 요일 정보출력이 수정되었습니다※<br>")
     public TimeTableContainerVo getTimeTableByClassOfTheWeek(@AuthenticationPrincipal MyUserDetails myuser){
-        return service.getTimeTableByClassAndTheWeek(myuser);
+        TimeTableGetDto dto = new TimeTableGetDto();
+        dto.setClassNum(myuser.getClassNum());
+        dto.setGrade(myuser.getGrade());
+        dto.setSchoolNm(myuser.getSchoolNm());
+        return service.getTimeTableByClassAndTheWeek(dto);
     }
 
 

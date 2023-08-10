@@ -29,9 +29,7 @@ public class MealMenuTableController {
             "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)"
     +"※ 날짜가 2023년 6월로 고정되어있습니다.※<br>")
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(@AuthenticationPrincipal MyUserDetails myuser){
-        log.info("myuser : {}",myuser);
-
-        return service.getMealTableBySchoolOfTheMonth(myuser);
+        return service.getMealTableBySchoolOfTheMonth(myuser.getSchoolNm());
     }
 
     @GetMapping("/main")
@@ -39,6 +37,6 @@ public class MealMenuTableController {
             "출력값 리스트세부내역 : <br> (1)lunchOrDinner - 중식or석식 <br> (2) menuOftheDay : 식사명(한줄로표시/쉼표로 구분)<br><br>"+
     "※ 7월 둘째주 부로 고등학교가 방학기간이라 개발단계에서는 주단위 테스트시 날짜값이 6.25-6.30일로 고정되어있습니다.※<br>")
     public MealTableContainerVo getMealTableBySchoolOfTheWeek(@AuthenticationPrincipal MyUserDetails myuser){
-        return service.getMealTableBySchoolOfTheWeek(myuser);
+        return service.getMealTableBySchoolOfTheWeek(myuser.getSchoolNm());
     }
 }

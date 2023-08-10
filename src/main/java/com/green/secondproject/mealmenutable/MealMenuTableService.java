@@ -64,14 +64,14 @@ public class MealMenuTableService {
                 .build();
     }
 
-    public MealTableContainerVo getMealTableBySchoolOfTheMonth(MyUserDetails myuser) {
+    public MealTableContainerVo getMealTableBySchoolOfTheMonth(String schoolNm) {
 //        YearMonth thisMonth = YearMonth.now();
         YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
 
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(myuser.getSchoolNm());
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
 
 
         MealTableDto dto = new MealTableDto();
@@ -83,12 +83,12 @@ public class MealMenuTableService {
         return result;
     }
 
-    public MealTableContainerVo getMealTableBySchoolOfTheWeek(MyUserDetails myuser) {
+    public MealTableContainerVo getMealTableBySchoolOfTheWeek(String schoolNm) {
 //        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
         LocalDate now = LocalDate.of(2023,7,1);
         MealTableDto dto = new MealTableDto();
 
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(myuser.getSchoolNm());
+        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
         dto.setSdSchulCode(String.valueOf(sdSchulCode));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
@@ -123,7 +123,7 @@ public class MealMenuTableService {
 
         try{
             JsonNode jsonNode = om.readTree(json); //자바객체
-            mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<List<MealTableVo>>() {});
+            mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<>() {});
             for (MealTableVo f : mealTableVo) {
                 StringBuffer sb = new StringBuffer();
                 sb.append(f.getDate());
