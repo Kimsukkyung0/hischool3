@@ -33,3 +33,6 @@ INSERT INTO `tc_sbj` VALUES
                          (1,1),
                          (1,2);
 
+SELECT category_id categoryid,nm
+FROM sbj_category
+WHERE TYPE = 1

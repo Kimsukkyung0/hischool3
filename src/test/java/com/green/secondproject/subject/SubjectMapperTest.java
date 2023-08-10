@@ -24,7 +24,7 @@ public class SubjectMapperTest {
     List<SubjectVo> list = mapper.subCate();
     SubjectVo vo = list.get(0);
 
-    assertEquals(1,list.size());
+    assertEquals(4,list.size());
     assertEquals(1,vo.getCategoryid());
     assertEquals("국어",vo.getNm());
 
