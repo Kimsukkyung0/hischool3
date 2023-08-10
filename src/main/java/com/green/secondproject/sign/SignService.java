@@ -6,10 +6,7 @@ import com.green.secondproject.config.RedisService;
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.JwtTokenProvider;
 import com.green.secondproject.config.security.UserMapper;
-import com.green.secondproject.config.security.model.MyUserDetails;
-import com.green.secondproject.config.security.model.RedisJwtVo;
 import com.green.secondproject.config.security.model.UserEntity;
-import com.green.secondproject.config.security.model.UserTokenEntity;
 import com.green.secondproject.sign.model.*;
 import com.green.secondproject.utils.MyFileUtils;
 import io.jsonwebtoken.Claims;
@@ -27,7 +24,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -167,13 +163,7 @@ public class SignService {
         String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
                 Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
 
-        RedisJwtVo redisJwtVo = RedisJwtVo.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-
-        String value = objectMapper.writeValueAsString(redisJwtVo);
-        redisService.setData(redisKey, value);
+        redisService.setData(redisKey, refreshToken);
 
         log.info("[getSignInResult] SignInResultDto 객체 생성");
         SignInResultDto dto = SignInResultDto.builder()
@@ -191,37 +181,34 @@ public class SignService {
         String error = "유효하지 않은 토큰";
         if(!(JWT_PROVIDER.isValidateToken(refreshToken, JWT_PROVIDER.REFRESH_KEY))) { return error; }
 
-        String ip = req.getRemoteAddr();
-        String accessToken = JWT_PROVIDER.resolveToken(req, JWT_PROVIDER.TOKEN_TYPE);
-        Claims claims = JWT_PROVIDER.getClaims(refreshToken, JWT_PROVIDER.REFRESH_KEY);
-        if(claims == null) { return error; }
+        Claims claims = null;
+        try {
+            claims = JWT_PROVIDER.getClaims(refreshToken, JWT_PROVIDER.REFRESH_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (claims == null) {
+            return error;
+        }
 
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
+        String ip = req.getRemoteAddr();
 
         String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
-        String value = redisService.getData(redisKey);
-        if (value == null) {
+        String redisRt = redisService.getData(redisKey);
+        if (redisRt == null) {
             return error;
         }
 
         try {
-            RedisJwtVo redisJwtVo = objectMapper.readValue(value, RedisJwtVo.class);
-            if (!redisJwtVo.getAccessToken().equals(accessToken) ||
-                    !redisJwtVo.getRefreshToken().equals(refreshToken)) {
+            if (!redisRt.equals(refreshToken)) {
                 return error;
             }
 
             List<String> roles = (List<String>)claims.get("roles");
             String reAccessToken = JWT_PROVIDER.generateJwtToken(strIuser, roles,
                     JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
-
-            RedisJwtVo updateRedisJwtVo = RedisJwtVo.builder()
-                    .accessToken(reAccessToken)
-                    .refreshToken(redisJwtVo.getRefreshToken())
-                    .build();
-            String updateValue = objectMapper.writeValueAsString(updateRedisJwtVo);
-            redisService.setData(redisKey, updateValue);
 
             return reAccessToken;
         } catch (Exception e) {

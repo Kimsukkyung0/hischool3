@@ -1,6 +1,11 @@
 package com.green.secondproject;
 
 
-public class Test {
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+public class Test {
+    @org.junit.jupiter.api.Test
+    void test() throws JsonProcessingException {
+
+    }
 }

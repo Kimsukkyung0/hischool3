@@ -1,10 +1,9 @@
 package com.green.secondproject.sign;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.green.secondproject.IntegrationTest;
 import com.green.secondproject.config.RedisService;
+import com.green.secondproject.config.exception.MyErrorResponse;
 import com.green.secondproject.config.security.UserMapper;
-import com.green.secondproject.config.security.model.RedisJwtVo;
 import com.green.secondproject.sign.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
@@ -25,7 +24,6 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -111,10 +109,7 @@ public class SignIntegrationTest extends IntegrationTest {
         String data = service.getData(redisKey);
         log.info("data: {}", data);
 
-        RedisJwtVo vo = om.readValue(data, RedisJwtVo.class);
-
-        assertEquals(resultDto.getAccessToken(), vo.getAccessToken());
-        assertEquals(resultDto.getRefreshToken(), vo.getRefreshToken());
+        assertEquals(resultDto.getRefreshToken(), data);
     }
 
     @Test
@@ -133,5 +128,50 @@ public class SignIntegrationTest extends IntegrationTest {
                 .andReturn();
 
         log.info("res: {}", res.getResponse().getContentAsString());
+
+        MyErrorResponse error = om.readValue(res.getResponse().getContentAsString(), MyErrorResponse.class);
+        assertEquals("존재하지 않는 이메일", error.getMessage());
+    }
+
+    @Test
+    public void 비밀번호_불일치() throws Exception {
+        SignInParam p = new SignInParam();
+        p.setEmail("tc@gmail.com");
+        p.setPw("1112");
+
+        String paramJson = om.writeValueAsString(p);
+
+        MvcResult res = mvc.perform(post("/api/sign-in")
+                        .content(paramJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andDo(print())
+                .andReturn();
+
+        log.info("res: {}", res.getResponse().getContentAsString());
+
+        MyErrorResponse error = om.readValue(res.getResponse().getContentAsString(), MyErrorResponse.class);
+        assertEquals("비밀번호 불일치", error.getMessage());
+    }
+
+    @Test
+    public void 미승인_계정() throws Exception {
+        SignInParam p = new SignInParam();
+        p.setEmail("lbarbery0@soundcloud.com");
+        p.setPw("1112");
+
+        String paramJson = om.writeValueAsString(p);
+
+        MvcResult res = mvc.perform(post("/api/sign-in")
+                        .content(paramJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError())
+                .andDo(print())
+                .andReturn();
+
+        log.info("res: {}", res.getResponse().getContentAsString());
+
+        MyErrorResponse error = om.readValue(res.getResponse().getContentAsString(), MyErrorResponse.class);
+        assertEquals("비밀번호 불일치", error.getMessage());
     }
 }
