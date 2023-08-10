@@ -6,7 +6,7 @@ import lombok.Data;
 public class SelMockResultVo {
     private Long resultId;
     private String year;
-    private int mon;
+    private Integer mon;
     private String cateId;
     private String nm;
     private String detailCateId;
