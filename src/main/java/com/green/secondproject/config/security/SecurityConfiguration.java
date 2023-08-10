@@ -47,11 +47,12 @@ public class SecurityConfiguration {
                             .requestMatchers(mvc.pattern("/api/timetable")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/subject/**")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/logout")).hasAnyRole("TC", "STD")
+                            .requestMatchers(mvc.pattern("/api/side")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/teacher/**")).hasRole("TC")
                             .requestMatchers(mvc.pattern("/api/schedule")).hasRole("TC")
                             .requestMatchers(mvc.pattern("/api/student/**")).hasRole("STD")
                             .requestMatchers(mvc.pattern("/api/meal/**")).hasRole("STD")
-                            .anyRequest().hasRole("ADMIN")
+                            .anyRequest().permitAll()
                 ) //사용 권한 체크
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 X
         .httpBasic(http -> http.disable()) //UI 있는 시큐리티 설정을 비활성화
