@@ -30,6 +30,7 @@ public class StudentService {
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
         log.info("mon : {}", now.getMonthValue());
+        try{
         List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
         List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
 
@@ -42,7 +43,11 @@ public class StudentService {
 
         StringBuffer sb = new StringBuffer(sub.get(0).getDate());
 
-        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);
+        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -69,14 +74,22 @@ public class StudentService {
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
-        List<StudentTestSumGraphVo> sub =  mapper.getMockTestGraph(dto);
-        List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
-        for (StudentTestSumGraphVo vo : sub) {
-            log.info("vo : {}",vo);
-            StringBuffer sb = new StringBuffer(vo.getDate());
-            vo.setDate(sb.insert(4,"-").toString());
-            result.add(vo);
-        } return result;
+
+        try {
+            List<StudentTestSumGraphVo> sub = mapper.getMockTestGraph(dto);
+            List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
+            for (StudentTestSumGraphVo vo : sub) {
+                log.info("vo : {}", vo);
+                StringBuffer sb = new StringBuffer(vo.getDate());
+                vo.setDate(sb.insert(4, "-").toString());
+                result.add(vo);
+            }
+            return result;
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
         }
 
 
@@ -123,6 +136,7 @@ public class StudentService {
 
     public StudentSumContainerVo getLatestRatingsOfAcaTest(Long userId) {
         //결과값 : List<2023 2-2 국수영한 등급>
+        try{
         List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
@@ -134,26 +148,37 @@ public class StudentService {
 
          String date = getmidFinalFormOfDate(subList.get(0).getDate());
 
-         return new StudentSumContainerVo(date,tmp);
+         return new StudentSumContainerVo(date,tmp);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
-        //mapper로 부터 가져온 리스트
-        List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
-        //날짜수정,출력할 리스트 선언
-        List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
 
-        //for문에서 날짜수정작업
-        for(StudentTestSumGraphVo vo : subList){
-            StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-            subResult.setDate(getmidFinalFormOfDate(vo.getDate()));
-            subResult.setNm(vo.getNm());
-            subResult.setRating(vo.getRating());
-            result.add(subResult);
+        //mapper로 부터 가져온 리스트
+        try {
+            List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
+            log.info("subList : {}", subList);
+            List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
+
+                //for문에서 날짜수정작업
+                for (StudentTestSumGraphVo vo : subList) {
+                    StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
+                    subResult.setDate(getmidFinalFormOfDate(vo.getDate()));
+                    subResult.setNm(vo.getNm());
+                    subResult.setRating(vo.getRating());
+                    result.add(subResult);
+                }
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
         }
-        return result;
+        return null;
+
     }
 
 

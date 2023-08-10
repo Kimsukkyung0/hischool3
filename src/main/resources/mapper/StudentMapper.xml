@@ -91,18 +91,18 @@
     </select>
 
     <select id="getLatestRatingsOfAcaTest">
-        select C.nm, A.rating, concat(year,semester,mid_final) date, A.subject_id
-        from aca_result A
+        SELECT CONCAT(year,semester,mid_final) date, C.nm, A.rating
+        FROM aca_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
-        WHERE A.user_id = #{userId} and (select max(concat(year,semester,mid_final)) from aca_result where B.category_id in(1,3,6,7))
-        ORDER BY A.year,A.semester desc,A.mid_final desc, nm
-        limit 4
-
+        WHERE user_id = #{userId} AND (YEAR, semester, mid_final) IN (
+        SELECT YEAR, semester, mid_final FROM aca_result
+        WHERE result_id = (
+        SELECT MAX(result_id) FROM aca_result
+        WHERE user_id = #{userId})) and B.category_id in(1,3,6,7) ;
     </select>
-
 
     <select id="getAcaTestGraph">
         select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating

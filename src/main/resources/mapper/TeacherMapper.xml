@@ -124,14 +124,24 @@
         WHERE apr_yn =0 AND class_id = #{classid} AND role = "ROLE_STD";
     </select>
 
-    <select id="teacherGrap">
-        SELECT COUNT(B.rating) count FROM `user` A
-        INNER JOIN aca_result B
-        ON A.user_id = B.user_id
-        INNER JOIN subject C
-        ON C.subject_id = B.subject_id
-        INNER JOIN sbj_category D
-        WHERE B.rating = #{count} AND A.class_id = #{classid} AND D.category_id = #{categoryid} and D.type =1;
+    <select id="teacherAcaGraph">
+        select D.nm cateNm,B.rating rating, count(B.rating) as percentage
+        from user A
+        INNER JOIN aca_result B ON A.user_id = B.user_id
+        INNER JOIN subject C ON B.subject_id = C.subject_id
+        INNER JOIN sbj_category D on C.category_id = D.category_id
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and concat(year,semester,mid_final) = (
+        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
+        group by rating
+    </select>
 
+    <select id="getNumberOfStudentByCate">
+        select count(C.nm)
+        from user A
+        INNER JOIN aca_result B ON A.user_id = B.user_id
+        INNER JOIN subject C ON B.subject_id = C.subject_id
+        INNER JOIN sbj_category D on C.category_id = D.category_id
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and concat(year,semester,mid_final) = (
+        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
     </select>
 </mapper>
