@@ -2,6 +2,8 @@ package com.green.secondproject.teacher;
 
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.student.StudentMapper;
+import com.green.secondproject.student.StudentService;
 import com.green.secondproject.teacher.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,7 @@ import java.util.*;
 public class TeacherSerivce {
     private final TeacherMapper mapper;
     private final AuthenticationFacade facade;
-
+    private final StudentService stService;
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         SelSignedStudentDto dto = new SelSignedStudentDto();
@@ -106,25 +108,33 @@ public class TeacherSerivce {
     }
 
     public TeacherGraphContainerVo teacherAcaGraph(Long classId) {
-        Long koCateId = 1L;
-        Long maCateId = 3L;
-        Long enCateId = 6L;
-        Long htCateId = 8L;
-        List<TeacherGraphVo> koList = mapper.teacherAcaGraph(classId,koCateId);
-        List<TeacherGraphVo> maList = mapper.teacherAcaGraph(classId,maCateId);
-        List<TeacherGraphVo> enList = mapper.teacherAcaGraph(classId,enCateId);
-        List<TeacherGraphVo> htList = mapper.teacherAcaGraph(classId,htCateId);
+        Long[] cateIdForAca = {1L,3L,6L,8L};
 
         List<List<TeacherGraphVo>> subResult = new ArrayList<>();
 
-        //그래프 형식
-        subResult.add(getSubResult(koList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(koCateId).classId(classId).build())));
-        subResult.add(getSubResult(maList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(maCateId).classId(classId).build())));
-        subResult.add(getSubResult(enList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(enCateId).classId(classId).build())));
-        subResult.add(getSubResult(htList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(htCateId).classId(classId).build())));
+        for (int i = 0; i < cateIdForAca.length; i++) {
+            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
+            subResult.add(tmpVo);
+        }
+        for (int i = 0; i < cateIdForAca.length; i++) {
+            subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
+        }
 
-        return TeacherGraphContainerVo.builder().date("2023-2 기말").list(subResult).build();
+        String date = stService.getMidFinalFormOfDate(mapper.getLatestTest());
+        return TeacherGraphContainerVo.builder().date(date).list(subResult).build();
     }
+
+//        List<TeacherGraphVo> koList =
+//        List<TeacherGraphVo> maList = mapper.teacherAcaGraph(classId,maCateId);
+//        List<TeacherGraphVo> enList = mapper.teacherAcaGraph(classId,enCateId);
+//        List<TeacherGraphVo> htList = mapper.teacherAcaGraph(classId,htCateId);
+
+
+//        //그래프 형식
+//        subResult.add(getSubResult(koList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(koCateId).classId(classId).build())));
+//        subResult.add(getSubResult(maList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(maCateId).classId(classId).build())));
+//        subResult.add(getSubResult(enList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(enCateId).classId(classId).build())));
+//        subResult.add(getSubResult(htList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(htCateId).classId(classId).build())));
 
 
     private double getPercentage (double count, double numberOfClassMembers) {
