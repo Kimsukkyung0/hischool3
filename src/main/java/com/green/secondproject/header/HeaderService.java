@@ -20,7 +20,7 @@ public class HeaderService {
     @Value("${file.logoPath}")
     private String logoPath;
 
-    public List<SelSchoolInfoVo> selSchoolInfo(MyUserDetails myuser) {
+    public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
         SelSchoolInfoDto dto = new SelSchoolInfoDto();
         dto.setUserId(myuser.getUserId());
         return mapper.selSchoolInfo(dto);

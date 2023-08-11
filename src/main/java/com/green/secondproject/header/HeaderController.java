@@ -26,7 +26,7 @@ public class HeaderController {
     @Operation(summary = "학생의 00고등학교 0학년 반 표기",
             description = "출력값 : <br>(1)userId - 학생 PK값<br>(2)schoolId- 학교 PK값<br>" +
                         "(3)nm - 학교명<br>(4)grade - 학년<br>(5)van - 반")
-    public List<SelSchoolInfoVo> SelectSchoolInfo(@AuthenticationPrincipal MyUserDetails myuser) {
+    public SelSchoolInfoVo SelectSchoolInfo(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.selSchoolInfo(myuser);
     }
 
