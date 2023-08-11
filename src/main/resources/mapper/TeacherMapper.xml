@@ -93,6 +93,7 @@
             , standard_score = #{standardScore}
             , rating = #{rating}
             , percent = #{percent}
+            , subject_id = #{subjectId}
         WHERE result_id = #{resultId}
     </update>
 
@@ -100,12 +101,14 @@
     <update id="updAcaResult">
         UPDATE aca_result
         SET year = #{year}
+        , subject_id = #{subjectId}
         , semester = #{semester}
-        , mind_final = #{mf}
+        , mid_final = #{mf}
         , score = #{score}
         , rating = #{rating}
         , class_rank = #{classRank}
         , whole_rank = #{wholeRank}
+        WHERE result_id = #{resultId}
     </update>
 
 

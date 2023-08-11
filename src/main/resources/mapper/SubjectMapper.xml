@@ -123,6 +123,7 @@
         WHERE D.class_id = #{classId} and B.category_id = #{categoryId}
         and A.year = year(NOW()) and mon = 6
         GROUP BY B.nm, rating;
+
     </select>
 
     <select id="mocktotal">

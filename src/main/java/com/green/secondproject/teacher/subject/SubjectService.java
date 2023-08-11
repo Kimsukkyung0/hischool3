@@ -121,29 +121,125 @@ public class SubjectService {
 
   public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
        Long classId = user.getClassId();
-       int mockTotal = mapper.mocktotal(classId);
+       Integer mockTotal = mapper.mocktotal(classId);
       List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId,2L));
       List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));
       List<MockGraphVo2> enList = mapper.mockgraph(new MockGraphDto(classId, 5L));
       List<MockGraphVo2> hiList = mapper.mockgraph(new MockGraphDto(classId, 8L));
-      for (MockGraphVo2 vo : koList) {
-          vo.setRatio(vo.getRatio() / mockTotal * 100);
+
+      List<MockGraphVo2> koList1 = new ArrayList<>();
+      List<MockGraphVo2> mtList1 = new ArrayList<>();
+      List<MockGraphVo2> enList1 = new ArrayList<>();
+      List<MockGraphVo2> hiList1 = new ArrayList<>();
+
+      String nm = "국어";
+      for (int i = 1; i <= 9; i++) {
+          koList1.add(MockGraphVo2.builder()
+                  .nm(nm)
+                  .rating(i)
+                  .ratio(0)
+                  .build());
       }
-      for (MockGraphVo2 vo : mtList) {
-          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      for (MockGraphVo2 vo2: koList1) {
+          for (MockGraphVo2 vo3 : koList) {
+              if (vo2.getRating() == vo3.getRating()) {
+                  vo2.setRating(vo3.getRating());
+                  vo2.setRatio(vo3.getRatio());
+              }
+          }
       }
-      for (MockGraphVo2 vo : enList) {
-          vo.setRatio(vo.getRatio() / mockTotal * 100);
+
+      String nm1 = "수학";
+      for (int i = 1; i <= 9; i++) {
+          mtList1.add(MockGraphVo2.builder()
+                  .nm(nm1)
+                  .rating(i)
+                  .ratio(0)
+                  .build());
       }
-      for (MockGraphVo2 vo : hiList) {
-          vo.setRatio(vo.getRatio() / mockTotal * 100);
+      for (MockGraphVo2 vo2: mtList1) {
+          for (MockGraphVo2 vo3: mtList) {
+              if (vo2.getRating() == vo3.getRating()){
+                  vo2.setRating(vo3.getRating());
+                  vo2.setRatio(vo3.getRatio());
+              }
+          }
+      }
+      String nm2 = "영어";
+      for (int i = 1; i <= 9; i++) {
+          enList1.add(MockGraphVo2.builder().nm(nm2).rating(i).ratio(0).build());
+      }
+      for (MockGraphVo2 vo2: enList1) {
+          for (MockGraphVo2 vo3 : enList) {
+              if(vo2.getRating() == vo3.getRating()){
+                  vo2.setRating(vo3.getRating());
+                  vo2.setRatio(vo3.getRatio());
+              }
+          }
+      }
+      String nm3 = "한국사";
+      for (int i = 1; i <= 9; i++) {
+          hiList1.add(MockGraphVo2.builder().nm(nm3).rating(i).ratio(0).build());
+      }
+      for (MockGraphVo2 vo2 :hiList1) {
+          for (MockGraphVo2 vo3: hiList) {
+              if(vo2.getRating() == vo3.getRating()){
+                  vo2.setRating(vo3.getRating());
+                  vo2.setRatio(vo3.getRatio());
+              }
+
+          }
+
+      }
+//      if (mtList.size() == 0){
+//          String nm = "수학";
+//          for (int i = 1; i <= 9; i++) {
+//              mtList.add(MockGraphVo2.builder()
+//                      .nm(nm)
+//                      .rating(i)
+//                      .ratio(0)
+//                      .build());
+//          }
+//      }
+//      if(enList.size() == 0){
+//          String nm = "영어";
+//          for (int i = 1; i <= 9; i++) {
+//              enList.add(MockGraphVo2.builder()
+//                      .nm(nm)
+//                      .rating(i)
+//                      .ratio(0).build());
+//          }
+//      }  if(hiList.size() == 0){
+//          String nm = "한국사";
+//          for (int i = 1; i <= 9; i++) {
+//              hiList.add(MockGraphVo2.builder()
+//                      .nm(nm)
+//                      .rating(i)
+//                      .ratio(0).build());
+//          }
+//      }
+
+
+      if (mockTotal != null) {
+          for (MockGraphVo2 vo : koList1) {
+              vo.setRatio(vo.getRatio() / mockTotal * 100);
+          }
+          for (MockGraphVo2 vo : mtList1) {
+              vo.setRatio(vo.getRatio() / mockTotal * 100);
+          }
+          for (MockGraphVo2 vo : enList1) {
+              vo.setRatio(vo.getRatio() / mockTotal * 100);
+          }
+          for (MockGraphVo2 vo : hiList1) {
+              vo.setRatio(vo.getRatio() / mockTotal * 100);
+          }
       }
 
         return MockGraphVo.builder()
-                .koList(koList)
-                .mtList(mtList)
-                .enList(enList)
-                .hiList(hiList)
+                .koList(koList1)
+                .mtList(mtList1)
+                .enList(enList1)
+                .hiList(hiList1)
                 .build();
     }
 
