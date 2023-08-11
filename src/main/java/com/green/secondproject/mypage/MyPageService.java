@@ -58,39 +58,56 @@ public class MyPageService {
         String centerPath = String.format("hischool/%d", myuser.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
-        File dic = new File(dicPath);
-        if (!dic.exists()) {
-            dic.mkdirs();
-        }
-
-        String originFileName = pic.getOriginalFilename();
-        String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
-        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
-        String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
-        File target = new File(targetPath);
-        try {
-            pic.transferTo(target);
-        } catch (Exception e) {
-            return 0;
-        }
-
-        try {
-            UserUpdDto dto = UserUpdDto.builder()
-                    .phone(p.getPhone())
-                    .address(p.getAddress())
-                    .detailAddr(p.getDetailAddr())
-                    .pw(PW_ENCODER.encode(p.getPw()))
-                    .userId(myuser.getUserId())
-                    .pic(savedFileName)
-                    .build();
-
-            int result = mapper.updUserInfo(dto);
-            if (result == 0) {
-                throw new Exception("프로필 사진을 등록할 수 없습니다.");
+        if (pic != null) {
+            File dic = new File(dicPath);
+            if (!dic.exists()) {
+                dic.mkdirs();
             }
-        } catch (Exception e) {
-            target.delete();
-            return 0;
+
+            String originFileName = pic.getOriginalFilename();
+            String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
+            String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+            String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
+            File target = new File(targetPath);
+            try {
+                pic.transferTo(target);
+            } catch (Exception e) {
+                return 0;
+            }
+
+
+            try {
+                UserUpdDto dto = UserUpdDto.builder()
+                        .phone(p.getPhone())
+                        .address(p.getAddress())
+                        .detailAddr(p.getDetailAddr())
+                        .pw(PW_ENCODER.encode(p.getPw()))
+                        .userId(myuser.getUserId())
+                        .pic(savedFileName)
+                        .build();
+
+                int result = mapper.updUserInfo(dto);
+                if (result == 0) {
+                    throw new Exception("프로필 사진을 등록할 수 없습니다.");
+                }
+            } catch (Exception e) {
+                target.delete();
+                return 0;
+            }
+        } else if (pic == null) {
+            try {
+                UserUpdDto dto = UserUpdDto.builder()
+                        .phone(p.getPhone())
+                        .address(p.getAddress())
+                        .detailAddr(p.getDetailAddr())
+                        .pw(PW_ENCODER.encode(p.getPw()))
+                        .userId(myuser.getUserId())
+                        .build();
+
+                int result = mapper.updUserInfo(dto);
+            } catch (Exception e) {
+                return 0;
+            }
         }
         return 1;
     }
