@@ -46,8 +46,8 @@ public class MyPageController {
 
     @PutMapping(value = "/user-info-update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "유저 정보 수정",
-            description = "(1)nm - 이름<br>(2)phone - 연락처<br>(3)address - 주소<br>(4)detailAddr - 상세 주소<br>" +
-                    "(5)pw - 비밀번호<br>(6)confirmPw - 비밀번호 확인")
+            description = "요구값 : <br>(1)phone - 연락처<br>(2)address - 주소<br>(3)detailAddr - 상세 주소<br>" +
+                    "(4)pw - 비밀번호")
     public int updUserInfo(@RequestPart MultipartFile pic, @RequestPart UpdInfoParam p,
                             @AuthenticationPrincipal MyUserDetails myuser) {
         return serivce.updUserInfo(pic, p, myuser);
