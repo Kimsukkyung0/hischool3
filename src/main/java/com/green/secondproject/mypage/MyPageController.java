@@ -19,16 +19,13 @@ import java.util.List;
 public class MyPageController {
     private final MyPageService serivce;
 
-
-
-
     @GetMapping("/user-mypage")
     @Operation(summary = "마이페이지",
             description = "출력값 : <br>(1)userId - 유저 PK값<br>(2)unm - 유저 이름<br>(3)email - 이메일<br>" +
                     "(4)role - 권한 [ADMIN - 관리자 / TC - 선생님 / STD - 학생]<br>(5)pic - 사진<br>" +
                     "(6)birth - 생일<br>(7)phone - 연락처<br>(8)classId - 학급 PK값<br>(9)grade - 학년<br>" +
                     "(10)van - 반<br>(11)schoolId - 학교 PK값<br>(12)schnm - 학교 이름<br>(13)address - 주소<br>(14)detailAddr - 상세 주소")
-    public List<SelUserMyPageVo> selectTcMyPage(@AuthenticationPrincipal MyUserDetails myuser) {
+    public SelUserMyPageVo selectTcMyPage(@AuthenticationPrincipal MyUserDetails myuser) {
         return serivce.selUserMyPage(myuser);
     }
 

@@ -26,6 +26,9 @@ public class MyPageService {
     @Value("/home/download")
     private String fileDir;
 
+    @Value("${file.imgPath}")
+    private String imgPath;
+
     @Autowired
     public MyPageService(MyPageMapper mapper, AuthenticationFacade facade, PasswordEncoder passwordEncoder) {
         this.mapper = mapper;
@@ -34,10 +37,13 @@ public class MyPageService {
     }
 
 
-    public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
+    public SelUserMyPageVo selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
         dto.setUserId(myuser.getUserId());
-        return mapper.selUserMyPage(dto);
+
+        SelUserMyPageVo userInfo = mapper.selUserMyPage(dto);
+        userInfo.setPic(String.format("%s/%d/%s", imgPath, myuser.getUserId(), userInfo.getPic()));
+        return userInfo;
     }
 
 
