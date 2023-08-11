@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UpdMockResultDto {
     private Long resultId;
+    private Long subjectId;
     private String year;
     private int mon;
     private int standardScore;

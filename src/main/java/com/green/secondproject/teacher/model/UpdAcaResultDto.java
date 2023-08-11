@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class UpdAcaResultDto {
     private Long resultId;
+    private Long subjectId;
     private String year;
     private int semester;
     private int mf;
