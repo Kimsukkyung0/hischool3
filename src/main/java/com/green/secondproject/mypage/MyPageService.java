@@ -64,11 +64,21 @@ public class MyPageService {
                 dic.mkdirs();
             }
 
+
+            String OriginalFileName = myuser.getPic();
+            if (OriginalFileName != null) {
+                File originFile = new File(dic, OriginalFileName);
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            }
+
             String originFileName = pic.getOriginalFilename();
             String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
             String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
             String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
             File target = new File(targetPath);
+
             try {
                 pic.transferTo(target);
             } catch (Exception e) {
@@ -105,6 +115,16 @@ public class MyPageService {
                         .build();
 
                 int result = mapper.updUserInfo(dto);
+
+
+                File dic = new File(dicPath);
+                String OriginalFileName = myuser.getPic();
+                if (OriginalFileName != null) {
+                    File originFile = new File(dic, OriginalFileName);
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                }
             } catch (Exception e) {
                 return 0;
             }
