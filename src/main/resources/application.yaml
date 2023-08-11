@@ -11,7 +11,7 @@ spring:
       max-request-size: 12MB
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
-    url: jdbc:mariadb://192.168.0.144:3306/team_c
+    jdbc-url: jdbc:mariadb://192.168.0.144:3306/team_c
     username: team_c
     password: green502
   data:
