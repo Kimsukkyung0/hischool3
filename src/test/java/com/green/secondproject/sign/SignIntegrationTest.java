@@ -31,8 +31,8 @@ public class SignIntegrationTest extends IntegrationTest {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+//    @Autowired
+//    private TestRestTemplate restTemplate;
 
     @Autowired
     private UserMapper mapper;
@@ -173,5 +173,10 @@ public class SignIntegrationTest extends IntegrationTest {
 
         MyErrorResponse error = om.readValue(res.getResponse().getContentAsString(), MyErrorResponse.class);
         assertEquals("비밀번호 불일치", error.getMessage());
+    }
+
+    @Test
+    public void accessToken_재발행() throws Exception {
+        로그인_성공();
     }
 }

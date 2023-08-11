@@ -133,7 +133,7 @@ public class SignService {
         return resultDto;
     }
 
-    public SignInResultDto signIn(SignInParam p, String ip) throws Exception {
+    public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
         UserVo user = MAPPER.selUserByEmail(p.getEmail());
 
