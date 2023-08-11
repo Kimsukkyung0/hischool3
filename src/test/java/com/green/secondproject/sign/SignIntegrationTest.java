@@ -88,7 +88,7 @@ public class SignIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void 로그인_성공() throws Exception {
+    public String 로그인_성공() throws Exception {
         SignInParam p = new SignInParam();
         p.setEmail("tc@gmail.com");
         p.setPw("1111");
@@ -110,6 +110,8 @@ public class SignIntegrationTest extends IntegrationTest {
         log.info("data: {}", data);
 
         assertEquals(resultDto.getRefreshToken(), data);
+
+        return resultDto.getRefreshToken();
     }
 
     @Test
@@ -177,6 +179,28 @@ public class SignIntegrationTest extends IntegrationTest {
 
     @Test
     public void accessToken_재발행() throws Exception {
-        로그인_성공();
+        String refreshToken = 로그인_성공();
+        TokenDto dto = new TokenDto();
+        dto.setRefreshToken(refreshToken);
+
+        String dtoJson = om.writeValueAsString(dto);
+
+        mvc.perform(post("/api/refresh-token")
+                        .content(dtoJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+    }
+
+    @Test
+    public void 이메일_인증() throws Exception {
+        String email = "gyujin0912@gmail.com";
+
+        MvcResult res = mvc.perform(post("/api/mail-confirm")
+                .param("email", email))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
     }
 }
