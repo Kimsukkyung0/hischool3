@@ -19,18 +19,11 @@
 
     <update id="updUserInfo">
         UPDATE user
-        SET nm = #{nm}
-        , phone = #{phone}
+        SET phone = #{phone}
         , address = #{address}
         , detail_addr = #{detailAddr}
         , pw = #{pw}
-        WHERE user_id = #{userId}
-    </update>
-
-
-    <update id="updUserPic">
-        UPDATE user
-        SET pic = #{pic}
+        , pic = #{pic}
         WHERE user_id = #{userId}
     </update>
 
@@ -42,9 +35,4 @@
     </update>
 
 
-    <!--    <update id="updUserPw">-->
-    <!--        UPDATE user-->
-    <!--        SET pw = #{pw}-->
-    <!--        WHERE user_id = #{userId}-->
-    <!--    </update>-->
 </mapper>

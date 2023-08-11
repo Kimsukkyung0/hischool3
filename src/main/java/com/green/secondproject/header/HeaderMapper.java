@@ -10,6 +10,6 @@ import java.util.List;
 
 @Mapper
 public interface HeaderMapper {
-    List<SelSchoolInfoVo> selSchoolInfo(SelSchoolInfoDto dto);
+    SelSchoolInfoVo selSchoolInfo(SelSchoolInfoDto dto);
     SelSchoolLogoVo selSchoolLogo(SelSchoolLogoDto dto);
 }

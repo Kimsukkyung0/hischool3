@@ -26,6 +26,9 @@ public class MyPageService {
     @Value("/home/download")
     private String fileDir;
 
+    @Value("${file.imgPath}")
+    private String imgPath;
+
     @Autowired
     public MyPageService(MyPageMapper mapper, AuthenticationFacade facade, PasswordEncoder passwordEncoder) {
         this.mapper = mapper;
@@ -33,127 +36,99 @@ public class MyPageService {
         this.PW_ENCODER = passwordEncoder;
     }
 
-//    public int updUserPw(UpdUserPwDto dto) {
-//        String upw = dto.getPw();
-//        String verifypw = dto.getVerifypw();
-//        String encodedPassword = PW_ENCODER.encode(upw);
-//
-//        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
-//        dto2.setUserId(facade.getLoginUserPk());
-//        dto2.setPw(encodedPassword);
-//
-//        if (PW_ENCODER.matches(upw, verifypw)) {
-//            return mapper.updUserPw(dto2);
-//        } else {
-//            throw new RuntimeException("비밀번호가 일치하지 않습니다");
-//        }
-//    }
 
-//    public int updUserPw(UpdUserPwDto dto) {
-//        String upw = dto.getPw();
-//        String encodedPassword = PW_ENCODER.encode(upw);
-//
-//        if (!upw.equals(dto.getConfirmpw())) {
-//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//
-//        UpdUserPwDto2 dto2 = new UpdUserPwDto2();
-//        dto2.setUserId(facade.getLoginUserPk());
-//        dto2.setPw(encodedPassword);
-//
-//        return mapper.updUserPw(dto2);
-//    }
-
-
-    public List<SelUserMyPageVo> selUserMyPage(MyUserDetails myuser) {
+    public SelUserMyPageVo selUserMyPage(MyUserDetails myuser) {
         SelUserMyPageDto dto = new SelUserMyPageDto();
         dto.setUserId(myuser.getUserId());
-        return mapper.selUserMyPage(dto);
+
+        SelUserMyPageVo userInfo = mapper.selUserMyPage(dto);
+        userInfo.setPic(String.format("%s/%d/%s", imgPath, myuser.getUserId(), userInfo.getPic()));
+        return userInfo;
     }
-
-
-//    public int updUserInfo(UpdUserInfoDto dto) {
-//        UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
-//        dto2.setUserId(facade.getLoginUserPk());
-//        dto2.setNm(dto.getNm());
-//        dto2.setAddress(dto.getAddress());
-//        dto2.setDetailAddr(dto.getDetailAddr());
-//        dto2.setPhone(dto.getPhone());
-//        return mapper.updUserInfo(dto2);
-//    }@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-
-
-    public int updUserInfo(UpdUserInfoDto dto) {
-        UpdUserInfoDto2 dto2 = new UpdUserInfoDto2();
-        dto2.setUserId(facade.getLoginUserPk());
-        dto2.setNm(dto.getNm());
-        dto2.setAddress(dto.getAddress());
-        dto2.setDetailAddr(dto.getDetailAddr());
-        dto2.setPhone(dto.getPhone());
-
-
-        String upw = dto.getPw();
-        String encodedPassword = PW_ENCODER.encode(upw);
-
-        if (!upw.equals(dto.getConfirmPw())) {
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-        }
-
-
-        dto2.setPw(encodedPassword);
-        return mapper.updUserInfo(dto2);
-
-    }
-
-
-
-    public String updUserPic(MultipartFile pic) {
-        UserPicDto2 dto2 = new UserPicDto2();
-
-        dto2.setPic(String.valueOf(pic));
-        dto2.setUserId(facade.getLoginUserPk());
-
-
-        String temp = "0";
-        String centerPath = String.format("hischool/%d", dto2.getUserId());
-        String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
-
-        File dic = new File(dicPath);
-        if (!dic.exists()) {
-            dic.mkdirs();
-        }
-
-        String originFileName = pic.getOriginalFilename();
-        String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
-//        String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
-        String savedFilePath = String.format("%s", savedFileName);
-        String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
-        File target = new File(targetPath);
-        try {
-            pic.transferTo(target);
-        }catch (Exception e) {
-            return temp;
-        }
-        dto2.setPic(savedFilePath);
-        try {
-            int result = mapper.updUserPic(dto2);
-            if(result == Integer.parseInt(temp)) {
-                throw new Exception("프로필 사진을 등록할 수 없습니다.");
-            }
-        } catch (Exception e) {
-            target.delete();
-            return temp;
-        }
-        return savedFilePath;
-    }
-
 
 
     public int delUser(MyUserDetails myuser) {
         DelUserDto dto = new DelUserDto();
         dto.setUserId(myuser.getUserId());
         return mapper.delUser(dto);
+    }
+
+
+    public int updUserInfo(MultipartFile pic, UpdInfoParam p, MyUserDetails myuser) {
+        String centerPath = String.format("hischool/%d", myuser.getUserId());
+        String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
+
+        if (pic != null) {
+            File dic = new File(dicPath);
+            if (!dic.exists()) {
+                dic.mkdirs();
+            }
+
+
+            String OriginalFileName = myuser.getPic();
+            if (OriginalFileName != null) {
+                File originFile = new File(dic, OriginalFileName);
+                if (originFile.exists()) {
+                    originFile.delete();
+                }
+            }
+
+            String originFileName = pic.getOriginalFilename();
+            String savedFileName = MyFileUtils.makeRandomFileNm(originFileName);
+            String savedFilePath = String.format("%s/%s", centerPath, savedFileName);
+            String targetPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), savedFilePath);
+            File target = new File(targetPath);
+
+            try {
+                pic.transferTo(target);
+            } catch (Exception e) {
+                return 0;
+            }
+
+
+            try {
+                UserUpdDto dto = UserUpdDto.builder()
+                        .phone(p.getPhone())
+                        .address(p.getAddress())
+                        .detailAddr(p.getDetailAddr())
+                        .pw(PW_ENCODER.encode(p.getPw()))
+                        .userId(myuser.getUserId())
+                        .pic(savedFileName)
+                        .build();
+
+                int result = mapper.updUserInfo(dto);
+                if (result == 0) {
+                    throw new Exception("프로필 사진을 등록할 수 없습니다.");
+                }
+            } catch (Exception e) {
+                target.delete();
+                return 0;
+            }
+        } else if (pic == null) {
+            try {
+                UserUpdDto dto = UserUpdDto.builder()
+                        .phone(p.getPhone())
+                        .address(p.getAddress())
+                        .detailAddr(p.getDetailAddr())
+                        .pw(PW_ENCODER.encode(p.getPw()))
+                        .userId(myuser.getUserId())
+                        .build();
+
+                int result = mapper.updUserInfo(dto);
+
+
+                File dic = new File(dicPath);
+                String OriginalFileName = myuser.getPic();
+                if (OriginalFileName != null) {
+                    File originFile = new File(dic, OriginalFileName);
+                    if (originFile.exists()) {
+                        originFile.delete();
+                    }
+                }
+            } catch (Exception e) {
+                return 0;
+            }
+        }
+        return 1;
     }
 }

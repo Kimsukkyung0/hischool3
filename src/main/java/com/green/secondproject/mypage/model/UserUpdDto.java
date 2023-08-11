@@ -5,14 +5,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class myPageEntity {
+public class UserUpdDto {
     private Long userId;
-    private String pic;
-    private String nm;
     private String phone;
     private String address;
     private String detailAddr;
     private String pw;
-    private String confirmPw;
+    private String pic;
 }
-
