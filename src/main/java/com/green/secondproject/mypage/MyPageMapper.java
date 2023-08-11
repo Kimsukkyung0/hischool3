@@ -9,5 +9,5 @@ import java.util.List;
 public interface MyPageMapper {
     int updUserInfo(UserUpdDto dto);
     int delUser(DelUserDto dto);
-    List<SelUserMyPageVo> selUserMyPage(SelUserMyPageDto dto);
+    SelUserMyPageVo selUserMyPage(SelUserMyPageDto dto);
 }

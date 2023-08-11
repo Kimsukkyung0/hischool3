@@ -7,6 +7,7 @@ import com.green.secondproject.header.model.SelSchoolLogoDto;
 import com.green.secondproject.header.model.SelSchoolLogoVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +17,8 @@ import java.util.List;
 public class HeaderService {
     private final HeaderMapper mapper;
 
+    @Value("${file.logoPath}")
+    private String logoPath;
 
     public List<SelSchoolInfoVo> selSchoolInfo(MyUserDetails myuser) {
         SelSchoolInfoDto dto = new SelSchoolInfoDto();
@@ -26,6 +29,9 @@ public class HeaderService {
     public SelSchoolLogoVo selSchoolLogo(MyUserDetails myuser) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();
         dto.setUserId(myuser.getUserId());
-        return mapper.selSchoolLogo(dto);
+
+        SelSchoolLogoVo logoVo = mapper.selSchoolLogo(dto);
+        logoVo.setLogo(logoPath + "/" + logoVo.getLogo());
+        return logoVo;
     }
 }
