@@ -106,8 +106,9 @@
     </insert>
 
     <select id="stulist">
-        SELECT user_id userid,nm FROM user
-        WHERE role = "ROLE_STD" AND class_id = #{classid} and apr_yn =1;
+        SELECT nm FROM user
+        WHERE role = "ROLE_STD" AND class_id = #{classid}
+        and apr_yn =1 and user_id = #{userid};
     </select>
 
 
