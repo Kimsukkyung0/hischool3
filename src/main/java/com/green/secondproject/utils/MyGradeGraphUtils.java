@@ -26,20 +26,21 @@ public class MyGradeGraphUtils {
 
 
     public static List<List<TeacherGraphVo>> teacherGraphListAtb(){
-        List<TeacherGraphVo> subList = new ArrayList<>();
         List<List<TeacherGraphVo>> result = new ArrayList<>();
+
         for (int i = 0; i < cateNm.length; i++) {
+            List<TeacherGraphVo> subList = new ArrayList<>();
+            for (int j = 1; j <= RATING_NUM; j++) {
                 TeacherGraphVo tmp = new TeacherGraphVo();
                 tmp.setCateNm(cateNm[i]);
-            for (int j = 1; j <= RATING_NUM; j++) {
                 tmp.setRating(j);
                 tmp.setPercentage(0);
                 subList.add(tmp);
             }
             result.add(subList);
-            log.info("result : {}",result);
         }
 
+        log.info("result : {}",result);
         return result;
     }
 }

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -107,6 +108,7 @@ public class TeacherSerivce {
         Long[] cateIdForAca = mg.getCateIdForAca();//1367
         String[] cateNm = MyGradeGraphUtils.cateNm;//국수영한
         int RATING_NUM = mg.RATING_NUM;
+        DecimalFormat df = new DecimalFormat("0.00");
         List<List<TeacherGraphVo>> subResult = MyGradeGraphUtils.teacherGraphListAtb();
         //과목 4 * 등급 9  (0%가 들어있는 리스트)
 
@@ -119,6 +121,11 @@ public class TeacherSerivce {
             //일단 국 9 수 9 영 9 한 9
             List<TeacherGraphVo> subSubList = subResult.get(i);
             Long tmpCateIdForAca = cateIdForAca[i];
+            double vanMemNum = mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
+                    categoryId(tmpCateIdForAca)
+                    .classId(classId)
+                    .build());
+            log.info("vanMemNum : {}", vanMemNum);
 
             //mapperList -  percentage = 인원수
             List<TeacherGraphVo> tmpVoList = mapper.teacherAcaGraph(classId,tmpCateIdForAca);//1번
@@ -133,10 +140,7 @@ public class TeacherSerivce {
                 for (TeacherGraphVo voComp : tmpVoList){
                     if(subSubSubList.getRating() == voComp.getRating()){
                         subSubSubList.setPercentage(getPercentage(voComp.getPercentage()
-                                , mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
-                                        categoryId(tmpCateIdForAca)
-                                        .classId(classId)
-                                        .build())));
+                                ,vanMemNum));
                     }
                     tmpSubList.add(subSubSubList);
                 }
@@ -172,7 +176,8 @@ public class TeacherSerivce {
     }
 
     private double getPercentage (double count, double numberOfClassMembers) {
-        double tmp = (count /numberOfClassMembers)*100;
+//        double tmp = (double)(Math.round((count / numberOfClassMembers) * 100) /100);
+        double tmp =  Math.round((count/numberOfClassMembers) * 10000) / 100.0;
         return tmp;
     }
 
