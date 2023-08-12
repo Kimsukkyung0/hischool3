@@ -126,8 +126,6 @@ public class StudentService {
         return mapper.selAcaTestResultByDatesAndPeriod(param);
     }
 
-    ;
-
     public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
