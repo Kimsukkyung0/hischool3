@@ -5,6 +5,7 @@ import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentMapper;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.teacher.model.*;
+import com.green.secondproject.utils.MyGradeGraphUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class TeacherSerivce {
     private final TeacherMapper mapper;
     private final AuthenticationFacade facade;
     private final StudentService stService;
+
+
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         SelSignedStudentDto dto = new SelSignedStudentDto();
@@ -70,13 +73,10 @@ public class TeacherSerivce {
         return mapper.updMockResult(dto);
     }
 
-
     public int updAcaResult(UpdAcaResultDto dto) {
         dto.setResultId(dto.getResultId());
         return mapper.updAcaResult(dto);
     }
-
-
 
 
     public int delMockRusult(Long resultId) {
@@ -103,34 +103,73 @@ public class TeacherSerivce {
     }
 
     public TeacherGraphContainerVo teacherAcaGraph(Long classId) {
-        Long[] cateIdForAca = {1L,3L,6L,8L};
+        MyGradeGraphUtils mg = new MyGradeGraphUtils();
+        Long[] cateIdForAca = mg.getCateIdForAca();//1367
+        String[] cateNm = MyGradeGraphUtils.cateNm;//국수영한
+        int RATING_NUM = mg.RATING_NUM;
+        List<List<TeacherGraphVo>> subResult = MyGradeGraphUtils.teacherGraphListAtb();
+        //과목 4 * 등급 9  (0%가 들어있는 리스트)
 
-        List<List<TeacherGraphVo>> subResult = new ArrayList<>();
+        //과목을 넣기위한 임시거처..?
+        List<List<TeacherGraphVo>> tmpSubResult = new ArrayList<>();
+        List<TeacherGraphVo> tmpSubList = new ArrayList<>();
 
-        for (int i = 0; i < cateIdForAca.length; i++) {
-            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
-            subResult.add(tmpVo);
+        for (int i = 0; i < cateNm.length; i++) { //4번 돌것이다.
+            //국수영한 4개 * 9개의 리스트 받아오기
+            //일단 국 9 수 9 영 9 한 9
+            List<TeacherGraphVo> subSubList = subResult.get(i);
+            Long tmpCateIdForAca = cateIdForAca[i];
+
+            //mapperList -  percentage = 인원수
+            List<TeacherGraphVo> tmpVoList = mapper.teacherAcaGraph(classId,tmpCateIdForAca);//1번
+            log.info("tmpVoList : {}", tmpVoList);
+            //과목 id
+            log.info("cateIdForAca[i] : {}", cateIdForAca[i]);
+
+            for (int j = 0; j < RATING_NUM; j++) {
+                //0리스트 과목명/등급/명수만 갖고있는 리스트 9개로 분해
+                TeacherGraphVo subSubSubList = subSubList.get(j);
+
+                for (TeacherGraphVo voComp : tmpVoList){
+                    if(subSubSubList.getRating() == voComp.getRating()){
+                        subSubSubList.setPercentage(getPercentage(voComp.getPercentage()
+                                , mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
+                                        categoryId(tmpCateIdForAca)
+                                        .classId(classId)
+                                        .build())));
+                    }
+                    tmpSubList.add(subSubSubList);
+                }
+                //mapper로부터 온 리스트 9개로 분해하려고 했지만 9보다 작을수도있음
+                tmpSubResult.add(tmpSubList);
+            }
         }
-        for (int i = 0; i < cateIdForAca.length; i++) {
-            subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
-        }
 
+
+
+//0점 없이 작동하는 애들
+//        for (int i = 0; i < cateIdForAca.length; i++) {
+//            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
+//            subResult.add(tmpVo);
+//        }
+//        for (int i = 0; i < cateIdForAca.length; i++) {
+//            subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
+//        }
+//
+//안되는애들 하다 포기한 애들
+//        for (int i = 0; i < cateNm.length; i++) {
+//            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
+//            subResult.add(tmpVo);
+//            getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build()));
+//
+////            for (int j = 1; j <=RATING_NUM; j++) {
+////                subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
+////            }
+//
+//        }
         String date = stService.getMidFinalFormOfDate(mapper.getLatestTest());
         return TeacherGraphContainerVo.builder().date(date).list(subResult).build();
     }
-
-//        List<TeacherGraphVo> koList =
-//        List<TeacherGraphVo> maList = mapper.teacherAcaGraph(classId,maCateId);
-//        List<TeacherGraphVo> enList = mapper.teacherAcaGraph(classId,enCateId);
-//        List<TeacherGraphVo> htList = mapper.teacherAcaGraph(classId,htCateId);
-
-
-//        //그래프 형식
-//        subResult.add(getSubResult(koList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(koCateId).classId(classId).build())));
-//        subResult.add(getSubResult(maList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(maCateId).classId(classId).build())));
-//        subResult.add(getSubResult(enList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(enCateId).classId(classId).build())));
-//        subResult.add(getSubResult(htList, mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(htCateId).classId(classId).build())));
-
 
     private double getPercentage (double count, double numberOfClassMembers) {
         double tmp = (count /numberOfClassMembers)*100;

@@ -15,11 +15,8 @@ import java.util.List;
 @RequestMapping("/api/student")
 @Tag(name = "학생")
 public class StudentController {
+
     private final StudentService service;
-
-
-
-
 
     @GetMapping("/mock-table")
     @Operation(summary = "모의고사성적관리 테이블",  description = "요구값 : <br>" + "(1)year - 조회기준연도(yyyy) <br>"+"(2)mon - 조회기준월(1~12)<br><br>"+
