@@ -31,7 +31,8 @@ springdoc:
 
 file:
   dir: D:/home/download
-  imgPath: http://192.168.0.144:5003/img/hiSchool
+  imgPath: http://192.168.0.144:5003/img/hiSchool/userPic
+  aprimgPath: http://192.168.0.144:5003/img/hiSchool/userApr
   logoPath: http://192.168.0.144:5003/logo
 
 my-api:
