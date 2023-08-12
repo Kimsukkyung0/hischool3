@@ -3,13 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.green.secondproject.teacher.TeacherMapper">
-    
+
     <select id="selSignedStudent" resultType="SelSignedStudentVo">
         SELECT user_id userId, class_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
         WHERE role = "ROLE_STD"
-            AND apr_yn = 1
-            AND class_id = #{classId}
+        AND apr_yn = 1
+        AND class_id = #{classId}
     </select>
 
 
@@ -20,13 +20,12 @@
         AND apr_yn = 0
         AND class_id = #{classId}
     </select>
-    
 
 
     <select id="selAcaResult" resultType="SelAcaResultVo">
         SELECT A.result_id resultId, A.`year`, A.semester , A.mid_final mf
-                , B.category_id detailCateId, B.nm detailNm, C.category_id cateId
-                ,C.nm nm , A.score, A.rating , A.class_rank cr, A.whole_rank wr
+        , B.category_id detailCateId, B.nm detailNm, C.category_id cateId
+        ,C.nm nm , A.score, A.rating , A.class_rank cr, A.whole_rank wr
         FROM aca_result A
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
@@ -49,13 +48,13 @@
 
     <select id="selMockResult" resultType="SelMockResultVo">
         SELECT A.result_id resultId, A.`year`, A.mon, B.category_id detailCateId , B.nm detailNm
-                , C.category_id cateId, C.nm nm, A.standard_score sc, A.rating , A.percent
+        , C.category_id cateId, C.nm, A.standard_score sc, A.rating , A.percent
         FROM mock_result A
         INNER JOIN subject B
         ON B.subject_id = A.subject_id
         INNER JOIN sbj_category C
         ON C.category_id = B.category_id
-        WHERE  A.user_id = #{userId}
+        WHERE A.user_id = #{userId}
         <if test='year != null and year != ""'>
             AND A.year = #{year}
         </if>
@@ -73,11 +72,11 @@
     </update>
 
 
-<!--    <update id="rejectStudent">-->
-<!--        UPDATE user-->
-<!--        SET apr_yn = 2-->
-<!--        WHERE user_id = #{userId}-->
-<!--    </update>-->
+    <!--    <update id="rejectStudent">-->
+    <!--        UPDATE user-->
+    <!--        SET apr_yn = 2-->
+    <!--        WHERE user_id = #{userId}-->
+    <!--    </update>-->
 
 
     <update id="cancelAcceptStd">
@@ -89,11 +88,11 @@
     <update id="updMockResult">
         UPDATE mock_result
         SET year = #{year}
-            , mon = #{mon}
-            , standard_score = #{standardScore}
-            , rating = #{rating}
-            , percent = #{percent}
-            , subject_id = #{subjectId}
+        , mon = #{mon}
+        , standard_score = #{standardScore}
+        , rating = #{rating}
+        , percent = #{percent}
+        , subject_id = #{subjectId}
         WHERE result_id = #{resultId}
     </update>
 
@@ -112,8 +111,6 @@
     </update>
 
 
-
-
     <delete id="delMockResult">
         DELETE
         FROM mock_result
@@ -128,15 +125,14 @@
     </delete>
 
 
-
-<select id="classStudent">
-    SELECT  COUNT(C.class_id) classid FROM van A
-    INNER JOIN school B
-    ON A.school_id = B.school_id
-    INNER JOIN user C
-    ON A.class_id = C.class_id
-    WHERE C.class_id = #{classid}  AND C.role ="ROLE_STD" and apr_yn = 1 and del_yn = 0;
-</select>
+    <select id="classStudent">
+        SELECT COUNT(C.class_id) classid FROM van A
+        INNER JOIN school B
+        ON A.school_id = B.school_id
+        INNER JOIN user C
+        ON A.class_id = C.class_id
+        WHERE C.class_id = #{classid} AND C.role ="ROLE_STD" and apr_yn = 1 and del_yn = 0;
+    </select>
 
     <select id="aprStudent">
         SELECT count(user_id) userid FROM user
@@ -149,7 +145,8 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and concat(year,semester,mid_final) = (
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and
+        concat(year,semester,mid_final) = (
         SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
         group by rating
     </select>
@@ -160,11 +157,12 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and concat(year,semester,mid_final) = (
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and
+        concat(year,semester,mid_final) = (
         SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
     </select>
 
-    <select id = "getLatestTest">
+    <select id="getLatestTest">
         select MAX(concat(year,semester,mid_final)) from aca_result
     </select>
 </mapper>
