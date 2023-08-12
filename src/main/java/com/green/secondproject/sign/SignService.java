@@ -113,15 +113,22 @@ public class SignService {
 
         if(result == 1) {
             log.info("[getSignUpResult] 정상 처리 완료");
-            String targetDicPath = FILE_DIR + "/hiSchool/" + entity.getUserId();
+            String targetDicPath = FILE_DIR + "/hiSchool/userPic/" + entity.getUserId();
+            String targetDicPath1 = FILE_DIR + "/hiSchool/userApr/" + entity.getUserId();
             File targetDic = new File(targetDicPath);
             if (!targetDic.exists()) { targetDic.mkdirs(); }
+
+            File targetDic1 = new File(targetDicPath1);
+            if (!targetDic1.exists()) { targetDic1.mkdirs(); }
 
             File targetPic = new File(targetDicPath, savedPicNm);
             tempPic.renameTo(targetPic);
 
+            File targetPic1 = new File(targetDicPath1, savedPicNm);
+            tempPic.renameTo(targetPic1);
+
             if (aprPic != null) {
-                File targetAprPic = new File(targetDicPath, savedAprPicNm);
+                File targetAprPic = new File(targetDicPath1, savedAprPicNm);
                 tempAprPic.renameTo(targetAprPic);
             }
 
