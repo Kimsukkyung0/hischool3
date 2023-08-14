@@ -1,8 +1,12 @@
 package com.green.secondproject.subject;
 
+import com.green.secondproject.config.RedisService;
+import com.green.secondproject.config.security.AuthenticationFacade;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.SubjectMapper;
 import com.green.secondproject.teacher.subject.SubjectService;
 import com.green.secondproject.teacher.subject.model.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,6 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.security.auth.Subject;
@@ -29,8 +37,34 @@ public class SubjectServiceTest {
 
     @MockBean
     private SubjectMapper mapper;
+    @MockBean
+    private AuthenticationFacade FACADE;
     @Autowired
     private SubjectService service;
+
+    @MockBean
+    private RedisService redisService;
+
+    @BeforeEach
+    void beforeEach() {
+        UserDetails user = createUserDetails();
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
+
+    }
+
+    private UserDetails createUserDetails() {
+        List<String> roles = new ArrayList<>();
+        roles.add("ROLE_USER");
+        //roles.add("ROLE_ADMIN");
+
+        UserDetails userDetails = MyUserDetails.builder()
+                .userId(1L)
+                .roles(roles)
+                .build();
+        return userDetails;
+    }
 
     @Test
     @DisplayName("SubjectServiceTest - subcate()과목계열")
@@ -68,15 +102,22 @@ public class SubjectServiceTest {
     @Test
     @DisplayName("SubjectDetailTest2 - tcslist() 등록후 과목계열list")
     void tcslist() {
+        when(FACADE.getLoginUserPk()).thenReturn(1L);
         List<SubjectDetailVo2> list = new ArrayList<>();
         SubjectDetailVo2 vo2 = new SubjectDetailVo2();
         SubjectDetailDto dto = new SubjectDetailDto();
-        dto.setUserid(1L);
+        dto.setUserid(FACADE.getLoginUserPk());
         vo2.setNm("국어");
         vo2.setSubjectid(1L);
-        vo2.setUserid(1L);
-        list.add(vo2);
+        vo2.setUserid(FACADE.getLoginUserPk());
 
+        list.add(vo2);
+        when(mapper.tcslist(dto)).thenReturn(list);
+        List<SubjectDetailVo2> list1 =  service.tcslist((MyUserDetails) createUserDetails());
+
+        assertEquals(list.get(0).getNm(),list1.get(0).getNm());
+        assertEquals(list.get(0).getUserid(),list1.get(0).getUserid());
+        assertEquals(list.get(0).getSubjectid(),list1.get(0).getSubjectid());
 
     }
 }

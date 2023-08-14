@@ -56,10 +56,9 @@ public class SubjectController {
             , description =
             "categoryid - category 테이블에 세부과목 PK값" +
                     "<br>nm - 학생이름")
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long categoryid) {
+    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user) {
         SubjectDto dto = new SubjectDto();
         dto.setUserid(user.getUserId());
-        dto.setCategoryid(categoryid);
         return serivce.smalllist(dto);
     }
 

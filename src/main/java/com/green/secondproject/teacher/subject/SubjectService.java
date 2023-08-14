@@ -36,43 +36,43 @@ public class SubjectService {
         return mapper.subject(categoryid);
     }
 
-    List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user) {
+public List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user) {
         SubjectDetailDto dto = new SubjectDetailDto();
         dto.setUserid(user.getUserId());
         return mapper.tcslist(dto);
     }
 
-    List<SubjectVo2> smalllist(SubjectDto dto) {
+    public List<SubjectVo2> smalllist(SubjectDto dto) {
 
         return mapper.smalllist(dto);
     }
 
-    int classnum(@AuthenticationPrincipal MyUserDetails user) {
+    public int classnum(@AuthenticationPrincipal MyUserDetails user) {
         StudentClassDto dto = new StudentClassDto();
         dto.setClassid(user.getClassNum());
         dto.setSchoolid(user.getUserId());
         return mapper.classnum(dto);
     }
 
-    int schoolnum(@AuthenticationPrincipal MyUserDetails user) {
+    public int schoolnum(@AuthenticationPrincipal MyUserDetails user) {
         StudentSchoolDto dto = new StudentSchoolDto();
         dto.setGrade(user.getGrade());
         dto.setSchoolNm(user.getSchoolNm());
         return mapper.schoolnum(dto);
     }
 
-    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
+public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
         return mapper.mocksmalllist(categoryid);
     }
 
-    List<MockSubjectBigVo> mockbiglist() {
+    public List<MockSubjectBigVo> mockbiglist() {
         return mapper.mockbiglist();
     }
 
 
     //Post(insert)
 
-    int mockins(mockDto2 dto) {
+    public int mockins(mockDto2 dto) {
         List<MockSubjectVo> list = new ArrayList<>();
 
         for (int i = 0; i < dto.getList().size(); i++) {
@@ -88,7 +88,7 @@ public class SubjectService {
         return mapper.mockins(list);
     }
 
-    int instcsbj(SubjectInsDto2 dto) {
+    public int instcsbj(SubjectInsDto2 dto) {
         List<SubjectInsVo> list = new LinkedList<>();
 
         for (int i = 0; i < dto.getList().size(); i++) {
@@ -100,7 +100,7 @@ public class SubjectService {
         return mapper.instcsbj(list);
     }
 
-    int acasubject(AcalistDto2 dto) {
+    public int acasubject(AcalistDto2 dto) {
     List<AcaSubjectVo> list = new LinkedList<>();
         for (int i = 0; i <dto.getList().size() ; i++) {
             AcaSubjectVo vo = new AcaSubjectVo();
