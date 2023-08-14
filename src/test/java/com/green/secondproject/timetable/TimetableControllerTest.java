@@ -6,14 +6,20 @@ import com.green.secondproject.config.security.JwtTokenProvider;
 import com.green.secondproject.config.security.SecurityConfiguration;
 import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.timetable.model.TimeTableContainerVo;
 import com.green.secondproject.timetable.model.TimeTableGetDto;
+import com.green.secondproject.timetable.model.TimeTableVo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.security.SecurityConfig;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
 import org.springframework.http.MediaType;
@@ -33,6 +39,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyCollection;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,21 +50,24 @@ import static org.springframework.web.servlet.function.RequestPredicates.content
 
 //@AutoConfigureMockMvc // 아래 init 이랑 중복
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Import({SecurityConfiguration.class, JwtTokenProvider.class})
-@WebMvcTest(controllers = TimetableController.class)
+
+
+@WebMvcTest(TimetableController.class)
+//        excludeFilters = {
+//                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
+//)
 @WebAppConfiguration
 @Disabled
+@AutoConfigureMockMvc(addFilters = false)
 @Slf4j
 class TimetableControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
     @MockBean
     private TimetableService service;
-    @MockBean
-    private UserMapper mapper;
-    @MockBean
-    private RedisService redisService;
+
 
     @BeforeEach
     @DisplayName("create mockUserDetails for Test")
@@ -89,24 +99,29 @@ class TimetableControllerTest {
 //    @IfProfileValue(name = "springs.profile.active", value = "local")
     void getTimeTableByClassOfTheWeekWithAuth() throws Exception {
         //given
+        List<TimeTableVo> list = new ArrayList<>();
 
+        TimeTableContainerVo subResult = new TimeTableContainerVo("오성고등학교","1","1","1",list);
+        TimeTableGetDto dto = new TimeTableGetDto();
+        dto.setClassNum("1");
+        dto.setGrade("1");
+        dto.setSchoolNm("오성고등학교");
+        given(service.getTimeTableByClassAndTheWeek(any())).willReturn(subResult);
         //when
-       mvc.perform(get("/api/timetable"))
-                .andExpect(status().is4xxClientError())
+        mvc.perform(get("/api/timetable"))
+                .andExpect(status().isOk())
                 .andDo(print());
 
-
-        verify(service).getTimeTableByClassAndTheWeek(any());
+        TimeTableGetDto dto2 = new TimeTableGetDto();
+        verify(service).getTimeTableByClassAndTheWeek(dto);
         SecurityContextHolder.clearContext();
-
-
     }
+
     @Test
     @DisplayName("시간표테스트-익명유저")
     @Disabled
     void getTimeTableByClassOfTheWeekWithoutAuth() throws Exception {
-}
     }
-
+}
 
 
