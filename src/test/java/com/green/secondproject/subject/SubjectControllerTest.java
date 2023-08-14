@@ -37,10 +37,8 @@ public class SubjectControllerTest {
     @BeforeEach
     void beforeEach() {
         UserDetails user = createUserDetails();
-
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
-
     }
 
     private UserDetails createUserDetails() {

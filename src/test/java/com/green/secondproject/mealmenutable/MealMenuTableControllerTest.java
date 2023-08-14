@@ -1,73 +1,48 @@
-package com.green.secondproject.timetable;
+package com.green.secondproject.mealmenutable;
 
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.JwtAuthenticationFilter;
-import com.green.secondproject.config.security.JwtTokenProvider;
-import com.green.secondproject.config.security.SecurityConfiguration;
-import com.green.secondproject.config.security.UserMapper;
 import com.green.secondproject.config.security.model.MyUserDetails;
-import com.green.secondproject.timetable.model.TimeTableContainerVo;
+import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
+import com.green.secondproject.mealmenutable.model.MealTableVo;
+import com.green.secondproject.timetable.TimetableController;
+import com.green.secondproject.timetable.TimetableService;
 import com.green.secondproject.timetable.model.TimeTableGetDto;
-import com.green.secondproject.timetable.model.TimeTableVo;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.security.SecurityConfig;
-import org.junit.jupiter.api.*;
-import org.mockito.Mock;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyCollection;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
-//@AutoConfigureMockMvc // 아래 init 이랑 중복
-//@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-
-
-@WebMvcTest(TimetableController.class)
-//        excludeFilters = {
-//                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SecurityConfig.class)}
-//)
+@WebMvcTest(MealMenuTableController.class)
 @WebAppConfiguration
 @Disabled
 @AutoConfigureMockMvc(addFilters = false)
-@Slf4j
-class TimetableControllerTest {
-
+class MealMenuTableControllerTest {
     @Autowired
     private MockMvc mvc;
 
     @MockBean
-    private TimetableService service;
-
+    private MealMenuTableService service;
 
     @BeforeEach
     @DisplayName("create mockUserDetails for Test")
@@ -92,30 +67,40 @@ class TimetableControllerTest {
                 .build();
         return user;
     }
-
     @Test
-    @DisplayName("시간표테스트")
+    @DisplayName("급식표테스트(월간)")
     @Disabled
-//    @IfProfileValue(name = "springs.profile.active", value = "local")
-    void getTimeTableByClassOfTheWeekWithAuth() throws Exception {
-        //given
-        List<TimeTableVo> list = new ArrayList<>();
+    void getMealTableBySchoolOfTheMonth() throws Exception {
+        String requestSchoolNm = "오성고등학교";
+        List<MealTableVo> list = new ArrayList<>();
+        MealTableContainerVo vo = new MealTableContainerVo(requestSchoolNm,"202305",list);
+        given(service.getMealTableBySchoolOfTheMonth(any())).willReturn(vo);
 
-        TimeTableContainerVo subResult = new TimeTableContainerVo("오성고등학교","1","1","1",list);
-        TimeTableGetDto dto = new TimeTableGetDto();
-        dto.setClassNum("1");
-        dto.setGrade("1");
-        dto.setSchoolNm("오성고등학교");
-        given(service.getTimeTableByClassAndTheWeek(any())).willReturn(subResult);
-        //when
-        mvc.perform(get("/api/timetable"))
+        mvc.perform(get("/api/meal"))
                 .andExpect(status().isOk())
                 .andDo(print());
 
-        TimeTableGetDto dto2 = new TimeTableGetDto();
-        verify(service).getTimeTableByClassAndTheWeek(dto);
+        verify(service).getMealTableBySchoolOfTheMonth(requestSchoolNm);
+        assertEquals(requestSchoolNm,vo.getSchoolNm());
+        SecurityContextHolder.clearContext();
+
+    }
+
+    @Test
+    @DisplayName("급식표테스트(주간)")
+    @Disabled
+    void getMealTableBySchoolOfTheWeek() throws Exception {
+        String requestSchoolNm = "오성고등학교";
+        List<MealTableVo> list = new ArrayList<>();
+        MealTableContainerVo vo = new MealTableContainerVo(requestSchoolNm,"202305",list);
+        given(service.getMealTableBySchoolOfTheWeek(any())).willReturn(vo);
+
+        mvc.perform(get("/api/meal"))
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        verify(service).getMealTableBySchoolOfTheWeek(requestSchoolNm);
+        assertEquals(requestSchoolNm,vo.getSchoolNm());
         SecurityContextHolder.clearContext();
     }
 }
-
-
