@@ -20,7 +20,7 @@
         </if>
         <if test='mon != null and mon != ""'>
             AND A.mon = #{mon}
-    </if>
+        </if>
     ORDER BY A.year desc, A.mon desc, cateName asc
     </select>
 

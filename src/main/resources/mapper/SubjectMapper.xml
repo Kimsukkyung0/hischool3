@@ -82,7 +82,7 @@
         (user_id,subject_id)
         VALUES
         <foreach collection="list" item="item" separator=",">
-        (#{item.userid},#{item.subjectid})
+            (#{item.userid},#{item.subjectid})
 
         </foreach>
     </insert>
@@ -106,8 +106,9 @@
     </insert>
 
     <select id="stulist">
-        SELECT user_id userid,nm FROM user
-        WHERE role = "ROLE_STD" AND class_id = #{classid} and apr_yn =1;
+        SELECT nm FROM user
+        WHERE role = "ROLE_STD" AND class_id = #{classid}
+        and apr_yn =1 and user_id = #{userid};
     </select>
 
 
@@ -123,6 +124,7 @@
         WHERE D.class_id = #{classId} and B.category_id = #{categoryId}
         and A.year = year(NOW()) and mon = 6
         GROUP BY B.nm, rating;
+
     </select>
 
     <select id="mocktotal">
@@ -143,7 +145,8 @@
     </select>
 
     <select id="selaca">
-        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank wholeRank, A.semester,A.mid_final midfinal FROM
+        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank
+        wholeRank, A.semester,A.mid_final midfinal FROM
         aca_result A
         INNER JOIN
         subject B

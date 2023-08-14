@@ -91,9 +91,10 @@ public class SubjectController {
 
     @GetMapping("/stulist")
     @Operation(summary = "학생pk값과 이름")
-    List<StudentListVo> stulist(@AuthenticationPrincipal MyUserDetails user) {
+    List<StudentListVo> stulist(@AuthenticationPrincipal MyUserDetails user,@RequestParam Long userid) {
         StudentListDto dto = new StudentListDto();
         dto.setClassid(user.getClassId());
+        dto.setUserid(userid);
         return serivce.stulist(dto);
     }
 
