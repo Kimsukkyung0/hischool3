@@ -35,19 +35,16 @@ public class SignService {
     private final String FILE_DIR;
     private final AuthenticationFacade facade;
     private final RedisService redisService;
-    private final ObjectMapper objectMapper;
 
     @Autowired
     public SignService(UserMapper mapper, JwtTokenProvider provider, PasswordEncoder encoder,
-                       @Value("${file.dir}") String fileDir, AuthenticationFacade facade, RedisService redisService,
-                       ObjectMapper objectMapper) {
+                       @Value("${file.dir}") String fileDir, AuthenticationFacade facade, RedisService redisService) {
         MAPPER = mapper;
         JWT_PROVIDER = provider;
         PW_ENCODER = encoder;
         FILE_DIR = MyFileUtils.getAbsolutePath(fileDir);
         this.facade = facade;
         this.redisService = redisService;
-        this.objectMapper = objectMapper;
     }
 
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
@@ -135,6 +132,8 @@ public class SignService {
             setSuccessResult(resultDto);
         } else {
             log.info("[getSignUpResult] 실패 처리 완료");
+            tempPic.delete();
+            if (tempAprPic != null) { tempAprPic.delete(); }
             setFailResult(resultDto);
         }
         return resultDto;
@@ -150,6 +149,7 @@ public class SignService {
         log.info("[getSignInResult] email: {}", p.getEmail());
 
         log.info("[getSignInResult] 패스워드 비교");
+        log.info("user: {}", user);
         if(!PW_ENCODER.matches(p.getPw(), user.getPw())) {
             throw new RuntimeException("비밀번호 불일치");
         }

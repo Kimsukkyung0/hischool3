@@ -21,12 +21,12 @@ class StudentMapperTest {
     @Test
     @DisplayName("학생메인 내신그래프 mapper TEST")
     void selMockTestResultByDates() {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(1L);
-
-        List<StudentMockSumResultVo> expectedList = new ArrayList<>();
-        expectedList.add(StudentMockSumResultVo.builder().year("2023").mon("6").cateName("국어").nm().standardScore().rating().percent().build()));
-        expectedList.add(StudentMockSumResultVo.builder().year("2023").mon("6").cateName("국어").nm().standardScore().rating().percent().build()));
+//        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+//        dto.setUserId(1L);
+//
+//        List<StudentMockSumResultVo> expectedList = new ArrayList<>();
+//        expectedList.add(StudentMockSumResultVo.builder().year("2023").mon("6").cateName("국어").nm().standardScore().rating().percent().build()));
+//        expectedList.add(StudentMockSumResultVo.builder().year("2023").mon("6").cateName("국어").nm().standardScore().rating().percent().build()));
     }
 
     @Test
