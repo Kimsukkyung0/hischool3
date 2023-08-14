@@ -63,9 +63,9 @@ spring:
     url: jdbc:mariadb://localhost:3306/hi_school_test
     username: root
     password: green502
-  sql:
-    init:
-      mode: always
-      schema-locations: classpath:init/schema.sql
-      data-locations: classpath:init/data.sql
+#  sql:
+#    init:
+#      mode: always
+#      schema-locations: classpath:init/schema.sql
+#      data-locations: classpath:init/data.sql
 

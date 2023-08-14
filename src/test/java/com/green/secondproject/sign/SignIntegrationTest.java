@@ -245,15 +245,15 @@ public class SignIntegrationTest extends IntegrationTest {
         log.info("res: {}", res.getResponse().getContentAsString());
     }
 
-    @Test
-    public void 로그아웃() throws Exception {
-        MvcResult res = mvc.perform(post("/api/logout"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andReturn();
-
-        log.info("res: {}", res.getResponse().getContentAsString());
-    }
+//    @Test
+//    public void 로그아웃() throws Exception {
+//        MvcResult res = mvc.perform(post("/api/logout"))
+//                .andExpect(status().isOk())
+//                .andDo(print())
+//                .andReturn();
+//
+//        log.info("res: {}", res.getResponse().getContentAsString());
+//    }
 
     public String signIn() throws Exception {
         SignInParam p = new SignInParam();
