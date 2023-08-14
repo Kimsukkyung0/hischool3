@@ -4,26 +4,34 @@ import com.green.secondproject.IntegrationTest;
 import com.green.secondproject.config.RedisService;
 import com.green.secondproject.config.exception.MyErrorResponse;
 import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.sign.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
@@ -39,6 +47,25 @@ public class SignIntegrationTest extends IntegrationTest {
 
     @Autowired
     private RedisService service;
+
+    @BeforeEach
+    void beforeEach() {
+        UserDetails user = createUserDetails();
+
+        SecurityContext context = SecurityContextHolder.getContext();
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(
+                user, user.getPassword(), user.getAuthorities()));
+    }
+
+    private UserDetails createUserDetails() {
+        List<String> roles = new ArrayList<>();
+        roles.add("ROLE_TC");
+
+        return MyUserDetails.builder()
+                .userId(3L)
+                .roles(roles)
+                .build();
+    }
 
     @Test
     @DisplayName("회원가입")
@@ -88,7 +115,7 @@ public class SignIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public String 로그인_성공() throws Exception {
+    public void 로그인_성공() throws Exception {
         SignInParam p = new SignInParam();
         p.setEmail("tc@gmail.com");
         p.setPw("1111");
@@ -110,8 +137,6 @@ public class SignIntegrationTest extends IntegrationTest {
         log.info("data: {}", data);
 
         assertEquals(resultDto.getRefreshToken(), data);
-
-        return resultDto.getRefreshToken();
     }
 
     @Test
@@ -179,7 +204,7 @@ public class SignIntegrationTest extends IntegrationTest {
 
     @Test
     public void accessToken_재발행() throws Exception {
-        String refreshToken = 로그인_성공();
+        String refreshToken = signIn();
         TokenDto dto = new TokenDto();
         dto.setRefreshToken(refreshToken);
 
@@ -194,7 +219,7 @@ public class SignIntegrationTest extends IntegrationTest {
     }
 
     @Test
-    public void 이메일_인증() throws Exception {
+    public void 이메일_인증코드_발송() throws Exception {
         String email = "gyujin0912@gmail.com";
 
         MvcResult res = mvc.perform(post("/api/mail-confirm")
@@ -202,5 +227,70 @@ public class SignIntegrationTest extends IntegrationTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andReturn();
+
+        log.info("code: {}", res.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void 인증코드_확인() throws Exception {
+        String code = mailConfirm();
+
+        MvcResult res = mvc.perform(post("/api/code-confirm")
+                        .param("code", code))
+                .andExpect(status().isOk())
+                .andExpect((content().string("1")))
+                .andDo(print())
+                .andReturn();
+
+        log.info("res: {}", res.getResponse().getContentAsString());
+    }
+
+    @Test
+    public void 로그아웃() throws Exception {
+        MvcResult res = mvc.perform(post("/api/logout"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        log.info("res: {}", res.getResponse().getContentAsString());
+    }
+
+    public String signIn() throws Exception {
+        SignInParam p = new SignInParam();
+        p.setEmail("tc@gmail.com");
+        p.setPw("1111");
+
+        String paramJson = om.writeValueAsString(p);
+
+        MvcResult res = mvc.perform(post("/api/sign-in")
+                        .content(paramJson)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        log.info("res: {}", res.getResponse().getContentAsString());
+        SignInResultDto resultDto = om.readValue(res.getResponse().getContentAsString(), SignInResultDto.class);
+
+        String redisKey = "c:RT(Server):" + mapper.selUserByEmail(p.getEmail()).getUserId() + ":127.0.0.1";
+        String data = service.getData(redisKey);
+        log.info("data: {}", data);
+
+        assertEquals(resultDto.getRefreshToken(), data);
+
+        return resultDto.getRefreshToken();
+    }
+    public String mailConfirm() throws Exception {
+        String email = "gyujin0912@gmail.com";
+
+        MvcResult res = mvc.perform(post("/api/mail-confirm")
+                        .param("email", email))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andReturn();
+
+        String code = res.getResponse().getContentAsString();
+        log.info("code: {}", code);
+        return code;
     }
 }

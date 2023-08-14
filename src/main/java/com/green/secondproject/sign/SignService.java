@@ -235,6 +235,11 @@ public class SignService {
         redisService.setDataExpire(accessToken, "logout", expiration);
     }
 
+    public int mailCheck(String email) {
+        UserVo user = MAPPER.selUserByEmail(email);
+        return user == null ? 1 : 0;
+    }
+
     private void setSuccessResult(SignUpResultDto result) {
         result.setSuccess(true);
         result.setCode(CommonRes.SUCCESS.getCode());
