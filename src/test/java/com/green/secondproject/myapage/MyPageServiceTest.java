@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Profile;
 
 @Profile("mypageTest")
 @Primary
-public class TestMyPageService  {
+public class MyPageServiceTest {
 
-    public TestMyPageService() {
+    public MyPageServiceTest() {
         super();
     }
 

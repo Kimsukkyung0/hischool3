@@ -9,6 +9,7 @@
         FROM user
         WHERE role = "ROLE_STD"
         AND apr_yn = 1
+        AND del_yn = 0
         AND class_id = #{classId}
     </select>
 
@@ -18,6 +19,7 @@
         FROM user
         WHERE role = "ROLE_STD"
         AND apr_yn = 0
+        AND del_yn = 0
         AND class_id = #{classId}
     </select>
 
