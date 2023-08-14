@@ -21,28 +21,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(SpringExtension.class)
-@Import({SubjectService.class})
+@Import({ScheduleService.class})
 public class ScheduleServiceTest {
 
-    @Autowired
-    private SubjectMapper mapper;
-
-    private SubjectService service;
-
-    @Test
-    @DisplayName("SubjectServiceTest")
-
- void subCate(){
-List<SubjectVo> list = new ArrayList<>();
-//given
-
-
-//when
-when(mapper.subCate()).thenReturn(list);
-List<SubjectVo> result = service.subcate();
-//then
-        assertEquals(4,result.size());
-        assertEquals("국어",result.get(0).getNm());
-        verify(mapper).subCate();
-    }
 }
