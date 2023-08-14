@@ -55,7 +55,7 @@ public class MyPageService {
 
 
     public int updUserInfo(MultipartFile pic, UpdInfoParam p, MyUserDetails myuser) {
-        String centerPath = String.format("hischool/userPic/%d", myuser.getUserId());
+        String centerPath = String.format("hiSchool/userPic/%d", myuser.getUserId());
         String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
 
         if (pic != null) {
