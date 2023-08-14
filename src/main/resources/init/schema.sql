@@ -1,5 +1,3 @@
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `school` (
                           `school_id` bigint(20) NOT NULL AUTO_INCREMENT,
                           `nm` varchar(50) NOT NULL,
@@ -11,6 +9,7 @@ CREATE TABLE `school` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `van` (
                        `class_id` bigint(20) NOT NULL AUTO_INCREMENT,
                        `school_id` bigint(20) NOT NULL,
@@ -47,6 +46,7 @@ CREATE TABLE `user` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `sbj_category` (
                                 `category_id` bigint(20) NOT NULL AUTO_INCREMENT,
                                 `nm` varchar(10) NOT NULL,
@@ -56,6 +56,7 @@ CREATE TABLE `sbj_category` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `subject` (
                            `subject_id` bigint(20) NOT NULL AUTO_INCREMENT,
                            `category_id` bigint(20) NOT NULL,
@@ -67,6 +68,7 @@ CREATE TABLE `subject` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `aca_result` (
                               `result_id` bigint(20) NOT NULL AUTO_INCREMENT,
                               `user_id` bigint(20) NOT NULL,
@@ -87,6 +89,7 @@ CREATE TABLE `aca_result` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `mock_result` (
                                `result_id` bigint(20) NOT NULL AUTO_INCREMENT,
                                `user_id` bigint(20) NOT NULL,
@@ -105,6 +108,7 @@ CREATE TABLE `mock_result` (
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+
 CREATE TABLE `tc_sbj` (
                           `user_id` bigint(20) NOT NULL,
                           `subject_id` bigint(20) NOT NULL,

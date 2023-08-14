@@ -1,3 +1,4 @@
+
 INSERT INTO `school` VALUES
                          (1,'함지고등학교','hamji.png','7240273'),
                          (2,'오성고등학교','osung.png','7240099');
@@ -26,8 +27,8 @@ INSERT INTO `aca_result` VALUES
                              (2,1,1,'2023',1,1,100,1,1,1);
 
 INSERT INTO `mock_result` VALUES
-                              (3,1,4,'2023',6,110,1,3),
-                              (4,1,7,'2023',12,0,3,30);
+                              (1,1,4,'2023',6,110,1,3),
+                              (2,1,7,'2023',12,0,3,30);
 
 INSERT INTO `tc_sbj` VALUES
                          (1,1),

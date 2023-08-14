@@ -38,6 +38,7 @@ file:
 my-api:
   key: 9a7b0b8f560b480abf0d0cb941af2bea
 
+
 ---
 
 spring:
@@ -52,7 +53,6 @@ spring:
 
 file:
   dir: /home/download
-
 ---
 
 spring:
@@ -62,8 +62,10 @@ spring:
   datasource:
     url: jdbc:mariadb://localhost:3306/hi_school_test
     username: root
+    password: green502
   sql:
     init:
       mode: always
       schema-locations: classpath:init/schema.sql
       data-locations: classpath:init/data.sql
+
