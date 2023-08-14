@@ -1,5 +1,6 @@
 package com.green.secondproject.mypage.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
