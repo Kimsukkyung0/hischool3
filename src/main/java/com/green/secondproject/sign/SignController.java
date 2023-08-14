@@ -103,6 +103,12 @@ public class SignController {
                 .build();
     }
 
+//    @GetMapping("/mail-check")
+//    @Operation(summary = "이메일 중복 확인", description = "사용 가능(1), 불가능(0)")
+//    public int mailCheck(@RequestParam String email) {
+//        return SERVICE.mailCheck(email);
+//    }
+
 //    @GetMapping("/test")
 //    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
 //        log.info("userDetails: {}", userDetails);

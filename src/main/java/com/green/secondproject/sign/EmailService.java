@@ -1,6 +1,7 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.config.RedisService;
+import com.green.secondproject.sign.model.UserVo;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
