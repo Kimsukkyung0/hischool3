@@ -2,9 +2,11 @@ package com.green.secondproject.sign.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.ToString;
 
 @AllArgsConstructor
 @Getter
+@ToString
 public class UserVo {
     private Long userId;
     private String email;
