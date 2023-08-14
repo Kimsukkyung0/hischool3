@@ -31,11 +31,11 @@ public class MyGradeGraphUtils {
         for (int i = 0; i < cateNm.length; i++) {
             List<TeacherGraphVo> subList = new ArrayList<>();
             for (int j = 1; j <= RATING_NUM; j++) {
-                TeacherGraphVo tmp = new TeacherGraphVo();
-                tmp.setCateNm(cateNm[i]);
-                tmp.setRating(j);
-                tmp.setPercentage(0);
-                subList.add(tmp);
+               subList.add(TeacherGraphVo.builder()
+                       .cateNm(cateNm[i])
+                       .rating(j)
+                       .percentage(0)
+                       .build());
             }
             result.add(subList);
         }

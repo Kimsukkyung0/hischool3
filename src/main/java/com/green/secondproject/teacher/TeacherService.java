@@ -2,7 +2,6 @@ package com.green.secondproject.teacher;
 
 import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.config.security.model.MyUserDetails;
-import com.green.secondproject.student.StudentMapper;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.teacher.model.*;
 import com.green.secondproject.utils.MyGradeGraphUtils;
@@ -10,14 +9,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TeacherSerivce {
+public class TeacherService {
     private final TeacherMapper mapper;
     private final AuthenticationFacade facade;
     private final StudentService stService;
@@ -97,6 +94,7 @@ public class TeacherSerivce {
     public int classStudent(ClassStudentDto dto){
         return mapper.classStudent(dto);
     }
+
     public int aprStudent(Long classid){
         ClassStudentDto dto = new ClassStudentDto();
         dto.setClassid(classid);
@@ -108,7 +106,6 @@ public class TeacherSerivce {
         Long[] cateIdForAca = mg.getCateIdForAca();//1367
         String[] cateNm = MyGradeGraphUtils.cateNm;//국수영한
         int RATING_NUM = mg.RATING_NUM;
-        DecimalFormat df = new DecimalFormat("0.00");
         List<List<TeacherGraphVo>> subResult = MyGradeGraphUtils.teacherGraphListAtb();
         //과목 4 * 등급 9  (0%가 들어있는 리스트)
 
