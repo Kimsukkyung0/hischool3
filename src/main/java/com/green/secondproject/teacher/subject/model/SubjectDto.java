@@ -7,5 +7,4 @@ import java.util.List;
 @Data
 public class SubjectDto {
 private Long userid;
-private Long categoryid;
 }

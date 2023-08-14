@@ -1,5 +1,6 @@
 package com.green.secondproject.subject;
 
+import com.green.secondproject.config.security.AuthenticationFacade;
 import com.green.secondproject.teacher.subject.SubjectMapper;
 import com.green.secondproject.teacher.subject.SubjectService;
 import com.green.secondproject.teacher.subject.model.*;
@@ -29,6 +30,8 @@ public class SubjectServiceTest {
 
     @MockBean
     private SubjectMapper mapper;
+    @MockBean
+    private AuthenticationFacade FACADE;
     @Autowired
     private SubjectService service;
 
@@ -71,12 +74,17 @@ public class SubjectServiceTest {
         List<SubjectDetailVo2> list = new ArrayList<>();
         SubjectDetailVo2 vo2 = new SubjectDetailVo2();
         SubjectDetailDto dto = new SubjectDetailDto();
-        dto.setUserid(1L);
+        dto.setUserid(FACADE.getLoginUserPk());
         vo2.setNm("국어");
         vo2.setSubjectid(1L);
-        vo2.setUserid(1L);
+        vo2.setUserid(FACADE.getLoginUserPk());
         list.add(vo2);
-
+        when(mapper.tcslist(dto)).thenReturn(list);
+//        List<SubjectDetailVo2> list1 =  service.;
+//
+//        assertEquals(list.get(0).getNm(),list1.get(0).getNm());
+//        assertEquals(list.get(0).getUserid(),list1.get(0).getUserid());
+//        assertEquals(list.get(0).getSubjectid(),list1.get(0).getSubjectid());
 
     }
 }
