@@ -45,10 +45,10 @@ class MealMenuTableControllerTest {
     @MockBean
     private MealMenuTableService service;
 
+    CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
     @BeforeEach
     @DisplayName("create mockUserDetails for Test")
     void beforeEach() {
-        CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
         UserDetails user = testUser.getStudentUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user,user.getPassword(),user.getAuthorities()));

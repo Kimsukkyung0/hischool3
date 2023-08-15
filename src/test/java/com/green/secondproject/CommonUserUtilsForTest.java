@@ -11,7 +11,7 @@ public class CommonUserUtilsForTest {
     private UserDetails studentUser() throws UsernameNotFoundException {
         List<String> roles = new ArrayList<>();
         roles.add("ROLE_STD");
-        UserDetails user = MyUserDetails.builder()
+        UserDetails userStd = MyUserDetails.builder()
                 .userId(40L)
                 .email("aa@test.com")
                 .pw("123")
@@ -21,7 +21,7 @@ public class CommonUserUtilsForTest {
                 .pic("test.jpg")
                 .roles(roles)
                 .build();
-        return user;
+        return userStd;
     }
 
     public UserDetails getStudentUserDetails(){
@@ -31,7 +31,7 @@ public class CommonUserUtilsForTest {
     private UserDetails teacherUser() throws UsernameNotFoundException {
         List<String> roles = new ArrayList<>();
         roles.add("ROLE_TC");
-        UserDetails user = MyUserDetails.builder()
+        UserDetails userTc = MyUserDetails.builder()
                 .userId(1000L)
                 .email("bb@test.com")
                 .pw("123")
@@ -41,7 +41,7 @@ public class CommonUserUtilsForTest {
                 .pic("test.jpg")
                 .roles(roles)
                 .build();
-        return user;
+        return userTc;
     }
 
     public UserDetails getTeacherUserDetails(){
