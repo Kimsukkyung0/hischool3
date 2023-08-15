@@ -47,7 +47,7 @@ class MealMenuTableControllerTest {
 
     CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
     @BeforeEach
-    @DisplayName("create mockUserDetails for Test")
+    @DisplayName("테스트용 유저디테일 생성")
     void beforeEach() {
         UserDetails user = testUser.getStudentUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
