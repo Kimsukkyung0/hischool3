@@ -74,7 +74,7 @@ class TimetableControllerTest {
     @DisplayName("create mockUserDetails for Test")
     void beforeEach() {
         CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
-        UserDetails user = testUser.getFkUserDetails();
+        UserDetails user = testUser.getStudentUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user,user.getPassword(),user.getAuthorities()));
     }

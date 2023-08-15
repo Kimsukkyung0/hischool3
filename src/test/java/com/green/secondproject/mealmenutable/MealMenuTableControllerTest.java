@@ -1,5 +1,6 @@
 package com.green.secondproject.mealmenutable;
 
+import com.green.secondproject.CommonUserUtilsForTest;
 import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
@@ -47,26 +48,12 @@ class MealMenuTableControllerTest {
     @BeforeEach
     @DisplayName("create mockUserDetails for Test")
     void beforeEach() {
-        UserDetails user = createUserDetails();
+        CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
+        UserDetails user = testUser.getStudentUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user,user.getPassword(),user.getAuthorities()));
     }
 
-    private UserDetails createUserDetails() throws UsernameNotFoundException {
-        List<String> roles = new ArrayList<>();
-        roles.add("ROLE_STD");
-        UserDetails user = MyUserDetails.builder()
-                .userId(40L)
-                .email("aa@test.com")
-                .pw("123")
-                .schoolNm("오성고등학교")
-                .grade("1")
-                .classNum("1")
-                .pic("test.jpg")
-                .roles(roles)
-                .build();
-        return user;
-    }
     @Test
     @DisplayName("급식표테스트(월간)")
     @Disabled

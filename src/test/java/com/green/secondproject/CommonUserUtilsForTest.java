@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommonUserUtilsForTest {
-    private UserDetails fkUser() throws UsernameNotFoundException {
+    private UserDetails studentUser() throws UsernameNotFoundException {
         List<String> roles = new ArrayList<>();
         roles.add("ROLE_STD");
         UserDetails user = MyUserDetails.builder()
@@ -24,7 +24,27 @@ public class CommonUserUtilsForTest {
         return user;
     }
 
-    public UserDetails getFkUserDetails(){
-        return fkUser();
+    public UserDetails getStudentUserDetails(){
+        return studentUser();
+    }
+
+    private UserDetails teacherUser() throws UsernameNotFoundException {
+        List<String> roles = new ArrayList<>();
+        roles.add("ROLE_TC");
+        UserDetails user = MyUserDetails.builder()
+                .userId(1000L)
+                .email("bb@test.com")
+                .pw("123")
+                .schoolNm("오성고등학교")
+                .grade("3")
+                .classNum("1")
+                .pic("test.jpg")
+                .roles(roles)
+                .build();
+        return user;
+    }
+
+    public UserDetails getTeacherUserDetails(){
+        return teacherUser();
     }
 }
