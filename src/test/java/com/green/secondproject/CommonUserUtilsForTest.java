@@ -32,7 +32,7 @@ public class CommonUserUtilsForTest {
         List<String> roles = new ArrayList<>();
         roles.add("ROLE_TC");
         UserDetails userTc = MyUserDetails.builder()
-                .userId(1000L)
+                .userId(80L)
                 .email("bb@test.com")
                 .pw("123")
                 .schoolNm("오성고등학교")
