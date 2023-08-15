@@ -29,7 +29,6 @@ public class StudentService {
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
         dto.setMon(String.valueOf(now.getMonthValue()));
-        log.info("mon : {}", now.getMonthValue());
         try{
         List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
         List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
@@ -38,8 +37,6 @@ public class StudentService {
             StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
             result.add(tmpVo);
         }
-        log.info("sub : {}",sub);
-
 
         StringBuffer sb = new StringBuffer(sub.get(0).getDate());
 

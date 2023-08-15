@@ -1,5 +1,6 @@
 package com.green.secondproject.timetable;
 
+import com.green.secondproject.CommonUserUtilsForTest;
 import com.green.secondproject.config.RedisService;
 import com.green.secondproject.config.security.JwtAuthenticationFilter;
 import com.green.secondproject.config.security.JwtTokenProvider;
@@ -72,27 +73,11 @@ class TimetableControllerTest {
     @BeforeEach
     @DisplayName("create mockUserDetails for Test")
     void beforeEach() {
-        UserDetails user = createUserDetails();
+        CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
+        UserDetails user = testUser.getFkUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user,user.getPassword(),user.getAuthorities()));
     }
-
-    private UserDetails createUserDetails() throws UsernameNotFoundException {
-        List<String> roles = new ArrayList<>();
-        roles.add("ROLE_STD");
-        UserDetails user = MyUserDetails.builder()
-                .userId(40L)
-                .email("aa@test.com")
-                .pw("123")
-                .schoolNm("오성고등학교")
-                .grade("1")
-                .classNum("1")
-                .pic("test.jpg")
-                .roles(roles)
-                .build();
-        return user;
-    }
-
     @Test
     @DisplayName("시간표테스트")
     @Disabled
