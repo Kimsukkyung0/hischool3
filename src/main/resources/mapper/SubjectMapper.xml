@@ -54,7 +54,7 @@
     </select>
 
     <select id="schoolnum">
-        SELECT COUNT(B.nm) nm FROM van A
+        SELECT COUNT(B.nm) * 14 nm FROM van A
         INNER JOIN school B
         ON A.school_id = B.school_id
         INNER JOIN user C
