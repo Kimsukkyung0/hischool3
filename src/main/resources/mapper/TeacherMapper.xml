@@ -149,20 +149,18 @@
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
         where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and
-        concat(year,semester,mid_final) = (
-        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
+        concat(year,semester,mid_final) = 202312
         group by rating
     </select>
 
     <select id="getNumberOfStudentByCate">
-        select count(C.nm)
+        SELECT COUNT(C.category_id)
         from user A
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id = #{classId} and
-        concat(year,semester,mid_final) = (
-        SELECT MAX(concat(YEAR, semester, mid_final)) FROM aca_result)
+        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id=#{categoryId} and A.class_id = #{classId} AND
+        concat(year,semester,mid_final) = 202312
     </select>
 
     <select id="getLatestTest">

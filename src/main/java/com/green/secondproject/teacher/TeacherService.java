@@ -119,6 +119,7 @@ public class TeacherService {
             //국수영한 4개 * 9개의 리스트 받아오기
             //일단 국 9 수 9 영 9 한 9
             List<TeacherGraphVo> subSubList = subResult.get(i);
+//            Long tmpCateIdForAca = cateIdForAca[i];
             Long tmpCateIdForAca = cateIdForAca[i];
             double vanMemNum = mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
                     categoryId(tmpCateIdForAca)

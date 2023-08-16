@@ -84,7 +84,7 @@ class SignServiceTest {
     }
 
     @Test
-    void signIn() {
+    void 로그인() {
         SignInParam p = new SignInParam();
         p.setEmail("test@gmail.com");
         p.setPw("1111");
@@ -102,17 +102,5 @@ class SignServiceTest {
         assertEquals(user.getRole(), result.getRole());
 
         verify(mapper).selUserByEmail(any());
-    }
-
-    @Test
-    void refreshToken() {
-    }
-
-    @Test
-    void logout() {
-    }
-
-    @Test
-    void mailCheck() {
     }
 }

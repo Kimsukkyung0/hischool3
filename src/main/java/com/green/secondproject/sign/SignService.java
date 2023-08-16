@@ -258,9 +258,5 @@ public class SignService {
         result.setCode(CommonRes.FAIL.getCode());
         result.setMsg(CommonRes.FAIL.getMsg());
     }
-
-//    public MyUserDetails test() {
-//        return facade.getLoginUser();
-//    }
 }
 
