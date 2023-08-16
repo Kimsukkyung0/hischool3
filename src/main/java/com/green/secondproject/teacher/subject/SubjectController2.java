@@ -1,6 +1,7 @@
 package com.green.secondproject.teacher.subject;
 
 import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.teacher.subject.model.StudentClassDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,11 @@ public class SubjectController2 {
     @GetMapping("/class-num")
     @Operation(summary = "반석차 반전체인원")
     int classnum(@AuthenticationPrincipal MyUserDetails user){
+        StudentClassDto dto = new StudentClassDto();
+        dto.setClassid(user.getClassNum());
+        dto.setSchoolid(user.getUserId());
 
-        return serivce.classnum(user);
+        return serivce.classnum(dto);
     }
 
     @GetMapping("/school-snum")
