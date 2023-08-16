@@ -32,7 +32,7 @@ public class SignController {
             "email": ex) "test@gmail.com"<br>
             "pw": ex) "1111"
             """)
-    public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) throws Exception {
+    public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) {
         String ip = req.getRemoteAddr();
         log.info("[signIn] 로그인을 시도하고 있습니다. email: {}, pw: {}, ip: {}", p.getEmail(), p.getPw(), ip);
 
@@ -107,17 +107,5 @@ public class SignController {
 //    @Operation(summary = "이메일 중복 확인", description = "사용 가능(1), 불가능(0)")
 //    public int mailCheck(@RequestParam String email) {
 //        return SERVICE.mailCheck(email);
-//    }
-
-//    @GetMapping("/test")
-//    public MyUserDetails test(@AuthenticationPrincipal MyUserDetails userDetails) {
-//        log.info("userDetails: {}", userDetails);
-//        return userDetails;
-//    }
-
-//    @GetMapping("/test")
-//    public MyUserDetails test() {
-//        log.info("userDetails: {}", SERVICE.test());
-//        return SERVICE.test();
 //    }
 }

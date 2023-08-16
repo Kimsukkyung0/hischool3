@@ -47,10 +47,7 @@ public List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails use
         return mapper.smalllist(dto);
     }
 
-    public int classnum(@AuthenticationPrincipal MyUserDetails user) {
-        StudentClassDto dto = new StudentClassDto();
-        dto.setClassid(user.getClassNum());
-        dto.setSchoolid(user.getUserId());
+    public int classnum(StudentClassDto dto) {
         return mapper.classnum(dto);
     }
 

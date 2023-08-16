@@ -11,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 
 
@@ -23,7 +22,7 @@ public class SecurityConfiguration {
     private final JwtTokenProvider jwtTokenProvider;
     private final RedisService service;
 
-    //webSecurityCustomizer를 제외한 모든 것, 시큐리티를 거친다. 보안과 연관
+    //webSecurityCustomizer 를 제외한 모든 것, 시큐리티를 거친다. 보안과 연관
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         httpSecurity.authorizeHttpRequests(authz ->
