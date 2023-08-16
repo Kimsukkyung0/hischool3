@@ -121,9 +121,6 @@ public class SignService {
             File targetPic = new File(targetDicPath, savedPicNm);
             tempPic.renameTo(targetPic);
 
-            File targetPic1 = new File(targetDicPath1, savedPicNm);
-            tempPic.renameTo(targetPic1);
-
             if (aprPic != null) {
                 File targetAprPic = new File(targetDicPath1, savedAprPicNm);
                 tempAprPic.renameTo(targetAprPic);
@@ -141,20 +138,15 @@ public class SignService {
 
     public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
+
         UserVo user = MAPPER.selUserByEmail(p.getEmail());
 
         if (user == null) {
             throw new RuntimeException("존재하지 않는 이메일");
         }
-        log.info("[getSignInResult] email: {}", p.getEmail());
-
-        log.info("[getSignInResult] 패스워드 비교");
-        log.info("user: {}", user);
         if(!PW_ENCODER.matches(p.getPw(), user.getPw())) {
             throw new RuntimeException("비밀번호 불일치");
         }
-        log.info("[getSignInResult] 패스워드 일치");
-
         if (user.getAprYn() == 0) {
             throw new RuntimeException("미승인 계정");
         }

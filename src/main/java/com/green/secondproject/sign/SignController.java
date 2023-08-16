@@ -44,7 +44,6 @@ public class SignController {
         return dto;
     }
 
-    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "회원가입", description = """
             "email": ex) "std1@gmail.com"<br>
             "pw": ex) "1111"<br>
@@ -60,6 +59,7 @@ public class SignController {
             "pic": 프로필 사진<br>
             "aprPic": 선생님 인증사진
             """)
+    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public SignUpResultDto signUp(@RequestPart SignUpParam p, @RequestPart MultipartFile pic,
                                   @RequestPart(required = false) MultipartFile aprPic) {
         return SERVICE.signUp(p, pic, aprPic);
