@@ -151,18 +151,15 @@ public class TeacherController {
 
     @GetMapping("/class-student")
     @Operation(summary = "반 학생총원")
-    public int classStudent(@RequestParam Long classid){
-        ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(classid);
-
-        return service.classStudent(dto);
+    public int classStudent(@AuthenticationPrincipal MyUserDetails myuser){
+        return service.classStudent(myuser);
     }
 
 
     @GetMapping("/apr-student")
     @Operation(summary = "승인 대기 인원(n명)")
-    public int aprStudent(@RequestParam Long classid){
-        return service.aprStudent(classid);
+    public int aprStudent(@AuthenticationPrincipal MyUserDetails myuser){
+        return service.aprStudent(myuser);
     }
 
 

@@ -1,30 +1,24 @@
-package com.green.secondproject.myapage;
+package com.green.secondproject.mypage;
 
+import com.green.secondproject.CommonUserUtilsForTest;
 import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.JwtTokenProvider;
-import com.green.secondproject.config.security.SecurityConfiguration;
 import com.green.secondproject.config.security.UserMapper;
-import com.green.secondproject.config.security.model.MyUserDetails;
-import com.green.secondproject.mypage.MyPageController;
-import com.green.secondproject.mypage.MyPageMapper;
-import com.green.secondproject.mypage.MyPageService;
+import com.green.secondproject.mypage.model.SelUserMyPageDto;
 import com.green.secondproject.mypage.model.SelUserMyPageVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -34,15 +28,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-
-@Import({SecurityConfiguration.class, JwtTokenProvider.class})
-@WebMvcTest(controllers = MyPageController.class)
+//@WebMvcTest(MyPageController.class)
+@SpringBootTest
 @WebAppConfiguration
 @Disabled
+@AutoConfigureMockMvc(addFilters = false)
 @Slf4j
 class MyPageControllerTest {
     @Autowired
@@ -60,39 +51,52 @@ class MyPageControllerTest {
 
     @BeforeEach
     void beforeEach() {
-        UserDetails user = createUserDetails();
+        CommonUserUtilsForTest testUser = new CommonUserUtilsForTest();
+        UserDetails user = testUser.getStudentUserDetails();
         SecurityContext context = SecurityContextHolder.getContext();
-        context.setAuthentication(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
+        context.setAuthentication(new UsernamePasswordAuthenticationToken(user,user.getPassword(),user.getAuthorities()));
     }
 
-    private UserDetails createUserDetails() throws UsernameNotFoundException {
-        List<String> roles = new ArrayList<>();
-        roles.add("ROLE_STD");
-        UserDetails user = MyUserDetails.builder()
-                .userId(40L)
-                .email("aa@test.com")
-                .pw("123")
-                .schoolNm("오성고등학교")
-                .grade("1")
-                .classNum("1")
-                .pic("test.jpg")
-                .roles(roles)
-                .build();
-        return user;
-    }
+//    private UserDetails createUserDetails() throws UsernameNotFoundException {
+//        List<String> roles = new ArrayList<>();
+//        roles.add("ROLE_STD");
+//        UserDetails user = MyUserDetails.builder()
+//                .userId(40L)
+//                .email("aa@test.com")
+//                .pw("123")
+//                .schoolNm("오성고등학교")
+//                .grade("1")
+//                .classNum("1")
+//                .pic("test.jpg")
+//                .roles(roles)
+//                .build();
+//        return user;
+//    }
 
     @Test
     @Disabled
     void selectMyPage() throws Exception {
-        SelUserMyPageVo MyPageVo = new SelUserMyPageVo();
-        given(service.selUserMyPage(any())).willReturn(MyPageVo);
+//        SelUserMyPageVo MyPageVo = new SelUserMyPageVo();
+//        given(service.selUserMyPage(any())).willReturn(MyPageVo);
 
-        mvc.perform(get("/api/mypage"))
-                .andExpect(status().is4xxClientError())
+        SelUserMyPageVo vo = new SelUserMyPageVo();
+        vo.setUserId(1L);
+        vo.setEmail("aa@test.com");
+        vo.setSchnm("오성고등학교");
+        vo.setGrade("1");
+        vo.setVan("1");
+        vo.setPic("test.jpg");
+        vo.setRole("STD");
+        given(service.selUserMyPage(any())).willReturn(vo);
+
+        mvc.perform(get("/api/mypage/user-mypage"))
+                .andExpect(status().isOk())
                 .andDo(print());
 
+        SelUserMyPageDto dto = new SelUserMyPageDto();
         verify(service).selUserMyPage(any());
         SecurityContextHolder.clearContext();
     }
+
 }
 

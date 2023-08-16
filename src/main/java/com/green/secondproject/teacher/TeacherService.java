@@ -91,13 +91,15 @@ public class TeacherService {
     }
 
 
-    public int classStudent(ClassStudentDto dto){
+    public int classStudent(MyUserDetails myuser){
+        ClassStudentDto dto = new ClassStudentDto();
+        dto.setClassid(myuser.getClassId());
         return mapper.classStudent(dto);
     }
 
-    public int aprStudent(Long classid){
+    public int aprStudent(MyUserDetails myuser){
         ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(classid);
+        dto.setClassid(myuser.getClassId());
         return mapper.aprStudent(dto);
     }
 
