@@ -92,7 +92,8 @@
         (user_id,subject_id,YEAR,semester,MID_final,score,rating,class_rank,whole_rank)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.semester},#{item.midfinal},#{item.score},#{item.rating},#{item.classrank},#{item.wholerank})
+            (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.semester},#{item.midfinal},
+            #{item.score},#{item.rating},#{item.classrank},#{item.wholerank})
         </foreach>
     </insert>
 
