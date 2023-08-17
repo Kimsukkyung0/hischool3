@@ -65,8 +65,8 @@ public class MealMenuTableService {
     }
 
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(String schoolNm) {
-//        YearMonth thisMonth = YearMonth.now();
-        YearMonth thisMonth = YearMonth.of(2023,6);
+        YearMonth thisMonth = YearMonth.now();
+//        YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
