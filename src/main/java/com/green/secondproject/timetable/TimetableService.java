@@ -67,12 +67,12 @@ public class TimetableService {
     }
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableGetDto dto){
-//        LocalDate now = LocalDate.now();
+        LocalDate now = LocalDate.now();
 
-        LocalDate now = LocalDate.of(2023,5,26);
+//        LocalDate now = LocalDate.of(2023,5,26);
 
 //        int dayOfToday = now.getDayOfWeek().getValue(); //요일값 구하기
-//        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있게 ?
+//        if( dayOfToday >=6 ){//접속한 날이 토요일이라면 ?//다음주 시간표 보여줄 수 있도록
 //            now.plusDays((7-dayOfToday)+1);
 //        }
         String thisWeekStart = now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd"));

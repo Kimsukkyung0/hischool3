@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-public class MyGradeGraphUtils {
+public class
+MyGradeGraphUtils {
     private final Long[] cateIdForAca = {1L,3L,6L,7L};
 
     private final Long[] cateIdForMockTest = {2L,4L,5L,8L};

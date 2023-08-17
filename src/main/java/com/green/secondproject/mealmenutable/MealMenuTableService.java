@@ -84,8 +84,8 @@ public class MealMenuTableService {
     }
 
     public MealTableContainerVo getMealTableBySchoolOfTheWeek(String schoolNm) {
-//        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
-        LocalDate now = LocalDate.of(2023,7,1);
+        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
+//        LocalDate now = LocalDate.of(2023,7,1);
         MealTableDto dto = new MealTableDto();
 
         Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
