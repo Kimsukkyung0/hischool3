@@ -5,6 +5,8 @@ import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.StudentAcaResultVo;
 import com.green.secondproject.student.model.StudentAcaResultsParam;
+import com.green.secondproject.student.model.StudentMockSumResultVo;
+import com.green.secondproject.student.model.StudentSummarySubjectDto;
 import com.green.secondproject.teacher.model.*;
 import com.green.secondproject.utils.MyGradeGraphUtils;
 import lombok.RequiredArgsConstructor;
@@ -193,6 +195,10 @@ public class TeacherService {
 
     public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param) {
         return mapper.selAcaTestResultByDatesAndPeriodAndStudent(param);
+    }
+
+    public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
+        return mapper.selMockTestResultByDates(dto);
     }
 }
 

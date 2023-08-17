@@ -193,4 +193,28 @@
             #{midFinal} desc
         </if>
     </select>
+
+    <select id = "selMockTestResultByDates">
+        SELECT A.year, A.mon, C.nm cateName, B.nm,
+        A.standard_score standardScore, A.rating, A.percent
+        FROM mock_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
+        where A.user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='mon != null and mon != ""'>
+            AND A.mon = #{mon}
+        </if>
+        ORDER BY A.year desc, A.mon desc, cateName asc
+        <if test='year != null and year != ""'>
+            , #{year} desc
+        </if>
+        <if test='mon != null and mon != ""'>
+            , {mon} desc
+        </if>
+    </select>
 </mapper>
