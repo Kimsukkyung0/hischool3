@@ -166,4 +166,31 @@
     <select id="getLatestTest">
         select MAX(concat(year,semester,mid_final)) from aca_result
     </select>
+
+    <select id = "selAcaTestResultByDatesAndPeriodAndStudent">
+        SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
+        A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
+        FROM aca_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
+        where A.user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='semester != null and semester != ""'>
+            AND A.semester = #{semester}
+        </if>
+        <if test='midFinal != null and midFinal != ""'>
+            AND A.mid_final = #{midFinal}
+        </if>
+        ORDER BY A.year desc
+        <if test='semester != null and semester != ""'>
+            ,#{semester} desc
+        </if>
+        <if test='midFinal != null and midFinal != ""'>
+            #{midFinal} desc
+        </if>
+    </select>
 </mapper>

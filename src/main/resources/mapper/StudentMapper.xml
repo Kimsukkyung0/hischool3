@@ -22,6 +22,12 @@
             AND A.mon = #{mon}
         </if>
     ORDER BY A.year desc, A.mon desc, cateName asc
+        <if test='year != null and year != ""'>
+           , #{year} desc
+        </if>
+        <if test='mon != null and mon != ""'>
+           , {mon} desc
+        </if>
     </select>
 
     <select id="getHighestRatingsOfMockTest">
@@ -76,7 +82,13 @@
         <if test='midFinal != null and midFinal != ""'>
             AND A.mid_final = #{midFinal}
         </if>
-        ORDER BY A.year desc, A.semester desc, A.mid_final desc;
+        ORDER BY A.year desc , A.semester desc, midFinal desc
+        <if test='semester != null and semester != ""'>
+            ,#{semester} desc
+        </if>
+        <if test='midFinal != null and midFinal != ""'>
+            #{midFinal} desc
+        </if>
     </select>
 
     <select id="getHighestRatingsOfAcaTest">
