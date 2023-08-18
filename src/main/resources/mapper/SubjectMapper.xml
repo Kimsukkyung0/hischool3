@@ -42,7 +42,7 @@
         ON B.user_id = C.user_id
         inner JOIN sbj_category sc
         on A.category_id = sc.category_id
-        WHERE B.user_id = #{userid} and C.apr_yn = 1
+        WHERE B.user_id = #{userid} and C.apr_yn = 1 and A.category_id = #{categoryId}
     </select>
     <select id="classnum">
         SELECT COUNT(C.class_id) classid FROM van A
