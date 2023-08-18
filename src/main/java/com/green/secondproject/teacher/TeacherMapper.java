@@ -1,9 +1,6 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.student.model.StudentAcaResultVo;
-import com.green.secondproject.student.model.StudentAcaResultsParam;
-import com.green.secondproject.student.model.StudentMockSumResultVo;
-import com.green.secondproject.student.model.StudentSummarySubjectDto;
+import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -25,8 +22,8 @@ public interface TeacherMapper {
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
 
-    List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
-    List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param);
+    List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
+    List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param);
     List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
     double getNumberOfStudentByCate(TeacherGraphDto dto);
     String getLatestTest();

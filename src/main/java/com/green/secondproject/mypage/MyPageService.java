@@ -104,7 +104,7 @@ public class MyPageService {
                 target.delete();
                 return 0;
             }
-        } else if (pic == null) {
+        } else {
             try {
                 UserUpdDto dto = UserUpdDto.builder()
                         .phone(p.getPhone())

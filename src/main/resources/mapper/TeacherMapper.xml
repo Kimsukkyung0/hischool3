@@ -168,7 +168,7 @@
     </select>
 
     <select id = "selAcaTestResultByDatesAndPeriodAndStudent">
-        SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
+        SELECT A.result_id resultId, A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
         A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
         FROM aca_result A
         INNER JOIN subject B
@@ -185,17 +185,17 @@
         <if test='midFinal != null and midFinal != ""'>
             AND A.mid_final = #{midFinal}
         </if>
-        ORDER BY A.year desc
+        ORDER BY A.year desc, A.semester desc, A.mid_final desc
         <if test='semester != null and semester != ""'>
             ,#{semester} desc
         </if>
         <if test='midFinal != null and midFinal != ""'>
-            #{midFinal} desc
+            , #{midFinal} desc
         </if>
     </select>
 
     <select id = "selMockTestResultByDates">
-        SELECT A.year, A.mon, C.nm cateName, B.nm,
+        SELECT A.result_id resultId, A.year, A.mon, C.nm cateName, B.nm,
         A.standard_score standardScore, A.rating, A.percent
         FROM mock_result A
         INNER JOIN subject B
@@ -214,7 +214,7 @@
             , #{year} desc
         </if>
         <if test='mon != null and mon != ""'>
-            , {mon} desc
+            , #{mon} desc
         </if>
     </select>
 </mapper>
