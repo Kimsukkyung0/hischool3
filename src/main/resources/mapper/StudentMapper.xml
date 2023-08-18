@@ -43,7 +43,7 @@
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
         where A.user_id = #{userId} and B.category_id in(2,4,5,8) and A.year = #{year} and A.mon = (select MAX(A.mon) from mock_result where A.user_id=#{userId})
-        order by A.mon desc
+        order by A.mon desc, C.nm
         limit 4
     </select>
 
