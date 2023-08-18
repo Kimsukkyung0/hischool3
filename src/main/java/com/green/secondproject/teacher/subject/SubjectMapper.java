@@ -44,4 +44,5 @@ public interface SubjectMapper {
     List<ResultAcaVo> selaca(ResultAcaDto dto);
 
     List<ResultMockVo> selmock(ResultMockDto dto);
+
 }

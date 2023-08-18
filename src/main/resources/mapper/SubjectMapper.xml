@@ -18,8 +18,6 @@
         ON A.category_id = B.category_id
         WHERE B.`type` =1 and A.category_id = #{categoryid};
     </select>
-
-
     <select id="tcslist" resultType="SubjectDetailVo2">
         SELECT DISTINCT B.subject_id subjectid,A.nm,C.user_id userid
         FROM sbj_category A
@@ -163,5 +161,6 @@
         ON A.subject_id = B.subject_id
         WHERE result_id = #{resultId};
     </select>
+
 </mapper>
 

@@ -113,8 +113,7 @@ public class SubjectController {
 
     @PostMapping
     @Operation(summary = "과목 등록",
-            description = "subjectid - 과목 번호<br>"
-    )
+            description = "subjectid - 과목 번호<br>")
     int instcsbj(@RequestBody SubjectInsDto2 dto) {
         return serivce.instcsbj(dto);
     }

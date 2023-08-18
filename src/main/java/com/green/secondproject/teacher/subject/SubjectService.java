@@ -43,7 +43,6 @@ public List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails use
     }
 
     public List<SubjectVo2> smalllist(SubjectDto dto) {
-
         return mapper.smalllist(dto);
     }
 
@@ -251,6 +250,8 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
     public List<ResultMockVo> selmock(ResultMockDto dto){
         return mapper.selmock(dto);
     }
+
+
 
 }
 
