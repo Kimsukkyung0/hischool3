@@ -114,4 +114,10 @@ public class SignController {
     public List<SchoolVo> getSchoolList() {
         return SERVICE.getSchoolList();
     }
+
+    @GetMapping("/class-list")
+    @Operation(summary = "선택한 학교, 학년의 반 리스트")
+    public List<Integer> getClassList(SchoolParam p) {
+        return SERVICE.getClassList(p);
+    }
 }

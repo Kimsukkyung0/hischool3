@@ -1,5 +1,9 @@
 package com.green.secondproject.sign;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
@@ -9,6 +13,7 @@ import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.school.SchoolRepository;
 import com.green.secondproject.sign.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
@@ -22,14 +27,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,6 +54,9 @@ public class SignService {
 
     @Value("${file.dir}")
     private String FILE_DIR;
+
+    @Value("${my-api.key}")
+    private String myApiKey;
 
     public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
         String fileDir = MyFileUtils.getAbsolutePath(FILE_DIR);
@@ -235,7 +246,42 @@ public class SignService {
         return schoolList.stream().map(schoolEntity -> SchoolVo.builder()
                 .schoolId(schoolEntity.getSchoolId())
                 .nm(schoolEntity.getNm())
+                .schoolCode(schoolEntity.getCode())
                 .build()).toList();
+    }
+
+    public List<Integer> getClassList(SchoolParam p) {
+        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/classInfo")
+                        .queryParam("KEY", myApiKey)
+                        .queryParam("Type", "json")
+                        .queryParam("pIndex", 1)
+                        .queryParam("pSize", 500)
+                        .queryParam("ATPT_OFCDC_SC_CODE", "D10")
+                        .queryParam("SD_SCHUL_CODE", p.getSchoolCode())
+                        .queryParam("AY", LocalDate.now().getYear())
+                        .queryParam("GRADE", p.getGrade())
+                        .build()
+                ).retrieve().bodyToMono(String.class)
+                .block();
+
+        ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        List<String> classList = new ArrayList<>();
+        try {
+            JsonNode jsonNode = om.readTree(json);
+            List<ClassVo> classVoList = om.convertValue(jsonNode.at("/classInfo/1/row"), new TypeReference<>() {});
+            for (ClassVo vo : classVoList) {
+                classList.add(vo.getClassNm());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        List<Integer> list = new ArrayList<>(classList.stream()
+                .map(Integer::parseInt)
+                .toList());
+        Collections.sort(list);
+
+        return list;
     }
 
     private void setSuccessResult(SignUpResultDto result) {

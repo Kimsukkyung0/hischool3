@@ -8,4 +8,5 @@ import lombok.Getter;
 public class SchoolVo {
     private Long schoolId;
     private String nm;
+    private String schoolCode;
 }
