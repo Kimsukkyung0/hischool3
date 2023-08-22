@@ -12,7 +12,7 @@ public class WebController implements ErrorController {
     @GetMapping({"/", "/error"})
     public String index() {
         return "index.html";
-    }
+    }//
 
 //    @GetMapping("/")
 //    public String index() {
