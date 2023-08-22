@@ -1,12 +1,8 @@
 package com.green.secondproject.mealmenutable;
 
 import com.green.secondproject.CommonUserUtilsForTest;
-import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
-import com.green.secondproject.timetable.TimetableController;
-import com.green.secondproject.timetable.TimetableService;
-import com.green.secondproject.timetable.model.TimeTableGetDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +15,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 

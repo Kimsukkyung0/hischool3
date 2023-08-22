@@ -1,10 +1,10 @@
 package com.green.secondproject.sign;
 
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.JwtTokenProvider;
-import com.green.secondproject.config.security.PasswordEncoderConfiguration;
-import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.common.config.redis.RedisService;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.JwtTokenProvider;
+import com.green.secondproject.common.config.security.PasswordEncoderConfiguration;
+import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.sign.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -12,15 +12,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;

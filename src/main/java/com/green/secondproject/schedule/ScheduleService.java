@@ -1,14 +1,11 @@
 package com.green.secondproject.schedule;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.UserMapper;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.schedule.model.ScheduleContainerVo;
 import com.green.secondproject.schedule.model.ScheduleInfoVo;
 import com.green.secondproject.schedule.model.ScheduleParam;

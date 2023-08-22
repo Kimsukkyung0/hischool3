@@ -1,6 +1,7 @@
 package com.green.secondproject.config.security;
 
-import com.green.secondproject.config.security.model.UserEntity;
+import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.config.security.model.UserEntity;
 import com.green.secondproject.sign.model.ClassDto;
 import com.green.secondproject.sign.model.UserVo;
 import org.junit.jupiter.api.Test;

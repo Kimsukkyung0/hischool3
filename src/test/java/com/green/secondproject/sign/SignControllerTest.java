@@ -1,11 +1,9 @@
 
 package com.green.secondproject.sign;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.green.secondproject.config.security.MyUserDetailsServiceImpl;
 import com.green.secondproject.sign.model.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 

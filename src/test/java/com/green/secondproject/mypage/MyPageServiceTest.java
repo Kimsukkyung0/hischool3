@@ -3,8 +3,8 @@ package com.green.secondproject.mypage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.SelUserMyPageDto;
 import com.green.secondproject.mypage.model.SelUserMyPageVo;
 import org.junit.jupiter.api.Test;

@@ -1,6 +1,6 @@
 package com.green.secondproject.student;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

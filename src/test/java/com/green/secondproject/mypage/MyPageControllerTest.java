@@ -1,8 +1,8 @@
 package com.green.secondproject.mypage;
 
 import com.green.secondproject.CommonUserUtilsForTest;
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.common.config.redis.RedisService;
+import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.mypage.model.SelUserMyPageDto;
 import com.green.secondproject.mypage.model.SelUserMyPageVo;
 import lombok.extern.slf4j.Slf4j;

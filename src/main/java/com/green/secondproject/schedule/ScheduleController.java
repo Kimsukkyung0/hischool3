@@ -1,6 +1,6 @@
 package com.green.secondproject.schedule;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.schedule.model.ScheduleContainerVo;
 import com.green.secondproject.schedule.model.ScheduleParam;
 import io.swagger.v3.oas.annotations.Operation;

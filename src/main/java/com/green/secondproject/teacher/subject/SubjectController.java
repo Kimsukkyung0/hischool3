@@ -1,7 +1,7 @@
 package com.green.secondproject.teacher.subject;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import io.swagger.v3.oas.annotations.Operation;

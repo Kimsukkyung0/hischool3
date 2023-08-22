@@ -1,10 +1,10 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.IntegrationTest;
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.exception.MyErrorResponse;
-import com.green.secondproject.config.security.UserMapper;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.redis.RedisService;
+import com.green.secondproject.common.config.exception.MyErrorResponse;
+import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.sign.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;

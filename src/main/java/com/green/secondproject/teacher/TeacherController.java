@@ -1,6 +1,6 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;

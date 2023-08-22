@@ -1,12 +1,11 @@
 package com.green.secondproject.subject;
 
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.redis.RedisService;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.SubjectMapper;
 import com.green.secondproject.teacher.subject.SubjectService;
 import com.green.secondproject.teacher.subject.model.*;
-import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.security.auth.Subject;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

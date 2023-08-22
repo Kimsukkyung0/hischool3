@@ -1,6 +1,6 @@
 package com.green.secondproject.mypage;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -9,8 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

@@ -1,11 +1,11 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
-import com.green.secondproject.utils.MyGradeGraphUtils;
+import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

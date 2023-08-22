@@ -1,7 +1,7 @@
 package com.green.secondproject.teacher.subject;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
@@ -11,7 +11,6 @@ import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

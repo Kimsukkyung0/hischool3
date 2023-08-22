@@ -1,7 +1,7 @@
 package com.green.secondproject.header;
 
 import com.green.secondproject.CommonUserUtilsForTest;
-import com.green.secondproject.config.RedisService;
+import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.header.model.SelSchoolInfoDto;
 import com.green.secondproject.header.model.SelSchoolInfoVo;
 import com.green.secondproject.header.model.SelSchoolLogoVo;
@@ -25,7 +25,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 

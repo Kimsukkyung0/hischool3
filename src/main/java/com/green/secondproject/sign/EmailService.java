@@ -1,7 +1,6 @@
 package com.green.secondproject.sign;
 
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.sign.model.UserVo;
+import com.green.secondproject.common.config.redis.RedisService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -9,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;

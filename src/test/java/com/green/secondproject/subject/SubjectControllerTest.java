@@ -1,15 +1,11 @@
 package com.green.secondproject.subject;
 
 import com.green.secondproject.CommonUserUtilsForTest;
-import com.green.secondproject.config.RedisService;
-import com.green.secondproject.config.security.JwtTokenProvider;
-import com.green.secondproject.config.security.SecurityConfiguration;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.teacher.subject.SubjectController;
 import com.green.secondproject.teacher.subject.SubjectService;
 import com.green.secondproject.teacher.subject.model.SubjectVo;
 import lombok.extern.slf4j.Slf4j;
-import net.bytebuddy.matcher.FilterableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

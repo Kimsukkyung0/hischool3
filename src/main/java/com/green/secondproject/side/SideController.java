@@ -1,6 +1,6 @@
 package com.green.secondproject.side;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.side.model.SideVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

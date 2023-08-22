@@ -1,6 +1,5 @@
 package com.green.secondproject.student;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,10 +1,9 @@
 package com.green.secondproject.mypage;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.mypage.model.*;
-import com.green.secondproject.teacher.model.TeacherDelDto;
-import com.green.secondproject.utils.MyFileUtils;
+import com.green.secondproject.common.utils.MyFileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.List;
 
 @Slf4j
 @Service

@@ -1,6 +1,6 @@
 package com.green.secondproject.timetable;
 
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.timetable.model.TimeTableContainerVo;
 import com.green.secondproject.timetable.model.TimeTableGetDto;
 import io.swagger.v3.oas.annotations.Operation;

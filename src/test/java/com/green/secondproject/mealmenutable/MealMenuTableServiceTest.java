@@ -1,15 +1,12 @@
 package com.green.secondproject.mealmenutable;
 
-import com.green.secondproject.config.security.UserMapper;
+import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableDto;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
-import com.green.secondproject.timetable.TimetableService;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -17,11 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.FactoryBasedNavigableListAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @Import({MealMenuTableService.class})

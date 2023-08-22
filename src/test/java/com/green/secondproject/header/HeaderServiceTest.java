@@ -1,7 +1,7 @@
 package com.green.secondproject.header;
 
-import com.green.secondproject.config.security.AuthenticationFacade;
-import com.green.secondproject.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.header.model.SelSchoolInfoDto;
 import com.green.secondproject.header.model.SelSchoolInfoVo;
 import org.junit.jupiter.api.Test;
