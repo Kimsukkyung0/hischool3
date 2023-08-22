@@ -1,6 +1,6 @@
 package com.green.secondproject.sign;
 
-import com.green.secondproject.CommonRes;
+import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,26 +41,26 @@ public class SignController {
         return dto;
     }
 
-    @Operation(summary = "회원가입", description = """
-            "email": ex) "std1@gmail.com"<br>
-            "pw": ex) "1111"<br>
-            "nm": ex) "김학생"<br>
-            "schoolNm": ex) "오성고등학교"<br>
-            "grade": ex) "1"<br>
-            "classNum": ex) "1"<br>
-            "birth": ex) "2003-08-02"<br>
-            "phone": ex) "010-2739-3928"<br>
-            "address": ex) "대구광역시 중구 중앙대로 394"<br>
-            "detailAddress": ex) "제일빌딩 5F"<br>
-            "role": ex) 선생님이면 TC, 학생이면 STD<br><br>
-            "pic": 프로필 사진<br>
-            "aprPic": 선생님 인증사진
-            """)
-    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public SignUpResultDto signUp(@RequestPart SignUpParam p, @RequestPart MultipartFile pic,
-                                  @RequestPart(required = false) MultipartFile aprPic) {
-        return SERVICE.signUp(p, pic, aprPic);
-    }
+//    @Operation(summary = "회원가입", description = """
+//            "email": ex) "std1@gmail.com"<br>
+//            "pw": ex) "1111"<br>
+//            "nm": ex) "김학생"<br>
+//            "schoolNm": ex) "오성고등학교"<br>
+//            "grade": ex) "1"<br>
+//            "classNum": ex) "1"<br>
+//            "birth": ex) "2003-08-02"<br>
+//            "phone": ex) "010-2739-3928"<br>
+//            "address": ex) "대구광역시 중구 중앙대로 394"<br>
+//            "detailAddress": ex) "제일빌딩 5F"<br>
+//            "role": ex) 선생님이면 TC, 학생이면 STD<br><br>
+//            "pic": 프로필 사진<br>
+//            "aprPic": 선생님 인증사진
+//            """)
+//    @PostMapping(value = "/sign-up", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+//    public SignUpResultDto signUp(@RequestPart SignUpParam p, @RequestPart MultipartFile pic,
+//                                  @RequestPart(required = false) MultipartFile aprPic) {
+//        return SERVICE.signUp(p, pic, aprPic);
+//    }
 
     @PostMapping("/refresh-token")
     @Operation(summary = "accessToken 재발행")

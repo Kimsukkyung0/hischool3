@@ -1,4 +1,4 @@
-package com.green.secondproject;
+package com.green.secondproject.common.config.etc;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

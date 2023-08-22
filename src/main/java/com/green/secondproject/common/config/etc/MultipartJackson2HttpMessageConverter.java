@@ -1,4 +1,4 @@
-package com.green.secondproject;
+package com.green.secondproject.common.config.etc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
