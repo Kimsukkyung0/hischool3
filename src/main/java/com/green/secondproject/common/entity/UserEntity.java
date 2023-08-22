@@ -69,7 +69,7 @@ public class UserEntity extends BaseEntity {
     private int aprYn;
 
     @JsonIgnore
-    @Column(length = 10, columnDefinition = "default 'ENROLL")
+    @Column(length = 10, columnDefinition = "default 'ENROLL'")
     @Enumerated(EnumType.STRING)
     @NotNull
     private EnrollState enrollState;

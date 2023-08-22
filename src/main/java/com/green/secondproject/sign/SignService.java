@@ -5,6 +5,10 @@ import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
 import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.entity.VanEntity;
 import com.green.secondproject.school.SchoolRepository;
 import com.green.secondproject.sign.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
@@ -14,7 +18,6 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -44,96 +47,85 @@ public class SignService {
     @Value("${file.dir}")
     private String FILE_DIR;
 
-//    public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
-//        String fileDir = MyFileUtils.getAbsolutePath(FILE_DIR);
-//        log.info("[getSignUpResult] signDataHandler로 회원 정보 요청");
-//
-//        File tempDic = new File(fileDir, "/temp");
-//        if (!tempDic.exists()) {
-//            tempDic.mkdirs();
-//        }
-//
-//        String savedPicNm = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
-//        File tempPic = new File(tempDic.getPath(), savedPicNm);
-//
-//        try {
-//            pic.transferTo(tempPic);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        schoolRepository.g
-//        Long schoolId = MAPPER.selSchoolIdByNm(p.getSchoolNm());
-//        Long classId = MAPPER.selClassId(ClassDto.builder()
-//                .schoolId(schoolId)
-//                .year(String.valueOf(LocalDate.now().getYear()))
-//                .grade(p.getGrade())
-//                .classNum(p.getClassNum())
-//                .build());
-//
-//        UserEntity entity = UserEntity.builder()
-//                .email(p.getEmail())
-//                .pw(PW_ENCODER.encode(p.getPw()))
-//                .nm(p.getNm())
-//                .pic(savedPicNm)
-//                .birth(p.getBirth())
-//                .phone(p.getPhone())
-//                .address(p.getAddress())
-//                .detailAddress(p.getDetailAddress())
-//                .role(String.format("ROLE_%s", p.getRole().toUpperCase()))
-//                .classId(classId)
-//                .build();
-//
-//        if ("TC".equalsIgnoreCase(p.getRole())) {
-//            entity.setAprYn(1);
-//        } else {
-//            entity.setAprYn(0);
-//        }
-//
-//        String savedAprPicNm = null;
-//        File tempAprPic = null;
-//        if (aprPic != null) {
-//            savedAprPicNm = MyFileUtils.makeRandomFileNm(aprPic.getOriginalFilename());
-//            tempAprPic = new File(tempDic.getPath(), savedAprPicNm);
-//
-//            try {
-//                aprPic.transferTo(tempAprPic);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            entity.setAprPic(savedAprPicNm);
-//        }
-//
-//        int result = MAPPER.save(entity);
-//        SignUpResultDto resultDto = new SignUpResultDto();
-//
-//        if(result == 1) {
-//            log.info("[getSignUpResult] 정상 처리 완료");
-//            String targetDicPath = fileDir + "/hiSchool/userPic/" + entity.getUserId();
-//            String targetDicPath1 = fileDir + "/hiSchool/userApr/" + entity.getUserId();
-//            File targetDic = new File(targetDicPath);
-//            if (!targetDic.exists()) { targetDic.mkdirs(); }
-//
-//            File targetDic1 = new File(targetDicPath1);
-//            if (!targetDic1.exists()) { targetDic1.mkdirs(); }
-//
-//            File targetPic = new File(targetDicPath, savedPicNm);
-//            tempPic.renameTo(targetPic);
-//
-//            if (aprPic != null) {
-//                File targetAprPic = new File(targetDicPath1, savedAprPicNm);
-//                tempAprPic.renameTo(targetAprPic);
-//            }
-//
-//            setSuccessResult(resultDto);
-//        } else {
-//            log.info("[getSignUpResult] 실패 처리 완료");
-//            tempPic.delete();
-//            if (tempAprPic != null) { tempAprPic.delete(); }
-//            setFailResult(resultDto);
-//        }
-//        return resultDto;
-//    }
+    public SignUpResultDto signUp(SignUpParam p, MultipartFile pic, MultipartFile aprPic) {
+        String fileDir = MyFileUtils.getAbsolutePath(FILE_DIR);
+        log.info("[getSignUpResult] signDataHandler로 회원 정보 요청");
+
+        File tempDic = new File(fileDir, "/temp");
+        if (!tempDic.exists()) {
+            tempDic.mkdirs();
+        }
+
+        String savedPicNm = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
+        File tempPic = new File(tempDic.getPath(), savedPicNm);
+
+        try {
+            pic.transferTo(tempPic);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        SchoolEntity schoolEntity = schoolRepository.getReferenceById(p.getSchoolId());
+        VanEntity vanEntity = vanRepository.findVanEntityBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity,
+                String.valueOf(LocalDate.now().getYear()), p.getGrade(), p.getClassNum());
+
+        UserEntity entity = UserEntity.builder()
+                .email(p.getEmail())
+                .pw(PW_ENCODER.encode(p.getPw()))
+                .nm(p.getNm())
+                .pic(savedPicNm)
+                .birth(p.getBirth())
+                .phone(p.getPhone())
+                .address(p.getAddress())
+                .detailAddr(p.getDetailAddress())
+                .roleType("TC".equalsIgnoreCase(p.getRole()) ? RoleType.TC : RoleType.STD)
+                .vanEntity(vanEntity)
+                .build();
+
+        String savedAprPicNm = null;
+        File tempAprPic = null;
+        if (aprPic != null) {
+            savedAprPicNm = MyFileUtils.makeRandomFileNm(aprPic.getOriginalFilename());
+            tempAprPic = new File(tempDic.getPath(), savedAprPicNm);
+
+            try {
+                aprPic.transferTo(tempAprPic);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            entity.setAprPic(savedAprPicNm);
+        }
+
+        SignUpResultDto resultDto = new SignUpResultDto();
+        UserEntity result;
+        try {
+            result = userRepository.save(entity);
+        } catch (Exception e) {
+            setFailResult(resultDto);
+            return resultDto;
+        }
+
+        log.info("[getSignUpResult] 정상 처리 완료");
+        String targetDicPath = fileDir + "/hiSchool/userPic/" + result.getUserId();
+        File targetDic = new File(targetDicPath);
+        if (!targetDic.exists()) { targetDic.mkdirs(); }
+
+        File targetPic = new File(targetDicPath, savedPicNm);
+        tempPic.renameTo(targetPic);
+
+        if (aprPic != null) {
+            String targetDicPathApr = fileDir + "/hiSchool/userApr/" + result.getUserId();
+
+            File targetDicApr = new File(targetDicPathApr);
+            if (!targetDicApr.exists()) { targetDicApr.mkdirs(); }
+
+            File targetAprPic = new File(targetDicPathApr, savedAprPicNm);
+            tempAprPic.renameTo(targetAprPic);
+        }
+
+        setSuccessResult(resultDto);
+        return resultDto;
+    }
 
     public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");

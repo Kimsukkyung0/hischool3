@@ -11,7 +11,7 @@ public class SignUpParam {
     private String email;
     private String pw;
     private String nm;
-    private String schoolNm;
+    private Long schoolId;
     private String grade;
     private String classNum;
     private LocalDate birth;

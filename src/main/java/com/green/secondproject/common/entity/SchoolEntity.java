@@ -18,6 +18,6 @@ public class SchoolEntity {
     @Column(nullable = false, columnDefinition = "char(7)", unique = true)
     private String code;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String logo;
 }

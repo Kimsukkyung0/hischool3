@@ -12,6 +12,10 @@ public class SchoolAdminEntity {
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long adminId;
 
+    @OneToOne
+    @JoinColumn(name = "school_id")
+    private SchoolEntity schoolEntity;
+
     @Column(nullable = false, length = 50, unique = true)
     private String email;
 
