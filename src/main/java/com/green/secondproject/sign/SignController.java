@@ -1,6 +1,7 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -100,9 +103,15 @@ public class SignController {
                 .build();
     }
 
-//    @GetMapping("/mail-check")
-//    @Operation(summary = "이메일 중복 확인", description = "사용 가능(1), 불가능(0)")
-//    public int mailCheck(@RequestParam String email) {
-//        return SERVICE.mailCheck(email);
-//    }
+    @GetMapping("/mail-check")
+    @Operation(summary = "이메일 중복 확인", description = "사용 가능(1), 불가능(0)")
+    public int mailCheck(@RequestParam String email) {
+        return SERVICE.mailCheck(email);
+    }
+
+    @GetMapping("/school-list")
+    @Operation(summary = "대구 일반, 자율고 리스트")
+    public List<SchoolVo> getSchoolList() {
+        return SERVICE.getSchoolList();
+    }
 }

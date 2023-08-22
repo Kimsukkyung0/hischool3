@@ -230,6 +230,14 @@ public class SignService {
         return user == null ? 1 : 0;
     }
 
+    public List<SchoolVo> getSchoolList() {
+        List<SchoolEntity> schoolList = schoolRepository.findAll();
+        return schoolList.stream().map(schoolEntity -> SchoolVo.builder()
+                .schoolId(schoolEntity.getSchoolId())
+                .nm(schoolEntity.getNm())
+                .build()).toList();
+    }
+
     private void setSuccessResult(SignUpResultDto result) {
         result.setSuccess(true);
         result.setCode(CommonRes.SUCCESS.getCode());
