@@ -30,7 +30,7 @@ public class StudentController {
         return service.selMockTestResultByDates(dto);
     }
 
-    @GetMapping("/mock-highrating")
+    @GetMapping("/mock-highest")
     @Operation(summary = "모의고사-학생별 가장 높은 등급",  description =
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"+"※국어,수학,영어 한국사※")
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser){
@@ -38,7 +38,7 @@ public class StudentController {
         return service.getHighestRatingsOfMockTest(userId);
     }
 
-    @GetMapping("/mock-currentrating" )
+    @GetMapping("/mock-latest" )
     @Operation(summary = "모의고사- 최근응시 시험 등급",  description =
             "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
             +"※국어,수학,영어 한국사※")
