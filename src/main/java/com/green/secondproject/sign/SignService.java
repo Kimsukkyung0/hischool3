@@ -74,9 +74,27 @@ public class SignService {
             e.printStackTrace();
         }
 
-        SchoolEntity schoolEntity = schoolRepository.getReferenceById(p.getSchoolId());
-        VanEntity vanEntity = vanRepository.findVanEntityBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity,
-                String.valueOf(LocalDate.now().getYear()), p.getGrade(), p.getClassNum());
+        SchoolEntity schoolEntity = schoolRepository.findByCode(p.getSchoolCode());
+        if (schoolEntity == null) {
+            schoolRepository.save(SchoolEntity.builder()
+                    .code(p.getSchoolCode())
+                    .logo(p.getSchoolNm() + ".png")
+                    .nm(p.getSchoolNm())
+                    .build());
+        }
+
+        String year = String.valueOf(LocalDate.now().getYear());
+        VanEntity vanEntity = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity, year,
+                p.getGrade(), p.getClassNum());
+
+        if (vanEntity == null) {
+            vanRepository.save(VanEntity.builder()
+                    .schoolEntity(schoolEntity)
+                    .year(year)
+                    .grade(p.getGrade())
+                    .classNum(p.getClassNum())
+                    .build());
+        }
 
         UserEntity entity = UserEntity.builder()
                 .email(p.getEmail())

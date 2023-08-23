@@ -19,7 +19,7 @@ public class Test {
     void test() {
         SchoolEntity schoolEntity = new SchoolEntity();
         schoolEntity.setSchoolId(1L);
-        VanEntity entity = repository.findVanEntityBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity,
+        VanEntity entity = repository.findBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity,
                 "2023", "1", "1");
         System.out.println(entity);
     }

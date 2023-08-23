@@ -1,12 +1,18 @@
 package com.green.secondproject.common.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="van", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"school_id","year","grade", "class_num"})})
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class VanEntity {
     @Id //pk
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto_increment
