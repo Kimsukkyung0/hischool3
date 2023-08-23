@@ -24,14 +24,14 @@ public class TeacherService {
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         SelSignedStudentDto dto = new SelSignedStudentDto();
-        dto.setClassId(myuser.getClassId());
+        dto.setClassId(myuser.getVanId());
         return mapper.selSignedStudent(dto);
     }
 
 
     public List<SelUnsignedStudentVo> selUnsignedStudent(MyUserDetails myuser) {
         SelUnsignedStudentDto dto = new SelUnsignedStudentDto();
-        dto.setClassId(myuser.getClassId());
+        dto.setClassId(myuser.getVanId());
         return mapper.selUnsignedStudent(dto);
     }
 
@@ -94,13 +94,13 @@ public class TeacherService {
 
     public int classStudent(MyUserDetails myuser){
         ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(myuser.getClassId());
+        dto.setClassid(myuser.getVanId());
         return mapper.classStudent(dto);
     }
 
     public int aprStudent(MyUserDetails myuser){
         ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(myuser.getClassId());
+        dto.setClassid(myuser.getVanId());
         return mapper.aprStudent(dto);
     }
 

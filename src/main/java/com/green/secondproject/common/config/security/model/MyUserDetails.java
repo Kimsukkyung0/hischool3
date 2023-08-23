@@ -1,6 +1,5 @@
 package com.green.secondproject.common.config.security.model;
 
-import com.green.secondproject.sign.model.UserVo;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,7 +18,7 @@ public class MyUserDetails implements UserDetails {
     private String email;
     private String pw;
     private String nm;
-    private Long classId;
+    private Long vanId;
     private String schoolNm;
     private String grade;
     private String classNum;

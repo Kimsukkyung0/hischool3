@@ -1,7 +1,8 @@
 package com.green.secondproject.common.config.security;
 
 import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.sign.model.UserVo;
+import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.user.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -28,11 +29,12 @@ public class JwtTokenProvider {
     public final long ACCESS_TOKEN_VALID_MS = 1000L * 60 * 30;
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
     private final UserMapper mapper;
+    private final UserRepository userRepository;
 
     public JwtTokenProvider(@Value("${springboot.jwt.access-secret}") String accessSecretKey
                             , @Value("${springboot.jwt.refresh-secret}") String refreshSecretKey
                             , @Value("${springboot.jwt.token-type}") String tokenType,
-                            UserMapper mapper) {
+                            UserMapper mapper, UserRepository userRepository) {
         byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecretKey);
         this.ACCESS_KEY = Keys.hmacShaKeyFor(accessKeyBytes);
 
@@ -40,6 +42,7 @@ public class JwtTokenProvider {
         this.REFRESH_KEY = Keys.hmacShaKeyFor(refreshKeyBytes);
         this.TOKEN_TYPE = tokenType;
         this.mapper = mapper;
+        this.userRepository = userRepository;
     }
 
     public String generateJwtToken(String strIuser, List<String> roles, long token_valid_ms, Key key) {
@@ -75,18 +78,18 @@ public class JwtTokenProvider {
         Claims claims = getClaims(token, key);
         String strIuser = claims.getSubject();
         List<String> roles = (List<String>)claims.get("roles");
-        UserVo vo = mapper.selUserById(Long.valueOf(strIuser));
+        UserEntity user = userRepository.findById(Long.valueOf(strIuser)).get();
 
         return MyUserDetails.builder()
-                .userId(vo.getUserId())
-                .email(vo.getEmail())
-                .pw(vo.getPw())
-                .nm(vo.getNm())
-                .classId(vo.getClassId())
-                .schoolNm(vo.getSchoolNm())
-                .grade(vo.getGrade())
-                .classNum(vo.getClassNum())
-                .pic(vo.getPic())
+                .userId(user.getUserId())
+                .email(user.getEmail())
+                .pw(user.getPw())
+                .nm(user.getNm())
+                .vanId(user.getVanEntity().getVanId())
+                .schoolNm(user.getVanEntity().getSchoolEntity().getNm())
+                .grade(user.getVanEntity().getGrade())
+                .classNum(user.getVanEntity().getClassNum())
+                .pic(user.getPic())
                 .roles(roles)
                 .build();
     }
