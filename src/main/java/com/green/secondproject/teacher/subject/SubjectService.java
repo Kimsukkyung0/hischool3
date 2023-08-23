@@ -2,6 +2,8 @@ package com.green.secondproject.teacher.subject;
 
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.SbjCategoryEntity;
+import com.green.secondproject.common.entity.SubjectEntity;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
@@ -24,6 +26,7 @@ import java.util.List;
 public class SubjectService {
     private final SubjectMapper mapper;
     private final AuthenticationFacade facade;
+    private final SubjectRepository subjectRepository;
 
 
    public List<SubjectVo> subcate() {
@@ -57,7 +60,27 @@ public List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails use
     }
 
 public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
-        return mapper.mocksmalllist(categoryid);
+    SbjCategoryEntity sbjCategoryEntity= SbjCategoryEntity.builder()
+            .categoryId(categoryid)
+            .build();
+
+       List<SubjectEntity> subjectList = subjectRepository.findBySbjCategoryEntity(sbjCategoryEntity);
+       List<MockSubjcetSmallVo> list = new ArrayList<>();
+
+    for (SubjectEntity subjectEntity : subjectList) {
+        list.add(MockSubjcetSmallVo.builder()
+                .categoryid(subjectEntity.getSbjCategoryEntity().getCategoryId())
+                .subjectid(subjectEntity.getSubjectId())
+                .nm(subjectEntity.getNm())
+                .build());
+    }
+    return list;
+//
+//        return subjectList.stream().map(subjectEntity -> MockSubjcetSmallVo.builder()
+//                .categoryid(subjectEntity.getSbjCategoryEntity().getCategoryId())
+//                .subjectid(subjectEntity.getSubjectId())
+//                .nm(subjectEntity.getNm())
+//                .build()).toList();
     }
 
     public List<MockSubjectBigVo> mockbiglist() {

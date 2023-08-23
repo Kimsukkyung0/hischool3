@@ -68,12 +68,12 @@
         WHERE B.`type` = 2
     </select>
 
-    <select id="mocksmalllist">
-        SELECT A.subject_id subjectid ,A.nm ,A.category_id categoryid FROM subject A
-        INNER JOIN sbj_category B
-        ON A.category_id = B.category_id
-        WHERE B.`type` = 2 AND A.category_id = #{categoryid};
-    </select>
+<!--    <select id="mocksmalllist">-->
+<!--        SELECT A.subject_id subjectid ,A.nm ,A.category_id categoryid FROM subject A-->
+<!--        INNER JOIN sbj_category B-->
+<!--        ON A.category_id = B.category_id-->
+<!--        WHERE B.`type` = 2 AND A.category_id = #{categoryid}-->
+<!--    </select>-->
 
     <insert id="instcsbj">
         INSERT INTO tc_sbj
