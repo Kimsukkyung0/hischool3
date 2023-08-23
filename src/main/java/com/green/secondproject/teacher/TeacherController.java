@@ -109,7 +109,7 @@ public class TeacherController {
     }
 
 
-    @PatchMapping("/update-mock")
+    @PatchMapping("/change-mock")
     @Operation(summary = "모의고사 성적 수정",
             description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +
                     "<br>(3)mon - 월<br>(4)standardScore - 표준점수<br>(5)rating - 등급<br>(6)percent - 백분위")
@@ -118,7 +118,7 @@ public class TeacherController {
     }
 
 
-    @PatchMapping("/update-aca")
+    @PatchMapping("/change-aca")
     @Operation(summary = "내신 성적 수정",
             description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +
                             "<br>(3)semester - 학기<br>(4)mf - [0 = 중간/1 = 기말]<br>" +
