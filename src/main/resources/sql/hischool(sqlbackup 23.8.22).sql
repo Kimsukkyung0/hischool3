@@ -2556,7 +2556,7 @@ CREATE TABLE IF NOT EXISTS `school` (
 /*!40000 ALTER TABLE `school` DISABLE KEYS */;
 INSERT INTO `school` (`school_id`, `nm`, `logo`, `school_cd`) VALUES
 	(1, '함지고등학교', 'hamji.png', '7240273'),
-	(2, '오성고등학교', 'osung.png', '7240099'),
+	(2, '오성고등학교', '오성고등학교.png', '7240099'),
 	(3, '영진고등학교', 'youngjin.png', '7240098'),
 	(4, '청구고등학교', 'cheonggu.png', '7240103');
 /*!40000 ALTER TABLE `school` ENABLE KEYS */;

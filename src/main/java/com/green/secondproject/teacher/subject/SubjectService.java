@@ -114,7 +114,7 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
     }
 
   public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
-       Long classId = user.getClassId();
+       Long classId = user.getVanId();
        Integer mockTotal = mapper.mocktotal(classId);
       List<MockGraphVo2> koList = mapper.mockgraph(new MockGraphDto(classId,2L));
       List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));

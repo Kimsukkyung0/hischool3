@@ -24,7 +24,7 @@ public class SubjectController2 {
     @Operation(summary = "반석차 반전체인원")
     int classnum(@AuthenticationPrincipal MyUserDetails user){
         StudentClassDto dto = new StudentClassDto();
-        dto.setClassid(String.valueOf(user.getClassId()));
+        dto.setClassid(String.valueOf(user.getVanId()));
         dto.setSchoolid(user.getUserId());
 
         return serivce.classnum(dto);

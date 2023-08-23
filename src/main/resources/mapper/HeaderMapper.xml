@@ -21,7 +21,7 @@
         INNER JOIN van B
         ON B.school_id = A.school_id
         INNER JOIN user C
-        ON C.class_id = B.class_id
+        ON C.van_id = B.van_id
         WHERE C.user_id = #{userId}
 
     </select>

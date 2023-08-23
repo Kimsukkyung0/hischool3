@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -37,7 +36,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -76,9 +74,27 @@ public class SignService {
             e.printStackTrace();
         }
 
-        SchoolEntity schoolEntity = schoolRepository.getReferenceById(p.getSchoolId());
-        VanEntity vanEntity = vanRepository.findVanEntityBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity,
-                String.valueOf(LocalDate.now().getYear()), p.getGrade(), p.getClassNum());
+        SchoolEntity schoolEntity = schoolRepository.findByCode(p.getSchoolCode());
+        if (schoolEntity == null) {
+            schoolRepository.save(SchoolEntity.builder()
+                    .code(p.getSchoolCode())
+                    .logo(p.getSchoolNm() + ".png")
+                    .nm(p.getSchoolNm())
+                    .build());
+        }
+
+        String year = String.valueOf(LocalDate.now().getYear());
+        VanEntity vanEntity = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(schoolEntity, year,
+                p.getGrade(), p.getClassNum());
+
+        if (vanEntity == null) {
+            vanRepository.save(VanEntity.builder()
+                    .schoolEntity(schoolEntity)
+                    .year(year)
+                    .grade(p.getGrade())
+                    .classNum(p.getClassNum())
+                    .build());
+        }
 
         UserEntity entity = UserEntity.builder()
                 .email(p.getEmail())
@@ -141,7 +157,7 @@ public class SignService {
     public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
 
-        UserVo user = MAPPER.selUserByEmail(p.getEmail());
+        UserEntity user = userRepository.findUserEntityByEmail(p.getEmail());
 
         if (user == null) {
             throw new RuntimeException("존재하지 않는 이메일");
@@ -160,9 +176,9 @@ public class SignService {
 
         log.info("[getSignInResult] access_token 객체 생성");
         String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
-                Collections.singletonList(user.getRole()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+                Collections.singletonList(user.getRoleType().getCode()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
         String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
-                Collections.singletonList(user.getRole()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
+                Collections.singletonList(user.getRoleType().getCode()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
 
         redisService.setData(redisKey, refreshToken);
 
@@ -170,7 +186,7 @@ public class SignService {
         SignInResultDto dto = SignInResultDto.builder()
                                 .accessToken(accessToken)
                                 .refreshToken(refreshToken)
-                                .role(user.getRole())
+                                .role(user.getRoleType().getCode())
                                 .build();
 
         log.info("[getSignInResult] SignInResultDto 객체 값 주입");
@@ -241,13 +257,44 @@ public class SignService {
         return user == null ? 1 : 0;
     }
 
-    public List<SchoolVo> getSchoolList() {
-        List<SchoolEntity> schoolList = schoolRepository.findAll();
-        return schoolList.stream().map(schoolEntity -> SchoolVo.builder()
-                .schoolId(schoolEntity.getSchoolId())
-                .nm(schoolEntity.getNm())
-                .schoolCode(schoolEntity.getCode())
-                .build()).toList();
+    public List<SchoolRes> getSchoolList() {
+        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/schoolInfo")
+                        .queryParam("KEY", myApiKey)
+                        .queryParam("Type", "json")
+                        .queryParam("pIndex", 1)
+                        .queryParam("pSize", 500)
+                        .queryParam("ATPT_OFCDC_SC_CODE", "D10")
+                        .queryParam("SCHUL_KND_SC_NM", "고등학교")
+                        .build()
+                ).retrieve().bodyToMono(String.class)
+                .block();
+
+        ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        List<SchoolRes> schoolInfoList = new ArrayList<>();
+        try {
+            JsonNode jsonNode = om.readTree(json);
+            List<SchoolVo> schoolList = om.convertValue(jsonNode.at("/schoolInfo/1/row"), new TypeReference<>() {});
+            for (SchoolVo vo : schoolList) {
+                if ("일반고".equals(vo.getType()) || "자율고".equals(vo.getType())) {
+                    schoolInfoList.add(SchoolRes.builder()
+                            .nm(vo.getNm())
+                            .schoolCode(vo.getCode())
+                            .build());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return schoolInfoList;
+
+//        List<SchoolEntity> schoolList = schoolRepository.findAll();
+//        return schoolList.stream().map(schoolEntity -> SchoolVo.builder()
+//                .schoolId(schoolEntity.getSchoolId())
+//                .nm(schoolEntity.getNm())
+//                .schoolCode(schoolEntity.getCode())
+//                .build()).toList();
     }
 
     public List<Integer> getClassList(SchoolParam p) {

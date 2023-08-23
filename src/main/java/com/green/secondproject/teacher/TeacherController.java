@@ -163,7 +163,7 @@ public class TeacherController {
     @GetMapping("/aca-graph")
     @Operation(summary = "선생님 - 담당학급 최근성적내신 등급비율 출력",  description = "출력값 : (1)cateNm - 과목계열명 <br>(2)rating - 등급<br>(3)percentage - 학생비율<br><br>")
     public TeacherGraphContainerVo teacherAcaGraph(@AuthenticationPrincipal MyUserDetails myuser){
-        return service.teacherAcaGraph(myuser.getClassId());
+        return service.teacherAcaGraph(myuser.getVanId());
     }
 
 //    @GetMapping("/aca/{id}")

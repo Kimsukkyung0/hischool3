@@ -1,7 +1,6 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.common.config.etc.CommonRes;
-import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -111,7 +110,7 @@ public class SignController {
 
     @GetMapping("/school-list")
     @Operation(summary = "대구 일반, 자율고 리스트")
-    public List<SchoolVo> getSchoolList() {
+    public List<SchoolRes> getSchoolList() {
         return SERVICE.getSchoolList();
     }
 

@@ -1,7 +1,7 @@
 
 INSERT INTO `school` VALUES
                          (1,'함지고등학교','hamji.png','7240273'),
-                         (2,'오성고등학교','osung.png','7240099');
+                         (2,'오성고등학교','오성고등학교.png','7240099');
 
 INSERT INTO `van` VALUES
                       (1,1,'2023','1','1'),
