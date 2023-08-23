@@ -39,7 +39,7 @@ public class MyPageController {
 
 
 
-    @PutMapping(value = "/user-info-update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(value = "/user-info", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "유저 정보 수정",
             description = "요구값 : <br>(1)phone - 연락처<br>(2)address - 주소<br>(3)detailAddr - 상세 주소<br>" +
                     "(4)pw - 비밀번호")
