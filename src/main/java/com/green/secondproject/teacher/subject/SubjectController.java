@@ -58,8 +58,8 @@ public class SubjectController {
                     "<br>nm - 학생이름")
     List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user,@RequestParam Long categoryId) {
         SubjectDto dto = new SubjectDto();
-        dto.setCategoryid(categoryId);
-        dto.setUserid(user.getUserId());
+        dto.setCategoryId(categoryId);
+        dto.setUserId(user.getUserId());
 
         return serivce.smalllist(dto);
     }
