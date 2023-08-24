@@ -1,4 +1,4 @@
-package com.green.secondproject.student;
+package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.entity.AcaEntity;
 import org.springframework.data.jpa.repository.JpaRepository;

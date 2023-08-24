@@ -1,4 +1,4 @@
-package com.green.secondproject.teacher.subject;
+package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.entity.SbjCategoryEntity;
 import com.green.secondproject.common.entity.SubjectEntity;
