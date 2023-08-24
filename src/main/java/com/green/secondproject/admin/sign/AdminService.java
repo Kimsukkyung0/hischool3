@@ -9,22 +9,24 @@ import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
+import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AdminSignService {
+public class AdminService {
     private final SchoolAdminRepository repository;
     private final PasswordEncoder PW_ENCODER;
     private final RedisService redisService;
     private final JwtTokenProvider JWT_PROVIDER;
 
     public SignInResultDto signIn(SignInParam p, String ip) {
-        //todo 학교 관리자 회원가입 여부
         final String ADMIN = "ROLE_ADMIN";
         SchoolAdminEntity schoolAdmin = repository.findByEmail(p.getEmail());
 

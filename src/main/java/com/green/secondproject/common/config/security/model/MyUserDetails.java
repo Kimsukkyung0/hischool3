@@ -19,6 +19,7 @@ public class MyUserDetails implements UserDetails {
     private String pw;
     private String nm;
     private Long vanId;
+    private Long schoolId;
     private String schoolNm;
     private String grade;
     private String classNum;
