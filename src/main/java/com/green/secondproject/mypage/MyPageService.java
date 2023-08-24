@@ -5,7 +5,7 @@ import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
-import com.green.secondproject.user.UserRepository;
+import com.green.secondproject.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
