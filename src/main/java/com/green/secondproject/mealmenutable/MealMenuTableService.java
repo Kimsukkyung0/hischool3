@@ -28,6 +28,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -102,7 +103,7 @@ public class MealMenuTableService {
 
     public MealTableContainerVo getMealTableApi(MealTableDto dto){
 
-        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
+        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/mealServiceDietInfo")
                         //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
                         .queryParam("KEY", myApiKey)
                         .queryParam("Type", "json")
@@ -119,12 +120,14 @@ public class MealMenuTableService {
         log.info("json : {}",json);
 
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        List<MealTableVo> mealTableVo = null;
+        List<MealTableVo> mealTableVo = new ArrayList<>();
         MealTableContainerVo result = null;
 
         try{
             JsonNode jsonNode = om.readTree(json); //자바객체
             mealTableVo = om.convertValue(jsonNode.at("/mealServiceDietInfo/1/row"), new TypeReference<>() {});
+            log.info("mealTableVo : {}",mealTableVo);
+
             for (MealTableVo f : mealTableVo) {
                 StringBuffer sb = new StringBuffer();
                 sb.append(f.getDate());
