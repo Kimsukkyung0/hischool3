@@ -58,7 +58,7 @@ public class NoticeService {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
 
         NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent())
-                .imptyn(dto.getImptyn()).schoolEntity(schoolEntity).build();
+                .imptYn(dto.getImptyn()).schoolEntity(schoolEntity).build();
         NoticeEntity result = noticeRepository.save(entity);
 
         return NoticeVo.builder()

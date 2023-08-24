@@ -1,4 +1,4 @@
-package com.green.secondproject.admin.sign.model;
+package com.green.secondproject.admin;
 
 import lombok.Data;
 
