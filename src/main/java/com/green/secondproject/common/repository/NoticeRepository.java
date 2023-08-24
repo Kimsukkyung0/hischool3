@@ -1,4 +1,4 @@
-package com.green.secondproject.notice;
+package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     List<NoticeEntity> findByschoolEntity(SchoolEntity entity);
+
+
+
 }

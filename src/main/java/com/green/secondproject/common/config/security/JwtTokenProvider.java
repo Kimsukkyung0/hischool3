@@ -1,8 +1,10 @@
 package com.green.secondproject.common.config.security;
 
+import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.common.entity.UserEntity;
-import com.green.secondproject.user.UserRepository;
+import com.green.secondproject.common.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -29,10 +31,12 @@ public class JwtTokenProvider {
     public final long ACCESS_TOKEN_VALID_MS = 1000L * 60 * 30;
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
     private final UserRepository userRepository;
+    private final SchoolAdminRepository adminRepository;
 
     public JwtTokenProvider(@Value("${springboot.jwt.access-secret}") String accessSecretKey
                             , @Value("${springboot.jwt.refresh-secret}") String refreshSecretKey
-                            , @Value("${springboot.jwt.token-type}") String tokenType, UserRepository userRepository) {
+                            , @Value("${springboot.jwt.token-type}") String tokenType, UserRepository userRepository,
+                            SchoolAdminRepository adminRepository) {
         byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecretKey);
         this.ACCESS_KEY = Keys.hmacShaKeyFor(accessKeyBytes);
 
@@ -40,6 +44,7 @@ public class JwtTokenProvider {
         this.REFRESH_KEY = Keys.hmacShaKeyFor(refreshKeyBytes);
         this.TOKEN_TYPE = tokenType;
         this.userRepository = userRepository;
+        this.adminRepository = adminRepository;
     }
 
     public String generateJwtToken(String strIuser, List<String> roles, long token_valid_ms, Key key) {
@@ -74,7 +79,20 @@ public class JwtTokenProvider {
     private UserDetails getUserDetailsFromToken(String token, Key key) {
         Claims claims = getClaims(token, key);
         String strIuser = claims.getSubject();
+        Long id = Long.valueOf(strIuser);
         List<String> roles = (List<String>)claims.get("roles");
+
+        log.info(roles.get(0));
+        if ("ROLE_ADMIN".equals(roles.get(0))) {
+            SchoolAdminEntity admin = adminRepository.findById(id).get();
+            return MyUserDetails.builder()
+                    .userId(admin.getAdminId())
+                    .email(admin.getEmail())
+                    .pw(admin.getPw())
+                    .schoolNm(admin.getSchoolEntity().getNm())
+                    .build();
+        }
+
         UserEntity user = userRepository.findById(Long.valueOf(strIuser)).get();
 
         return MyUserDetails.builder()
