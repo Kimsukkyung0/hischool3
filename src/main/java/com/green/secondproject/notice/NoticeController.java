@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,8 +21,10 @@ public class NoticeController {
 
     @GetMapping
     @Operation(summary = "공지사항 리스트")
-
-    List<NoticeVo> noticeList(){
+    public List<NoticeVo> noticeList(){
         return service.noticeList();
     }
+//    @PostMapping
+//    @Operation(summary = "공지사항 입력")
+//    public
 }

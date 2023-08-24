@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "notice",uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"school_id"})
-})
+@Table(name = "notice")
 @Data
 public class NoticeEntity extends BaseEntity {
     @Id //pk
