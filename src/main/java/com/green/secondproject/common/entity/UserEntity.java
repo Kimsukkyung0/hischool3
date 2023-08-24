@@ -29,7 +29,7 @@ public class UserEntity extends BaseEntity {
     private Long userId;
 
     @ManyToOne
-    @JoinColumn(name = "van_id")
+    @JoinColumn(name = "van_id", nullable = false)
     private VanEntity vanEntity;
 
     @Column(nullable = false, length = 50, unique = true)

@@ -1,6 +1,7 @@
 package com.green.secondproject.sign;
 
 import com.green.secondproject.common.config.redis.RedisService;
+import com.green.secondproject.common.utils.PwUtils;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -50,6 +51,29 @@ public class EmailService {
         return message;
     }
 
+    public MimeMessage findPwMessage(String to) throws MessagingException, UnsupportedEncodingException {
+        ePw = PwUtils.getRandomPassword(8);
+        log.info("보내는 대상 : "+ to);
+        log.info("임시 비밀번호 : " + ePw);
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        message.addRecipients(MimeMessage.RecipientType.TO, to); // to 보내는 대상
+        message.setSubject("Hi School 임시 비밀번호 발급: "); //메일 제목
+
+        // 메일 내용 메일의 subtype을 html로 지정하여 html문법 사용 가능
+        String msg="";
+        msg += "<h1 style=\"font-size: 30px; padding-right: 30px; padding-left: 30px;\">임시 비밀번호 발급</h1>";
+        msg += "<p style=\"font-size: 17px; padding-right: 30px; padding-left: 30px;\">아래 비밀번호를 로그인 화면에서 입력해주세요. 로그인 후에는 비밀번호를 변경해주세요.</p>";
+        msg += "<div style=\"padding-right: 30px; padding-left: 30px; margin: 32px 0 40px;\"><table style=\"border-collapse: collapse; border: 0; background-color: #F4F4F4; height: 70px; table-layout: fixed; word-wrap: break-word; border-radius: 6px;\"><tbody><tr><td style=\"text-align: center; vertical-align: middle; font-size: 30px;\">";
+        msg += ePw;
+        msg += "</td></tr></tbody></table></div>";
+
+        message.setText(msg, "utf-8", "html"); //내용, charset타입, subtype
+        message.setFrom(new InternetAddress(id,"prac_Admin")); //보내는 사람의 메일 주소, 보내는 사람 이름
+
+        return message;
+    }
+
     // 인증코드 만들기
     public static String createKey() {
         StringBuffer key = new StringBuffer();
@@ -77,6 +101,17 @@ public class EmailService {
             return "유효하지 않은 이메일";
         }
         return ePw; // 메일로 보냈던 인증 코드를 서버로 리턴
+    }
+
+    public String sendFindPw(String to) throws Exception {
+        MimeMessage message = findPwMessage(to);
+        try{
+            javaMailSender.send(message); // 메일 발송
+        }catch(MailException es){
+            es.printStackTrace();
+            return "유효하지 않은 이메일";
+        }
+        return ePw; // 메일로 보냈던 임시 비밀번호를 서버로 리턴
     }
 
     public int verifyEmail(String key) {

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
@@ -20,6 +21,7 @@ import com.green.secondproject.common.utils.MyFileUtils;
 import com.green.secondproject.user.UserRepository;
 import com.green.secondproject.van.VanRepository;
 import io.jsonwebtoken.Claims;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -49,6 +52,7 @@ public class SignService {
     private final UserRepository userRepository;
     private final SchoolRepository schoolRepository;
     private final VanRepository vanRepository;
+    private final EmailService emailService;
 
     @Value("${file.dir}")
     private String FILE_DIR;
@@ -76,11 +80,12 @@ public class SignService {
 
         SchoolEntity schoolEntity = schoolRepository.findByCode(p.getSchoolCode());
         if (schoolEntity == null) {
-            schoolRepository.save(SchoolEntity.builder()
+            schoolEntity = SchoolEntity.builder()
                     .code(p.getSchoolCode())
                     .logo(p.getSchoolNm() + ".png")
                     .nm(p.getSchoolNm())
-                    .build());
+                    .build();
+            schoolRepository.save(schoolEntity);
         }
 
         String year = String.valueOf(LocalDate.now().getYear());
@@ -88,12 +93,13 @@ public class SignService {
                 p.getGrade(), p.getClassNum());
 
         if (vanEntity == null) {
-            vanRepository.save(VanEntity.builder()
+            vanEntity = VanEntity.builder()
                     .schoolEntity(schoolEntity)
                     .year(year)
                     .grade(p.getGrade())
                     .classNum(p.getClassNum())
-                    .build());
+                    .build();
+            vanRepository.save(vanEntity);
         }
 
         UserEntity entity = UserEntity.builder()
@@ -157,7 +163,7 @@ public class SignService {
     public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
 
-        UserEntity user = userRepository.findUserEntityByEmail(p.getEmail());
+        UserEntity user = userRepository.findByEmail(p.getEmail());
 
         if (user == null) {
             throw new RuntimeException("존재하지 않는 이메일");
@@ -167,6 +173,9 @@ public class SignService {
         }
         if (user.getAprYn() == 0) {
             throw new RuntimeException("미승인 계정");
+        }
+        if (!EnrollState.ENROLL.equals(user.getEnrollState())) {
+            throw new RuntimeException("탈퇴한 회원");
         }
 
         String redisKey = String.format("c:RT(%s):%s:%s", "Server", user.getUserId(), ip);
@@ -329,6 +338,18 @@ public class SignService {
         Collections.sort(list);
 
         return list;
+    }
+
+    public String findPw(String email) throws Exception {
+        UserEntity user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("존재하지 않는 이메일");
+        }
+
+        String newPw = emailService.sendFindPw(email);
+        user.setPw(PW_ENCODER.encode(newPw));
+        userRepository.save(user);
+        return newPw;
     }
 
     private void setSuccessResult(SignUpResultDto result) {

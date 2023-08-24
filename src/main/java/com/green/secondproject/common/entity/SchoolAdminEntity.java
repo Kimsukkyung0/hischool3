@@ -13,7 +13,7 @@ public class SchoolAdminEntity {
     private Long adminId;
 
     @OneToOne
-    @JoinColumn(name = "school_id")
+    @JoinColumn(name = "school_id", nullable = false)
     private SchoolEntity schoolEntity;
 
     @Column(nullable = false, length = 50, unique = true)
