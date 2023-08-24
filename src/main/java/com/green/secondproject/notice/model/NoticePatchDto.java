@@ -5,12 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 
-public class NoticeInsDto {
+public class NoticePatchDto {
+    private Long noticeId;
     private String title;
     private String content;
-    private int imptyn;
 }
