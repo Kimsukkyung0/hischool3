@@ -87,7 +87,7 @@ public class TeacherController {
 
 
 
-    @PatchMapping("/accept-student")
+    @PatchMapping("/act-std")
     @Operation(summary = "학생 가입 승인",
             description = "요구값 : <br>(1)userId - 학생 PK값")
     public int acceptStudent(@RequestParam Long userId) {
@@ -101,7 +101,7 @@ public class TeacherController {
 //    }
 
 
-    @PatchMapping("/cancel-std")
+    @PatchMapping("/can-std")
     @Operation(summary = "학생 가입 승인 취소",
             description = "요구값 : <br>(1)userId - 학생 PK값")
     public int cancelAcceptStd(@RequestParam Long userId) {
