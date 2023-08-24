@@ -1,6 +1,9 @@
 package com.green.secondproject.header;
 
+import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.header.model.SelSchoolInfoDto;
 import com.green.secondproject.header.model.SelSchoolInfoVo;
 import com.green.secondproject.header.model.SelSchoolLogoDto;
@@ -16,19 +19,25 @@ public class HeaderService {
 
     @Value("${file.logoPath}")
     private String logoPath;
-//    private final SchoolRepository schoolRepository;
+    private final SchoolRepository schoolRepository;
+    private final AuthenticationFacade FACADE;
 
-    public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
-        SelSchoolInfoDto dto = new SelSchoolInfoDto();
-        dto.setUserId(myuser.getUserId());
-        return mapper.selSchoolInfo(dto);
-//        SchoolEntity schoolEntity = SchoolEntity.builder()
-//                .schoolId(myuser.getUserId())
-//                .build();
+//    public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
+////        SelSchoolInfoDto dto = new SelSchoolInfoDto();
+////        dto.setUserId(myuser.getUserId());
+////        return mapper.selSchoolInfo(dto);
 //
-//        return
-
-    }
+//
+//        SchoolEntity schoolEntity = schoolRepository.getReferenceById(myuser.getSchoolId());
+//        myuser.setSchoolId(schoolEntity.getSchoolId());
+//        SchoolEntity entity = SchoolEntity.builder()
+//                .schoolId(myuser.getSchoolId())
+//                .nm(myuser.getSchoolNm())
+//                .
+//
+//        return result;
+//
+//    }
 
     public SelSchoolLogoVo selSchoolLogo(MyUserDetails myuser) {
         SelSchoolLogoDto dto = new SelSchoolLogoDto();

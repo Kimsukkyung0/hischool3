@@ -2,11 +2,13 @@ package com.green.secondproject.notice;
 
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.notice.model.NoticeInsDto;
+import com.green.secondproject.notice.model.NoticePatchDto;
 import com.green.secondproject.notice.model.NoticeSelDto;
 import com.green.secondproject.notice.model.NoticeVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,4 +34,24 @@ public class NoticeController {
     public NoticeVo saveByNotice(@RequestBody NoticeInsDto dto){
         return service.saveByNotice(dto);
     }
+
+    @GetMapping("/bynotice")
+    @Operation(summary = "공지사항 하나 선택보기")
+    public NoticeVo findBySchoolNotice(@RequestParam Long noticeId){
+        return service.findBySchoolNotice(noticeId);
+    }
+
+    @PatchMapping
+    @Transactional
+    @Operation(summary = "글 수정")
+    public NoticeVo no(NoticePatchDto dto){
+
+        return service.upNotice(dto);
+    }
+    @DeleteMapping
+    @Operation(summary = "글 삭제")
+    public void del(@RequestParam Long noticeId){
+        service.delNotice(noticeId);
+    }
+
 }
