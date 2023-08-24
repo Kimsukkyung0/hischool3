@@ -1,28 +1,32 @@
 package com.green.secondproject.admin.sign;
 
 import com.green.secondproject.admin.sign.model.AdminParam;
+import com.green.secondproject.admin.sign.model.StatusVo;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
+import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
-import com.green.secondproject.sign.model.SignUpParam;
-import com.green.secondproject.sign.model.SignUpResultDto;
+import com.green.secondproject.sign.model.TokenDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin")
-@Tag(name = "관리자 로그인")
-public class AdminSignController {
-    private final AdminSignService service;
+@Tag(name = "관리자")
+public class AdminController {
+    private final AdminService service;
+    private final SignService signService;
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
@@ -48,4 +52,36 @@ public class AdminSignController {
     public SchoolAdminEntity signUp(@RequestBody AdminParam p) {
         return service.signUp(p);
     }
+
+    @PostMapping("/refresh-token")
+    @Operation(summary = "accessToken 재발행")
+    public String refreshToken(HttpServletRequest req, @RequestBody TokenDto token) {
+        return signService.refreshToken(req, token.getRefreshToken());
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
+    public ResponseEntity<?> logout(HttpServletRequest req) {
+        signService.logout(req);
+        ResponseCookie responseCookie = ResponseCookie.from("refresh-token", "")
+                .maxAge(0)
+                .path("/")
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, responseCookie.toString())
+                .build();
+    }
+
+//    @GetMapping("/status")
+//    @Operation(summary = "교원/학생 현황")
+//    public StatusVo getStatus() {
+//        //야 남규ㅠ진 코드 잘 짜면 다냐/?
+//        //다냐고
+//        // 왕꿈틀이 내가 다 먹는다 ㅋㅋ
+//        // 규진이 꿈에 왕꿈틀이나올예정 힝
+//        // 야 니 우산 뭐냐 도데체
+//        //내가 정리 해놓음
+//    }
 }

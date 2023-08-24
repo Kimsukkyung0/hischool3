@@ -8,6 +8,7 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
@@ -24,6 +25,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -216,8 +218,12 @@ public class SignService {
         String strIuser = claims.getSubject();
         Long iuser = Long.valueOf(strIuser);
         String ip = req.getRemoteAddr();
+        List<String> roles = (List<String>)claims.get("roles");
 
-        String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
+        String redisKey = "ROLE_ADMIN".equals(roles.get(0)) ?
+                String.format("c:RT(%s):ADMIN:%s:%s", "Server", iuser, ip) :
+                String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
+
         String redisRt = redisService.getData(redisKey);
         if (redisRt == null) {
             return error;
@@ -227,8 +233,6 @@ public class SignService {
             if (!redisRt.equals(refreshToken)) {
                 return error;
             }
-
-            List<String> roles = (List<String>)claims.get("roles");
 
             return JWT_PROVIDER.generateJwtToken(strIuser, roles,
                     JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
@@ -242,8 +246,12 @@ public class SignService {
         String accessToken = JWT_PROVIDER.resolveToken(req, JWT_PROVIDER.TOKEN_TYPE);
         Long iuser = facade.getLoginUserPk();
         String ip = req.getRemoteAddr();
+        MyUserDetails userDetails = facade.getLoginUser();
 
-        String redisKey = String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
+        String redisKey = "ROLE_ADMIN".equals(userDetails.getRoles().get(0)) ?
+                String.format("c:RT(%s):ADMIN:%s:%s", "Server", iuser, ip) :
+                String.format("c:RT(%s):%s:%s", "Server", iuser, ip);
+
         String refreshTokenInRedis = redisService.getData(redisKey);
         if (refreshTokenInRedis != null) {
             redisService.deleteData(redisKey);

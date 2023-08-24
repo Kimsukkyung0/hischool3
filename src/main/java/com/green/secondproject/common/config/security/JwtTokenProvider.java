@@ -90,6 +90,7 @@ public class JwtTokenProvider {
                     .email(admin.getEmail())
                     .pw(admin.getPw())
                     .schoolNm(admin.getSchoolEntity().getNm())
+                    .schoolId(admin.getSchoolEntity().getSchoolId())
                     .build();
         }
 
@@ -102,6 +103,7 @@ public class JwtTokenProvider {
                 .nm(user.getNm())
                 .vanId(user.getVanEntity().getVanId())
                 .schoolNm(user.getVanEntity().getSchoolEntity().getNm())
+                .schoolId(user.getVanEntity().getSchoolEntity().getSchoolId())
                 .grade(user.getVanEntity().getGrade())
                 .classNum(user.getVanEntity().getClassNum())
                 .pic(user.getPic())
