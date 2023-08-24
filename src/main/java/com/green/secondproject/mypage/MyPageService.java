@@ -2,37 +2,40 @@ package com.green.secondproject.mypage;
 
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.mypage.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
+import com.green.secondproject.common.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.util.StringUtils;
 
 import java.io.File;
 
+import static com.green.secondproject.common.config.etc.EnrollState.GRADUATION;
+
 @Slf4j
 @Service
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
+@ToString
 public class MyPageService {
     private final MyPageMapper mapper;
     private final AuthenticationFacade facade;
     private final PasswordEncoder PW_ENCODER;
+    private final UserRepository userRepository;
+
 
     @Value("/home/download")
     private String fileDir;
 
     @Value("${file.imgPath}")
     private String imgPath;
-
-    @Autowired
-    public MyPageService(MyPageMapper mapper, AuthenticationFacade facade, PasswordEncoder passwordEncoder) {
-        this.mapper = mapper;
-        this.facade = facade;
-        this.PW_ENCODER = passwordEncoder;
-    }
 
 
     public SelUserMyPageVo selUserMyPage(MyUserDetails myuser) {
@@ -46,9 +49,17 @@ public class MyPageService {
 
 
     public int delUser(MyUserDetails myuser) {
-        DelUserDto dto = new DelUserDto();
-        dto.setUserId(myuser.getUserId());
-        return mapper.delUser(dto);
+//        DelUserDto dto = new DelUserDto();
+//        dto.setUserId(myuser.getUserId());
+//        return mapper.delUser(dto);
+
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(GRADUATION);
+
+        userRepository.save(userEntity);
+
+        return 1;
     }
 
 
@@ -84,6 +95,9 @@ public class MyPageService {
             }
 
 
+//            if(!StringUtils.isEmpty(myuser.getPw()) && !myuser.getPw().equals(myuser.getPw())) {
+//                myuser.setPw(myuser.getPw());
+//            }
             try {
                 UserUpdDto dto = UserUpdDto.builder()
                         .phone(p.getPhone())
