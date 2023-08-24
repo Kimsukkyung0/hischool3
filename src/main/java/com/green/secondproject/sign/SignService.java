@@ -5,15 +5,16 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
-import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
 import com.green.secondproject.common.utils.ApiUtils;
+import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.school.SchoolRepository;
 import com.green.secondproject.sign.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
@@ -41,7 +42,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SignService {
-    private final UserMapper MAPPER;
     private final JwtTokenProvider JWT_PROVIDER;
     private final PasswordEncoder PW_ENCODER;
     private final AuthenticationFacade facade;
@@ -49,6 +49,7 @@ public class SignService {
     private final UserRepository userRepository;
     private final SchoolRepository schoolRepository;
     private final VanRepository vanRepository;
+    private final EmailService emailService;
 
     @Value("${file.dir}")
     private String FILE_DIR;
@@ -76,11 +77,12 @@ public class SignService {
 
         SchoolEntity schoolEntity = schoolRepository.findByCode(p.getSchoolCode());
         if (schoolEntity == null) {
-            schoolRepository.save(SchoolEntity.builder()
+            schoolEntity = SchoolEntity.builder()
                     .code(p.getSchoolCode())
                     .logo(p.getSchoolNm() + ".png")
                     .nm(p.getSchoolNm())
-                    .build());
+                    .build();
+            schoolRepository.save(schoolEntity);
         }
 
         String year = String.valueOf(LocalDate.now().getYear());
@@ -88,12 +90,13 @@ public class SignService {
                 p.getGrade(), p.getClassNum());
 
         if (vanEntity == null) {
-            vanRepository.save(VanEntity.builder()
+            vanEntity = VanEntity.builder()
                     .schoolEntity(schoolEntity)
                     .year(year)
                     .grade(p.getGrade())
                     .classNum(p.getClassNum())
-                    .build());
+                    .build();
+            vanRepository.save(vanEntity);
         }
 
         UserEntity entity = UserEntity.builder()
@@ -128,7 +131,7 @@ public class SignService {
         try {
             result = userRepository.save(entity);
         } catch (Exception e) {
-            setFailResult(resultDto);
+            ResultUtils.setFailResult(resultDto);
             return resultDto;
         }
 
@@ -150,14 +153,14 @@ public class SignService {
             tempAprPic.renameTo(targetAprPic);
         }
 
-        setSuccessResult(resultDto);
+        ResultUtils.setSuccessResult(resultDto);
         return resultDto;
     }
 
     public SignInResultDto signIn(SignInParam p, String ip) {
         log.info("[getSignInResult] signDataHandler로 회원 정보 요청");
 
-        UserEntity user = userRepository.findUserEntityByEmail(p.getEmail());
+        UserEntity user = userRepository.findByEmail(p.getEmail());
 
         if (user == null) {
             throw new RuntimeException("존재하지 않는 이메일");
@@ -167,6 +170,9 @@ public class SignService {
         }
         if (user.getAprYn() == 0) {
             throw new RuntimeException("미승인 계정");
+        }
+        if (!EnrollState.ENROLL.equals(user.getEnrollState())) {
+            throw new RuntimeException("탈퇴한 회원");
         }
 
         String redisKey = String.format("c:RT(%s):%s:%s", "Server", user.getUserId(), ip);
@@ -190,7 +196,7 @@ public class SignService {
                                 .build();
 
         log.info("[getSignInResult] SignInResultDto 객체 값 주입");
-        setSuccessResult(dto);
+        ResultUtils.setSuccessResult(dto);
         return dto;
     }
 
@@ -253,7 +259,7 @@ public class SignService {
     }
 
     public int mailCheck(String email) {
-        UserVo user = MAPPER.selUserByEmail(email);
+        UserEntity user = userRepository.findByEmail(email);
         return user == null ? 1 : 0;
     }
 
@@ -331,16 +337,16 @@ public class SignService {
         return list;
     }
 
-    private void setSuccessResult(SignUpResultDto result) {
-        result.setSuccess(true);
-        result.setCode(CommonRes.SUCCESS.getCode());
-        result.setMsg(CommonRes.SUCCESS.getMsg());
-    }
+    public String findPw(String email) throws Exception {
+        UserEntity user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("존재하지 않는 이메일");
+        }
 
-    private void setFailResult(SignUpResultDto result) {
-        result.setSuccess(false);
-        result.setCode(CommonRes.FAIL.getCode());
-        result.setMsg(CommonRes.FAIL.getMsg());
+        String newPw = emailService.sendFindPw(email);
+        user.setPw(PW_ENCODER.encode(newPw));
+        userRepository.save(user);
+        return newPw;
     }
 }
 

@@ -25,7 +25,6 @@ public class SignController {
     //ApiParam은 문서 자동화를 위한 Swagger에서 쓰이는 어노테이션이고
     //RequestParam은 http 로부터 요청 온 정보를 받아오기 위한 스프링 어노테이션이다.
 
-
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
             "email": ex) "test@gmail.com"<br>
@@ -47,7 +46,8 @@ public class SignController {
             "email": ex) "std1@gmail.com"<br>
             "pw": ex) "1111"<br>
             "nm": ex) "김학생"<br>
-            "schoolId": 사용자가 선택한 학교의 pk값 ex) 53<br>
+            "schoolCode": 사용자가 선택한 학교의 학교코드 ex) 7240223<br>
+            "schoolNm": ex) 강동고등학교<br>
             "grade": ex) "1"<br>
             "classNum": ex) "1"<br>
             "birth": ex) "2003-08-02"<br>
@@ -115,8 +115,17 @@ public class SignController {
     }
 
     @GetMapping("/class-list")
-    @Operation(summary = "선택한 학교, 학년의 반 리스트")
+    @Operation(summary = "선택한 학교, 학년의 반 리스트", description = """
+            "schoolCode": ex) "7240223"<br>
+            "grade": ex) "1"<br>
+            """)
     public List<Integer> getClassList(SchoolParam p) {
         return SERVICE.getClassList(p);
+    }
+
+    @PostMapping("/pw-find")
+    @Operation(summary = "비밀번호 찾기")
+    public String findPw(String email) throws Exception {
+        return SERVICE.findPw(email);
     }
 }

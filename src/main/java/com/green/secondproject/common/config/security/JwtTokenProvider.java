@@ -28,20 +28,17 @@ public class JwtTokenProvider {
     //public final long ACCESS_TOKEN_VALID_MS = 3_600_000L; // 1000L * 60 * 60 -> 1시간
     public final long ACCESS_TOKEN_VALID_MS = 1000L * 60 * 30;
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
-    private final UserMapper mapper;
     private final UserRepository userRepository;
 
     public JwtTokenProvider(@Value("${springboot.jwt.access-secret}") String accessSecretKey
                             , @Value("${springboot.jwt.refresh-secret}") String refreshSecretKey
-                            , @Value("${springboot.jwt.token-type}") String tokenType,
-                            UserMapper mapper, UserRepository userRepository) {
+                            , @Value("${springboot.jwt.token-type}") String tokenType, UserRepository userRepository) {
         byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecretKey);
         this.ACCESS_KEY = Keys.hmacShaKeyFor(accessKeyBytes);
 
         byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecretKey);
         this.REFRESH_KEY = Keys.hmacShaKeyFor(refreshKeyBytes);
         this.TOKEN_TYPE = tokenType;
-        this.mapper = mapper;
         this.userRepository = userRepository;
     }
 
