@@ -4,6 +4,7 @@ import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.SbjCategoryEntity;
 import com.green.secondproject.common.entity.SubjectEntity;
+import com.green.secondproject.common.repository.SubjectRepository;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
