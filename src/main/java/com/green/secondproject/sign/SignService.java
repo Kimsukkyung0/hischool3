@@ -9,19 +9,18 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
-import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
 import com.green.secondproject.common.utils.ApiUtils;
+import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.school.SchoolRepository;
 import com.green.secondproject.sign.model.*;
 import com.green.secondproject.common.utils.MyFileUtils;
 import com.green.secondproject.user.UserRepository;
 import com.green.secondproject.van.VanRepository;
 import io.jsonwebtoken.Claims;
-import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,7 +42,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class SignService {
-    private final UserMapper MAPPER;
     private final JwtTokenProvider JWT_PROVIDER;
     private final PasswordEncoder PW_ENCODER;
     private final AuthenticationFacade facade;
@@ -134,7 +131,7 @@ public class SignService {
         try {
             result = userRepository.save(entity);
         } catch (Exception e) {
-            setFailResult(resultDto);
+            ResultUtils.setFailResult(resultDto);
             return resultDto;
         }
 
@@ -156,7 +153,7 @@ public class SignService {
             tempAprPic.renameTo(targetAprPic);
         }
 
-        setSuccessResult(resultDto);
+        ResultUtils.setSuccessResult(resultDto);
         return resultDto;
     }
 
@@ -199,7 +196,7 @@ public class SignService {
                                 .build();
 
         log.info("[getSignInResult] SignInResultDto 객체 값 주입");
-        setSuccessResult(dto);
+        ResultUtils.setSuccessResult(dto);
         return dto;
     }
 
@@ -262,7 +259,7 @@ public class SignService {
     }
 
     public int mailCheck(String email) {
-        UserVo user = MAPPER.selUserByEmail(email);
+        UserEntity user = userRepository.findByEmail(email);
         return user == null ? 1 : 0;
     }
 
@@ -350,18 +347,6 @@ public class SignService {
         user.setPw(PW_ENCODER.encode(newPw));
         userRepository.save(user);
         return newPw;
-    }
-
-    private void setSuccessResult(SignUpResultDto result) {
-        result.setSuccess(true);
-        result.setCode(CommonRes.SUCCESS.getCode());
-        result.setMsg(CommonRes.SUCCESS.getMsg());
-    }
-
-    private void setFailResult(SignUpResultDto result) {
-        result.setSuccess(false);
-        result.setCode(CommonRes.FAIL.getCode());
-        result.setMsg(CommonRes.FAIL.getMsg());
     }
 }
 

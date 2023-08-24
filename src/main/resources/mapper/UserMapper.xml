@@ -2,56 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.green.secondproject.common.config.security.UserMapper">
-    <insert id="save" useGeneratedKeys="true" keyProperty="userId">
-        INSERT INTO user
-        SET class_id = #{classId},
-            email = #{email},
-            pw = #{pw},
-            nm = #{nm},
-            pic = #{pic},
-            birth = #{birth},
-            phone = #{phone},
-            address = #{address},
-            detail_addr = #{detailAddress},
-            role = #{role},
-            apr_pic = #{aprPic},
-            apr_yn = #{aprYn}
-    </insert>
-
-    <select id="selUserByEmail">
-        SELECT user_id userId, email, pw, u.nm, u.class_id classId, s.nm schoolNm, v.grade, v.class classNum, pic, role,
-            apr_yn aprYn
-        FROM user u
-        inner join van v on u.class_id = v.class_id
-        inner join school s on v.school_id = s.school_id
-        WHERE email = #{email} and del_yn = 0
-    </select>
-
-    <select id="selUserById">
-        SELECT user_id userId, email, pw, u.nm, u.class_id classId, s.nm schoolNm, v.grade, v.class classNum, pic, role,
-            apr_yn aprYn
-        FROM user u
-        inner join van v on u.class_id = v.class_id
-        inner join school s on v.school_id = s.school_id
-        WHERE user_id = #{userId}
-    </select>
-
-    <select id="selSchoolIdByNm">
-        select school_id
-        from school
-        where nm = #{nm}
-    </select>
-    
-    <select id="selClassId">
-        select class_id
-        from van
-        where school_id = #{schoolId} and year = #{year} and grade = #{grade} and class = #{classNum}
-    </select>
-
     <select id="selSchoolCdByNm">
         select school_cd
         from school
         where nm = #{nm}
     </select>
-
 </mapper>
