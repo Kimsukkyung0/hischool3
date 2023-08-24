@@ -2,11 +2,18 @@ package com.green.secondproject.common.entity;
 
 import com.green.secondproject.common.config.jpa.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "notice")
 @Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class NoticeEntity extends BaseEntity {
     @Id //pk
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto_increment

@@ -14,7 +14,6 @@ public class NoticeVo {
     private Long noticeId;
     private String title;
     private String content;
-    private Long userId;
     private LocalDateTime createdAt;
     private int hits;
 }

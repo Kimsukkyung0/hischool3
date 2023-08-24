@@ -1,14 +1,13 @@
 package com.green.secondproject.notice;
 
+import com.green.secondproject.common.entity.NoticeEntity;
+import com.green.secondproject.notice.model.NoticeInsDto;
 import com.green.secondproject.notice.model.NoticeSelDto;
 import com.green.secondproject.notice.model.NoticeVo;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,4 +26,10 @@ public class NoticeController {
 //    @PostMapping
 //    @Operation(summary = "공지사항 입력")
 //    public
+
+    @PostMapping
+    @Operation(summary = "공지사항등록")
+    public NoticeVo saveByNotice(@RequestBody NoticeInsDto dto){
+        return service.saveByNotice(dto);
+    }
 }
