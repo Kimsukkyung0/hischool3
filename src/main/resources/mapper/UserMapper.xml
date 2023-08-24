@@ -3,7 +3,7 @@
 
 <mapper namespace="com.green.secondproject.common.config.security.UserMapper">
     <select id="selSchoolCdByNm">
-        select school_cd
+        select code
         from school
         where nm = #{nm}
     </select>

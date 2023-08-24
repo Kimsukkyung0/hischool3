@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableDto;
 import com.green.secondproject.mealmenutable.model.MealTableVo;
@@ -37,31 +38,32 @@ import java.util.Map;
 @Service
 @Slf4j
 public class MealMenuTableService {
-    private final WebClient webClient;
-    private final String myApiKey;
+//    private final WebClient webClient;
+    @Value("${my-api.key}")
+    private String myApiKey;
 
     @Autowired
     private UserMapper USERMAPPER;
 
-
-    public MealMenuTableService(@Value("${my-api.key}") String myApiKey) {
-        this.myApiKey = myApiKey;
-        TcpClient tcpClient = TcpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
-                .doOnDisconnected(connection -> {
-                    connection.addHandlerLast(new ReadTimeoutHandler(5000));
-                    connection.addHandlerLast(new WriteTimeoutHandler(5000));
-                });
-        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-                .codecs(config -> config.defaultCodecs().maxInMemorySize(-1))
-                .build();
-
-        this.webClient = WebClient.builder()
-                .exchangeStrategies(exchangeStrategies).baseUrl("https://open.neis.go.kr")
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
+//
+//    public MealMenuTableService(@Value("${my-api.key}") String myApiKey) {
+//        this.myApiKey = myApiKey;
+//        TcpClient tcpClient = TcpClient.create()
+//                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
+//                .doOnDisconnected(connection -> {
+//                    connection.addHandlerLast(new ReadTimeoutHandler(5000));
+//                    connection.addHandlerLast(new WriteTimeoutHandler(5000));
+//                });
+//        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+//                .codecs(config -> config.defaultCodecs().maxInMemorySize(-1))
+//                .build();
+//
+//        this.webClient = WebClient.builder()
+//                .exchangeStrategies(exchangeStrategies).baseUrl("https://open.neis.go.kr")
+//                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
+//                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+//                .build();
+//    }
 
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(String schoolNm) {
         YearMonth thisMonth = YearMonth.now();
@@ -100,7 +102,7 @@ public class MealMenuTableService {
 
     public MealTableContainerVo getMealTableApi(MealTableDto dto){
 
-        String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
+        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/hub/mealServiceDietInfo")
                         //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
                         .queryParam("KEY", myApiKey)
                         .queryParam("Type", "json")
