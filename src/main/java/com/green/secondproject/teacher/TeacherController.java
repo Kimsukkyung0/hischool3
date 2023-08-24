@@ -87,7 +87,7 @@ public class TeacherController {
 
 
 
-    @PatchMapping("/act-std")
+    @PatchMapping("/acpt-std")
     @Operation(summary = "학생 가입 승인",
             description = "요구값 : <br>(1)userId - 학생 PK값")
     public int acceptStudent(@RequestParam Long userId) {

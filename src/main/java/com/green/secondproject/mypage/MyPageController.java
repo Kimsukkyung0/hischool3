@@ -1,6 +1,7 @@
 package com.green.secondproject.mypage;
 
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.mypage.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,14 +29,28 @@ public class MyPageController {
     }
 
 
-    @DeleteMapping
-    @Operation(summary = "유저 탈퇴 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 삭제 처리 완료")
-    public int deleteTeacher(@AuthenticationPrincipal MyUserDetails myuser) {
-        return serivce.delUser(myuser);
+    @PatchMapping("/grad-user")
+    @Operation(summary = "유저 졸업 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
+    public int delUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return serivce.graduateUser(myuser);
     }
 
 
+    @PatchMapping("/tran-user")
+    @Operation(summary = "유저 전학 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+    public int transferUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return serivce.transferUser(myuser);
+    }
+
+
+    @PatchMapping("/leave-user")
+    @Operation(summary = "유저 자퇴 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+    public int leaveUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return serivce.leaveUser(myuser);
+    }
 
 
 

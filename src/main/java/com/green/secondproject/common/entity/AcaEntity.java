@@ -21,13 +21,16 @@ public class AcaEntity {
     @Column(name="result_id", updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long resultId;
 
-    @Column(name="user_id", nullable = false, length = 20)
-    @NotNull
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(
+             referencedColumnName = "userId"
+            , nullable = false)
+    private UserEntity userEntity;
 
-    @Column(name="subject_id", nullable = false, length = 20)
-    @NotNull
-    private Long subjectId;
+    @ManyToOne
+    @JoinColumn(referencedColumnName = "subjectId"
+            , nullable = false)
+    private SubjectEntity subjectEntity;
 
     @Column(nullable = false, length = 4)
     @NotNull

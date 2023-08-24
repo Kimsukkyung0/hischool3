@@ -8,4 +8,7 @@ import java.util.List;
 
 public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     List<NoticeEntity> findByschoolEntity(SchoolEntity entity);
+
+
+
 }
