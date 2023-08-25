@@ -81,12 +81,22 @@ public class NoticeService {
 
      return vo;
     }
-    public NoticeVo upNotice(NoticePatchDto dto){
-        NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent()).noticeId(dto.getNoticeId()).build();
+    public NoticeVo2 upNotice(NoticePatchDto dto){
+        NoticeEntity entity = NoticeEntity.builder()
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .noticeId(dto.getNoticeId())
+                .imptYn(dto.getImptyn())
+                .build();
 
         NoticeEntity result = noticeRepository.save(entity);
 
-        return NoticeVo.builder().title(result.getTitle()).content(result.getContent()).noticeId(result.getNoticeId()).build();
+        return NoticeVo2.builder()
+                .title(result.getTitle())
+                .content(result.getContent())
+                .noticeId(result.getNoticeId())
+                .imptyn(result.getImptYn())
+                .build();
     }
     public void delNotice(Long noticeId){
         NoticeEntity entity = noticeRepository.getReferenceById(noticeId);

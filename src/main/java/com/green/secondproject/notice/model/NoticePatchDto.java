@@ -11,4 +11,5 @@ public class NoticePatchDto {
     private Long noticeId;
     private String title;
     private String content;
+    private int imptyn;
 }

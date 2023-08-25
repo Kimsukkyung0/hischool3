@@ -1,10 +1,7 @@
 package com.green.secondproject.notice;
 
 import com.green.secondproject.common.entity.NoticeEntity;
-import com.green.secondproject.notice.model.NoticeInsDto;
-import com.green.secondproject.notice.model.NoticePatchDto;
-import com.green.secondproject.notice.model.NoticeSelDto;
-import com.green.secondproject.notice.model.NoticeVo;
+import com.green.secondproject.notice.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -44,7 +41,7 @@ public class NoticeController {
     @PatchMapping
     @Transactional
     @Operation(summary = "글 수정")
-    public NoticeVo no(NoticePatchDto dto){
+    public NoticeVo2 no(NoticePatchDto dto){
 
         return service.upNotice(dto);
     }

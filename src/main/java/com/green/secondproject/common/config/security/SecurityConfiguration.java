@@ -27,17 +27,12 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, MvcRequestMatcher.Builder mvc) throws Exception {
         httpSecurity.authorizeHttpRequests(authz ->
                     authz.requestMatchers(
-                                    mvc.pattern("/swagger.html"),
-                                    mvc.pattern("/swagger-ui/**"),
-                                    mvc.pattern("/v3/api-docs/**"),
-                                    mvc.pattern("/index.html"),
-                                    mvc.pattern("/"),
-                                    mvc.pattern("/static/**"),
+                                    mvc.pattern("/swagger.html"), mvc.pattern("/swagger-ui/**"), mvc.pattern("/v3/api-docs/**"),
+                                    mvc.pattern("/index.html"), mvc.pattern("/"), mvc.pattern("/static/**"),
 
-                                    mvc.pattern("/api/sign-in"),
-                                    mvc.pattern("/api/sign-up"),
-                                    mvc.pattern("/api/mail-confirm"),
-                                    mvc.pattern("/api/code-confirm"),
+                                    mvc.pattern("/api/sign-in"), mvc.pattern("/api/sign-up"),
+                                    mvc.pattern("/api/admin/sign-in"), mvc.pattern("/api/admin/sign-up"),
+                                    mvc.pattern("/api/mail-confirm"), mvc.pattern("/api/code-confirm"),
                                     mvc.pattern("**exception**")
                             ).permitAll()
                             .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/refresh-token")).permitAll()
@@ -48,9 +43,10 @@ public class SecurityConfiguration {
                             .requestMatchers(mvc.pattern("/api/logout")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/side")).hasAnyRole("TC", "STD", "ADMIN")
                             .requestMatchers(mvc.pattern("/api/teacher/**")).hasRole("TC")
-                            .requestMatchers(mvc.pattern("/api/schedule")).hasRole("TC")
+                            .requestMatchers(mvc.pattern("/api/schedule")).hasAnyRole("TC", "ADMIN")
                             .requestMatchers(mvc.pattern("/api/student/**")).hasRole("STD")
                             .requestMatchers(mvc.pattern("/api/meal/**")).hasRole("STD")
+                            .requestMatchers(mvc.pattern("/api/admin/**")).hasRole("ADMIN")
                             .anyRequest().permitAll()
                 ) //사용 권한 체크
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 X
