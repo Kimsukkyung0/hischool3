@@ -2,12 +2,13 @@ package com.green.secondproject.admin.teachermng.model;
 
 import com.green.secondproject.common.config.etc.EnrollState;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Builder
-@Getter
+@Data
 public class TeacherMngVo {
     private Long userId;
     private Long classId;

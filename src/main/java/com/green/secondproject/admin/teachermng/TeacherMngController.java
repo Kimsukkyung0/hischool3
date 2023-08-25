@@ -2,6 +2,7 @@ package com.green.secondproject.admin.teachermng;
 
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,8 +34,8 @@ public class TeacherMngController {
             "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
             "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
             "(11)enrollState : 재직상태(ENROLL : 재직중)")
-    ResponseEntity<List<TeacherMngVo>> teacherNotapprovedList(){
-        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList());
+    List<TeacherMngVo> teacherNotapprovedList(){
+        return teacherMngService.teacherNotapprovedList();
     }
 //
 //    @GetMapping
@@ -41,8 +43,8 @@ public class TeacherMngController {
 //            "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
 //            "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
 //            "(11)enrollState : 재직상태(ENROLL : 재직중)")
-//    ResponseEntity<Page<UserEntity>> teacherNotapprovedList(@PageableDefault(sort="createdAt",value = 16) Pageable page){
-//        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList(page));
+//    ResponseEntity<Page<UserEntity>> teacherNotapprovedListTmp(@AuthenticationPrincipal MyUserDetails myuser, @PageableDefault(sort="createdAt",value = 16) Pageable page){
+//        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList2(myuser.getSchoolId(),page));
 //    }
 
 }
