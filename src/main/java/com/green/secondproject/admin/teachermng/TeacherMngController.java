@@ -20,9 +20,9 @@ import java.util.List;
 public class TeacherMngController {
         private final TeacherMngService teacherMngService;
 
-//    @GetMapping
-//    List<TeacherMngVo> teacherNotapprovedList(){
-//        return teacherMngService.teacherNotapprovedList();
-//    }
+    @GetMapping
+    List<TeacherMngVo> teacherNotapprovedList(Long schoolId){
+        return teacherMngService.teacherNotapprovedList(schoolId);
+    }
 
 }
