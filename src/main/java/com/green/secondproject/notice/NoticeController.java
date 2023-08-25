@@ -3,6 +3,7 @@ package com.green.secondproject.notice;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.notice.model.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @ToString
+@Tag(name = "공지사항")
 @RequestMapping("/api/notice")
 @RequiredArgsConstructor
 public class NoticeController {
