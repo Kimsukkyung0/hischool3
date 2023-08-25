@@ -1,5 +1,6 @@
 package com.green.secondproject.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -18,81 +19,67 @@ public class AttendanceEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, columnDefinition = "BIGINT UNSIGNED")
-    @NotNull
     private Long attendId;
 
-    @NotNull
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "user_id", columnDefinition = "BIGINT UNSIGNED", nullable = false)
     private UserEntity userEntity;
 
     @Column(columnDefinition = "char(1)", nullable = false)
-    @NotNull
     private String grade;
 
-    @NotNull
     @ColumnDefault(value = "0")
-    private int lessonNum;
+    @Column(nullable = false)
+    private Integer lessonNum;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int diseaseAbsence;
+    private Integer diseaseAbsence;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int unauthAbsence;
+    private Integer unauthAbsence;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int etcAbsence;
+    private Integer etcAbsence;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int diseaseLate;
+    private Integer diseaseLate;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int unauthLate;
+    private Integer unauthLate;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int etcLate;
+    private Integer etcLate;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int diseaseEarly;
+    private Integer diseaseEarly;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int unauthEarly;
+    private Integer unauthEarly;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int etcEarly;
+    private Integer etcEarly;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int diseaseOut;
+    private Integer diseaseOut;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int unauthOut;
+    private Integer unauthOut;
 
-    @Column(columnDefinition = "tinyint not null")
+    @Column(columnDefinition = "tinyint", nullable = false)
     @ColumnDefault(value = "0")
-    @NotNull
-    private int etcOut;
+    private Integer etcOut;
 
     @Column(length = 20)
     private String specialNote;
