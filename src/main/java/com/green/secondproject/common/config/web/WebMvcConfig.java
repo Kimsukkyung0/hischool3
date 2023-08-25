@@ -22,7 +22,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         String uploadPath = uploadDir.toFile().getAbsolutePath();
         if (fileDir.startsWith("../")) fileDir = fileDir.replace("../", "");
         log.info("uploadPath {}", uploadPath);
-        reg.addResourceHandler( "/imgs/**")
+        reg.addResourceHandler( "/img/**")
                 .addResourceLocations(String.format("file:%s/", fileDir));
         reg.addResourceHandler( "/**")
                 .addResourceLocations("classpath:/static/**")
