@@ -26,4 +26,22 @@ public class SchoolEntity {
 
     @Column(length = 100)
     private String logo;
+
+    @Column(columnDefinition = "char(12)")
+    private String admNum;
+
+    @Column(columnDefinition = "char(12)")
+    private String tcNum;
+
+    @Column(columnDefinition = "char(12)")
+    private String prcpNum;
+
+    @Column(columnDefinition = "char(12)")
+    private String mainNum;
+
+    @Column(columnDefinition = "char(12)")
+    private String machineNum;
+
+    @Column(columnDefinition = "char(12)")
+    private String faxNum;
 }
