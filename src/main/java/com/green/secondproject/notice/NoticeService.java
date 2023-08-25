@@ -86,7 +86,7 @@ public class NoticeService {
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .noticeId(dto.getNoticeId())
-                .imptyn(dto.getImptyn())
+                .imptYn(dto.getImptyn())
                 .build();
 
         NoticeEntity result = noticeRepository.save(entity);
@@ -95,7 +95,7 @@ public class NoticeService {
                 .title(result.getTitle())
                 .content(result.getContent())
                 .noticeId(result.getNoticeId())
-                .imptyn(result.getImptyn())
+                .imptyn(result.getImptYn())
                 .build();
     }
     public void delNotice(Long noticeId){
