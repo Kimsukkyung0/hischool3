@@ -1,5 +1,6 @@
 package com.green.secondproject.common.repository;
 
+import com.green.secondproject.admin.teachermng.TeacherMngParam;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
@@ -13,6 +14,8 @@ import com.green.secondproject.common.entity.VanEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,9 +32,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 
     //석경작업
-    List<UserEntity> findAllByRoleTypeAnd();
-    //ㅚㅏㅗㅓ
-    List<UserEntity> findAllByRoleTypeAndAprYn(RoleType roleType,int aprYn);
+//    List<UserEntity> findAllByRoleTypeAnd();
 
-    ///ㄴㅁ엄나;어만언ㅁ;어dAllByRoleTypeAndAprYn(RoleType roleType,int aprYn);dAllByRoleTypeAndAprYn(RoleType roleType,int aprYn);
+//    List<UserEntity> findAllByRoleTypeAndAprYnAndVanEntityAndEnrollState(RoleType roleType,int aprYn,List<VanEntity> vanEnti,EnrollState enrollState);
+//    List<UserEntity> findAllByRoleTypeAndAprYnAndEnrollState(TeacherMngParam param);
+//    List<UserEntity> findAllByVanEntityInAndRoleTypeAndAprYnAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
+@Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
+List<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
+
+
 }

@@ -3,14 +3,12 @@ package com.green.secondproject.admin.teachermng;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
-import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.metamodel.Metamodel;
+import com.green.secondproject.common.repository.VanRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,13 +23,20 @@ public class TeacherMngService {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    SchoolRepository scRep;
+    @Autowired
+    VanRepository vanRep;
 
     public List<TeacherMngVo> teacherNotapprovedList(Long schoolId){
-        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYn(RoleType.TC,0);
+        SchoolEntity scEnti = scRep.findByCode(schoolId.toString());//학교 코드로 학교 entity 가져오기
+        List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
+        //school entity 로 반 entity 리스트 가져오기
 
-//        List<UserEntity> subResult = userRepository.findUserEntitiesByRoleTypeAndAprYn(schoolCode,0, EnrollState.ENROLL,RoleType.TC);
-        List<TeacherMngVo> finalResult = new ArrayList<>();
         //(학교코드 ->반코드)   ->>RoleType : TC / apr_Yn =0 / enrollstate = enroll인 애들
+//        List<UserEntity> tcList =  userRepository.findAllByVanEntityInAndRoleTypeAndAprYnAndEnrollState(vanEnti,RoleType.TC, 0, EnrollState.ENROLL);
+        List<UserEntity> tcList =  userRepository.findUsersByConditions(vanEnti,RoleType.TC, 0, EnrollState.ENROLL);
+        List<TeacherMngVo> finalResult = new ArrayList<>();
 
         for(UserEntity en : tcList){
             finalResult.add(TeacherMngVo.builder()
@@ -50,5 +55,8 @@ public class TeacherMngService {
         return finalResult;
 
 
+//        TeacherMngParam param = TeacherMngParam.builder().roleType(RoleType.TC).aprYn(0).enrollState(EnrollState.ENROLL).vanEntityList(vanEnti).build();
+//        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndVanEntityAndEnrollState(param);
+//        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndEnrollState(param);
     }
 }
