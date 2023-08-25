@@ -1,7 +1,7 @@
-package com.green.secondproject.admin.sign;
+package com.green.secondproject.admin;
 
-import com.green.secondproject.admin.sign.model.AdminParam;
-import com.green.secondproject.admin.sign.model.StatusVo;
+import com.green.secondproject.admin.model.MainNoticeListVo;
+import com.green.secondproject.admin.model.StatusVo;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -74,14 +76,22 @@ public class AdminController {
                 .build();
     }
 
-//    @GetMapping("/status")
-//    @Operation(summary = "교원/학생 현황")
-//    public StatusVo getStatus() {
-//        //야 남규ㅠ진 코드 잘 짜면 다냐/?
-//        //다냐고
-//        // 왕꿈틀이 내가 다 먹는다 ㅋㅋ
-//        // 규진이 꿈에 왕꿈틀이나올예정 힝
-//        // 야 니 우산 뭐냐 도데체
-//        //내가 정리 해놓음
-//    }
+    @GetMapping("/status")
+    @Operation(summary = "교원/학생 현황")
+    public StatusVo getStatus() {
+        return service.getStatus();
+    }
+
+    @GetMapping("/main-notice")
+    @Operation(summary = "메인페이지 공지사항")
+    public MainNoticeListVo getMainNotice() {
+        return service.getMainNotice();
+    }
 }
+
+//야 남규ㅠ진 코드 잘 짜면 다냐/?
+//다냐고
+// 왕꿈틀이 내가 다 먹는다 ㅋㅋ
+// 규진이 꿈에 왕꿈틀이나올예정 힝
+// 야 니 우산 뭐냐 도데체
+//내가 정리 해놓음

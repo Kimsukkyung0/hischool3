@@ -48,7 +48,7 @@ file:
 
 my-api:
   key: 9a7b0b8f560b480abf0d0cb941af2bea
-
+  key2: 9dd88f65ea0be9e40510e536212d21fe
 ---
 
 spring:

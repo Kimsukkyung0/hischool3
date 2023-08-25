@@ -31,7 +31,7 @@ public class NoticeEntity extends BaseEntity {
     private String content;
 
     @Column(nullable = false,columnDefinition = "tinyint default 0")
-    private int imptyn;
+    private int imptYn;
 
     @Column(nullable = false,columnDefinition = "int default 0")
     private int hits;
