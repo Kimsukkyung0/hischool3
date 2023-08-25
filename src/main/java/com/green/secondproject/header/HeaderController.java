@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HeaderController {
     private final HeaderService service;
 
-//
+
 //    @GetMapping("/school-info")
 //    @Operation(summary = "학생의 00고등학교 0학년 반 표기",
 //            description = "출력값 : <br>(1)userId - 학생 PK값<br>(2)schoolId- 학교 PK값<br>" +
