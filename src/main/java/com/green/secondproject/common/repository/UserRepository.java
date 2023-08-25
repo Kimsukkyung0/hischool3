@@ -11,6 +11,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.green.secondproject.common.entity.VanEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -37,6 +39,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 //    List<UserEntity> findAllByRoleTypeAndAprYnAndVanEntityAndEnrollState(RoleType roleType,int aprYn,List<VanEntity> vanEnti,EnrollState enrollState);
 //    List<UserEntity> findAllByRoleTypeAndAprYnAndEnrollState(TeacherMngParam param);
 //    List<UserEntity> findAllByVanEntityInAndRoleTypeAndAprYnAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
+//    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
+//    List<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
+
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
     List<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
 
