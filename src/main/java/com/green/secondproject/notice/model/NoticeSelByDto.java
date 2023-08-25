@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 
 @Data
-
-public class NoticeInsDto {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class NoticeSelByDto {
+    private Long noticeId;
     private String title;
     private String content;
-    private int imptyn;
 }

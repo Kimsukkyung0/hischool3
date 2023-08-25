@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SchoolRepository extends JpaRepository<SchoolEntity, Long> {
     SchoolEntity findByCode(String code);
-
+    SchoolEntity findBySchoolId(Long schoolId);
 }

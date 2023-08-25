@@ -12,6 +12,9 @@ public class AuthenticationFacade {
     public MyUserDetails getLoginUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         log.info("auth: {}", auth);
+        if ("anonymousUser".equals(auth.getPrincipal())) {
+            throw new RuntimeException("로그인 필요");
+        }
         return (MyUserDetails) auth.getPrincipal();
     }
 

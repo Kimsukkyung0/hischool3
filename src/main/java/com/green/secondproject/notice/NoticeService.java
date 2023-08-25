@@ -6,9 +6,7 @@ import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.repository.NoticeRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
-import com.green.secondproject.notice.model.NoticeInsDto;
-import com.green.secondproject.notice.model.NoticeSelDto;
-import com.green.secondproject.notice.model.NoticeVo;
+import com.green.secondproject.notice.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -58,7 +56,7 @@ public class NoticeService {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
 
         NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent())
-                .imptyn(dto.getImptyn()).schoolEntity(schoolEntity).build();
+                .imptYn(dto.getImptyn()).schoolEntity(schoolEntity).build();
         NoticeEntity result = noticeRepository.save(entity);
 
         return NoticeVo.builder()
@@ -68,6 +66,31 @@ public class NoticeService {
                 .createdAt(result.getCreatedAt())
                 .hits(result.getHits())
                 .build();
+    }
+
+    public NoticeVo findBySchoolNotice(Long noticeId){
+
+      NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
+
+
+      NoticeVo vo = NoticeVo.builder().noticeId(sel.getNoticeId())
+              .title(sel.getTitle())
+              .content(sel.getContent())
+              .createdAt(sel.getCreatedAt())
+              .build();
+
+     return vo;
+    }
+    public NoticeVo upNotice(NoticePatchDto dto){
+        NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent()).noticeId(dto.getNoticeId()).build();
+
+        NoticeEntity result = noticeRepository.save(entity);
+
+        return NoticeVo.builder().title(result.getTitle()).content(result.getContent()).noticeId(result.getNoticeId()).build();
+    }
+    public void delNotice(Long noticeId){
+        NoticeEntity entity = noticeRepository.getReferenceById(noticeId);
+        noticeRepository.delete(entity);
     }
 
 }
