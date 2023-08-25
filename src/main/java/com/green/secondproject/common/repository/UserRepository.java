@@ -30,4 +30,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     //석경작업
     List<UserEntity> findAllByRoleTypeAnd();
+    //ㅚㅏㅗㅓ
 }
