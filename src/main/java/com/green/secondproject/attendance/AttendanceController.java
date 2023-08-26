@@ -35,15 +35,33 @@ public class AttendanceController {
           "unauthOut": 무단 결과<br>
           "etcOut": 기타 결과<br>
           "specialNote": 특이 사항
-    """)
+          """)
     public AttendanceEntity postAttendance(@RequestBody AttendanceIns p) {
         return service.insAttendance(p);
     }
 
     @GetMapping
     @Operation(summary = "출결 현황 조회", description = """
-          "userId": 선택한 학생 PK
-    """)
+          입력값 -<br>
+          "userId": 선택한 학생 PK<br><br>
+          출력값 -<br>
+          "attendId": 출결 현황 PK<br>
+          "grade": 학년<br>
+          "lessonNum": 수업 일수<br>
+          "diseaseAbsence": 질병 결석<br>
+          "unauthAbsence": 무단 결석<br>
+          "etcAbsence": 기타 결석<br>
+          "diseaseLate": 질병 지각<br>
+          "unauthLate": 무단 지각<br>
+          "etcLate": 기타 지각<br>
+          "diseaseEarly": 질병 조퇴<br>
+          "unauthEarly": 무단 조퇴<br>
+          "etcEarly": 기타 조퇴<br>
+          "diseaseOut": 질병 결과<br>
+          "unauthOut": 무단 결과<br>
+          "etcOut": 기타 결과<br>
+          "specialNote": 특이 사항
+          """)
     public List<AttendanceEntity> getAttendance(Long userId) {
         return service.getAttendance(userId);
     }
@@ -65,7 +83,7 @@ public class AttendanceController {
           "unauthOut": 무단 결과<br>
           "etcOut": 기타 결과<br>
           "specialNote": 특이 사항
-    """)
+          """)
     public AttendanceEntity putAttendance(@RequestBody AttendanceUpd p) {
         return service.updAttendance(p);
     }

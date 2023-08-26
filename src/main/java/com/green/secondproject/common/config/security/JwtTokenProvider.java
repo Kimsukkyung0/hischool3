@@ -91,6 +91,7 @@ public class JwtTokenProvider {
                     .pw(admin.getPw())
                     .schoolNm(admin.getSchoolEntity().getNm())
                     .schoolId(admin.getSchoolEntity().getSchoolId())
+                    .roles(roles)
                     .build();
         }
 
