@@ -1,5 +1,6 @@
 package com.green.secondproject.admin;
 
+import com.green.secondproject.admin.model.EmergencyContactsVo;
 import com.green.secondproject.admin.model.MainNoticeListVo;
 import com.green.secondproject.admin.model.StatusVo;
 import com.green.secondproject.common.config.etc.CommonRes;
@@ -98,6 +99,12 @@ public class AdminController {
             """)
     public MainNoticeListVo getMainNotice() {
         return service.getMainNotice();
+    }
+
+    @GetMapping("/emergency-contacts")
+    @Operation(summary = "비상연락망")
+    public EmergencyContactsVo getEmergencyContacts() {
+        return service.getEmergencyContacts();
     }
 }
 
