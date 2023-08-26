@@ -32,11 +32,11 @@ public class AcaEntity {
             , nullable = false)
     private SubjectEntity subjectEntity;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private char year;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int semester;
 
@@ -44,9 +44,13 @@ public class AcaEntity {
     @NotNull
     private int midFinal;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int score;
+
+    @Column(length = 1)
+    @NotNull
+    private int rating;
 
     @Column(name = "class_rank", nullable = false, length = 4)
     @NotNull

@@ -46,38 +46,14 @@ public class MealMenuTableService {
     @Autowired
     private UserMapper USERMAPPER;
 
-//
-//    public MealMenuTableService(@Value("${my-api.key}") String myApiKey) {
-//        this.myApiKey = myApiKey;
-//        TcpClient tcpClient = TcpClient.create()
-//                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
-//                .doOnDisconnected(connection -> {
-//                    connection.addHandlerLast(new ReadTimeoutHandler(5000));
-//                    connection.addHandlerLast(new WriteTimeoutHandler(5000));
-//                });
-//        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-//                .codecs(config -> config.defaultCodecs().maxInMemorySize(-1))
-//                .build();
-//
-//        this.webClient = WebClient.builder()
-//                .exchangeStrategies(exchangeStrategies).baseUrl("https://open.neis.go.kr")
-//                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-//                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .build();
-//    }
-
-    public MealTableContainerVo getMealTableBySchoolOfTheMonth(String schoolNm) {
+    public MealTableContainerVo getMealTableBySchoolOfTheMonth(Long schoolId) {
         YearMonth thisMonth = YearMonth.now();
 //        YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
-
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
-
-
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(String.valueOf(sdSchulCode));
+        dto.setSdSchulCode(String.valueOf(schoolId));
         dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -85,13 +61,13 @@ public class MealMenuTableService {
         return result;
     }
 
-    public MealTableContainerVo getMealTableBySchoolOfTheWeek(String schoolNm) {
-        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
+    public MealTableContainerVo getMealTableBySchoolOfTheWeek(Long schoolId) {
+        LocalDate now = LocalDate.now();
+        //data of the developing process for the 2nd project
 //        LocalDate now = LocalDate.of(2023,7,1);
         MealTableDto dto = new MealTableDto();
 
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
-        dto.setSdSchulCode(String.valueOf(sdSchulCode));
+        dto.setSdSchulCode(String.valueOf(schoolId));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 

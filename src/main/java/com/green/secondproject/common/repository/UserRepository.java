@@ -28,8 +28,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 //    List<UserEntity> findAllByRoleTypeAndAprYnAndEnrollState(TeacherMngParam param);
 //    List<UserEntity> findAllByVanEntityInAndRoleTypeAndAprYnAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
-    Page<UserEntity> findUsersByConditions2(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState,Pageable pageable);
+//    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
+//    Page<UserEntity> findUsersByConditions2(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState,Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
     List<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState);
