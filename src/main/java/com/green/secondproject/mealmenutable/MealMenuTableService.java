@@ -96,7 +96,7 @@ public class MealMenuTableService {
         log.info("json : {}",json);
 
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        List<MealTableVo> mealTableVo = new ArrayList<>();
+        List<MealTableVo> mealTableVo = null;
         MealTableContainerVo result = null;
 
         try{
