@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableDto;
@@ -44,7 +46,15 @@ public class MealMenuTableService {
     private String myApiKey;
 
     @Autowired
-    private UserMapper USERMAPPER;
+    private SchoolRepository scRep;
+
+
+
+
+    private String scCode;
+    public void setScCode(Long schoolId) {
+        this.scCode = scRep.findBySchoolId(schoolId).getCode();}
+
 
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(Long schoolId) {
         YearMonth thisMonth = YearMonth.now();
@@ -52,8 +62,10 @@ public class MealMenuTableService {
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
+        //jpa - schoolrep 을 통해 scCode입력
+        setScCode(schoolId);
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(String.valueOf(schoolId));
+        dto.setSdSchulCode(scCode);
         dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -65,8 +77,10 @@ public class MealMenuTableService {
         LocalDate now = LocalDate.now();
         //data of the developing process for the 2nd project
 //        LocalDate now = LocalDate.of(2023,7,1);
-        MealTableDto dto = new MealTableDto();
+        setScCode(schoolId);
 
+        MealTableDto dto = new MealTableDto();
+        setScCode(schoolId);
         dto.setSdSchulCode(String.valueOf(schoolId));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
@@ -86,7 +100,7 @@ public class MealMenuTableService {
                         .queryParam("pIndex",1)
                         .queryParam("pSize",50)
                         .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                        .queryParam("SD_SCHUL_CODE",dto.getSdSchulCode())
+                        .queryParam("SD_SCHUL_CODE",scCode)
                         .queryParam("MLSV_FROM_YMD",dto.getStartDate())//조회시작일 : 기준월의 1일
                         .queryParam("MLSV_TO_YMD",dto.getEndDate())//조회종료일 : 기준월의 마지막일
                         .build()

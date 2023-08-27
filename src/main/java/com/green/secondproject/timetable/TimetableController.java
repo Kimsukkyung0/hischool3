@@ -23,13 +23,12 @@ public class TimetableController {
     @GetMapping
     @Operation(summary = "접속한 주의 시간표출력(월-금)", description = "출력값 : <br>" + "(1)schoolNm - 학교명<br>"+"(2)grade - 학년 <br>"+
             "(3)classNm:학급번호<br>"+"(4)grade - 학년 <br>"+"(5)semester - 학기<br><br> "+"출력값 리스트세부내역 : <br> (1)dayMonToSun - 요일정보<br> (2)date : 시간표기준일(0:월 1:화 2:수 3:목 4:금 5:토 6:일) <br> (3)period - 교시 <br> (4) class_contents : 수업명<br>"
-            + "※ 7월 둘째주 부로 고등학교가 방학기간이라 개발단계에서는 주단위 테스트시 날짜값이 5.22-5.26일로 고정되어있습니다.※<br>"
             +"※일자 및 요일 정보출력이 수정되었습니다※<br>")
     public TimeTableContainerVo getTimeTableByClassOfTheWeek(@AuthenticationPrincipal MyUserDetails myuser){
         TimeTableGetDto dto = new TimeTableGetDto();
         dto.setClassNum(myuser.getClassNum());
         dto.setGrade(myuser.getGrade());
-        dto.setSchoolNm(myuser.getSchoolNm());
+        dto.setSchoolId(myuser.getSchoolId());
         return service.getTimeTableByClassAndTheWeek(dto);
     }
 
