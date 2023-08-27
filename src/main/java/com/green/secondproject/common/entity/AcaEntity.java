@@ -22,13 +22,12 @@ public class AcaEntity {
     private Long resultId;
 
     @ManyToOne
-    @JoinColumn(
-             referencedColumnName = "userId"
+    @JoinColumn(name = "user_id"
             , nullable = false)
     private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "subjectId"
+    @JoinColumn(name = "subject_id"
             , nullable = false)
     private SubjectEntity subjectEntity;
 
