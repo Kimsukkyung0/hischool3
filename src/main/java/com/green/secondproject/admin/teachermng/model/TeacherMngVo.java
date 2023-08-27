@@ -4,10 +4,11 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 
-@Builder
+@SuperBuilder
 @Data
 public class TeacherMngVo {
     private Long userId;

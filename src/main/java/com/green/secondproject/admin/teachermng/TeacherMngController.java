@@ -2,6 +2,7 @@ package com.green.secondproject.admin.teachermng;
 
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,11 +30,11 @@ public class TeacherMngController {
         return teacherMngService.teacherNotapprovedList(myuser.getSchoolId());
     }
 
-//    @GetMapping("/{userId}")
-//    @Operation(summary = "각 학교의 승인대기중 교원목록")
-//    TeacherMngWithPicVo teacherDetailNotApr(@AuthenticationPrincipal MyUserDetails myuser, @PathVariable @RequestParam Long userId){
-//        return teacherMngService.teacherDetailNotApr(userId);
-//    }
+    @GetMapping("/{userId}")
+    @Operation(summary = "각 학교의 승인대기중 교원목록")
+    TeacherMngWithPicVo teacherDetailNotApr(@AuthenticationPrincipal MyUserDetails myuser, @PathVariable @RequestParam Long userId){
+        return teacherMngService.teacherDetailNotApr(userId);
+    }
 
 //
 //    @GetMapping("/list")

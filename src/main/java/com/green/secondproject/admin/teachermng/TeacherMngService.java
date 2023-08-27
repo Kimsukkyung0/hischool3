@@ -1,6 +1,7 @@
 package com.green.secondproject.admin.teachermng;
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolEntity;
@@ -11,6 +12,7 @@ import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,9 +32,14 @@ public class TeacherMngService {
     @Autowired
     VanRepository vanRep;
 
+    @Value("${file.aprimgPath}")
+    private String aprimgPath;
+
+    private String schoolCode;
+
     public List<TeacherMngVo> teacherNotapprovedList(Long schoolId) {
-        String schoolCd = scRep.findBySchoolId(schoolId).getCode();
-        SchoolEntity scEnti = scRep.findByCode(schoolCd);//학교 코드로 학교 entity 가져오기
+        schoolCode = scRep.findBySchoolId(schoolId).getCode();
+        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
         List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL);
@@ -95,16 +102,44 @@ public class TeacherMngService {
 
 
 
-//    public TeacherMngWithPicVo teacherDetailNotApr(Long userId){
-//        UserEntity userEnti = userRepository.findByUserId(userId);
+    public TeacherMngWithPicVo teacherDetailNotApr(Long userId){
+//        if(user){
+//        try{
+//            UserEntity userEnti = userRepository.findByUserId(userId)
 //
-//        return null;
-////        return  TeacherMngWithPicVo.builder()
-////                .userId(userEnti.getUserId())
-////                .classId(userEnti.getVanEntity().getVanId())
+//        }
+//        catch (Exception e){
+//            }}
+//        else{
+//            TeacherMngWithPicVo vo = new TeacherMngWithPicVo();
+//            vo.set
+//        }
 //
-//
-//    }
+//        SchoolEntity scEnti = scRep.findByCode(userEnti.getVanEntity().getVanId().toString());
+
+        UserEntity userEnti = userRepository.findByUserId(userId);
+
+
+        String aprPicPath =  aprimgPath + userId + userEnti.getAprPic();
+
+        return TeacherMngWithPicVo.builder()
+                .aprPic(aprPicPath)
+                .userId(userEnti.getUserId())
+                .schoolNm(userEnti.getVanEntity().getSchoolEntity().getNm())
+                .grade(userEnti.getVanEntity().getGrade())
+                .vanNum(userEnti.getVanEntity().getClassNum())
+                .email(userEnti.getEmail())
+                .nm(userEnti.getNm())
+                .birth(userEnti.getBirth())
+                .phone(userEnti.getPhone())
+                .address(userEnti.getAddress())
+                .detailAddr(userEnti.getDetailAddr())
+                .role(userEnti.getRoleType().toString())
+                .aprYn(userEnti.getAprYn())
+                .enrollState(userEnti.getEnrollState())
+                .build();
+
+    }
 }
 
 
