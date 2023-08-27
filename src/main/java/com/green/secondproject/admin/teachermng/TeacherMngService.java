@@ -44,42 +44,43 @@ public class TeacherMngService {
 
     private String schoolCode;
 
-//    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId) {
-//        schoolCode = scRep.findBySchoolId(schoolId).getCode();
-//        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
-//        List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-//
-//        List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL);
-//
-//        List<TeacherMngVo> finalResult = new ArrayList<>();
-//
-//        for (UserEntity en : tcList) {
-//            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-//            finalResult.add(TeacherMngVo.builder()
-//                    .userId(en.getUserId())
-//                            .schoolNm(scEnti.getNm())
-//                            .grade(vanEntity.getGrade())
-//                    .vanNum(vanEntity.getClassNum())
-//                    .email(en.getEmail())
-//                    .nm(en.getNm())
-//                    .birth(en.getBirth())
-//                    .phone(en.getPhone())
-//                    .address(en.getAddress())
-//                    .detailAddr(en.getDetailAddr())
-//                    .role(en.getRoleType().toString())
-//                    .aprYn(en.getAprYn())
-//                    .enrollState(en.getEnrollState()).build());
-//        } //->람돠도 가넝 ?
-//
-//        return finalResult;
-//    }
-
     public List<TeacherMngVo> teacherNotapprovedList(Long schoolId, Pageable page) {
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
         List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
+
+        List<TeacherMngVo> finalResult = new ArrayList<>();
+
+        for (UserEntity en : tcList) {
+            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+            finalResult.add(TeacherMngVo.builder()
+                    .userId(en.getUserId())
+                    .schoolNm(scEnti.getNm())
+                    .grade(vanEntity.getGrade())
+                    .vanNum(vanEntity.getClassNum())
+                    .email(en.getEmail())
+                    .nm(en.getNm())
+                    .birth(en.getBirth())
+                    .phone(en.getPhone())
+                    .address(en.getAddress())
+                    .detailAddr(en.getDetailAddr())
+                    .role(en.getRoleType().toString())
+                    .aprYn(en.getAprYn())
+                    .enrollState(en.getEnrollState()).build());
+        }
+        return finalResult;
+    }
+
+
+    public List<TeacherMngVo> teacherListOfTheSchool(Long schoolId, Pageable page) {
+
+        schoolCode = scRep.findBySchoolId(schoolId).getCode();
+        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
+        List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
+
+        List<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, page);
 
         List<TeacherMngVo> finalResult = new ArrayList<>();
 

@@ -20,10 +20,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);
 
-
     //석경작업
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
     List<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState,Pageable pageable);
 
-    List<UserEntity> findUsersByVanEntityAndRoleType(List<VanEntity> vanEnti,RoleType roleType);
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType")
+    List<UserEntity> findUsersByVanEntityAndRoleType(List<VanEntity> vanEnti,RoleType roleType,Pageable pageable);
 }
