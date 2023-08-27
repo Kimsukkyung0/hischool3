@@ -11,7 +11,9 @@ import java.time.LocalDate;
 @Data
 public class TeacherMngVo {
     private Long userId;
-    private Long classId;
+    private String schoolNm;
+    private String grade;
+    private String vanNum;
     private String email;
     private String nm;
     private LocalDate birth;

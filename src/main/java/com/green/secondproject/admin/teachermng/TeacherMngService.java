@@ -11,10 +11,6 @@ import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,9 +40,12 @@ public class TeacherMngService {
         List<TeacherMngVo> finalResult = new ArrayList<>();
 
         for (UserEntity en : tcList) {
+            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
             finalResult.add(TeacherMngVo.builder()
                     .userId(en.getUserId())
-                    .classId(en.getVanEntity().getVanId())
+                            .schoolNm(scEnti.getNm())
+                            .grade(vanEntity.getGrade())
+                    .vanNum(vanEntity.getClassNum())
                     .email(en.getEmail())
                     .nm(en.getNm())
                     .birth(en.getBirth())
@@ -92,6 +91,19 @@ public class TeacherMngService {
 ////        TeacherMngParam param = TeacherMngParam.builder().roleType(RoleType.TC).aprYn(0).enrollState(EnrollState.ENROLL).vanEntityList(vanEnti).build();
 ////        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndVanEntityAndEnrollState(param);
 ////        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndEnrollState(param);
+//    }
+
+
+
+//    public TeacherMngWithPicVo teacherDetailNotApr(Long userId){
+//        UserEntity userEnti = userRepository.findByUserId(userId);
+//
+//        return null;
+////        return  TeacherMngWithPicVo.builder()
+////                .userId(userEnti.getUserId())
+////                .classId(userEnti.getVanEntity().getVanId())
+//
+//
 //    }
 }
 

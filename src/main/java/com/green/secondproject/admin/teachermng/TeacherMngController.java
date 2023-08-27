@@ -3,21 +3,12 @@ package com.green.secondproject.admin.teachermng;
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.common.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jdk.jfr.Description;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,6 +28,13 @@ public class TeacherMngController {
     List<TeacherMngVo> teacherNotapprovedList(@AuthenticationPrincipal MyUserDetails myuser){
         return teacherMngService.teacherNotapprovedList(myuser.getSchoolId());
     }
+
+//    @GetMapping("/{userId}")
+//    @Operation(summary = "각 학교의 승인대기중 교원목록")
+//    TeacherMngWithPicVo teacherDetailNotApr(@AuthenticationPrincipal MyUserDetails myuser, @PathVariable @RequestParam Long userId){
+//        return teacherMngService.teacherDetailNotApr(userId);
+//    }
+
 //
 //    @GetMapping("/list")
 //    @Operation(summary = "각 학교의 승인대기중 교원목록", description = "요구값 : schoolId : 학교고유코드<br>※※추후로그인기능으로수정예정※※<br><br>" +
