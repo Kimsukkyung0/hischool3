@@ -3,23 +3,25 @@ package com.green.secondproject.admin.teachermng;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.common.config.exception.MyErrorResponse;
 import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 
 @Slf4j
 @Service
@@ -31,6 +33,9 @@ public class TeacherMngService {
     SchoolRepository scRep;
     @Autowired
     VanRepository vanRep;
+
+    @Autowired
+    SchoolAdminRepository scAdminRep;
 
     @Value("${file.aprimgPath}")
     private String aprimgPath;
@@ -101,23 +106,13 @@ public class TeacherMngService {
 //    }
 
 
-
+//잘 작동되는 친구^^
     public TeacherMngWithPicVo teacherDetailNotApr(Long userId){
-//        if(user){
-//        try{
-//            UserEntity userEnti = userRepository.findByUserId(userId)
-//
-//        }
-//        catch (Exception e){
-//            }}
-//        else{
-//            TeacherMngWithPicVo vo = new TeacherMngWithPicVo();
-//            vo.set
-//        }
-//
-//        SchoolEntity scEnti = scRep.findByCode(userEnti.getVanEntity().getVanId().toString());
-
         UserEntity userEnti = userRepository.findByUserId(userId);
+
+              SchoolEntity scEnti = scRep.findByCode(userEnti.getVanEntity().getVanId().toString());
+
+//        UserEntity userEnti = userRepository.findByUserId(userId);
 
 
         String aprPicPath =  aprimgPath + userId + userEnti.getAprPic();
@@ -138,6 +133,49 @@ public class TeacherMngService {
                 .aprYn(userEnti.getAprYn())
                 .enrollState(userEnti.getEnrollState())
                 .build();
+
+    }
+
+
+
+    public TeacherMngWithPicVo teacherDetailNotApr2(Long signedinId, Long userId){
+        //진정한 학교관리자인지 확인한다!
+        SchoolAdminEntity sdAdminEnti = scAdminRep.getReferenceById(signedinId);
+        UserEntity userEnti = userRepository.findByUserId(userId);
+
+        //로그인한 관리자의 소속학급과 조회대상유저의 아이디가 일치한다면
+
+        if(sdAdminEnti.getSchoolEntity().getSchoolId()
+                .equals(userEnti.getVanEntity().getSchoolEntity().getSchoolId())){
+
+                String aprPicPath =  aprimgPath + userId + userEnti.getAprPic();
+                return TeacherMngWithPicVo.builder()
+                        .aprPic(aprPicPath)
+                        .userId(userEnti.getUserId())
+                        .schoolNm(userEnti.getVanEntity().getSchoolEntity().getNm())
+                        .grade(userEnti.getVanEntity().getGrade())
+                        .vanNum(userEnti.getVanEntity().getClassNum())
+                        .email(userEnti.getEmail())
+                        .nm(userEnti.getNm())
+                        .birth(userEnti.getBirth())
+                        .phone(userEnti.getPhone())
+                        .address(userEnti.getAddress())
+                        .detailAddr(userEnti.getDetailAddr())
+                        .role(userEnti.getRoleType().toString())
+                        .aprYn(userEnti.getAprYn())
+                        .enrollState(userEnti.getEnrollState())
+                        .build();
+            }
+        else{
+            return null;
+        }
+
+//        UserEntity userEnti = userRepository.findByUserId(userId);
+
+
+
+
+
 
     }
 }
