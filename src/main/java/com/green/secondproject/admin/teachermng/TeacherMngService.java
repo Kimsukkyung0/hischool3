@@ -34,8 +34,9 @@ public class TeacherMngService {
     @Autowired
     VanRepository vanRep;
 
-    public List<TeacherMngVo> teacherNotapprovedList() {
-        SchoolEntity scEnti = scRep.findByCode("7240098");//학교 코드로 학교 entity 가져오기
+    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId) {
+        String schoolCd = scRep.findBySchoolId(schoolId).getCode();
+        SchoolEntity scEnti = scRep.findByCode(schoolCd);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
         List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL);

@@ -1,4 +1,4 @@
-package com.green.secondproject.admin.teachermng;
+package com.green.secondproject.admin.teachermng.model;
 
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
