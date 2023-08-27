@@ -15,12 +15,12 @@
 
 
     <select id="selUnsignedStudent" resultType="SelUnsignedStudentVo">
-        SELECT user_id userId, class_id classId, apr_yn aprYn, nm snm, birth, phone, email
+        SELECT user_id userId, van_id classId, apr_yn aprYn, nm snm, birth, phone, email
         FROM user
-        WHERE role = "ROLE_STD"
+        WHERE role_type = "STD"
         AND apr_yn = 0
-        AND del_yn = 0
-        AND class_id = #{classId}
+        AND enroll_state = "ENROLL"
+        AND van_id = #{classId}
     </select>
 
 
@@ -148,7 +148,7 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id = #{categoryId} and A.class_id =#{classId} and
+        where A.apr_yn=1 and A.role_type = 'STD' and C.category_id = #{categoryId} and A.van_id =#{classId} and
         concat(year,semester,mid_final) = 202312
         group by rating
     </select>
@@ -159,7 +159,7 @@
         INNER JOIN aca_result B ON A.user_id = B.user_id
         INNER JOIN subject C ON B.subject_id = C.subject_id
         INNER JOIN sbj_category D on C.category_id = D.category_id
-        where A.apr_yn=1 and A.role = 'ROLE_STD' and C.category_id=#{categoryId} and A.class_id = #{classId} AND
+        where A.apr_yn=1 and A.role_type = 'STD' and C.category_id=#{categoryId} and A.van_id = #{classId} AND
         concat(year,semester,mid_final) = 202312
     </select>
 
