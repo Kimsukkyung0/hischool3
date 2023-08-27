@@ -9,7 +9,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
-@Table(name="aca_result")
+@Table(name="aca_result", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id","year","subject_id", "semester","mid_final"})})
 @Data
 @SuperBuilder
 @NoArgsConstructor
