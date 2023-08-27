@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,14 +25,14 @@ import java.util.List;
 public class TeacherMngController {
         private final TeacherMngService teacherMngService;
 
-    @GetMapping
-    @Operation(summary = "각 학교의 승인대기중 교원목록", description = "※페이징처리전입니다-수정예정※<br><br>" +
-            "출력값 : <br><br> (1)userId : 유저pk<br>(2)grade : 담당학년 <br> (3)vanNum : 담당학반 <br>(4)email : 교원email <br> (5)nm : 교원이름<br> (6)birth : 생년월일<br>(7)phone :교원연락처<br>"+
-            "(8)address : 상위주소<br> (9)detailAddr : 상세주소 <br> (10)role : 권한명(TC : 선생님) <br> (11)aprYn : 승인여부(0:미승인)"+
-            "(12)enrollState : 재직상태(ENROLL : 재직중)")
-    List<TeacherMngVo> teacherNotapprovedList(@AuthenticationPrincipal MyUserDetails myuser){
-        return teacherMngService.teacherNotapprovedList(myuser.getSchoolId());
-    }
+//    @GetMapping
+//    @Operation(summary = "각 학교의 승인대기중 교원목록", description = "※페이징처리전입니다-수정예정※<br><br>" +
+//            "출력값 : <br><br> (1)userId : 유저pk<br>(2)grade : 담당학년 <br> (3)vanNum : 담당학반 <br>(4)email : 교원email <br> (5)nm : 교원이름<br> (6)birth : 생년월일<br>(7)phone :교원연락처<br>"+
+//            "(8)address : 상위주소<br> (9)detailAddr : 상세주소 <br> (10)role : 권한명(TC : 선생님) <br> (11)aprYn : 승인여부(0:미승인)"+
+//            "(12)enrollState : 재직상태(ENROLL : 재직중)")
+//    List<TeacherMngVo> teacherNotapprovedList(@AuthenticationPrincipal MyUserDetails myuser){
+//        return teacherMngService.teacherNotapprovedList(myuser.getSchoolId());
+//    }//페이징 안돼있는 친구들
 
     @GetMapping("/{userId}")
     @Operation(summary = "승인처리용 교원신청데이터(잘 작동합니다)", description = "요구값 : <br> (1)userId : 조회대상선생님pk <br><br> 출력값 : <br> (1)userId : 유저pk<br>(2)grade : 담당학년 <br> (3)vanNum : 담당학반 <br>(4)email : 교원email <br> (5)nm : 교원이름<br> (6)birth : 생년월일<br>(7)phone :교원연락처<br>"+
@@ -47,14 +51,15 @@ public class TeacherMngController {
 
 
 
-//
-//    @GetMapping("/list")
-//    @Operation(summary = "각 학교의 승인대기중 교원목록", description = "요구값 : schoolId : 학교고유코드<br>※※추후로그인기능으로수정예정※※<br><br>" +
-//            "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
-//            "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
-//            "(11)enrollState : 재직상태(ENROLL : 재직중)")
-//    ResponseEntity<Page<UserEntity>> teacherNotapprovedListTmp(@AuthenticationPrincipal MyUserDetails myuser, @PageableDefault(sort="createdAt",value = 16) Pageable page){
-//        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList2(myuser.getSchoolId(),page));
-//    }
+
+    @GetMapping
+    @Operation(summary = "각 학교의 승인대기중 교원목록", description = "요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>" +
+            "(3)sort : 정렬기준 컬럼(default : 승인신청일자 오름차순 / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br><br>"+
+            "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
+            "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
+            "(11)enrollState : 재직상태(ENROLL : 재직중)")
+    ResponseEntity<List<TeacherMngVo>> teacherNotapprovedListTmp(@AuthenticationPrincipal MyUserDetails myuser, @PageableDefault(sort={"createdAt","nm"},value = 16,page = 0) Pageable page){
+        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList(myuser.getSchoolId(),page));
+    }
 
 }

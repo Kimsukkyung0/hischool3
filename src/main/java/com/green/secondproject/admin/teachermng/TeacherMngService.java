@@ -17,6 +17,8 @@ import com.green.secondproject.common.utils.ResultUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -42,12 +44,42 @@ public class TeacherMngService {
 
     private String schoolCode;
 
-    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId) {
+//    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId) {
+//        schoolCode = scRep.findBySchoolId(schoolId).getCode();
+//        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
+//        List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
+//
+//        List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL);
+//
+//        List<TeacherMngVo> finalResult = new ArrayList<>();
+//
+//        for (UserEntity en : tcList) {
+//            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+//            finalResult.add(TeacherMngVo.builder()
+//                    .userId(en.getUserId())
+//                            .schoolNm(scEnti.getNm())
+//                            .grade(vanEntity.getGrade())
+//                    .vanNum(vanEntity.getClassNum())
+//                    .email(en.getEmail())
+//                    .nm(en.getNm())
+//                    .birth(en.getBirth())
+//                    .phone(en.getPhone())
+//                    .address(en.getAddress())
+//                    .detailAddr(en.getDetailAddr())
+//                    .role(en.getRoleType().toString())
+//                    .aprYn(en.getAprYn())
+//                    .enrollState(en.getEnrollState()).build());
+//        } //->람돠도 가넝 ?
+//
+//        return finalResult;
+//    }
+
+    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId, Pageable page) {
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
-        List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL);
+        List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
 
         List<TeacherMngVo> finalResult = new ArrayList<>();
 
@@ -55,8 +87,8 @@ public class TeacherMngService {
             VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
             finalResult.add(TeacherMngVo.builder()
                     .userId(en.getUserId())
-                            .schoolNm(scEnti.getNm())
-                            .grade(vanEntity.getGrade())
+                    .schoolNm(scEnti.getNm())
+                    .grade(vanEntity.getGrade())
                     .vanNum(vanEntity.getClassNum())
                     .email(en.getEmail())
                     .nm(en.getNm())
@@ -67,43 +99,9 @@ public class TeacherMngService {
                     .role(en.getRoleType().toString())
                     .aprYn(en.getAprYn())
                     .enrollState(en.getEnrollState()).build());
-        } //->람돠도 가넝 ?
-
+        }
         return finalResult;
     }
-//
-//    public Page<UserEntity> teacherNotapprovedList2(Long schoolId, Pageable page) {
-//        SchoolEntity scEnti = scRep.findByCode(schoolId.toString());//학교 코드로 학교 entity 가져오기
-//        List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-//        //school entity 로 반 entity 리스트 가져오기
-////        page = page.
-//        //(학교코드 ->반코드)   ->>RoleType : TC / apr_Yn =0 / enrollstate = enroll인 애들
-////        List<UserEntity> tcList =  userRepository.findAllByVanEntityInAndRoleTypeAndAprYnAndEnrollState(vanEnti,RoleType.TC, 0, EnrollState.ENROLL);
-//        Page<UserEntity> tcList = userRepository.findUsersByConditions2(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
-//
-//
-////        for(UserEntity en : tcList){
-////            finalResult.add(TeacherMngVo.builder()
-////                    .userId(en.getUserId())
-////                    .classId(en.getVanEntity().getVanId())
-////                    .email(en.getEmail())
-////                    .nm(en.getNm())
-////                    .birth(en.getBirth())
-////                    .phone(en.getPhone())
-////                    .address(en.getAddress())
-////                    .detailAddr(en.getDetailAddr())
-////                    .role(en.getRoleType().toString())
-////                    .aprYn(en.getAprYn())
-////                    .enrollState(en.getEnrollState()).build());
-////        } //->람돠도 가넝 ?
-//
-//        return tcList;
-//
-////
-////        TeacherMngParam param = TeacherMngParam.builder().roleType(RoleType.TC).aprYn(0).enrollState(EnrollState.ENROLL).vanEntityList(vanEnti).build();
-////        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndVanEntityAndEnrollState(param);
-////        List<UserEntity> tcList = userRepository.findAllByRoleTypeAndAprYnAndEnrollState(param);
-//    }
 
 
 //잘 작동되는 친구^^
@@ -169,9 +167,6 @@ public class TeacherMngService {
         else{
             return null;
         }
-
-//        UserEntity userEnti = userRepository.findByUserId(userId);
-
 
 
 
