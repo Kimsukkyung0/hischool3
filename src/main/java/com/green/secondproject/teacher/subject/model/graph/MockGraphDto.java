@@ -11,6 +11,6 @@ import java.util.List;
 @AllArgsConstructor
 public class MockGraphDto {
 
-   private Long classId;
+   private Long vanId;
    private Long categoryId;
 }

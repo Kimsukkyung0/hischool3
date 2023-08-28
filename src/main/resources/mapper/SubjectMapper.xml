@@ -78,7 +78,6 @@
         VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.userid},#{item.subjectid})
-
         </foreach>
     </insert>
 
@@ -101,14 +100,29 @@
         </foreach>
     </insert>
 
+<!--    <select id="stulist">-->
+<!--        SELECT nm FROM user-->
+<!--        WHERE role = "STD" AND class_id = #{classid}-->
+<!--        and apr_yn =1 and user_id = #{userid};-->
+<!--    </select>-->
     <select id="stulist">
-        SELECT nm FROM user
-        WHERE role = "ROLE_STD" AND class_id = #{classid}
-        and apr_yn =1 and user_id = #{userid};
+    SELECT user_id userid,nm FROM user
+    WHERE role_type = "STD" AND van_id = #{vanId}
+    and apr_yn = 1 and user_id = #{userid}
     </select>
 
-
     <select id="mockgraph">
+<!--        SELECT B.nm, rating, COUNT(rating) ratio-->
+<!--        FROM mock_result A-->
+<!--        INNER JOIN subject B-->
+<!--        ON A.subject_id = B.subject_id-->
+<!--        INNER JOIN sbj_category C-->
+<!--        on B.category_id = c.category_id-->
+<!--        INNER JOIN user D-->
+<!--        ON A.user_id = D.user_id-->
+<!--        WHERE D.class_id = #{classId} and B.category_id = #{categoryId}-->
+<!--        and A.year = year(NOW()) and mon = 6-->
+<!--        GROUP BY B.nm, rating;-->
         SELECT B.nm, rating, COUNT(rating) ratio
         FROM mock_result A
         INNER JOIN subject B
@@ -117,7 +131,7 @@
         on B.category_id = c.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
-        WHERE D.class_id = #{classId} and B.category_id = #{categoryId}
+        WHERE D.van_id = #{vanId} and B.category_id = #{categoryId}
         and A.year = year(NOW()) and mon = 6
         GROUP BY B.nm, rating;
 
@@ -134,7 +148,7 @@
         ON B.category_id = c.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
-        WHERE D.class_id = #{classId} AND B.category_id = 2 AND A.year = YEAR(NOW())
+        WHERE D.van_id = #{vanId} AND B.category_id = 2 AND A.year = YEAR(NOW())
         AND mon = 6
         GROUP BY B.nm, rating
         ) AS derived_table;

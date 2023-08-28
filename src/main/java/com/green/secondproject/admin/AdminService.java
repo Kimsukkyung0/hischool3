@@ -101,12 +101,14 @@ public class AdminService {
                         .title(noticeEntity.getTitle())
                         .hits(noticeEntity.getHits())
                         .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .imptYn(noticeEntity.getImptYn())
                         .build()).toList())
                 .normalList(normalList.stream().map(noticeEntity -> MainNoticeVo.builder()
                         .noticeId(noticeEntity.getNoticeId())
                         .title(noticeEntity.getTitle())
                         .hits(noticeEntity.getHits())
                         .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .imptYn(noticeEntity.getImptYn())
                         .build()).toList())
                 .build();
     }
