@@ -114,7 +114,7 @@ public class TeacherMngService {
 //        UserEntity userEnti = userRepository.findByUserId(userId);
 
 
-        String aprPicPath =  aprimgPath + userId + userEnti.getAprPic();
+        String aprPicPath =  aprimgPath +"/" + userId + "/"+ userEnti.getAprPic();
 
         return TeacherMngWithPicVo.builder()
                 .aprPic(aprPicPath)

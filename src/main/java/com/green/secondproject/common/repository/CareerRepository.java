@@ -1,8 +1,6 @@
 package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.entity.CareerEntity;
-import com.green.secondproject.common.entity.NoticeEntity;
-import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

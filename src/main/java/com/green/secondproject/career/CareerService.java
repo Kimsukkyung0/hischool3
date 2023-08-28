@@ -7,13 +7,10 @@ import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.CareerEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.repository.CareerRepository;
-import com.green.secondproject.common.repository.NoticeRepository;
-import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
