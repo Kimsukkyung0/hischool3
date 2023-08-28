@@ -4,7 +4,8 @@ import lombok.Data;
 
 @Data
 public class TimeTableGetDto {
-    private String schoolNm;
+    private Long schoolId;
     private String grade;
     private String classNum;
+//    private String schoolCode;
 }

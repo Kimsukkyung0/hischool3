@@ -110,6 +110,7 @@ public class SignService {
                 .address(p.getAddress())
                 .detailAddr(p.getDetailAddress())
                 .roleType("TC".equalsIgnoreCase(p.getRole()) ? RoleType.TC : RoleType.STD)
+                .enrollState(EnrollState.ENROLL)
                 .vanEntity(vanEntity)
                 .build();
 
@@ -132,6 +133,7 @@ public class SignService {
         try {
             result = userRepository.save(entity);
         } catch (Exception e) {
+            e.printStackTrace();
             ResultUtils.setFailResult(resultDto);
             return resultDto;
         }

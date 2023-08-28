@@ -4,29 +4,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.timetable.model.TimeTableContainerVo;
 import com.green.secondproject.timetable.model.TimeTableGetDto;
 import com.green.secondproject.timetable.model.TimeTableVo;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.tcp.TcpClient;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +25,12 @@ import java.util.Map;
 @Service
 @Slf4j
 public class TimetableService {
-//    private final WebClient webClient;
+
    @Value("${my-api.key}")
     private String myApiKey;
 
-    @Autowired
-    private UserMapper USERMAPPER;
+   @Autowired
+   private SchoolRepository scRep;
 
     public TimeTableContainerVo getTimeTableByClassAndTheWeek(TimeTableGetDto dto){
         LocalDate now = LocalDate.now();
@@ -55,8 +46,6 @@ public class TimetableService {
         log.info("thisWeekStart : {}", thisWeekStart);
         log.info("thisWeekEnds : {}", thisWeekEnds);
 
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(dto.getSchoolNm());
-
         String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/hisTimetable")
                 //URI는 URL보다 큰 개념. 생성자에서 주입해준 주소에 덧붙여 세부uri 생성.
                 .queryParam("KEY", myApiKey)
@@ -64,7 +53,7 @@ public class TimetableService {
                 .queryParam("pIndex",1)
                 .queryParam("pSize",50)
                 .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                .queryParam("SD_SCHUL_CODE",sdSchulCode)
+                .queryParam("SD_SCHUL_CODE", scRep.findBySchoolId( dto.getSchoolId()).getCode())
                 .queryParam("GRADE",dto.getGrade())
                 .queryParam("CLASS_NM",dto.getClassNum())
                 .queryParam("TI_FROM_YMD",thisWeekStart)//조회시작일 : 월
@@ -76,7 +65,7 @@ public class TimetableService {
         log.info("json : {}",json);
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
 
-        List<TimeTableVo> timeTableVoList = null;
+        List<TimeTableVo> timeTableVoList = new ArrayList<>();
         TimeTableContainerVo result = null; //빈 배열 및 리턴타입 선언
 
         try{

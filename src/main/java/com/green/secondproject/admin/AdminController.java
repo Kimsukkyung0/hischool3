@@ -1,5 +1,6 @@
 package com.green.secondproject.admin;
 
+import com.green.secondproject.admin.model.EmergencyContactsVo;
 import com.green.secondproject.admin.model.MainNoticeListVo;
 import com.green.secondproject.admin.model.StatusVo;
 import com.green.secondproject.common.config.etc.CommonRes;
@@ -77,15 +78,33 @@ public class AdminController {
     }
 
     @GetMapping("/status")
-    @Operation(summary = "교원/학생 현황")
+    @Operation(summary = "교원/학생 현황", description = """
+            "tcNum": 승인된 교원 수<br>
+            "tcWaitingNum": 승인 대기중인 교원 수<br>
+            "stdNum": 승인된 학생 수
+            """)
     public StatusVo getStatus() {
         return service.getStatus();
     }
 
     @GetMapping("/main-notice")
-    @Operation(summary = "메인페이지 공지사항")
+    @Operation(summary = "메인페이지 공지사항", description = """
+            "imptList": 중요공지 리스트<br>
+            "normalList": 일반공지 리스트<br>
+            "noticeId": 공지사항 PK,<br>
+            "imptYn": 중요(1) 일반(0),<br>
+            "title": 제목,<br>
+            "createdAt": 작성일,<br>
+            "hits": 조회수
+            """)
     public MainNoticeListVo getMainNotice() {
         return service.getMainNotice();
+    }
+
+    @GetMapping("/emergency-contacts")
+    @Operation(summary = "비상연락망")
+    public EmergencyContactsVo getEmergencyContacts() {
+        return service.getEmergencyContacts();
     }
 }
 

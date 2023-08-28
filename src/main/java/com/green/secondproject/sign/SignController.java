@@ -123,7 +123,7 @@ public class SignController {
         return SERVICE.getClassList(p);
     }
 
-    @PostMapping("/pw-find")
+    @GetMapping("/pw-find")
     @Operation(summary = "비밀번호 찾기")
     public String findPw(String email) throws Exception {
         return SERVICE.findPw(email);

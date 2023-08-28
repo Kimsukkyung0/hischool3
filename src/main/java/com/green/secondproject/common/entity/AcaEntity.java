@@ -9,7 +9,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
-@Table(name="aca_result")
+@Table(name="aca_result", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id","year","subject_id", "semester","mid_final"})})
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -22,21 +23,20 @@ public class AcaEntity {
     private Long resultId;
 
     @ManyToOne
-    @JoinColumn(
-             referencedColumnName = "userId"
+    @JoinColumn(name = "user_id"
             , nullable = false)
     private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "subjectId"
+    @JoinColumn(name = "subject_id"
             , nullable = false)
     private SubjectEntity subjectEntity;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private char year;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int semester;
 
@@ -44,9 +44,13 @@ public class AcaEntity {
     @NotNull
     private int midFinal;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int score;
+
+    @Column(length = 1)
+    @NotNull
+    private int rating;
 
     @Column(name = "class_rank", nullable = false, length = 4)
     @NotNull

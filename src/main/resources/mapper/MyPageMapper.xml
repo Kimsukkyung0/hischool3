@@ -6,11 +6,11 @@
 
 
     <select id="selUserMyPage">
-        SELECT A.user_id userId, A.nm unm, A.email, A.role, A.pic, A.birth, A.phone, A.address, A.detail_addr detailAddr
-        , B.class_id classId, B.grade, B.class van, C.school_id schoolId, C.nm schnm
+        SELECT A.user_id userId, A.nm unm, A.email, A.role_type role, A.pic, A.birth, A.phone, A.address, A.detail_addr detailAddr
+        , B.van_id classId, B.grade, B.class_num van, C.school_id schoolId, C.nm schnm
         FROM user A
         INNER JOIN van B
-        ON B.class_id = A.class_id
+        ON B.van_id = A.van_id
         INNER JOIN school C
         ON C.school_id = B.school_id
         WHERE user_id = #{userId}

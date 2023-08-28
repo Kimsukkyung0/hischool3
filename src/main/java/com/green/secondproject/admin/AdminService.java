@@ -1,16 +1,11 @@
 package com.green.secondproject.admin;
 
-import com.green.secondproject.admin.model.MainNoticeListVo;
-import com.green.secondproject.admin.model.MainNoticeVo;
-import com.green.secondproject.admin.model.StatusVo;
+import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
 import com.green.secondproject.common.config.security.model.RoleType;
-import com.green.secondproject.common.entity.NoticeEntity;
-import com.green.secondproject.common.entity.SchoolAdminEntity;
-import com.green.secondproject.common.entity.SchoolEntity;
-import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
 import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.sign.model.SignInParam;
@@ -113,6 +108,30 @@ public class AdminService {
                         .hits(noticeEntity.getHits())
                         .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
                         .build()).toList())
+                .build();
+    }
+
+    public EmergencyContactsVo getEmergencyContacts() {
+        SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
+        List<GradeManagerEntity> gradeManagerList = schoolEntity.getGradeManagerList();
+
+        return EmergencyContactsVo.builder()
+                .contactNum(ContactNumVo.builder()
+                        .admNum(schoolEntity.getAdmNum())
+                        .tcNum(schoolEntity.getTcNum())
+                        .prcpNum(schoolEntity.getPrcpNum())
+                        .mainNum(schoolEntity.getMainNum())
+                        .machineNum(schoolEntity.getMachineNum())
+                        .faxNum(schoolEntity.getFaxNum())
+                        .build())
+
+                .gradeManagerList(gradeManagerList.stream().map(gradeManagerEntity -> GradeManagerVo.builder()
+                        .grade(gradeManagerEntity.getGrade())
+                        .nm(gradeManagerEntity.getUserEntity().getNm())
+                        .van(gradeManagerEntity.getUserEntity().getVanEntity().getClassNum())
+                        .extNum(gradeManagerEntity.getExtNum())
+                        .build())
+                        .toList())
                 .build();
     }
 }

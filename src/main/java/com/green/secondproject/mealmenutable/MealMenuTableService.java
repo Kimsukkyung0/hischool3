@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.common.config.security.UserMapper;
+import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.mealmenutable.model.MealTableContainerVo;
 import com.green.secondproject.mealmenutable.model.MealTableDto;
@@ -44,40 +46,26 @@ public class MealMenuTableService {
     private String myApiKey;
 
     @Autowired
-    private UserMapper USERMAPPER;
+    private SchoolRepository scRep;
 
-//
-//    public MealMenuTableService(@Value("${my-api.key}") String myApiKey) {
-//        this.myApiKey = myApiKey;
-//        TcpClient tcpClient = TcpClient.create()
-//                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)//5초간의 연결시도
-//                .doOnDisconnected(connection -> {
-//                    connection.addHandlerLast(new ReadTimeoutHandler(5000));
-//                    connection.addHandlerLast(new WriteTimeoutHandler(5000));
-//                });
-//        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-//                .codecs(config -> config.defaultCodecs().maxInMemorySize(-1))
-//                .build();
-//
-//        this.webClient = WebClient.builder()
-//                .exchangeStrategies(exchangeStrategies).baseUrl("https://open.neis.go.kr")
-//                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-//                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-//                .build();
-//    }
 
-    public MealTableContainerVo getMealTableBySchoolOfTheMonth(String schoolNm) {
+
+
+    private String scCode;
+    public void setScCode(Long schoolId) {
+        this.scCode = scRep.findBySchoolId(schoolId).getCode();}
+
+
+    public MealTableContainerVo getMealTableBySchoolOfTheMonth(Long schoolId) {
         YearMonth thisMonth = YearMonth.now();
 //        YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
-
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
-
-
+        //jpa - schoolrep 을 통해 scCode입력
+        setScCode(schoolId);
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(String.valueOf(sdSchulCode));
+        dto.setSdSchulCode(scCode);
         dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -85,13 +73,15 @@ public class MealMenuTableService {
         return result;
     }
 
-    public MealTableContainerVo getMealTableBySchoolOfTheWeek(String schoolNm) {
-        LocalDate now = LocalDate.now();//현재방학중이므로 데이터가 없어서 기준일을 7월 1일로 고정해둠
+    public MealTableContainerVo getMealTableBySchoolOfTheWeek(Long schoolId) {
+        LocalDate now = LocalDate.now();
+        //data of the developing process for the 2nd project
 //        LocalDate now = LocalDate.of(2023,7,1);
-        MealTableDto dto = new MealTableDto();
+        setScCode(schoolId);
 
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(schoolNm);
-        dto.setSdSchulCode(String.valueOf(sdSchulCode));
+        MealTableDto dto = new MealTableDto();
+        setScCode(schoolId);
+        dto.setSdSchulCode(String.valueOf(schoolId));
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -110,7 +100,7 @@ public class MealMenuTableService {
                         .queryParam("pIndex",1)
                         .queryParam("pSize",50)
                         .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                        .queryParam("SD_SCHUL_CODE",dto.getSdSchulCode())
+                        .queryParam("SD_SCHUL_CODE",scCode)
                         .queryParam("MLSV_FROM_YMD",dto.getStartDate())//조회시작일 : 기준월의 1일
                         .queryParam("MLSV_TO_YMD",dto.getEndDate())//조회종료일 : 기준월의 마지막일
                         .build()
@@ -120,7 +110,7 @@ public class MealMenuTableService {
         log.info("json : {}",json);
 
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        List<MealTableVo> mealTableVo = new ArrayList<>();
+        List<MealTableVo> mealTableVo = null;
         MealTableContainerVo result = null;
 
         try{

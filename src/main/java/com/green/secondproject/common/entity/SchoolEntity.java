@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name="school")
 @Data
@@ -44,4 +46,7 @@ public class SchoolEntity {
 
     @Column(columnDefinition = "char(12)")
     private String faxNum;
+
+    @OneToMany(mappedBy = "schoolEntity")
+    private List<GradeManagerEntity> gradeManagerList;
 }

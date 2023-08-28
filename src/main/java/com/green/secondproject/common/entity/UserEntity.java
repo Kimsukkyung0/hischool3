@@ -9,6 +9,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ public class UserEntity extends BaseEntity {
     private String email;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String pw;
 
     @Column(nullable = false, length = 20)
@@ -58,19 +60,19 @@ public class UserEntity extends BaseEntity {
     private String detailAddr;
 
     @JsonIgnore
-    @Column(length = 10)
+    @Column(length = 10, nullable = false)
     @Enumerated(EnumType.STRING)
-    @NotNull
     private RoleType roleType;
 
     private String aprPic;
 
-    @Column(nullable = false, columnDefinition = "tinyint default 0")
+    @Column(nullable = false, columnDefinition = "tinyint")
+    @ColumnDefault(value = "0")
     private int aprYn;
 
     @JsonIgnore
-    @Column(length = 10, columnDefinition = "default 'ENROLL'")
+    @Column(length = 10, nullable = false)
+    @ColumnDefault(value = "'ENROLL'")
     @Enumerated(EnumType.STRING)
-    @NotNull
     private EnrollState enrollState;
 }
