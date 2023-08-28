@@ -46,7 +46,4 @@ public class SchoolEntity {
 
     @Column(columnDefinition = "char(12)")
     private String faxNum;
-
-    @OneToMany(mappedBy = "schoolEntity")
-    private List<GradeManagerEntity> gradeManagerList;
 }

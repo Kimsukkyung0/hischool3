@@ -1,6 +1,7 @@
 package com.green.secondproject.admin;
 
-import com.green.secondproject.admin.model.EmergencyContactsVo;
+import com.green.secondproject.admin.model.AdminParam;
+import com.green.secondproject.admin.model.EmergencyContacts;
 import com.green.secondproject.admin.model.MainNoticeListVo;
 import com.green.secondproject.admin.model.StatusVo;
 import com.green.secondproject.common.config.etc.CommonRes;
@@ -19,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -102,9 +101,29 @@ public class AdminController {
     }
 
     @GetMapping("/emergency-contacts")
-    @Operation(summary = "비상연락망")
-    public EmergencyContactsVo getEmergencyContacts() {
+    @Operation(summary = "비상연락망 조회", description = """
+            "admNum": 행정실<br>
+            "tcNum": 교무실<br>
+            "prcpNum": 교장실<br>
+            "mainNum": 관리실<br>
+            "machineNum": 기계실<br>
+            "faxNum": 팩스<br>
+            """)
+    public EmergencyContacts getEmergencyContacts() {
         return service.getEmergencyContacts();
+    }
+
+    @PutMapping("/emergency-contacts")
+    @Operation(summary = "비상연락망 수정", description = """
+            "admNum": 행정실<br>
+            "tcNum": 교무실<br>
+            "prcpNum": 교장실<br>
+            "mainNum": 관리실<br>
+            "machineNum": 기계실<br>
+            "faxNum": 팩스<br>
+            """)
+    public EmergencyContacts updEmergencyContacts(@RequestBody EmergencyContacts ec) {
+        return service.updEmergencyContacts(ec);
     }
 }
 

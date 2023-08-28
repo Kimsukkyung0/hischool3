@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ContactNumVo {
+public class EmergencyContacts {
     private String admNum;
     private String tcNum;
     private String prcpNum;

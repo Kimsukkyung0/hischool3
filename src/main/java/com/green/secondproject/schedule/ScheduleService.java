@@ -4,25 +4,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.green.secondproject.common.config.security.UserMapper;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.repository.SchoolRepository;
+import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.schedule.model.ScheduleContainerVo;
 import com.green.secondproject.schedule.model.ScheduleInfoVo;
 import com.green.secondproject.schedule.model.ScheduleParam;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.tcp.TcpClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,45 +22,23 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
-    private final String myApiKey;
-    private final WebClient webClient;
+    private final SchoolRepository schoolRepository;
 
-    @Autowired
-    private UserMapper USERMAPPER;
+    @Value("${my-api.key}")
+    private String myApiKey;
 
-    public ScheduleService(@Value("${my-api.key}") String myApiKey) {
-        this.myApiKey = myApiKey;
-
-        TcpClient tcpClient = TcpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000) //5초동안 시도
-                .doOnConnected(conn -> {
-                    conn.addHandlerLast(new ReadTimeoutHandler(5000));
-                    conn.addHandlerLast(new WriteTimeoutHandler(5000));
-                });
-        //저장공간 무한대 증식
-        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
-                .codecs(config -> config.defaultCodecs().maxInMemorySize(-1))
-                .build();
-
-
-        this.webClient = WebClient.builder()
-                .exchangeStrategies(exchangeStrategies)
-                .baseUrl("https://open.neis.go.kr")
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
-    }
     public ScheduleContainerVo getSchedule(MyUserDetails user,ScheduleParam p) {
-        Long sdSchulCode = USERMAPPER.selSchoolCdByNm(user.getSchoolNm());
+        SchoolEntity schoolEntity = schoolRepository.findById(user.getSchoolId()).get();
 
-        String json = webClient.get().uri(uriBuilder -> uriBuilder.path("/hub/SchoolSchedule")
+        String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/SchoolSchedule")
                         .queryParam("KEY", myApiKey)
                         .queryParam("Type", "json")
                         .queryParam("pIndex", 1)
                         .queryParam("pSize", 100)
                         .queryParam("ATPT_OFCDC_SC_CODE", "D10")
-                        .queryParam("SD_SCHUL_CODE", sdSchulCode)
+                        .queryParam("SD_SCHUL_CODE", schoolEntity.getCode())
                         .queryParam("AA_FROM_YMD",p.getAaFromYmd())
                         .queryParam("AA_TO_YMD",p.getAaToYmd())
                         .build()
