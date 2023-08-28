@@ -2,7 +2,6 @@ package com.green.secondproject.mypage;
 
 import com.green.secondproject.mypage.model.SelUserMyPageDto;
 import com.green.secondproject.mypage.model.SelUserMyPageVo;
-import com.green.secondproject.teacher.subject.SubjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;

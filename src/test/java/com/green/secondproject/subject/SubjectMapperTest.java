@@ -1,10 +1,10 @@
 package com.green.secondproject.subject;
 
-import com.green.secondproject.teacher.subject.SubjectMapper;
-import com.green.secondproject.teacher.subject.model.SubjectDetailDto;
-import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
-import com.green.secondproject.teacher.subject.model.SubjectDetailVo2;
-import com.green.secondproject.teacher.subject.model.SubjectVo;
+import com.green.secondproject.admin.subject.SubjectMapper;
+import com.green.secondproject.admin.subject.model.SubjectDetailDto;
+import com.green.secondproject.admin.subject.model.SubjectDetailVo;
+import com.green.secondproject.admin.subject.model.SubjectDetailVo2;
+import com.green.secondproject.admin.subject.model.SubjectVo;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;

@@ -2,9 +2,9 @@ package com.green.secondproject.subject;
 
 import com.green.secondproject.CommonUserUtilsForTest;
 import com.green.secondproject.common.config.redis.RedisService;
-import com.green.secondproject.teacher.subject.SubjectController;
-import com.green.secondproject.teacher.subject.SubjectService;
-import com.green.secondproject.teacher.subject.model.SubjectVo;
+import com.green.secondproject.admin.subject.SubjectController;
+import com.green.secondproject.admin.subject.SubjectService;
+import com.green.secondproject.admin.subject.model.SubjectVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
