@@ -122,20 +122,45 @@ public class AdminService {
                 .build();
     }
 
-    public EmergencyContactsVo getEmergencyContacts() {
+    public EmergencyContacts getEmergencyContacts() {
         Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
-        if (schoolOpt.isPresent()) {
-            SchoolEntity schoolEntity = schoolOpt.get();
-            return EmergencyContactsVo.builder()
-                    .admNum(schoolEntity.getAdmNum())
-                    .tcNum(schoolEntity.getTcNum())
-                    .prcpNum(schoolEntity.getPrcpNum())
-                    .mainNum(schoolEntity.getMainNum())
-                    .machineNum(schoolEntity.getMachineNum())
-                    .faxNum(schoolEntity.getFaxNum())
-                    .build();
+        if (schoolOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
         }
 
-        return null;
+        SchoolEntity schoolEntity = schoolOpt.get();
+        return EmergencyContacts.builder()
+                .admNum(schoolEntity.getAdmNum())
+                .tcNum(schoolEntity.getTcNum())
+                .prcpNum(schoolEntity.getPrcpNum())
+                .mainNum(schoolEntity.getMainNum())
+                .machineNum(schoolEntity.getMachineNum())
+                .faxNum(schoolEntity.getFaxNum())
+                .build();
+    }
+
+    public EmergencyContacts updEmergencyContacts(EmergencyContacts ec) {
+        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+        if (schoolOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
+
+        SchoolEntity schoolEntity = schoolOpt.get();
+        schoolEntity.setAdmNum(ec.getAdmNum());
+        schoolEntity.setTcNum(ec.getTcNum());
+        schoolEntity.setPrcpNum(ec.getPrcpNum());
+        schoolEntity.setMainNum(ec.getMainNum());
+        schoolEntity.setMachineNum(ec.getMachineNum());
+        schoolEntity.setFaxNum(ec.getFaxNum());
+        schoolRepository.save(schoolEntity);
+
+        return EmergencyContacts.builder()
+                .admNum(schoolEntity.getAdmNum())
+                .tcNum(schoolEntity.getTcNum())
+                .prcpNum(schoolEntity.getPrcpNum())
+                .mainNum(schoolEntity.getMainNum())
+                .machineNum(schoolEntity.getMachineNum())
+                .faxNum(schoolEntity.getFaxNum())
+                .build();
     }
 }

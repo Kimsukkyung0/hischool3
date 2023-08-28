@@ -3,11 +3,9 @@ package com.green.secondproject.admin.model;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.List;
-
 @Getter
 @Builder
-public class EmergencyContactsVo {
+public class EmergencyContacts {
     private String admNum;
     private String tcNum;
     private String prcpNum;
