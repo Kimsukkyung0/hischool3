@@ -2,6 +2,8 @@ package com.green.secondproject.attendance;
 
 import com.green.secondproject.attendance.model.AttendanceIns;
 import com.green.secondproject.attendance.model.AttendanceUpd;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.AttendanceEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.repository.AttendanceRepository;
@@ -16,6 +18,7 @@ import java.util.List;
 public class AttendanceService {
     private final AttendanceRepository repository;
     private final UserRepository userRepository;
+    private final AuthenticationFacade facade;
 
     public AttendanceEntity insAttendance(AttendanceIns p) {
         UserEntity user = userRepository.getReferenceById(p.getUserId());
@@ -40,8 +43,17 @@ public class AttendanceService {
     }
 
     public List<AttendanceEntity> getAttendance(Long userId) {
-        UserEntity user = userRepository.getReferenceById(userId);
-        return repository.findAllByUserEntity(user);
+        UserEntity user = userRepository.getReferenceById(facade.getLoginUserPk());
+        if (user.getRoleType() == RoleType.TC) {
+            if (userId == null) {
+                throw new RuntimeException("학생 PK값 필요");
+            }
+        } else {
+            userId = facade.getLoginUserPk();
+        }
+
+        UserEntity std = userRepository.getReferenceById(userId);
+        return repository.findAllByUserEntity(std);
     }
 
     public AttendanceEntity updAttendance(AttendanceUpd p) {

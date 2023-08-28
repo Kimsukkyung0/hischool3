@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -65,11 +66,19 @@ public class AdminService {
     }
 
     public SchoolAdminEntity signUp(AdminParam p) {
+        SchoolEntity schoolEntity = schoolRepository.findByCode(p.getSchoolCode());
+        if (schoolEntity == null) {
+            schoolEntity = schoolRepository.save(SchoolEntity.builder()
+                    .code(p.getSchoolCode())
+                    .nm(p.getSchoolNm())
+                    .logo(p.getSchoolNm() + ".png")
+                    .build());
+        }
         return adminRepository.save(SchoolAdminEntity.builder()
                 .email(p.getEmail())
                 .pw(PW_ENCODER.encode(p.getPw()))
                 .schoolEntity(SchoolEntity.builder()
-                        .schoolId(p.getSchoolId())
+                        .schoolId(schoolEntity.getSchoolId())
                         .build())
                 .build());
     }
@@ -92,7 +101,7 @@ public class AdminService {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
         List<NoticeEntity> imptList = noticeRepository.findByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 1, schoolEntity);
-        List<NoticeEntity> normalList = noticeRepository.findTop5ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
+        List<NoticeEntity> normalList = noticeRepository.findTop8ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 0, schoolEntity);
 
         return MainNoticeListVo.builder()
@@ -113,27 +122,45 @@ public class AdminService {
                 .build();
     }
 
-    public EmergencyContactsVo getEmergencyContacts() {
-        SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
-        List<GradeManagerEntity> gradeManagerList = schoolEntity.getGradeManagerList();
+    public EmergencyContacts getEmergencyContacts() {
+        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+        if (schoolOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
 
-        return EmergencyContactsVo.builder()
-                .contactNum(ContactNumVo.builder()
-                        .admNum(schoolEntity.getAdmNum())
-                        .tcNum(schoolEntity.getTcNum())
-                        .prcpNum(schoolEntity.getPrcpNum())
-                        .mainNum(schoolEntity.getMainNum())
-                        .machineNum(schoolEntity.getMachineNum())
-                        .faxNum(schoolEntity.getFaxNum())
-                        .build())
+        SchoolEntity schoolEntity = schoolOpt.get();
+        return EmergencyContacts.builder()
+                .admNum(schoolEntity.getAdmNum())
+                .tcNum(schoolEntity.getTcNum())
+                .prcpNum(schoolEntity.getPrcpNum())
+                .mainNum(schoolEntity.getMainNum())
+                .machineNum(schoolEntity.getMachineNum())
+                .faxNum(schoolEntity.getFaxNum())
+                .build();
+    }
 
-                .gradeManagerList(gradeManagerList.stream().map(gradeManagerEntity -> GradeManagerVo.builder()
-                        .grade(gradeManagerEntity.getGrade())
-                        .nm(gradeManagerEntity.getUserEntity().getNm())
-                        .van(gradeManagerEntity.getUserEntity().getVanEntity().getClassNum())
-                        .extNum(gradeManagerEntity.getExtNum())
-                        .build())
-                        .toList())
+    public EmergencyContacts updEmergencyContacts(EmergencyContacts ec) {
+        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+        if (schoolOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
+
+        SchoolEntity schoolEntity = schoolOpt.get();
+        schoolEntity.setAdmNum(ec.getAdmNum());
+        schoolEntity.setTcNum(ec.getTcNum());
+        schoolEntity.setPrcpNum(ec.getPrcpNum());
+        schoolEntity.setMainNum(ec.getMainNum());
+        schoolEntity.setMachineNum(ec.getMachineNum());
+        schoolEntity.setFaxNum(ec.getFaxNum());
+        schoolRepository.save(schoolEntity);
+
+        return EmergencyContacts.builder()
+                .admNum(schoolEntity.getAdmNum())
+                .tcNum(schoolEntity.getTcNum())
+                .prcpNum(schoolEntity.getPrcpNum())
+                .mainNum(schoolEntity.getMainNum())
+                .machineNum(schoolEntity.getMachineNum())
+                .faxNum(schoolEntity.getFaxNum())
                 .build();
     }
 }

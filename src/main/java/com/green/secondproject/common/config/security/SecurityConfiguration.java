@@ -36,17 +36,22 @@ public class SecurityConfiguration {
                                     mvc.pattern("**exception**")
                             ).permitAll()
                             .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/refresh-token")).permitAll()
-                            .requestMatchers(mvc.pattern("/api/mypage/**")).hasAnyRole("TC", "STD")
-                            .requestMatchers(mvc.pattern("/api/header/**")).hasAnyRole("TC", "STD")
-                            .requestMatchers(mvc.pattern("/api/timetable")).hasAnyRole("TC", "STD")
-                            .requestMatchers(mvc.pattern("/api/subject/**")).hasAnyRole("TC", "STD")
-                            .requestMatchers(mvc.pattern("/api/logout")).hasAnyRole("TC", "STD")
-                            .requestMatchers(mvc.pattern("/api/side")).hasAnyRole("TC", "STD", "ADMIN")
-                            .requestMatchers(mvc.pattern("/api/teacher/**")).hasRole("TC")
-                            .requestMatchers(mvc.pattern("/api/schedule")).hasAnyRole("TC", "ADMIN")
-                            .requestMatchers(mvc.pattern("/api/student/**")).hasRole("STD")
-                            .requestMatchers(mvc.pattern("/api/meal/**")).hasRole("STD")
+                            .requestMatchers(
+                                    mvc.pattern("/api/mypage/**"), mvc.pattern("/api/timetable"),
+                                    mvc.pattern("/api/subject/**"), mvc.pattern("/api/logout"),
+                                    mvc.pattern(HttpMethod.GET, "/api/attendance")).hasAnyRole("TC", "STD")
+                            .requestMatchers(
+                                    mvc.pattern("/api/teacher/**"),
+                                    mvc.pattern(HttpMethod.POST, "/api/attendance"),
+                                    mvc.pattern(HttpMethod.PUT, "/api/attendance")).hasRole("TC")
+                            .requestMatchers(
+                                    mvc.pattern("/api/student/**"),
+                                    mvc.pattern("/api/meal/**")).hasRole("STD")
                             .requestMatchers(mvc.pattern("/api/admin/**")).hasRole("ADMIN")
+                            .requestMatchers(mvc.pattern("/api/schedule")).hasAnyRole("TC", "ADMIN")
+                            .requestMatchers(
+                                    mvc.pattern("/api/side"),
+                                    mvc.pattern("/api/header/**")).hasAnyRole("TC", "STD", "ADMIN")
                             .anyRequest().permitAll()
                 ) //사용 권한 체크
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 사용 X

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleController {
     private final ScheduleService service;
 
-
     @GetMapping
     @Operation(summary = "학사일정",description = 
             " <br> sdSchulCode - 학교코드" +
