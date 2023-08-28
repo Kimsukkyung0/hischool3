@@ -57,7 +57,7 @@ spring:
       on-profile: "prod"
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
   data:
     redis:
       host: 192.168.0.144
