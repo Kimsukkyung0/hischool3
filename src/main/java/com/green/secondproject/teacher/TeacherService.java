@@ -1,7 +1,12 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
@@ -17,15 +22,24 @@ import java.util.*;
 @Slf4j
 public class TeacherService {
     private final TeacherMapper mapper;
-    private final AuthenticationFacade facade;
     private final StudentService stService;
-
-
+    private final UserRepository userRepository;
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
-        SelSignedStudentDto dto = new SelSignedStudentDto();
-        dto.setClassId(myuser.getVanId());
-        return mapper.selSignedStudent(dto);
+        List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
+                VanEntity.builder()
+                .vanId(myuser.getVanId())
+                .build(), 1, EnrollState.ENROLL, RoleType.STD);
+
+        return stdList.stream().map(userEntity -> SelSignedStudentVo.builder()
+                .userId(userEntity.getUserId())
+                .classId(userEntity.getVanEntity().getVanId())
+                .aprYn(userEntity.getAprYn())
+                .snm(userEntity.getNm())
+                .birth(userEntity.getBirth())
+                .phone(userEntity.getPhone())
+                .email(userEntity.getEmail())
+                .build()).toList();
     }
 
 
@@ -93,9 +107,10 @@ public class TeacherService {
 
 
     public int classStudent(MyUserDetails myuser){
-        ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(myuser.getVanId());
-        return mapper.classStudent(dto);
+        return userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
+                VanEntity.builder()
+                        .vanId(myuser.getVanId())
+                        .build(), 1, EnrollState.ENROLL, RoleType.STD).size();
     }
 
     public int aprStudent(MyUserDetails myuser){

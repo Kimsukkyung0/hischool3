@@ -101,7 +101,7 @@ public class AdminService {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
         List<NoticeEntity> imptList = noticeRepository.findByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 1, schoolEntity);
-        List<NoticeEntity> normalList = noticeRepository.findTop5ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
+        List<NoticeEntity> normalList = noticeRepository.findTop8ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 0, schoolEntity);
 
         return MainNoticeListVo.builder()
