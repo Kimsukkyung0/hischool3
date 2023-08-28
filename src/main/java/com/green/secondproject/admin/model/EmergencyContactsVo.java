@@ -8,6 +8,10 @@ import java.util.List;
 @Getter
 @Builder
 public class EmergencyContactsVo {
-    private ContactNumVo contactNum;
-    private List<GradeManagerVo> gradeManagerList;
+    private String admNum;
+    private String tcNum;
+    private String prcpNum;
+    private String mainNum;
+    private String machineNum;
+    private String faxNum;
 }

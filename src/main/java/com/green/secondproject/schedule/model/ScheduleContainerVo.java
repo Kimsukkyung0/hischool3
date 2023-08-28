@@ -13,6 +13,4 @@ public class ScheduleContainerVo {
     private String year;
     private String schoolNm;
     private List<ScheduleInfoVo> infoList;
-
-
 }

@@ -1,4 +1,4 @@
-package com.green.secondproject.admin;
+package com.green.secondproject.admin.model;
 
 import lombok.Data;
 
@@ -6,5 +6,6 @@ import lombok.Data;
 public class AdminParam {
     private String email;
     private String pw;
-    private Long schoolId;
+    private String schoolCode;
+    private String schoolNm;
 }

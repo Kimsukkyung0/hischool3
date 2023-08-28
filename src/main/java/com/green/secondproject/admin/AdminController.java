@@ -1,5 +1,6 @@
 package com.green.secondproject.admin;
 
+import com.green.secondproject.admin.model.AdminParam;
 import com.green.secondproject.admin.model.EmergencyContactsVo;
 import com.green.secondproject.admin.model.MainNoticeListVo;
 import com.green.secondproject.admin.model.StatusVo;
@@ -19,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -102,7 +101,7 @@ public class AdminController {
     }
 
     @GetMapping("/emergency-contacts")
-    @Operation(summary = "비상연락망")
+    @Operation(summary = "비상연락망 조회")
     public EmergencyContactsVo getEmergencyContacts() {
         return service.getEmergencyContacts();
     }
