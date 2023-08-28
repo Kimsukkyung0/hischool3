@@ -43,7 +43,7 @@ public class AttendanceController {
     @GetMapping
     @Operation(summary = "출결 현황 조회", description = """
           입력값 -<br>
-          "userId": 선택한 학생 PK<br><br>
+          "userId": 선택한 학생 PK(학생이 조회할 경우 userId 미입력)<br><br>
           출력값 -<br>
           "attendId": 출결 현황 PK<br>
           "grade": 학년<br>
@@ -62,7 +62,7 @@ public class AttendanceController {
           "etcOut": 기타 결과<br>
           "specialNote": 특이 사항
           """)
-    public List<AttendanceEntity> getAttendance(Long userId) {
+    public List<AttendanceEntity> getAttendance(@RequestParam(required = false) Long userId) {
         return service.getAttendance(userId);
     }
 

@@ -8,7 +8,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
-@Table(name="attendance")
+@Table(name="attendance", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "grade"})
+})
 @Data
 @Builder
 @NoArgsConstructor
