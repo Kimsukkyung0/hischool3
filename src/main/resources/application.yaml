@@ -25,32 +25,26 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
 #  mvc:
 #    pathmatch:
 #      matching-strategy: ant_path_matcher
-
 # mybatis config
 mybatis:
   type-aliases-package: com.green.secondproject
   mapper-locations: classpath:mapper/**/*.xml
-
 # swagger
 springdoc:
   swagger-ui:
     path: /swagger.html
-
 file:
   dir: D:/home/download
   imgPath: http://192.168.0.144:5003/img/hiSchool/userPic
   aprimgPath: http://192.168.0.144:5003/img/hiSchool/userApr
   logoPath: http://192.168.0.144:5003/logo
-
 my-api:
   key: 9a7b0b8f560b480abf0d0cb941af2bea
   key2: 9dd88f65ea0be9e40510e536212d21fe
 ---
-
 spring:
   config:
     activate:
@@ -63,11 +57,9 @@ spring:
       host: 192.168.0.144
   datasource:
     url: jdbc:mariadb://192.168.0.144:3306/team_c
-
 file:
   dir: /home/download
 ---
-
 spring:
   config:
     activate:
@@ -81,4 +73,3 @@ spring:
 #      mode: always
 #      schema-locations: classpath:init/schema.sql
 #      data-locations: classpath:init/data.sql
-
