@@ -30,7 +30,7 @@ public class NoticeEntity extends BaseEntity {
     @Column(nullable = false,columnDefinition = "text")
     private String content;
 
-    @Column(nullable = false,columnDefinition = "tinyint default 0")
+    @Column(name = "impt_yn",nullable = false,columnDefinition = "tinyint default 0")
     private int imptYn;
 
     @Column(nullable = false,columnDefinition = "int default 0")
