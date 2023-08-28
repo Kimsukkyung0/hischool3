@@ -65,9 +65,10 @@ public class TeacherMngController {
     @Operation(summary = "담당교원 승인처리" , description = """
             요구값 : <br>(1)teacherId : 승인처리대상 선생님 pk<br><br>
             출력값 : <br>(1) 승인처리되었습니다 - <br>
-            (2) aprYn : (번호) - 데이터베이스 오류(0,1)이외의 값으로 저장되어있는 경우 <br>
+            (2) aprYn - (0)이외의 값으로 저장되어있는 경우 1은 이미 승인처리된 유저입니다<br>
             (3) 올바른 요청이 아닙니다 : 같은 학교소속이지만 승인대상이 아닌경우 <br>
             (4) 권한이없는 유저에 대한 요청 : 같은 학교 소속이 아닌 유저를 승인처리 시도 <br>
+            (5) 존재하지 않는 유저입니다 : 존재하지 않는 유저를 승인처리 시도 <br>
             """)
     String setAprYnOnTeacherAcnt(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam Long teacherId){
         return teacherMngService.teacherAprv(teacherId ,myuser.getSchoolId());

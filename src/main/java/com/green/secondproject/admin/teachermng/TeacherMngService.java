@@ -171,27 +171,28 @@ public class TeacherMngService {
     }
 
 
-        public String teacherAprv(Long teacherId,Long schoolId){
-        UserEntity getUserInfo = userRepository.findByUserId(teacherId);
-        //선생님 확인과정
-            if (getUserInfo.getVanEntity().getSchoolEntity().getSchoolId() == schoolId){
-                if(getUserInfo.getRoleType().equals(RoleType.TC)) {
-                    if (getUserInfo.getAprYn() == 0) {
-                    getUserInfo.setAprYn(1);
-                    userRepository.save(getUserInfo);
-                    return "승인처리되었습니다";
-                    } else {
-                        return "aprYn : " + getUserInfo.getAprYn();
-                        }
-                }
-                else {
-                return "올바른 요청이 아닙니다 : " + getUserInfo.getRoleType();
-                }
-            }
-            else{
-                return "권한이없는 유저에 대한 요청";
+        public String teacherAprv(Long teacherId,Long schoolId) {
+            UserEntity getUserInfo = userRepository.findByUserId(teacherId);
+            //선생님 확인과정
+            if (getUserInfo == null) {
+                return "유저 정보가 존재하지 않습니다";
             }
 
+            if (getUserInfo.getVanEntity().getSchoolEntity().getSchoolId() == schoolId) {
+                if (getUserInfo.getRoleType().equals(RoleType.TC)) {
+                    if (getUserInfo.getAprYn() == 0) {
+                        getUserInfo.setAprYn(1);
+                        userRepository.save(getUserInfo);
+                        return "승인처리되었습니다";
+                    } else {
+                        return "aprYn : " + getUserInfo.getAprYn();
+                    }
+                } else {
+                    return "올바른 요청이 아닙니다 : " + getUserInfo.getRoleType();
+                }
+            } else {
+                return "권한이없는 유저에 대한 요청";
+            }
 
 //EntityManager em = entityManagerFactory.createEntityManager();
 //        EntityTransaction tx = em.getTransaction();
