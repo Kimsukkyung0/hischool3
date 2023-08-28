@@ -114,9 +114,10 @@ public class TeacherService {
     }
 
     public int aprStudent(MyUserDetails myuser){
-        ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(myuser.getVanId());
-        return mapper.aprStudent(dto);
+        return userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
+                VanEntity.builder()
+                        .vanId(myuser.getVanId())
+                        .build(), 0, EnrollState.ENROLL, RoleType.STD).size();
     }
 
     public TeacherGraphContainerVo teacherAcaGraph(Long classId) {
