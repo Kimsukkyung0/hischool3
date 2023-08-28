@@ -2,9 +2,11 @@ package com.green.secondproject.header;
 
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
@@ -26,7 +28,7 @@ public class HeaderService {
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
     private final VanRepository vanRepository;
-    private final AuthenticationFacade FACADE;
+    private final SchoolAdminRepository schoolAdminRepository;
 
     public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
 //        SelSchoolInfoDto dto = new SelSchoolInfoDto();
@@ -35,7 +37,13 @@ public class HeaderService {
 //        MyUserDetails userDetails = FACADE.getLoginUser();
 
         SchoolEntity scEntity = schoolRepository.findBySchoolId(myuser.getSchoolId());
-        UserEntity userEntity = userRepository.findByUserId(myuser.getUserId());
+        if ("ROLE_ADMIN".equals(myuser.getRoles().get(0))) {
+            return SelSchoolInfoVo.builder()
+                    .userId(myuser.getUserId())
+                    .schoolId(scEntity.getSchoolId())
+                    .nm(scEntity.getNm())
+                    .build();
+        }
         VanEntity vanEntity = vanRepository.findByVanId(myuser.getVanId());
 
 //        SchoolEntity scEntity = SchoolEntity.builder()
@@ -52,9 +60,8 @@ public class HeaderService {
 //                                    .classNum(userDetails.getClassNum())
 //                                    .build();
 
-
         return SelSchoolInfoVo.builder()
-                .userId(userEntity.getUserId())
+                .userId(myuser.getUserId())
                 .schoolId(scEntity.getSchoolId())
                 .nm(scEntity.getNm())
                 .grade(vanEntity.getGrade())
@@ -78,11 +85,8 @@ public class HeaderService {
 
         */
 
-
-
         SchoolEntity scEntity = schoolRepository.findBySchoolId(myuser.getSchoolId());
         scEntity.setLogo(logoPath + "/" + scEntity.getLogo());
-
 
         return SelSchoolLogoVo.builder()
                             .logo(scEntity.getLogo())
