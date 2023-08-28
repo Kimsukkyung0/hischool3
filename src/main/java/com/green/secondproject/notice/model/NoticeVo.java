@@ -15,7 +15,7 @@ public class NoticeVo {
     private String title;
     private String content;
     private LocalDateTime createdAt;
-    private int impt_yn;
+    private int imptYn;
     private int hits;
     private Long userId;
 

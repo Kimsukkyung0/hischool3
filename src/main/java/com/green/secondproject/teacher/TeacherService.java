@@ -61,9 +61,15 @@ public class TeacherService {
 
 
     public int acceptStudent(Long userId) {
-        AcceptStudentDto dto = new AcceptStudentDto();
-        dto.setUserId(userId);
-        return mapper.acceptStudent(dto);
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new RuntimeException("해당하는 학생이 없습니다.");
+        }
+
+        UserEntity userEntity = user.get();
+        userEntity.setAprYn(1);
+        userRepository.save(userEntity);
+        return 1;
     }
 
 
@@ -73,11 +79,16 @@ public class TeacherService {
 //        return mapper.rejectStudent(dto);
 //    }
 
-
     public int cancelAcceptStd(Long userId) {
-        AcceptStudentDto dto = new AcceptStudentDto();
-        dto.setUserId(userId);
-        return mapper.cancelAcceptStd(dto);
+        Optional<UserEntity> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new RuntimeException("해당하는 학생이 없습니다.");
+        }
+
+        UserEntity userEntity = user.get();
+        userEntity.setAprYn(0);
+        userRepository.save(userEntity);
+        return 1;
     }
 
 
@@ -114,9 +125,10 @@ public class TeacherService {
     }
 
     public int aprStudent(MyUserDetails myuser){
-        ClassStudentDto dto = new ClassStudentDto();
-        dto.setClassid(myuser.getVanId());
-        return mapper.aprStudent(dto);
+        return userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
+                VanEntity.builder()
+                        .vanId(myuser.getVanId())
+                        .build(), 0, EnrollState.ENROLL, RoleType.STD).size();
     }
 
     public TeacherGraphContainerVo teacherAcaGraph(Long classId) {

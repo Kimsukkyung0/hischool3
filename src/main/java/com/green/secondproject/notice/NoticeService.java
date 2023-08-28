@@ -58,6 +58,7 @@ public class NoticeService {
 
         NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent())
                 .imptYn(dto.getImptyn()).schoolEntity(schoolEntity).build();
+
         NoticeEntity result = noticeRepository.save(entity);
 
         return NoticeVo.builder()
@@ -65,11 +66,14 @@ public class NoticeService {
                 .title(result.getTitle())
                 .content(result.getContent())
                 .createdAt(result.getCreatedAt())
+                .imptYn(result.getImptYn())
                 .hits(result.getHits())
+                .userId(userDetails.getUserId())
                 .build();
     }
 
     public NoticeVo findBySchoolNotice(Long noticeId){
+        MyUserDetails userDetails = facade.getLoginUser();
 
       NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
 
@@ -78,16 +82,20 @@ public class NoticeService {
               .title(sel.getTitle())
               .content(sel.getContent())
               .createdAt(sel.getCreatedAt())
+              .userId(userDetails.getUserId())
               .build();
 
      return vo;
     }
     public NoticeVo2 upNotice(NoticePatchDto dto){
+        MyUserDetails userDetails = facade.getLoginUser();
+        SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
         NoticeEntity entity = NoticeEntity.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
                 .noticeId(dto.getNoticeId())
                 .imptYn(dto.getImptyn())
+                .schoolEntity(schoolRepository.getReferenceById(schoolEntity.getSchoolId()))
                 .build();
 
         NoticeEntity result = noticeRepository.save(entity);
