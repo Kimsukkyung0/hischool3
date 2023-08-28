@@ -49,23 +49,18 @@ public class MealMenuTableService {
     private SchoolRepository scRep;
 
 
-
-
-    private String scCode;
-    public void setScCode(Long schoolId) {
-        this.scCode = scRep.findBySchoolId(schoolId).getCode();}
-
-
     public MealTableContainerVo getMealTableBySchoolOfTheMonth(Long schoolId) {
+        log.info("schoolId : {}" , schoolId);
         YearMonth thisMonth = YearMonth.now();
 //        YearMonth thisMonth = YearMonth.of(2023,6);
         LocalDate thisMonthStart = thisMonth.atDay(1);//이번달의 시작
         LocalDate thisMonthEnds = thisMonth.atEndOfMonth();//기준달 마지막
 
         //jpa - schoolrep 을 통해 scCode입력
-        setScCode(schoolId);
         MealTableDto dto = new MealTableDto();
-        dto.setSdSchulCode(scCode);
+
+
+        dto.setSdSchulCode(scRep.findBySchoolId(schoolId).getCode());
         dto.setStartDate(thisMonthStart.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(thisMonthEnds.format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -77,11 +72,10 @@ public class MealMenuTableService {
         LocalDate now = LocalDate.now();
         //data of the developing process for the 2nd project
 //        LocalDate now = LocalDate.of(2023,7,1);
-        setScCode(schoolId);
 
         MealTableDto dto = new MealTableDto();
-        setScCode(schoolId);
-        dto.setSdSchulCode(String.valueOf(schoolId));
+
+        dto.setSdSchulCode(scRep.findBySchoolId(schoolId).getCode());
         dto.setStartDate(now.with(DayOfWeek.MONDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
         dto.setEndDate(now.with(DayOfWeek.FRIDAY).format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
@@ -100,7 +94,7 @@ public class MealMenuTableService {
                         .queryParam("pIndex",1)
                         .queryParam("pSize",50)
                         .queryParam("ATPT_OFCDC_SC_CODE","D10")//시도교육청코드
-                        .queryParam("SD_SCHUL_CODE",scCode)
+                        .queryParam("SD_SCHUL_CODE",dto.getSdSchulCode())
                         .queryParam("MLSV_FROM_YMD",dto.getStartDate())//조회시작일 : 기준월의 1일
                         .queryParam("MLSV_TO_YMD",dto.getEndDate())//조회종료일 : 기준월의 마지막일
                         .build()
@@ -110,7 +104,7 @@ public class MealMenuTableService {
         log.info("json : {}",json);
 
         ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
-        List<MealTableVo> mealTableVo = null;
+        List<MealTableVo> mealTableVo = new ArrayList<>();
         MealTableContainerVo result = null;
 
         try{
