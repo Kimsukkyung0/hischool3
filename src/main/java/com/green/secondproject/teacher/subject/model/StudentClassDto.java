@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class StudentClassDto {
-    private String classid;
+    private String vanId;
     private Long schoolid;
 }

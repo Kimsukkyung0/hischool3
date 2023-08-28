@@ -46,6 +46,7 @@ public class NoticeService {
                     .title(entity.getTitle())
                     .content(entity.getContent())
                     .createdAt(entity.getCreatedAt())
+                    .userId(userDetails.getUserId())
                     .hits(entity.getHits()).build());
         }
         return list;

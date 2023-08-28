@@ -17,5 +17,6 @@ public class NoticeVo {
     private LocalDateTime createdAt;
     private int impt_yn;
     private int hits;
+    private Long userId;
 
 }
