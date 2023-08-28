@@ -9,7 +9,8 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
 @Entity
-@Table(name="mock_result")
+@Table(name="mock_result", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id","year","subject_id", "mon"})})
 @Data
 @SuperBuilder
 @NoArgsConstructor
@@ -21,31 +22,31 @@ public class MockEntity {
     @Column(name="result_id",updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long resultId;
 
-    @Column(name="user_id", nullable = false, length = 20)
+    @Column(name="user_id", length = 20)
     @NotNull
     private Long userId;
 
-    @Column(name="subject_id", nullable = false, length = 20)
+    @Column(name="subject_id", length = 20)
     @NotNull
     private Long subjectId;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private char year;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int mon;
 
-    @Column(name="standard_score", nullable = false, length = 4)
+    @Column(name="standard_score", length = 4)
     @NotNull
     private Long standardScore;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int rating;
 
-    @Column(nullable = false, length = 4)
+    @Column(length = 4)
     @NotNull
     private int percent;
 }
