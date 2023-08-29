@@ -105,6 +105,10 @@ public class AdminService {
     }
 
     public List<StudentClassVo> getStudentClass(int page) {
+        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+        if (schoolOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
@@ -116,6 +120,26 @@ public class AdminService {
                         .classNum(item.getVanEntity().getClassNum())
                         .build())
                 .toList();
+    }
+
+    public UserStateUpdVo updUserState(UserStateUpdDto dto) {
+        Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
+
+        UserEntity entity = optEntity.get();
+        VanEntity.builder()
+                .vanId(dto.getVanId())
+                        .build();
+
+//        entity.getVanEntity().setVanId(entity.getVanEntity().getVanId());
+
+
+        userRepository.save(entity);
+
+        return UserStateUpdVo.builder()
+//                .vanId(entity.getVanEntity().getVanId())
+                .vanId(entity.getVanEntity().getVanId())
+                .build();
+
     }
 
 
@@ -186,13 +210,8 @@ public class AdminService {
                 .build();
     }
 
-//    public int updUserState() {
-//
-//    }
 
-
-    public int enrollUser(MyUserDetails myuser) {
-        Long userId = myuser.getUserId();
+    public int enrollUser(long userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         userEntity.setEnrollState(ENROLL);
         userRepository.save(userEntity);
@@ -200,12 +219,11 @@ public class AdminService {
     }
 
 
-    public int graduateUser(MyUserDetails myuser) {
+    public int graduateUser(long userId) {
 //        DelUserDto dto = new DelUserDto();
 //        dto.setUserId(myuser.getUserId());
 //        return mapper.delUser(dto);
 
-        Long userId = myuser.getUserId();
         UserEntity userEntity = userRepository.findByUserId(userId);
         userEntity.setEnrollState(GRADUATION);
         userRepository.save(userEntity);
@@ -213,8 +231,7 @@ public class AdminService {
     }
 
 
-    public int transferUser(MyUserDetails myuser) {
-        Long userId = myuser.getUserId();
+    public int transferUser(long userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         userEntity.setEnrollState(TRANSFER);
         userRepository.save(userEntity);
@@ -222,8 +239,7 @@ public class AdminService {
     }
 
 
-    public int leaveUser(MyUserDetails myuser) {
-        Long userId = myuser.getUserId();
+    public int leaveUser(long userId) {
         UserEntity userEntity = userRepository.findByUserId(userId);
         userEntity.setEnrollState(LEAVE);
         userRepository.save(userEntity);

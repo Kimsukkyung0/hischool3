@@ -114,6 +114,11 @@ public class AdminController {
         return service.getMainNotice();
     }
 
+    @PatchMapping("/user-statement")
+    public UserStateUpdVo updUserState(@RequestBody UserStateUpdDto dto) {
+        return service.updUserState(dto);
+    }
+
     @GetMapping("/emergency-contacts")
     @Operation(summary = "비상연락망 조회", description = """
             "admNum": 행정실<br>
@@ -140,39 +145,38 @@ public class AdminController {
         return service.updEmergencyContacts(ec);
     }
 
-//    @PatchMapping("/user-statement")
-//    public
+
 
 
     @PatchMapping("/enroll-user")
     @Operation(summary = "유저 재학 처리",
             description = "출력값 : <br>(1)del_yn = 1 -> 재학 처리 완료")
-    public int enrollUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.enrollUser(myuser);
+    public int enrollUser(@RequestParam long userId) {
+        return service.enrollUser(userId);
     }
 
 
     @PatchMapping("/grad-user")
     @Operation(summary = "유저 졸업 처리",
             description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
-    public int delUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.graduateUser(myuser);
+    public int delUser(@RequestParam long userId) {
+        return service.graduateUser(userId);
     }
 
 
     @PatchMapping("/tran-user")
     @Operation(summary = "유저 전학 처리",
             description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
-    public int transferUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.transferUser(myuser);
+    public int transferUser(@RequestParam long userId) {
+        return service.transferUser(userId);
     }
 
 
     @PatchMapping("/leave-user")
     @Operation(summary = "유저 자퇴 처리",
             description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
-    public int leaveUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return service.leaveUser(myuser);
+    public int leaveUser(@RequestParam long userId) {
+        return service.leaveUser(userId);
     }
 
 }
