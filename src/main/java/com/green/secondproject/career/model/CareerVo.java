@@ -7,6 +7,7 @@ import lombok.Data;
 @Data
 public class CareerVo {
     private Long userId;
+    private Long careerId;
     private String grade;
     private String interest;
     private String stdHope;

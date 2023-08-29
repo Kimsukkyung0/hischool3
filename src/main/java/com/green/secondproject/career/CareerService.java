@@ -42,14 +42,15 @@ public class CareerService {
 
         for (CareerEntity entity: careerList) {
             list.add(CareerVo.builder()
+                    .userId(userentity.getUserId())
                     .grade(entity.getGrade())
-                    .userId(entity.getCareer_id())
+                    .careerId(entity.getCareer_id())
                     .interest(entity.getInterest())
-                            .stdHope(entity.getStd_hope())
-                            .parentHope(entity.getParent_hope())
-                            .hopeUniv(entity.getHope_univ())
-                            .hopeDept(entity.getHope_dept())
-                            .specialNote(entity.getSpecial_note())
+                    .stdHope(entity.getStd_hope())
+                    .parentHope(entity.getParent_hope())
+                    .hopeUniv(entity.getHope_univ())
+                    .hopeDept(entity.getHope_dept())
+                    .specialNote(entity.getSpecial_note())
                     .build());
         }
 
@@ -66,6 +67,7 @@ public class CareerService {
         for (CareerEntity entity: careerEntityList) {
             list.add(CareerVo.builder()
                     .grade(entity.getGrade())
+                    .careerId(entity.getCareer_id())
                     .stdHope(entity.getStd_hope())
                             .interest(entity.getInterest())
                             .userId(userentity.getUserId())
@@ -73,7 +75,7 @@ public class CareerService {
                             .hopeUniv(entity.getHope_univ())
                             .parentHope(entity.getParent_hope())
                             .specialNote(entity.getSpecial_note())
-
+                            .userId(entity.getUserEntity().getUserId())
                     .build());
 
         }
@@ -99,6 +101,7 @@ public class CareerService {
 
             return  CareerVo.builder()
                 .stdHope(result.getStd_hope())
+                .careerId(result.getCareer_id())
                 .parentHope(result.getParent_hope())
                 .userId(userEntity.getUserId())
                 .grade(result.getGrade())
@@ -136,6 +139,7 @@ public class CareerService {
 
 careerRepository.save(entity);
         return   CareerVo2.builder()
+                .careerId(entity.getCareer_id())
                 .stdHope(entity.getStd_hope())
                 .parentHope(entity.getParent_hope())
                 .grade(entity.getGrade())
