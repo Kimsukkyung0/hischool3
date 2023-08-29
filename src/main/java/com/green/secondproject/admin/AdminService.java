@@ -100,7 +100,7 @@ public class AdminService {
     }
 
     public List<StudentClassVo> getStudentClass() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함 + 페이지 처리
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, sort);
 
         return entities.stream().map(item -> StudentClassVo.builder()

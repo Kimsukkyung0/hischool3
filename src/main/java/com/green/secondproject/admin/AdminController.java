@@ -85,7 +85,7 @@ public class AdminController {
         return service.getStatus();
     }
 
-    @GetMapping("/hhh")
+    @GetMapping("/student-list")
     public List<StudentClassVo> getStudentClass() {
         return service.getStudentClass();
     }
