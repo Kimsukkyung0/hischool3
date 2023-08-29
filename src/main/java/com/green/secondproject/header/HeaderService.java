@@ -21,14 +21,10 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class HeaderService {
-    private final HeaderMapper mapper;
-
     @Value("${file.logoPath}")
     private String logoPath;
     private final SchoolRepository schoolRepository;
-    private final UserRepository userRepository;
     private final VanRepository vanRepository;
-    private final SchoolAdminRepository schoolAdminRepository;
 
     public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
 //        SelSchoolInfoDto dto = new SelSchoolInfoDto();

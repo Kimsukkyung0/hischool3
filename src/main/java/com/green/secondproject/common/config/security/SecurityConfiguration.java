@@ -37,10 +37,6 @@ public class SecurityConfiguration {
                             ).permitAll()
                             .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/refresh-token")).permitAll()
                             .requestMatchers(
-                                    mvc.pattern("/api/mypage/**"), mvc.pattern("/api/timetable"),
-                                    mvc.pattern("/api/subject/**"), mvc.pattern("/api/logout"),
-                                    mvc.pattern(HttpMethod.GET, "/api/attendance")).hasAnyRole("TC", "STD")
-                            .requestMatchers(
                                     mvc.pattern("/api/teacher/**"),
                                     mvc.pattern(HttpMethod.POST, "/api/attendance"),
                                     mvc.pattern(HttpMethod.PUT, "/api/attendance")).hasRole("TC")
@@ -48,6 +44,10 @@ public class SecurityConfiguration {
                                     mvc.pattern("/api/student/**"),
                                     mvc.pattern("/api/meal/**")).hasRole("STD")
                             .requestMatchers(mvc.pattern("/api/admin/**")).hasRole("ADMIN")
+                            .requestMatchers(
+                                    mvc.pattern("/api/mypage/**"), mvc.pattern("/api/timetable"),
+                                    mvc.pattern("/api/subject/**"), mvc.pattern("/api/logout"),
+                                    mvc.pattern(HttpMethod.GET, "/api/attendance")).hasAnyRole("TC", "STD")
                             .requestMatchers(mvc.pattern("/api/schedule")).hasAnyRole("TC", "ADMIN")
                             .requestMatchers(
                                     mvc.pattern("/api/side"),

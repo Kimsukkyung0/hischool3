@@ -1,13 +1,16 @@
 package com.green.secondproject.common.entity;
 
+import com.green.secondproject.common.config.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicInsert;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name="aca_result", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id","year","subject_id", "semester","mid_final"})})
@@ -16,47 +19,38 @@ import org.hibernate.annotations.DynamicInsert;
 @NoArgsConstructor
 @ToString(callSuper = true) // 부모클래스에 있는 toString 어노테이션을 호출 (만약 부모클래스에도 없으면 해시코드 출력)
 @DynamicInsert
-public class AcaEntity {
+public class AcaResultEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="result_id", updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
+    @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long resultId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id"
-            , nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity userEntity;
 
     @ManyToOne
-    @JoinColumn(name = "subject_id"
-            , nullable = false)
+    @JoinColumn(name = "subject_id", nullable = false)
     private SubjectEntity subjectEntity;
 
-    @Column(length = 4)
-    @NotNull
-    private char year;
+    @Column(columnDefinition = "char(4)", nullable = false)
+    private String year;
 
-    @Column(length = 4)
-    @NotNull
+    @Column(columnDefinition = "tinyint unsigned not null check(semester in (1, 2))")
     private int semester;
 
-    @Column(name = "mid_final", nullable = false, length = 4)
-    @NotNull
+    @Column(name = "mid_final", columnDefinition = "tinyint unsigned not null check(mid_final in (1, 2))")
     private int midFinal;
 
-    @Column(length = 4)
-    @NotNull
+    @Column(nullable = false, columnDefinition = "tinyint unsigned")
     private int score;
 
-    @Column(length = 1)
-    @NotNull
+    @Column(nullable = false, columnDefinition = "tinyint unsigned")
     private int rating;
 
-    @Column(name = "class_rank", nullable = false, length = 4)
-    @NotNull
+    @Column(columnDefinition = "tinyint unsigned")
     private int classRank;
 
-    @Column(name = "whole_rank", nullable = false, length = 11)
-    @NotNull
-    private Long wholeRank;
+    @Column(columnDefinition = "int unsigned")
+    private int wholeRank;
 }
