@@ -6,6 +6,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 @Data
+@Builder
 public class SelUserMyPageVo {
     private Long userId;
     private String unm;
@@ -14,7 +15,7 @@ public class SelUserMyPageVo {
     private String pic;
     private LocalDate birth;
     private String phone;
-    private String Address;
+    private String address;
     private String detailAddr;
     private Long classId;
     private String grade;
