@@ -134,7 +134,7 @@ public class TeacherController {
     @Operation(summary = "모의고사 성적 삭제",
             description = "요구값 : <br>(1)resultId - 모의고사 성적 PK값<br><br>")
     public int delMockResult(@RequestParam Long resultId) {
-        return service.delMockRusult(resultId);
+        return service.delMockResult(resultId);
     }
 
 
