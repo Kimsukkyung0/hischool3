@@ -1,6 +1,7 @@
 package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
@@ -11,6 +12,7 @@ import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -95,6 +97,18 @@ public class AdminService {
                 .stdNum(stdNum)
                 .tcWaitingNum(tcWaitingNum)
                 .build();
+    }
+
+    public List<StudentClassVo> getStudentClass() {
+        Sort sort = Sort.by(Sort.Direction.ASC, "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, sort);
+
+        return entities.stream().map(item -> StudentClassVo.builder()
+                        .nm(item.getNm())
+                        .grade(item.getVanEntity().getGrade())
+                        .classNum(item.getVanEntity().getClassNum())
+                        .build())
+                .toList();
     }
 
     public MainNoticeListVo getMainNotice() {

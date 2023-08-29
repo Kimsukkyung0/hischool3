@@ -115,6 +115,9 @@ public class MyPageService {
 //                myuser.setPw(myuser.getPw());
 //            }
             try {
+                if(!StringUtils.isEmpty(myuser.getPw()) && !myuser.getPw().equals(myuser.getPw())) {
+                    myuser.setPw(myuser.getPw());
+                }
                 UserUpdDto dto = UserUpdDto.builder()
                         .phone(p.getPhone())
                         .address(p.getAddress())
@@ -134,6 +137,9 @@ public class MyPageService {
             }
         } else {
             try {
+                if(!StringUtils.isEmpty(myuser.getPw()) && !myuser.getPw().equals(myuser.getPw())) {
+                    myuser.setPw(myuser.getPw());
+                }
                 UserUpdDto dto = UserUpdDto.builder()
                         .phone(p.getPhone())
                         .address(p.getAddress())

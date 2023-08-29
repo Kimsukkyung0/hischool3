@@ -1,9 +1,6 @@
 package com.green.secondproject.admin;
 
-import com.green.secondproject.admin.model.AdminParam;
-import com.green.secondproject.admin.model.EmergencyContacts;
-import com.green.secondproject.admin.model.MainNoticeListVo;
-import com.green.secondproject.admin.model.StatusVo;
+import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
@@ -20,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -40,7 +39,7 @@ public class AdminController {
         log.info("[signIn] 로그인을 시도하고 있습니다. email: {}, pw: {}, ip: {}", p.getEmail(), p.getPw(), ip);
 
         SignInResultDto dto = service.signIn(p, ip);
-        if(dto.getCode() == CommonRes.SUCCESS.getCode()) {
+        if (dto.getCode() == CommonRes.SUCCESS.getCode()) {
             log.info("[signIn] 정상적으로 로그인 되었습니다. email: {}, token: {}", p.getEmail(), dto.getAccessToken());
         }
 
@@ -84,6 +83,11 @@ public class AdminController {
             """)
     public StatusVo getStatus() {
         return service.getStatus();
+    }
+
+    @GetMapping("/hhh")
+    public List<StudentClassVo> getStudentClass() {
+        return service.getStudentClass();
     }
 
     @GetMapping("/main-notice")
