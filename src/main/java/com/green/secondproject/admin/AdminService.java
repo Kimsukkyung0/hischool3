@@ -12,6 +12,8 @@ import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -99,9 +101,11 @@ public class AdminService {
                 .build();
     }
 
-    public List<StudentClassVo> getStudentClass() {
-        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함 + 페이지 처리
-        List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, sort);
+    public List<StudentClassVo> getStudentClass(int page) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Pageable pageable = PageRequest.of(page, 2, sort);  //페이징 처리
+        List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
+
 
         return entities.stream().map(item -> StudentClassVo.builder()
                         .nm(item.getNm())

@@ -86,8 +86,8 @@ public class AdminController {
     }
 
     @GetMapping("/student-list")
-    public List<StudentClassVo> getStudentClass() {
-        return service.getStudentClass();
+    public List<StudentClassVo> getStudentClass(int page) {
+        return service.getStudentClass(page);
     }
 
     @GetMapping("/main-notice")
