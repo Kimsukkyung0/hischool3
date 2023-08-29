@@ -74,4 +74,21 @@ public class CareerController {
     public CareerVo2 CareerUp(@RequestBody CareerUpDto dto){
         return service.CareerUp(dto);
     }
+    @GetMapping("/hope")
+    @Operation(summary = "희망대학,희망학과 출력"
+            ,description = "<br>" +
+            "userId:\n" +"유저pk값<br>\n"+
+            "grade:\n" +"학년<br>\n"+
+            "interest:\n" +"특기 및 흥미<br>\n"+
+            "stdHope:\n" +"학생 진로희망<br>\n"+
+            "parentHope:\n" +"부모 진로희망<br>\n"+
+            "hopeUniv:\n" +"희망하는 대학교<br>\n"+
+            "hopeDept:\n" +"희망하는 학과<br>\n"+
+            "specialNote:\n"+"행동 특성 및 종합 의견<br>\n")
+    public List<CareerVo3> HopeSel(@RequestParam Long userId){
+
+        CareerDto dto = new CareerDto();
+        dto.setUserId(userId);
+        return service.HopeSel(dto);
+    }
 }
