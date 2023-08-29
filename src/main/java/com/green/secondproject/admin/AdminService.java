@@ -5,6 +5,7 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
@@ -22,6 +23,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.green.secondproject.common.config.etc.EnrollState.*;
 
 @Service
 @RequiredArgsConstructor
@@ -182,4 +185,42 @@ public class AdminService {
                 .faxNum(schoolEntity.getFaxNum())
                 .build();
     }
+
+    public int enrollUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(ENROLL);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+
+    public int graduateUser(MyUserDetails myuser) {
+//        DelUserDto dto = new DelUserDto();
+//        dto.setUserId(myuser.getUserId());
+//        return mapper.delUser(dto);
+
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(GRADUATION);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+    public int transferUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(TRANSFER);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+    public int leaveUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(LEAVE);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.SignInParam;
@@ -16,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -137,6 +139,40 @@ public class AdminController {
     public EmergencyContacts updEmergencyContacts(@RequestBody EmergencyContacts ec) {
         return service.updEmergencyContacts(ec);
     }
+
+
+
+    @PatchMapping("/enroll-user")
+    @Operation(summary = "유저 졸업 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
+    public int enrollUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.enrollUser(myuser);
+    }
+
+
+    @PatchMapping("/grad-user")
+    @Operation(summary = "유저 졸업 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
+    public int delUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.graduateUser(myuser);
+    }
+
+
+    @PatchMapping("/tran-user")
+    @Operation(summary = "유저 전학 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+    public int transferUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.transferUser(myuser);
+    }
+
+
+    @PatchMapping("/leave-user")
+    @Operation(summary = "유저 자퇴 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+    public int leaveUser(@AuthenticationPrincipal MyUserDetails myuser) {
+        return service.leaveUser(myuser);
+    }
+
 }
 
 //야 남규ㅠ진 코드 잘 짜면 다냐/?
