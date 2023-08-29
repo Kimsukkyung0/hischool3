@@ -140,6 +140,8 @@ public class AdminController {
         return service.updEmergencyContacts(ec);
     }
 
+//    @PatchMapping("/user-statement")
+//    public
 
 
     @PatchMapping("/enroll-user")

@@ -106,7 +106,7 @@ public class AdminService {
 
     public List<StudentClassVo> getStudentClass(int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page, 30, sort);  //페이징 처리
+        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
 
@@ -186,6 +186,11 @@ public class AdminService {
                 .build();
     }
 
+//    public int updUserState() {
+//
+//    }
+
+
     public int enrollUser(MyUserDetails myuser) {
         Long userId = myuser.getUserId();
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -207,6 +212,7 @@ public class AdminService {
         return 1;
     }
 
+
     public int transferUser(MyUserDetails myuser) {
         Long userId = myuser.getUserId();
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -215,6 +221,7 @@ public class AdminService {
         return 1;
     }
 
+
     public int leaveUser(MyUserDetails myuser) {
         Long userId = myuser.getUserId();
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -222,5 +229,4 @@ public class AdminService {
         userRepository.save(userEntity);
         return 1;
     }
-
 }
