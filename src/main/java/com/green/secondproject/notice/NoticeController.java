@@ -20,7 +20,8 @@ public class NoticeController {
     private final NoticeService service;
 
     @GetMapping
-    @Operation(summary = "공지사항 리스트")
+    @Operation(summary = "공지사항 리스트"
+    ,description = "")
     public List<NoticeVo> noticeList(){
         return service.noticeList();
     }
@@ -43,7 +44,7 @@ public class NoticeController {
     @PatchMapping
     @Transactional
     @Operation(summary = "글 수정")
-    public NoticeVo2 no(NoticePatchDto dto){
+    public NoticeVo2 no(@RequestBody NoticePatchDto dto){
 
         return service.upNotice(dto);
     }
