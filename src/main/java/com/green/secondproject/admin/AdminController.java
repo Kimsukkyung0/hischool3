@@ -86,6 +86,14 @@ public class AdminController {
     }
 
     @GetMapping("/student-list")
+    @Operation(summary = "학생 리스트 조회", description = """
+            입력 값<br>
+            "page": 페이지(0부터 시작, 현재 30명 당 1페이지로 적용)<br><br>
+            출력 값:<br>
+            "nm": 이름<br>
+            "grade": 학년<br>
+            "classNum": 반<br>
+            """)
     public List<StudentClassVo> getStudentClass(int page) {
         return service.getStudentClass(page);
     }

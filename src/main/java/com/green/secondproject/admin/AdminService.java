@@ -103,7 +103,7 @@ public class AdminService {
 
     public List<StudentClassVo> getStudentClass(int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page, 2, sort);  //페이징 처리
+        Pageable pageable = PageRequest.of(page, 30, sort);  //페이징 처리
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
 
@@ -114,6 +114,7 @@ public class AdminService {
                         .build())
                 .toList();
     }
+
 
     public MainNoticeListVo getMainNotice() {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
