@@ -1,18 +1,18 @@
 package com.green.secondproject.common.entity;
 
+import com.green.secondproject.common.config.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "career")
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CareerEntity {
+public class CareerEntity extends BaseEntity {
     @Id //pk
     @GeneratedValue(strategy = GenerationType.IDENTITY) //auto_increment
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")

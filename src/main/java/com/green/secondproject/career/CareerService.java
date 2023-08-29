@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,6 @@ public class CareerService {
                     .specialNote(entity.getSpecial_note())
                     .build());
         }
-
         return list;
     }
     public List<CareerVo> SelByStu(CareerSelByDto dto){
@@ -86,15 +86,27 @@ public class CareerService {
         UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
         List<CareerEntity> careerEntity = careerRepository.findByUserEntity(userEntity);
         List<CareerVo3> list = new ArrayList<>();
-        for (CareerEntity e : careerEntity) {
-            list.add(CareerVo3.builder()
-                    .hopeUniv(e.getHope_univ())
-                    .careerId(e.getCareer_id())
-                    .hopeDept(e.getHope_dept())
-                    .build());
+        if (careerEntity.isEmpty()) {
+            return null; // 혹은 적절한 기본값 또는 예외 처리
         }
-        return list;
+        careerEntity.sort(Comparator.comparing(CareerEntity::getCreatedAt).reversed());
+        CareerEntity mostRecent = careerEntity.get(0);
 
+        CareerVo3 mostRecentVo = CareerVo3.builder()
+                .hopeUniv(mostRecent.getHope_univ())
+                .careerId(mostRecent.getCareer_id())
+                .hopeDept(mostRecent.getHope_dept())
+                .build();
+        list.add(mostRecentVo);
+//
+//        for (CareerEntity e : careerEntity) {
+//            list.add(CareerVo3.builder()
+//                    .hopeUniv(e.getHope_univ())
+//                    .careerId(e.getCareer_id())
+//                    .hopeDept(e.getHope_dept())
+//                    .build());
+//        }
+        return list;
     }
 
     public CareerVo StuIns(CareerInsDto dto){
