@@ -108,7 +108,7 @@ public class CareerService {
                 .specialNote(result.getSpecial_note())
                 .build();
     }
-    public CareerVo CareerUp(CareerUpDto dto){
+    public CareerVo2 CareerUp(CareerUpDto dto){
 
 //        CareerEntity careerEntity =
 //                CareerEntity.builder()
@@ -135,7 +135,7 @@ public class CareerService {
         entity.setHope_univ(dto.getHopeUniv());
 
 careerRepository.save(entity);
-        return   CareerVo.builder()
+        return   CareerVo2.builder()
                 .stdHope(entity.getStd_hope())
                 .parentHope(entity.getParent_hope())
                 .grade(entity.getGrade())
