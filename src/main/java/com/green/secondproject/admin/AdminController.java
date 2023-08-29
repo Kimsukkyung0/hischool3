@@ -115,6 +115,7 @@ public class AdminController {
     }
 
     @PatchMapping("/user-statement")
+    @Operation(summary = "학생 학년,반 변경 (수정중)")
     public UserStateUpdVo updUserState(@RequestBody UserStateUpdDto dto) {
         return service.updUserState(dto);
     }

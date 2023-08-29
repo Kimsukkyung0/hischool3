@@ -115,6 +115,7 @@ public class AdminService {
 
 
         return entities.stream().map(item -> StudentClassVo.builder()
+                        .userId(item.getUserId())
                         .nm(item.getNm())
                         .grade(item.getVanEntity().getGrade())
                         .classNum(item.getVanEntity().getClassNum())
@@ -139,7 +140,6 @@ public class AdminService {
 //                .vanId(entity.getVanEntity().getVanId())
                 .vanId(entity.getVanEntity().getVanId())
                 .build();
-
     }
 
 

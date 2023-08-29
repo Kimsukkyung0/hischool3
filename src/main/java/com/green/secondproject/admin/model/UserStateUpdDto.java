@@ -8,5 +8,5 @@ public class UserStateUpdDto {
     private long userId;
 //    private String grade;
 //    private String classNum;
-    private long vanId;
+    private Long vanId;
 }
