@@ -7,7 +7,7 @@ public class UpdMockResultDto {
     private Long resultId;
     private Long subjectId;
     private String year;
-    private int mon;
+    private String mon;
     private int standardScore;
     private int rating;
     private int percent;
