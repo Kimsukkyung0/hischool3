@@ -10,5 +10,6 @@ import java.util.List;
 public class TeacherMngVoContainer {
     private List<TeacherMngVo> list;
     private int totalCount;
+    private int totalPage;
 
 }

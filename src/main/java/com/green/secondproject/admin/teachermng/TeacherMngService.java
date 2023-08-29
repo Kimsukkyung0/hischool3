@@ -45,12 +45,12 @@ public class TeacherMngService {
 
     private String schoolCode;
 
-    public List<TeacherMngVo> teacherNotapprovedList(Long schoolId, Pageable page) {
+    public TeacherMngVoContainer teacherNotapprovedList(Long schoolId, Pageable page) {
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
-        List<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
+        Page<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
 
         List<TeacherMngVo> finalResult = new ArrayList<>();
 
@@ -71,7 +71,10 @@ public class TeacherMngService {
                     .aprYn(en.getAprYn())
                     .enrollState(en.getEnrollState()).build());
         }
-        return finalResult;
+        return  TeacherMngVoContainer.builder()
+                .list(finalResult)
+                .totalCount((int)tcList.getTotalElements())
+                .totalPage(tcList.getTotalPages()).build();
     }
 
 
@@ -81,7 +84,7 @@ public class TeacherMngService {
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
-        List<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, page);
+        Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, page);
 
         List<TeacherMngVo> subResult = new ArrayList<>();
 
@@ -102,7 +105,11 @@ public class TeacherMngService {
                     .aprYn(en.getAprYn())
                     .enrollState(en.getEnrollState()).build());
         }
-        return TeacherMngVoContainer.builder().list(subResult).totalCount(subResult.size()).build();
+
+        return TeacherMngVoContainer.builder()
+                .list(subResult)
+                .totalCount((int)tcList.getTotalElements())
+                .totalPage(tcList.getTotalPages()).build();
     }
 
 
