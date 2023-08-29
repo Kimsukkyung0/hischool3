@@ -5,7 +5,6 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.jpa.BaseEntity;
 import com.green.secondproject.common.config.security.model.RoleType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -13,7 +12,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @Entity
 @Table(name="user")
