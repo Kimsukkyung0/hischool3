@@ -143,8 +143,8 @@ public class AdminController {
 
 
     @PatchMapping("/enroll-user")
-    @Operation(summary = "유저 졸업 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
+    @Operation(summary = "유저 재학 처리",
+            description = "출력값 : <br>(1)del_yn = 1 -> 재학 처리 완료")
     public int enrollUser(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.enrollUser(myuser);
     }
