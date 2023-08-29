@@ -1,9 +1,6 @@
 package com.green.secondproject.career;
 
-import com.green.secondproject.career.model.CareerInsDto;
-import com.green.secondproject.career.model.CareerSelByDto;
-import com.green.secondproject.career.model.CareerUpDto;
-import com.green.secondproject.career.model.CareerVo;
+import com.green.secondproject.career.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +36,7 @@ public class CareerController {
     }
     @PatchMapping("/clear")
     @Operation(summary = "진로지도 수정")
-    public CareerVo CareerUp(@RequestBody CareerUpDto dto){
+    public CareerVo2 CareerUp(@RequestBody CareerUpDto dto){
         return service.CareerUp(dto);
     }
 }

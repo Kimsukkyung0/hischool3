@@ -116,6 +116,7 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
             vo.setUserid(facade.getLoginUserPk());
             list.add(vo);
         }
+
         return mapper.instcsbj(list);
     }
 
