@@ -1,8 +1,6 @@
 package com.green.secondproject.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.green.secondproject.common.config.etc.Grade;
-import com.green.secondproject.common.config.security.model.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,6 +35,5 @@ public class ScSbjEntity {
     @JsonIgnore
     @Column(length = 1,nullable = false)
     @NotNull
-    @Enumerated(EnumType.ORDINAL)
-    private Grade grade;
+    private String grade;
 }

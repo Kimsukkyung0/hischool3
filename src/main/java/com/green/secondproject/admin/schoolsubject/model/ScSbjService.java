@@ -1,18 +1,14 @@
 package com.green.secondproject.admin.schoolsubject.model;
 
-import com.green.secondproject.common.config.etc.Grade;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
-import com.green.secondproject.teacher.subject.model.SubjectInsDto2;
-import com.green.secondproject.teacher.subject.model.SubjectInsVo;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -28,20 +24,35 @@ public class ScSbjService {
     private final SchoolRepository scRep;
 
 
-    public List<ScSbjVo> saveAll(List<Long> subjectIdList, Grade grade) {
-        SchoolEntity scEnti = scAdRep.findById(facade.getLoginUserPk()).get().getSchoolEntity();
-        List<SubjectEntity> sbjEnti = sbjtRep.findAllById(subjectIdList);
-        List<ScSbjEntity> sb = new ArrayList<>();
+    public List<ScSbjVo> saveAll(List<Long> subjectIdList, int grade) {
+        List<ScSbjVo> fkResult = new ArrayList<>();
+
+        if(grade>0 && grade<=3){
+            List<ScSbjEntity> sb = new ArrayList<>();
+            String strGrade = String.valueOf(grade);
+            SchoolEntity scEnti = scAdRep.findById(facade.getLoginUserPk()).get().getSchoolEntity();
+//        List<SubjectEntity> sbjEnti = sbjtRep.findAllById(subjectIdList);
+
 
         for(Long subjectId : subjectIdList){
             sb.add(ScSbjEntity
                     .builder()
                     .subjectEntity(sbjtRep.getReferenceById(subjectId))
                     .schoolEntity(scEnti)
-                    .grade(grade)
+                    .grade(strGrade)
                     .build());
         }
-//        }
+            sbjRep.saveAll(sb);
+
+            return sb.stream().map(item-> ScSbjVo.builder()
+                    .subjectId(item.getSubjectEntity().getSubjectId())
+                    .grade(item.getGrade())
+                    .scSbjId(item.getSchoolSbjId())
+                    .build()).toList();
+        }
+        else{
+            return fkResult;
+        }
 //        sbjEnti.stream()
 //                .map(item -> sb.add(ScSbjEntity
 //                        .builder()
@@ -49,13 +60,7 @@ public class ScSbjService {
 //                        .schoolEntity(scEnti)
 //                        .grade(grade)
 //                        .build()));
-        sbjRep.saveAll(sb);
 
-        return sb.stream().map(item-> ScSbjVo.builder()
-                .subjectId(item.getSubjectEntity().getSubjectId())
-                .grade(item.getGrade())
-                .scSbjId(item.getSchoolSbjId())
-                .build()).toList();
 
         }
 
