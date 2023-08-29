@@ -2,6 +2,7 @@ package com.green.secondproject.admin.teachermng;
 
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -56,7 +57,7 @@ public class TeacherMngController {
             "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
             "(11)enrollState : 재직상태<br>" +
             "(ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)")
-    ResponseEntity<List<TeacherMngVo>> allTeachersOfTheSchool(@AuthenticationPrincipal MyUserDetails myuser, @PageableDefault(sort={"nm"},value = 16,page = 0) Pageable page){
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(@AuthenticationPrincipal MyUserDetails myuser, @PageableDefault(sort={"nm"},value = 16,page = 1) Pageable page){
         return ResponseEntity.ok(teacherMngService.teacherListOfTheSchool(myuser.getSchoolId(),page));
     }
 

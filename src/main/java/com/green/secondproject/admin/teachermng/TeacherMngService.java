@@ -1,6 +1,7 @@
 package com.green.secondproject.admin.teachermng;
 
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
@@ -74,7 +75,7 @@ public class TeacherMngService {
     }
 
 
-    public List<TeacherMngVo> teacherListOfTheSchool(Long schoolId, Pageable page) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Long schoolId, Pageable page) {
 
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
@@ -82,11 +83,11 @@ public class TeacherMngService {
 
         List<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, page);
 
-        List<TeacherMngVo> finalResult = new ArrayList<>();
+        List<TeacherMngVo> subResult = new ArrayList<>();
 
         for (UserEntity en : tcList) {
             VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-            finalResult.add(TeacherMngVo.builder()
+            subResult.add(TeacherMngVo.builder()
                     .userId(en.getUserId())
                     .schoolNm(scEnti.getNm())
                     .grade(vanEntity.getGrade())
@@ -101,7 +102,7 @@ public class TeacherMngService {
                     .aprYn(en.getAprYn())
                     .enrollState(en.getEnrollState()).build());
         }
-        return finalResult;
+        return TeacherMngVoContainer.builder().list(subResult).totalCount(subResult.size()).build();
     }
 
 
