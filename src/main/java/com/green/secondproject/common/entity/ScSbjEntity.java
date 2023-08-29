@@ -36,4 +36,5 @@ public class ScSbjEntity {
     @Column(length = 1,nullable = false)
     @NotNull
     private String grade;
+
 }

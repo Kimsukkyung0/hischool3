@@ -25,4 +25,5 @@ public class SbjCategoryEntity {
 
     @Column(nullable = false, columnDefinition = "tinyint")
     private int type;
+
 }

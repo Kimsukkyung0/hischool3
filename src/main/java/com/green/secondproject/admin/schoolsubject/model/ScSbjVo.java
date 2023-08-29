@@ -1,12 +1,11 @@
 package com.green.secondproject.admin.schoolsubject.model;
 
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @Builder
 public class ScSbjVo {
-    private Long scSbjId;
-    private String grade;
-    private Long subjectId;
+        private Long id;
+        private String nm;
 }

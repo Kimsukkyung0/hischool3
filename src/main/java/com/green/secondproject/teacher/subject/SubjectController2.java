@@ -26,7 +26,6 @@ public class SubjectController2 {
         StudentClassDto dto = new StudentClassDto();
         dto.setVanId(String.valueOf(user.getVanId()));
         dto.setSchoolid(user.getUserId());
-
         return serivce.classnum(dto);
     }
 
