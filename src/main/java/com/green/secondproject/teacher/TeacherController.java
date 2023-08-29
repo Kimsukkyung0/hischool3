@@ -18,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService service;
-    private final StudentService studentService;
 
     @GetMapping("/signed")
     @Operation(summary = "승인된 학생 리스트",

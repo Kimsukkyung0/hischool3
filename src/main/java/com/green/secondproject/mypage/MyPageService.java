@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.util.StringUtils;
 
 import java.io.File;
+import java.util.Optional;
 
 import static com.green.secondproject.common.config.etc.EnrollState.*;
 
@@ -39,12 +40,35 @@ public class MyPageService {
 
 
     public SelUserMyPageVo selUserMyPage(MyUserDetails myuser) {
-        SelUserMyPageDto dto = new SelUserMyPageDto();
-        dto.setUserId(myuser.getUserId());
+        Optional<UserEntity> opt = userRepository.findById(myuser.getUserId());
+        if (opt.isEmpty()) {
+            throw new RuntimeException("존재하지 않는 사용자");
+        }
 
-        SelUserMyPageVo userInfo = mapper.selUserMyPage(dto);
-        userInfo.setPic(String.format("%s/%d/%s", imgPath, myuser.getUserId(), userInfo.getPic()));
-        return userInfo;
+        UserEntity entity = opt.get();
+        return SelUserMyPageVo.builder()
+                .userId(entity.getUserId())
+                .unm(entity.getNm())
+                .email(entity.getEmail())
+                .role(entity.getRoleType().getCode())
+                .pic(String.format("%s/%d/%s", imgPath, entity.getUserId(), entity.getPic()))
+                .birth(entity.getBirth())
+                .phone(entity.getPhone())
+                .address(entity.getAddress())
+                .detailAddr(entity.getDetailAddr())
+                .classId(entity.getVanEntity().getVanId())
+                .grade(entity.getVanEntity().getGrade())
+                .van(entity.getVanEntity().getClassNum())
+                .schoolId(entity.getVanEntity().getSchoolEntity().getSchoolId())
+                .schnm(entity.getVanEntity().getSchoolEntity().getNm())
+                .build();
+
+//        SelUserMyPageDto dto = new SelUserMyPageDto();
+//        dto.setUserId(myuser.getUserId());
+//
+//        SelUserMyPageVo userInfo = mapper.selUserMyPage(dto);
+//        userInfo.setPic(String.format("%s/%d/%s", imgPath, myuser.getUserId(), userInfo.getPic()));
+//        return userInfo;
     }
 
 
