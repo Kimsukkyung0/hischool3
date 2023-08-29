@@ -29,28 +29,6 @@ public class MyPageController {
     }
 
 
-    @PatchMapping("/grad-user")
-    @Operation(summary = "유저 졸업 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
-    public int delUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return serivce.graduateUser(myuser);
-    }
-
-
-    @PatchMapping("/tran-user")
-    @Operation(summary = "유저 전학 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
-    public int transferUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return serivce.transferUser(myuser);
-    }
-
-
-    @PatchMapping("/leave-user")
-    @Operation(summary = "유저 자퇴 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
-    public int leaveUser(@AuthenticationPrincipal MyUserDetails myuser) {
-        return serivce.leaveUser(myuser);
-    }
 
 
 

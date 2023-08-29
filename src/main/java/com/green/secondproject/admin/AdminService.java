@@ -5,6 +5,7 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
@@ -22,6 +23,8 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static com.green.secondproject.common.config.etc.EnrollState.*;
 
 @Service
 @RequiredArgsConstructor
@@ -103,7 +106,7 @@ public class AdminService {
 
     public List<StudentClassVo> getStudentClass(int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page, 30, sort);  //페이징 처리
+        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
 
@@ -181,5 +184,49 @@ public class AdminService {
                 .machineNum(schoolEntity.getMachineNum())
                 .faxNum(schoolEntity.getFaxNum())
                 .build();
+    }
+
+//    public int updUserState() {
+//
+//    }
+
+
+    public int enrollUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(ENROLL);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+
+    public int graduateUser(MyUserDetails myuser) {
+//        DelUserDto dto = new DelUserDto();
+//        dto.setUserId(myuser.getUserId());
+//        return mapper.delUser(dto);
+
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(GRADUATION);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+
+    public int transferUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(TRANSFER);
+        userRepository.save(userEntity);
+        return 1;
+    }
+
+
+    public int leaveUser(MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        UserEntity userEntity = userRepository.findByUserId(userId);
+        userEntity.setEnrollState(LEAVE);
+        userRepository.save(userEntity);
+        return 1;
     }
 }
