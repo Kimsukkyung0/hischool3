@@ -150,7 +150,8 @@ public class AdminController {
 
     @PatchMapping("/enroll-user")
     @Operation(summary = "유저 재학 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 재학 처리 완료")
+            description = "요구값 : <br>(1)userId : user PK값" +
+                    "출력값 : <br>(1)del_yn = 1 -> 재학 처리 완료")
     public int enrollUser(@RequestParam long userId) {
         return service.enrollUser(userId);
     }
@@ -158,7 +159,8 @@ public class AdminController {
 
     @PatchMapping("/grad-user")
     @Operation(summary = "유저 졸업 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
+            description = "요구값 : <br>(1)userId : user PK값" +
+                    "출력값 : <br>(1)del_yn = 1 -> 졸업 처리 완료")
     public int delUser(@RequestParam long userId) {
         return service.graduateUser(userId);
     }
@@ -166,7 +168,8 @@ public class AdminController {
 
     @PatchMapping("/tran-user")
     @Operation(summary = "유저 전학 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+            description = "요구값 : <br>(1)userId : user PK값" +
+                    "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
     public int transferUser(@RequestParam long userId) {
         return service.transferUser(userId);
     }
@@ -174,7 +177,8 @@ public class AdminController {
 
     @PatchMapping("/leave-user")
     @Operation(summary = "유저 자퇴 처리",
-            description = "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
+            description = "요구값 : <br>(1)userId : user PK값" +
+                    "출력값 : <br>(1)del_yn = 1 -> 전학 처리 완료")
     public int leaveUser(@RequestParam long userId) {
         return service.leaveUser(userId);
     }
