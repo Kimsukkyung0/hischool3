@@ -79,9 +79,22 @@ public class CareerService {
                     .build());
 
         }
-
-
         return list;
+    }
+
+    public List<CareerVo3> HopeSel(CareerDto dto){
+        UserEntity userEntity = userRepository.findByUserId(dto.getUserId());
+        List<CareerEntity> careerEntity = careerRepository.findByUserEntity(userEntity);
+        List<CareerVo3> list = new ArrayList<>();
+        for (CareerEntity e : careerEntity) {
+            list.add(CareerVo3.builder()
+                    .hopeUniv(e.getHope_univ())
+                    .careerId(e.getCareer_id())
+                    .hopeDept(e.getHope_dept())
+                    .build());
+        }
+        return list;
+
     }
 
     public CareerVo StuIns(CareerInsDto dto){
