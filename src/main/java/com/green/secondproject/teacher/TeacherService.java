@@ -1,11 +1,13 @@
 package com.green.secondproject.teacher;
 
 import com.green.secondproject.common.config.etc.EnrollState;
-import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.MockResultEntity;
+import com.green.secondproject.common.entity.SubjectEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.common.repository.MockResultRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
@@ -24,6 +26,7 @@ public class TeacherService {
     private final TeacherMapper mapper;
     private final StudentService stService;
     private final UserRepository userRepository;
+    private final MockResultRepository mockResultRepository;
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
@@ -42,11 +45,21 @@ public class TeacherService {
                 .build()).toList();
     }
 
-
     public List<SelUnsignedStudentVo> selUnsignedStudent(MyUserDetails myuser) {
-        SelUnsignedStudentDto dto = new SelUnsignedStudentDto();
-        dto.setClassId(myuser.getVanId());
-        return mapper.selUnsignedStudent(dto);
+        List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
+                VanEntity.builder()
+                        .vanId(myuser.getVanId())
+                        .build(), 0, EnrollState.ENROLL, RoleType.STD);
+
+        return stdList.stream().map(userEntity -> SelUnsignedStudentVo.builder()
+                .userId(userEntity.getUserId())
+                .classId(userEntity.getVanEntity().getVanId())
+                .aprYn(userEntity.getAprYn())
+                .snm(userEntity.getNm())
+                .birth(userEntity.getBirth())
+                .phone(userEntity.getPhone())
+                .email(userEntity.getEmail())
+                .build()).toList();
     }
 
 
@@ -91,10 +104,22 @@ public class TeacherService {
         return 1;
     }
 
-
     public int updMockResult(UpdMockResultDto dto) {
-        dto.setResultId(dto.getResultId());
-        return mapper.updMockResult(dto);
+        Optional<MockResultEntity> opt = mockResultRepository.findById(dto.getResultId());
+        if (opt.isEmpty()) {
+            return 0;
+        }
+
+        MockResultEntity entity = opt.get();
+        entity.setSubjectEntity(SubjectEntity.builder().subjectId(dto.getSubjectId()).build());
+        entity.setYear(dto.getYear());
+        entity.setMon(dto.getMon());
+        entity.setStandardScore(dto.getStandardScore());
+        entity.setRating(dto.getRating());
+        entity.setPercent(dto.getPercent());
+        mockResultRepository.save(entity);
+
+        return 1;
     }
 
     public int updAcaResult(UpdAcaResultDto dto) {
@@ -103,10 +128,14 @@ public class TeacherService {
     }
 
 
-    public int delMockRusult(Long resultId) {
-        DelResultDto dto = new DelResultDto();
-        dto.setResultId(resultId);
-        return mapper.delMockResult(dto);
+    public int delMockResult(Long resultId) {
+        Optional<MockResultEntity> opt = mockResultRepository.findById(resultId);
+        if (opt.isEmpty()) {
+            return 0;
+        }
+
+        mockResultRepository.deleteById(resultId);
+        return 1;
     }
 
 
