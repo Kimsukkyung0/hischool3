@@ -84,6 +84,7 @@ public class NoticeService {
               .content(sel.getContent())
               .createdAt(sel.getCreatedAt())
               .userId(userDetails.getUserId())
+              .imptYn(sel.getImptYn())
               .build();
 
      return vo;

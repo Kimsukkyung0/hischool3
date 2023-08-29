@@ -10,4 +10,5 @@ public interface CareerRepository extends JpaRepository<CareerEntity, Long> {
 
     List<CareerEntity> findByUserEntity(UserEntity userEntity); //select 유저값 입력 선생님,유저 2개해야함
 
+
 }

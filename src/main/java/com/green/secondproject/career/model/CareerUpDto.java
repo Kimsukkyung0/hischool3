@@ -1,12 +1,16 @@
 package com.green.secondproject.career.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Builder
 @Data
-public class CareerVo {
-    private Long userId;
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CareerUpDto {
+    private Long careerId;
     private String grade;
     private String interest;
     private String stdHope;

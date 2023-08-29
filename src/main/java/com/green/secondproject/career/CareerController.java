@@ -1,13 +1,14 @@
 package com.green.secondproject.career;
 
+import com.green.secondproject.career.model.CareerInsDto;
+import com.green.secondproject.career.model.CareerSelByDto;
+import com.green.secondproject.career.model.CareerUpDto;
 import com.green.secondproject.career.model.CareerVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 @Tag(name = "진로지도")
@@ -19,8 +20,26 @@ public class CareerController {
     private final CareerService service;
 
     @GetMapping
-    @Operation(description = "학생 진로지도 (학생보기)")
+    @Operation(summary = "학생 진로지도 (학생보기)")
     public List<CareerVo> SelStu(){
         return service.SelStu();
+    }
+    @GetMapping("/by")
+    @Operation(summary = "학생별 선택")
+    public List<CareerVo> SelByStu(@RequestParam Long userId,@RequestParam Long careerId){
+    CareerSelByDto dto = new CareerSelByDto();
+    dto.setCareerId(careerId);
+    dto.setUserId(userId);
+        return service.SelByStu(dto);
+    }
+    @PostMapping("/text")
+    @Operation(summary = "진로지도 입력")
+    public CareerVo StuIns(@RequestBody CareerInsDto dto){
+        return service.StuIns(dto);
+    }
+    @PatchMapping("/clear")
+    @Operation(summary = "진로지도 수정")
+    public CareerVo CareerUp(@RequestBody CareerUpDto dto){
+        return service.CareerUp(dto);
     }
 }
