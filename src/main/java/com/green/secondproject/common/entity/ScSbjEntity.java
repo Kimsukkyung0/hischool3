@@ -5,13 +5,19 @@ import com.green.secondproject.common.config.etc.Grade;
 import com.green.secondproject.common.config.security.model.RoleType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "sc_sbj", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"grade","subject_id","school_id"})
 })
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ScSbjEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +32,7 @@ public class ScSbjEntity {
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
-    private SubjectEntity entity;
+    private SubjectEntity subjectEntity;
 
     @JsonIgnore
     @Column(length = 1,nullable = false)
