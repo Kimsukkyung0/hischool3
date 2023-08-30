@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -111,6 +112,8 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page-1, 17, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
 
+
+        List<StudentClassVo> studentList = new ArrayList<>();
 
 
         return entities.stream().map(item -> StudentClassVo.builder()

@@ -37,10 +37,6 @@ public class AdminController {
     private final AdminService service;
     private final SignService signService;
 
-    @Bean
-    public PageableHandlerMethodArgumentResolverCustomizer customize() {
-        return p -> p.setOneIndexedParameters(true);
-    }
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
