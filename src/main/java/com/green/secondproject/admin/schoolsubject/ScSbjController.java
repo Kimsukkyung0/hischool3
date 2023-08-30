@@ -3,6 +3,7 @@ package com.green.secondproject.admin.schoolsubject;
 
 import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
+import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo2;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
 import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
 import com.green.secondproject.teacher.subject.model.SubjectVo;
@@ -53,14 +54,14 @@ public class ScSbjController {
 
 
     @GetMapping("/category/big")
-    @Operation(summary = "학년별 등록카테고리 리스트(수정중-중복값처리x)"
+    @Operation(summary = "학년별 등록카테고리 리스트"
             , description = """
                     입력값 :<br> (1)grade : 조회대상 학년(1-3)<br><br>
-                    출력값 : <br>(1)subjectid - subject 테이블에 과목 PK값
-                    <br>(2)nm - 카테고리이름
+                    출력값 : <br> (1)categoryId : 카테고리pk <br>(2)categoryNm - 카테고리이름<br>(3)subjectid -  과목 PK값<br> (4)subjectNm : 세부과목<br> 
+                    (5)scSbjId : 학교에 등록된 과목리스트 pk<br> 
                     """)
-    List<ScCateVo> adminList(int grade) {
-        return service.adminCateList(grade);
+    List<ScSbjListVo2> adminList(int grade) {
+        return service.adminSbjList(grade);
     }
 
 //    @GetMapping("/category/small")

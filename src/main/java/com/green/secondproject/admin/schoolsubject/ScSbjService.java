@@ -2,6 +2,7 @@ package com.green.secondproject.admin.schoolsubject;
 
 import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
+import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo2;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
@@ -61,7 +62,7 @@ public class ScSbjService {
             return fkResult;
         }
     }
-    public List<ScCateVo> adminCateList(int grade) {
+    public List<ScSbjListVo2> adminSbjList(int grade) {
         //schoolEntity 를 가져와서 학교별 저장된 목록을 가져온다
 //        List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntity(usrRep.findByUserId(facade.getLoginUserPk())
 //                .getVanEntity()
@@ -71,14 +72,25 @@ public class ScSbjService {
 //                        .getVanEntity()
 //                        .getSchoolEntity(),String.valueOf(grade));
 
-        List<ScSbjEntity> sbjEnti  = sbjRep.findDistinctBySchoolEntityAndGrade(
-                usrRep.findByUserId(facade.getLoginUserPk())
-                        .getVanEntity()
-                        .getSchoolEntity(),String.valueOf(grade));
+        List<ScSbjListVo2> result = new ArrayList<>();
 
-        return sbjEnti.stream().map(item -> ScCateVo.builder()
-                .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
-                .nm(item.getSubjectEntity().getSbjCategoryEntity().getNm()).build()).toList();
+        if(grade>0 && grade<=3) {
+            List<ScSbjEntity> sbjEnti = sbjRep.findDistinctBySchoolEntityAndGrade(
+                    usrRep.findByUserId(facade.getLoginUserPk())
+                            .getVanEntity()
+                            .getSchoolEntity(), String.valueOf(grade));
+
+            result = sbjEnti.stream().map(item -> ScSbjListVo2.builder()
+                    .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+                    .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+                    .subjectId(item.getSubjectEntity().getSubjectId())
+                    .subjectNm(item.getSubjectEntity().getNm())
+                    .scSbjId(item.getSchoolSbjId())
+                    .build()).toList();
+            return result;
+        }
+
+        return result;
     }
 
 
