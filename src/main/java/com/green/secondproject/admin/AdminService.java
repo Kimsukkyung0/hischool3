@@ -110,7 +110,7 @@ public class AdminService {
             throw new RuntimeException("관리자 로그인 필요");
         }
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
+        Pageable pageable = PageRequest.of(page-1, 17, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
 
@@ -128,7 +128,7 @@ public class AdminService {
 
     public List<StudentClassVo> searchStudent(String search, int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
+        Pageable pageable = PageRequest.of(page-1, 17, sort);
         List<UserEntity> entities = userRepository.findByNmContaining(search);
         List<UserEntity> nulEntities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
