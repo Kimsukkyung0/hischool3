@@ -80,12 +80,14 @@ public class NoticeService {
       NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
 
 
-      NoticeVo vo = NoticeVo.builder().noticeId(sel.getNoticeId())
+      NoticeVo vo = NoticeVo.builder()
+              .noticeId(sel.getNoticeId())
               .title(sel.getTitle())
               .content(sel.getContent())
               .createdAt(sel.getCreatedAt())
               .userId(userDetails.getUserId())
               .imptYn(sel.getImptYn())
+              .hits(sel.getHits())
               .build();
 
      return vo;
