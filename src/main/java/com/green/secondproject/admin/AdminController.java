@@ -91,7 +91,7 @@ public class AdminController {
     @GetMapping("/student-list")
     @Operation(summary = "학생 리스트 조회", description = """
             입력 값<br>
-            "page": 페이지(0부터 시작, 현재 30명 당 1페이지로 적용)<br><br>
+            "page": 페이지(1부터 시작, 현재 17명 당 1페이지로 적용)<br><br>
             출력 값:<br>
             "nm": 이름<br>
             "email": 이메일<br>
@@ -108,7 +108,7 @@ public class AdminController {
     @Operation(summary = "이름으로 학생 검색", description = """
             입력 값<br>
             "search": 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
-            "page": 페이지 (0부터 시작, 현재 30명 당 1페이지로 적용)<br><br>
+            "page": 페이지 (1부터 시작, 현재 17명 당 1페이지로 적용)<br><br>
             출력 값:<br>
             "nm": 이름<br>
             "email": 이메일<br>
