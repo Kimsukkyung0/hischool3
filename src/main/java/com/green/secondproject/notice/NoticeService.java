@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @ToString
@@ -114,4 +115,15 @@ public class NoticeService {
         noticeRepository.delete(entity);
     }
 
+    public int upHits(Long noticeId) {
+        Optional<NoticeEntity> opt = noticeRepository.findById(noticeId);
+        if (opt.isEmpty()) {
+            return 0;
+        }
+
+        NoticeEntity entity = opt.get();
+        entity.setHits(entity.getHits() + 1);
+        noticeRepository.save(entity);
+        return entity.getHits();
+    }
 }

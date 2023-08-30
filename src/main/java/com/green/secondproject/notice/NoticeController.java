@@ -54,4 +54,9 @@ public class NoticeController {
         service.delNotice(noticeId);
     }
 
+    @PatchMapping("/hits")
+    @Operation(summary = "조회수 +1")
+    public int upHits(Long noticeId) {
+        return service.upHits(noticeId);
+    }
 }
