@@ -9,5 +9,6 @@ import java.util.List;
 
 public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
     List<SubjectEntity> findBySbjCategoryEntity(SbjCategoryEntity entity);
+    List<SubjectEntity> findBySbjCategoryEntityOrderByNm(SbjCategoryEntity entity);
 //    List<SubjectEntity> findAllBySbjCategoryEntity(Long categoryId);
 }

@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface SbjCategoryRepository extends JpaRepository<SbjCategoryEntity,Long> {
-    List<SbjCategoryEntity> findAllByTypeIs(int type);
+//    List<SbjCategoryEntity> findAllByTypeIs(int type);
+    List<SbjCategoryEntity> findAllByTypeIsOrderByNm(int type);
 }

@@ -106,14 +106,14 @@ public class ScSbjService {
     }
 
     public List<ScCateVo> getCateList() {
-        List<SbjCategoryEntity> categoryEntities =  cateRep.findAllByTypeIs(1);
+        List<SbjCategoryEntity> categoryEntities =  cateRep.findAllByTypeIsOrderByNm(1);
         return categoryEntities.stream().map(item -> ScCateVo.builder()
                 .categoryId(item.getCategoryId()).nm(item.getNm()).build()).toList();
     }
 
     public List<ScSbjVo> getSubjectListByCate(Long categoryId){
         SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
-        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntity(cateEnti);
+        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
 
         return sbjEntityList.stream().map(item -> ScSbjVo.builder()
                 .subjectId(item.getSubjectId())
