@@ -33,9 +33,10 @@ public class SecurityConfiguration {
                                     mvc.pattern("/api/sign-in"), mvc.pattern("/api/sign-up"),
                                     mvc.pattern("/api/admin/sign-in"), mvc.pattern("/api/admin/sign-up"),
                                     mvc.pattern("/api/mail-confirm"), mvc.pattern("/api/code-confirm"),
-                                    mvc.pattern("**exception**")
+                                    mvc.pattern("**exception**"),
+                                    mvc.pattern(HttpMethod.POST, "/api/refresh-token"),
+                                    mvc.pattern(HttpMethod.POST, "/api/admin/refresh-token")
                             ).permitAll()
-                            .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/refresh-token")).permitAll()
                             .requestMatchers(
                                     mvc.pattern("/api/teacher/**"),
                                     mvc.pattern(HttpMethod.POST, "/api/attendance"),

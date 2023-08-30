@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ScSbjVo {
-        private Long subjectId;
-        private String nm;
+public class ScCateVo {
+    private Long categoryId;
+    private String nm;
 }

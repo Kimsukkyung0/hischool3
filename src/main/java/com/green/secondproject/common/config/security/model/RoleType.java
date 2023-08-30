@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 public enum RoleType {
-    TC("ROLE_TC", "학생 권한"),
-    STD("ROLE_STD", "선생님 권한");
+    TC("ROLE_TC", "선생님 권한"),
+    STD("ROLE_STD", "학생 권한");
 
     private final String code;
     private final String displayName;

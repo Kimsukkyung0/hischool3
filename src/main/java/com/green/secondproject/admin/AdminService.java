@@ -1,11 +1,9 @@
 package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
-import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
-import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
@@ -110,8 +108,9 @@ public class AdminService {
             throw new RuntimeException("관리자 로그인 필요");
         }
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
-        List<UserEntity> entities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
+        Pageable pageable = PageRequest.of(page-1, 17, sort);  //페이징 처리 -1해서 슬픔
+        List<UserEntity> entities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+
 
 
         return entities.stream().map(item -> StudentClassVo.builder()
@@ -126,12 +125,27 @@ public class AdminService {
                 .toList();
     }
 
-    public List<StudentClassVo> searchStudent(String search) {
+    public List<StudentClassVo> searchStudent(String search, int page) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Pageable pageable = PageRequest.of(page-1, 17, sort);
         List<UserEntity> entities = userRepository.findByNmContaining(search);
+        List<UserEntity> nulEntities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
 
 
-
-        return entities.stream().map(item -> StudentClassVo.builder()
+        if(search == null) {
+            return nulEntities.stream().map(item -> StudentClassVo.builder()
+                            .userId(item.getUserId())
+                            .nm(item.getNm())
+                            .email(item.getEmail())
+                            .phone(item.getPhone())
+                            .enrollState(item.getEnrollState())
+                            .grade(item.getVanEntity().getGrade())
+                            .classNum(item.getVanEntity().getClassNum())
+                            .build())
+                    .toList();
+        }
+        else {
+            return entities.stream().map(item -> StudentClassVo.builder()
                         .userId(item.getUserId())
                         .nm(item.getNm())
                         .email(item.getEmail())
@@ -141,6 +155,7 @@ public class AdminService {
                         .classNum(item.getVanEntity().getClassNum())
                         .build())
                 .toList();
+        }
     }
 
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {

@@ -1,6 +1,5 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
@@ -19,10 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService service;
+    private final StudentService stdService;
 
     @GetMapping("/signed")
     @Operation(summary = "승인된 학생 리스트",
-            description = "요구값 : <br>(1)classId - 학급 PK값<br><br>"+
+            description = "요구값 : <br>(1)classId - 학급 PK값<br><br>" +
                     "출력값 : <br>(1)userId - 학생 PK값<br>(2)classId - 학급 PK값<br>" +
                     "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)<br>(4)snm - 학생 이름<br>" +
                     "(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
@@ -33,8 +33,8 @@ public class TeacherController {
 
     @GetMapping("/unsigned")
     @Operation(summary = "승인 대기 명단",
-            description = "출력값 : <br>(1)classId - 학급 PK값<br><br>"+
-                    "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)"+
+            description = "출력값 : <br>(1)classId - 학급 PK값<br><br>" +
+                    "(3)aprYn - 승인여부 (0 = 승인대기, 1 = 승인)" +
                     "<br>(4)snm - 학생 이름<br>(5)birth - 생일<br>(6)phone - 연락처<br>(7)email - 이메일")
     public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.selUnsignedStudent(myuser);
@@ -85,8 +85,6 @@ public class TeacherController {
 //    }
 
 
-
-
     @PatchMapping("/acpt-std")
     @Operation(summary = "학생 가입 승인",
             description = "요구값 : <br>(1)userId - 학생 PK값")
@@ -121,13 +119,11 @@ public class TeacherController {
     @PatchMapping("/aca")
     @Operation(summary = "내신 성적 수정",
             description = "요구값 : <br>(1)resultId - 성적 PK값<br>(2)year - 년도" +
-                            "<br>(3)semester - 학기<br>(4)mf - [0 = 중간/1 = 기말]<br>" +
-                            "(5)score - 점수<br>(6)rating - 등급<br>(7)classRank - 반 석차<br>(8)wholeRank - 전교 석차")
+                    "<br>(3)semester - 학기<br>(4)mf - [0 = 중간/1 = 기말]<br>" +
+                    "(5)score - 점수<br>(6)rating - 등급<br>(7)classRank - 반 석차<br>(8)wholeRank - 전교 석차")
     public int updAcaResult(@RequestBody UpdAcaResultDto dto) {
         return service.updAcaResult(dto);
     }
-
-
 
 
     @DeleteMapping("/mock")
@@ -148,21 +144,21 @@ public class TeacherController {
 
     @GetMapping("/class-student")
     @Operation(summary = "반 학생총원")
-    public int classStudent(@AuthenticationPrincipal MyUserDetails myuser){
+    public int classStudent(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.classStudent(myuser);
     }
 
 
     @GetMapping("/apr-student")
     @Operation(summary = "승인 대기 인원(n명)")
-    public int aprStudent(@AuthenticationPrincipal MyUserDetails myuser){
+    public int aprStudent(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.aprStudent(myuser);
     }
 
 
     @GetMapping("/aca-graph")
-    @Operation(summary = "선생님 - 담당학급 최근성적내신 등급비율 출력",  description = "출력값 : (1)cateNm - 과목계열명 <br>(2)rating - 등급<br>(3)percentage - 학생비율<br><br>")
-    public TeacherGraphContainerVo teacherAcaGraph(@AuthenticationPrincipal MyUserDetails myuser){
+    @Operation(summary = "선생님 - 담당학급 최근성적내신 등급비율 출력", description = "출력값 : (1)cateNm - 과목계열명 <br>(2)rating - 등급<br>(3)percentage - 학생비율<br><br>")
+    public TeacherGraphContainerVo teacherAcaGraph(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.teacherAcaGraph(myuser.getVanId());
     }
 
@@ -193,10 +189,10 @@ public class TeacherController {
 //    }
 
     @GetMapping("/mock-result")
-    @Operation(summary = "선생님-학생별 모의고사성적관리 테이블(하단)",  description = "요구값(필수) : <br>\" + \"(1)userId - 학생pk <br>요구값 : <br>" + "(1)year - 조회기준연도(yyyy) <br>"+"(2)mon - 조회기준월(1~12)<br><br>"+
-            "<br><br>출력값 : <br>" + "(1)year - 연도<br>"+"(2)mon - 월<br>"+
-            "(3)nm - 과목이름<br>"+"(4)cateNm - 과목계열이름 <br>"+"(5)standardScore - 표준점수<br> "+"(6)rating - 등급<br> (7)percent - 백분위 ※ 연도 - 월 - 과목계열 내림차순 / 수정완료※<br>")
-    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(@RequestParam Long userId,@RequestParam(required = false) String year, @RequestParam(required = false) String mon){
+    @Operation(summary = "선생님-학생별 모의고사성적관리 테이블(하단)", description = "요구값(필수) : <br>\" + \"(1)userId - 학생pk <br>요구값 : <br>" + "(1)year - 조회기준연도(yyyy) <br>" + "(2)mon - 조회기준월(1~12)<br><br>" +
+            "<br><br>출력값 : <br>" + "(1)year - 연도<br>" + "(2)mon - 월<br>" +
+            "(3)nm - 과목이름<br>" + "(4)cateNm - 과목계열이름 <br>" + "(5)standardScore - 표준점수<br> " + "(6)rating - 등급<br> (7)percent - 백분위 ※ 연도 - 월 - 과목계열 내림차순 / 수정완료※<br>")
+    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(@RequestParam Long userId, @RequestParam(required = false) String year, @RequestParam(required = false) String mon) {
         StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
         dto.setUserId(userId);
         dto.setYear(year);
@@ -206,11 +202,11 @@ public class TeacherController {
 
 
     @GetMapping("/aca-result")
-    @Operation(summary = "선생님-학생별 내신성적관리 테이블(하단)",  description = "요구값(필수) : <br>\" + \"(1)userId - 학생pk <br>요구값(선택) : <br>" + "(1)year - 조회기준연도(yyyy) <br>(2)semester - 학기(1,2)<br>(3)midFinal - (1:중간,2:기말)<br><br>"
-            +"※※학생 아이디 외 요구값들은 선택사항입니다. 요구값없이 조회시 전체조회※※<br><br>"+
-            "출력값 : <br>" + "(1)year - 연도<br>(2)semester - 학기(1,2)<br>"+
-            "(3)midFinal - 1:중간2:기말<br>"+"(4)cateNm - 계열이름 <br>"+"(5)nm - 과목명 <br>"+"(6)score - 원점수<br>"+"(7)rating - 등급<br> (8)classRank - 반석차<br>(9)classRank - 전교석차<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
-    public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriod(@RequestParam Long userId, @RequestParam(required = false) String year, @RequestParam(required = false) Integer semester, @RequestParam(required = false) Integer midFinal){
+    @Operation(summary = "선생님-학생별 내신성적관리 테이블(하단)", description = "요구값(필수) : <br>\" + \"(1)userId - 학생pk <br>요구값(선택) : <br>" + "(1)year - 조회기준연도(yyyy) <br>(2)semester - 학기(1,2)<br>(3)midFinal - (1:중간,2:기말)<br><br>"
+            + "※※학생 아이디 외 요구값들은 선택사항입니다. 요구값없이 조회시 전체조회※※<br><br>" +
+            "출력값 : <br>" + "(1)year - 연도<br>(2)semester - 학기(1,2)<br>" +
+            "(3)midFinal - 1:중간2:기말<br>" + "(4)cateNm - 계열이름 <br>" + "(5)nm - 과목명 <br>" + "(6)score - 원점수<br>" + "(7)rating - 등급<br> (8)classRank - 반석차<br>(9)classRank - 전교석차<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
+    public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriod(@RequestParam Long userId, @RequestParam(required = false) String year, @RequestParam(required = false) Integer semester, @RequestParam(required = false) Integer midFinal) {
         StudentAcaResultsParam param = new StudentAcaResultsParam();
         param.setUserId(userId);
         param.setYear(year);
@@ -219,17 +215,24 @@ public class TeacherController {
         return service.selAcaTestResultByDatesAndPeriodAndStudent(param);
     }
 
-    //공지사항 메인출력
-    @GetMapping("/notice")
-    @Operation(summary = "선생님 페이지 공지사항", description = """
-            "imptList": 중요공지 리스트<br>
-            "normalList": 일반공지 리스트<br>
-            "noticeId": 공지사항 PK,<br>
-            "imptYn": 중요(1) 일반(0),<br>
-            "title": 제목,<br>
-            "createdAt": 작성일,<br>
-            "hits": 조회수 """)
-    public NoticeTeacherListVo NoticeTeacher(){
-        return service.NoticeTeacher();
+//==============================================3차 추가된부분 =====
+
+    @GetMapping("/mock-graph/{userId}")
+    @Operation(summary = "모의고사그래프-학생 별 올해 응시시험 성적",  description =
+            "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
+                    +"※국수영한 순서/수정완료※")
+    public List<StudentTestSumGraphVo> getMockTestSumGraph(@PathVariable Long userId){
+        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+        dto.setUserId(userId);
+        return stdService.getMockTestGraph(dto);
     }
+
+    @GetMapping("/aca-graph/{userId}")
+    @Operation(summary = "내신그래프- 학생별 올해 응시시험 성적",  description ="출력값 : <br>"+ "(1)date - (연도)-(학기) (중간/기말)<br> (2)nm - 과목계열이름<br>(3)rating - 등급<br>※수정완료※<br>")
+    List<StudentTestSumGraphVo> getAcaTestGraph(@PathVariable Long userId){
+        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
+        dto.setUserId(userId);
+        return stdService.getAcaTestGraph(dto);
+    }
+
 }
