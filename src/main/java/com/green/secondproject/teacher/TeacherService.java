@@ -292,9 +292,5 @@ public class TeacherService {
                         .build()).collect(Collectors.toList()))
                 .build();
     }
-
-
-
-
 }
 
