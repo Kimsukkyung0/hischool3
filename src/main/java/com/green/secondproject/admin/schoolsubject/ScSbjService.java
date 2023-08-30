@@ -1,15 +1,13 @@
 package com.green.secondproject.admin.schoolsubject;
 
+import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
-import com.green.secondproject.teacher.subject.model.SubjectDetailDto;
-import com.green.secondproject.teacher.subject.model.SubjectDetailVo2;
-import com.green.secondproject.teacher.subject.model.SubjectDto;
-import com.green.secondproject.teacher.subject.model.SubjectVo2;
+import com.green.secondproject.teacher.subject.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
@@ -63,7 +61,7 @@ public class ScSbjService {
             return fkResult;
         }
     }
-    public List<ScSbjVo> tcslist(int grade) {
+    public List<ScCateVo> adminCateList(int grade) {
         //schoolEntity 를 가져와서 학교별 저장된 목록을 가져온다
 //        List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntity(usrRep.findByUserId(facade.getLoginUserPk())
 //                .getVanEntity()
@@ -78,10 +76,11 @@ public class ScSbjService {
                         .getVanEntity()
                         .getSchoolEntity(),String.valueOf(grade));
 
-        return sbjEnti.stream().map(item -> ScSbjVo.builder()
-                .id(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+        return sbjEnti.stream().map(item -> ScCateVo.builder()
+                .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
                 .nm(item.getSubjectEntity().getSbjCategoryEntity().getNm()).build()).toList();
     }
+
 
 //    public List<ScSbjVo> smalllist(Long categoryId) {
 ////        SbjCategoryEntity sbjCategoryEntity = sbjRep.findBy(categoryId);
@@ -106,5 +105,19 @@ public class ScSbjService {
         }
     }
 
+    public List<ScCateVo> getCateList() {
+        List<SbjCategoryEntity> categoryEntities =  cateRep.findAllByTypeIs(1);
+        return categoryEntities.stream().map(item -> ScCateVo.builder()
+                .categoryId(item.getCategoryId()).nm(item.getNm()).build()).toList();
+    }
+
+    public List<ScSbjVo> getSubjectListByCate(Long categoryId){
+        SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntity(cateEnti);
+
+        return sbjEntityList.stream().map(item -> ScSbjVo.builder()
+                .subjectId(item.getSubjectId())
+                .nm(item.getNm()).build()).toList();
+    }
 }
 

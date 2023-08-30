@@ -1,8 +1,11 @@
 package com.green.secondproject.admin.schoolsubject;
 
 
+import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
 import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
+import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
+import com.green.secondproject.teacher.subject.model.SubjectVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -31,17 +34,33 @@ public class ScSbjController {
         List<ScSbjListVo> scSbjVoList = service.saveAll(subjectIdList,grade);
         return ResponseEntity.ok(scSbjVoList);
     }
+    @GetMapping("/cate")
+    @Operation(summary = "관리자용 과목계열 전체 리스트 조회(내신)",
+            description = "nm - 과목이름<br>" + "categoryId - 과목 계열pk값")
+    List<ScCateVo> cateList() {
+        return service.getCateList();
+    }
+
+    @GetMapping("/cate/{categoryId}")
+    @Operation(summary = "관리자용 과목계열별 세부과목 리스트 조회(내신)",
+            description = """  
+            요구값 : <br>(1)categoryId : 과목계열 pk값 <br><br>
+            출력값 : <br>(1)subjectid - 세부과목 pk값<br>(2)nm - 과목이름<br> 
+                    """)
+    List<ScSbjVo> getSubjectListByCate(@PathVariable Long categoryId) {
+        return service.getSubjectListByCate(categoryId);
+    }
 
 
     @GetMapping("/category/big")
-    @Operation(summary = "학년별 과목계열 리스트(수정중-중복값처리x)"
+    @Operation(summary = "학년별 등록카테고리 리스트(수정중-중복값처리x)"
             , description = """
                     입력값 :<br> (1)grade : 조회대상 학년(1-3)<br><br>
                     출력값 : <br>(1)subjectid - subject 테이블에 과목 PK값
-                    <br>(2)nm - 카테고이름
+                    <br>(2)nm - 카테고리이름
                     """)
-    List<ScSbjVo> adminList(int grade) {
-        return service.tcslist(grade);
+    List<ScCateVo> adminList(int grade) {
+        return service.adminCateList(grade);
     }
 
 //    @GetMapping("/category/small")
@@ -54,9 +73,10 @@ public class ScSbjController {
 //    }
 
     @DeleteMapping
-    @Operation(summary = "과목 삭제")
+    @Operation(summary = "학교별 과목 삭제")
     ResponseEntity<Integer> delScSbj(@RequestParam Long scSbjId)
     { return ResponseEntity.ok(service.delete(scSbjId)); }
+
 
 
 }
