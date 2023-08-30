@@ -14,8 +14,6 @@ import java.util.*;
 public class StudentService {
     private final StudentMapper mapper;
 
-
-
     public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mapper.selMockTestResultByDates(dto);
     }
@@ -172,9 +170,7 @@ public class StudentService {
             e.printStackTrace();
         }
         return null;
-
     }
-
 
     public String getMidFinalFormOfDate(String date){
 
@@ -188,7 +184,6 @@ public class StudentService {
             dateStrTmp = dateStrTmp.substring(0,len);
             dateStrTmp += " 중간";
         }
-
         else if(dateStrTmp.endsWith("2")){
             //기말일때
 //            StringUtils.removeEnd(dateStrTmp, "2");
