@@ -1,5 +1,6 @@
 package com.green.secondproject.student;
 
+import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -98,5 +99,18 @@ public class StudentController {
         Long userId =  myuser.getUserId();
         dto.setUserId(userId);
         return service.getAcaTestGraph(dto);
+    }
+
+    @GetMapping("/notice")
+    @Operation(summary = "학생 페이지 공지사항", description = """
+            "imptList": 중요공지 리스트<br>
+            "normalList": 일반공지 리스트<br>
+            "noticeId": 공지사항 PK,<br>
+            "imptYn": 중요(1) 일반(0),<br>
+            "title": 제목,<br>
+            "createdAt": 작성일,<br>
+            "hits": 조회수 """)
+    public NoticeTeacherListVo NoticeTeacher(){
+        return service.NoticeTeacher();
     }
 }

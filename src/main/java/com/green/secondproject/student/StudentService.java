@@ -1,5 +1,13 @@
 package com.green.secondproject.student;
 
+import com.green.secondproject.admin.model.NoticeTeacherListVo;
+import com.green.secondproject.admin.model.NoticeTeacherVo;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.NoticeEntity;
+import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.repository.NoticeRepository;
+import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.student.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,12 +15,16 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class StudentService {
     private final StudentMapper mapper;
+    private final AuthenticationFacade facade;
+    private final UserRepository userRepository;
+    private final NoticeRepository noticeRepository;
 
     public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mapper.selMockTestResultByDates(dto);
@@ -43,8 +55,6 @@ public class StudentService {
         }
         return null;
     }
-
-
 
 //    public List<StudentSummaryContainerVo> getMockTestGraph(StudentSummaryParam param){
 //        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(param);
@@ -193,5 +203,36 @@ public class StudentService {
         return dateStrTmp;
     }
 
+    public NoticeTeacherListVo NoticeTeacher(){
+        MyUserDetails userDetails = facade.getLoginUser();  // 현재 로그인한 사용자의 정보
 
+        UserEntity currentUser = userRepository.findById(userDetails.getUserId()).orElse(null);  // 사용자의 상세 정보를 가져옴
+
+        if (currentUser == null) {
+            throw new RuntimeException("로그인한 사용자 정보가 없습니다.");
+        }
+        Long currentVanId = currentUser.getVanEntity().getVanId();  // 로그인한 사용자의 vanId 값을 가져옴
+
+        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId);
+        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId);
+
+        return NoticeTeacherListVo.builder()
+                .imptList(imptList.stream().map(noticeEntity -> NoticeTeacherVo
+                        .builder()
+                        .noticeId(noticeEntity.getNoticeId())
+                        .title(noticeEntity.getTitle())
+                        .imptYn(noticeEntity.getImptYn())
+                        .hits(noticeEntity.getHits())
+                        .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .build()).collect(Collectors.toList()))
+                .normalList(normalList.stream().map(noticeEntity -> NoticeTeacherVo
+                        .builder()
+                        .noticeId(noticeEntity.getNoticeId())
+                        .title(noticeEntity.getTitle())
+                        .imptYn(noticeEntity.getImptYn())
+                        .hits(noticeEntity.getHits())
+                        .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .build()).collect(Collectors.toList()))
+                .build();
+    }
 }
