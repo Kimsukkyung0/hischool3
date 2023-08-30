@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -26,6 +27,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);
     List<UserEntity> findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(VanEntity vanEntity, int aprYn, EnrollState enrollState, RoleType roleType);
+    List<UserEntity> findAllByVanEntityAndRoleType(VanEntity vanEntity, RoleType roleType);
+    List<UserEntity> findAllByVanEntityInAndRoleType(List<VanEntity> vanEntity, RoleType roleType);
 
     //석경작업
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
