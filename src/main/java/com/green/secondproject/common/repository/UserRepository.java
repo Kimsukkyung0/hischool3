@@ -1,13 +1,11 @@
 package com.green.secondproject.common.repository;
 
-import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -18,7 +16,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
     UserEntity findByUserId(Long userId);
 
-    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType, Pageable page);
+    List<UserEntity> findAllByAprYnAndRoleType(int aprYn, RoleType roleType, Pageable page);
 //    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
 
     List<UserEntity> findByNmContaining(String search);

@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.el.stream.Optional;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -28,9 +30,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/admin")
 @Tag(name = "관리자")
+
 public class AdminController {
+
+
     private final AdminService service;
     private final SignService signService;
+
+    @Bean
+    public PageableHandlerMethodArgumentResolverCustomizer customize() {
+        return p -> p.setOneIndexedParameters(true);
+    }
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
