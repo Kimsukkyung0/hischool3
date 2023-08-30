@@ -39,11 +39,9 @@ public class RepositoryTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private final String classNum = "3";
-
     @Test
     @Rollback(value = false)
-    void calcWholeRank() {
+    void 전교_석차_계산() {
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
                 SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
         List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
@@ -65,51 +63,55 @@ public class RepositoryTest {
     }
     @Test
     @Rollback(value = false)
-    void calcClassRank() {
-        VanEntity vanEntity = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(
-                SchoolEntity.builder().schoolId(70L).build(), "2023", "1", classNum);
-        List<UserEntity> stdList = userRepository.findAllByVanEntityAndRoleType(vanEntity, RoleType.STD);
-        List<AcaResultEntity> resultList =
-                acaRepository.findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
-                        stdList, 1, SubjectEntity.builder().subjectId(1L).build(), 1, "2023"
-                );
+    void 반_석차_계산() {
+        for (int classNum = 3; classNum <= 10; classNum++) {
+            VanEntity vanEntity = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(
+                    SchoolEntity.builder().schoolId(70L).build(), "2023", "1", String.valueOf(classNum));
+            List<UserEntity> stdList = userRepository.findAllByVanEntityAndRoleType(vanEntity, RoleType.STD);
+            List<AcaResultEntity> resultList =
+                    acaRepository.findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
+                            stdList, 1, SubjectEntity.builder().subjectId(1L).build(), 1, "2023"
+                    );
 
-        for (AcaResultEntity res1 : resultList) {
-            int rank = 1;
-            for (AcaResultEntity res2 : resultList) {
-                if (res1.getScore() < res2.getScore()) {
-                    rank++;
+            for (AcaResultEntity res1 : resultList) {
+                int rank = 1;
+                for (AcaResultEntity res2 : resultList) {
+                    if (res1.getScore() < res2.getScore()) {
+                        rank++;
+                    }
                 }
+                res1.setClassRank(rank);
+                acaRepository.save(res1);
             }
-            res1.setClassRank(rank);
-            acaRepository.save(res1);
         }
     }
 
     @Test
     @Rollback(value = false)
-    void insResult() {
-        long startIdx = (Long.parseLong(classNum) - 1) * 20 + 2;
-        long endIdx = startIdx + 19;
+    void 내신성적_등록() {
+        for (long classNum = 10; classNum <= 10; classNum++) {
+            long startIdx = (classNum - 1) * 20 + 2;
+            long endIdx = startIdx + 19;
 
-        for (long i = startIdx; i <= endIdx; i++) {
-            acaRepository.save(AcaResultEntity.builder()
-                    .userEntity(UserEntity.builder().userId(i).build())
-                    .subjectEntity(SubjectEntity.builder().subjectId(1L).build())
-                    .year("2023")
-                    .midFinal(1)
-                    .rating((int)(Math.random() * 9) + 1)
-                    .score((int)(Math.random() * 101))
-                    .semester(1)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build());
+            for (long i = startIdx; i <= endIdx; i++) {
+                acaRepository.save(AcaResultEntity.builder()
+                        .userEntity(UserEntity.builder().userId(i).build())
+                        .subjectEntity(SubjectEntity.builder().subjectId(1L).build())
+                        .year("2023")
+                        .midFinal(1)
+                        .rating((int)(Math.random() * 9) + 1)
+                        .score((int)(Math.random() * 101))
+                        .semester(1)
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build());
+            }
         }
     }
 
     @Test
     @Rollback(value = false)
-    void insStd() {
+    void 학생_등록() {
         for (int classNum = 3; classNum <= 10; classNum++) {
             VanEntity vanEntity = VanEntity.builder()
                     .schoolEntity(SchoolEntity.builder().schoolId(70L).build())
