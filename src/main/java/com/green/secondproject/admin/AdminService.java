@@ -126,6 +126,23 @@ public class AdminService {
                 .toList();
     }
 
+    public List<StudentClassVo> searchStudent(String search) {
+        List<UserEntity> entities = userRepository.findByNmContaining(search);
+
+
+
+        return entities.stream().map(item -> StudentClassVo.builder()
+                        .userId(item.getUserId())
+                        .nm(item.getNm())
+                        .email(item.getEmail())
+                        .phone(item.getPhone())
+                        .enrollState(item.getEnrollState())
+                        .grade(item.getVanEntity().getGrade())
+                        .classNum(item.getVanEntity().getClassNum())
+                        .build())
+                .toList();
+    }
+
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {
         Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
 

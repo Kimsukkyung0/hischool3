@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.el.stream.Optional;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -99,6 +100,12 @@ public class AdminController {
     public List<StudentClassVo> getStudentClass(int page) {
         return service.getStudentClass(page);
     }
+
+    @GetMapping
+    public List<StudentClassVo> searchStudent(@RequestParam(required = false) String search) {
+        return service.searchStudent(search);
+    }
+
 
     @GetMapping("/main-notice")
     @Operation(summary = "메인페이지 공지사항", description = """
