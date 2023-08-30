@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,12 +46,12 @@ public class TeacherMngService {
 
     private String schoolCode;
 
-    public TeacherMngVoContainer teacherNotapprovedList(Long schoolId, Pageable page) {
+    public TeacherMngVoContainer teacherNotapprovedList(Long schoolId, Pageable pageable) {
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-
-        Page<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, page);
+        pageable = PageRequest.of(pageable.getPageNumber()-1,  16);
+        Page<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, pageable);
 
         List<TeacherMngVo> finalResult = new ArrayList<>();
 
@@ -78,14 +79,14 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Long schoolId, Pageable page) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Long schoolId, Pageable pageable) {
 
         schoolCode = scRep.findBySchoolId(schoolId).getCode();
         SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
-        Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, page);
-
+        pageable = PageRequest.of(pageable.getPageNumber()-1,  16);
+        Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
         List<TeacherMngVo> subResult = new ArrayList<>();
 
         for (UserEntity en : tcList) {
