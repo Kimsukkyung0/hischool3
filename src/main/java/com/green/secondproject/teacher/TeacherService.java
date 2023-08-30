@@ -1,14 +1,13 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.admin.model.NoticeTeacherListVo;
+import com.green.secondproject.admin.model.NoticeTeacherVo;
 import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
-import com.green.secondproject.common.entity.MockResultEntity;
-import com.green.secondproject.common.entity.SubjectEntity;
-import com.green.secondproject.common.entity.UserEntity;
-import com.green.secondproject.common.entity.VanEntity;
-import com.green.secondproject.common.repository.MockResultRepository;
-import com.green.secondproject.common.repository.UserRepository;
+import com.green.secondproject.common.entity.*;
+import com.green.secondproject.common.repository.*;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
@@ -17,7 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +28,10 @@ public class TeacherService {
     private final StudentService stService;
     private final UserRepository userRepository;
     private final MockResultRepository mockResultRepository;
+    private final SchoolRepository schoolRepository;
+    private final NoticeRepository noticeRepository;
+    private final AuthenticationFacade facade;
+    private final VanRepository vanRepository;
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
@@ -253,5 +258,41 @@ public class TeacherService {
     public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mapper.selMockTestResultByDates(dto);
     }
-}
+    //공지사항
+    public NoticeTeacherListVo NoticeTeacher(){
+        MyUserDetails userDetails = facade.getLoginUser();  // 현재 로그인한 사용자의 정보
+
+        SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUserPk());
+
+        UserEntity currentUser = userRepository.findById(userDetails.getUserId()).orElse(null);  // 사용자의 상세 정보를 가져옴
+
+        if (currentUser == null) {
+            throw new RuntimeException("로그인한 사용자 정보가 없습니다.");
+        }
+        Long currentVanId = currentUser.getVanEntity().getVanId();  // 로그인한 사용자의 vanId 값을 가져옴
+
+        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId);
+        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId);
+
+        return NoticeTeacherListVo.builder()
+                .imptList(imptList.stream().map(noticeEntity -> NoticeTeacherVo
+                        .builder()
+                        .noticeId(noticeEntity.getNoticeId())
+                        .title(noticeEntity.getTitle())
+                        .imptYn(noticeEntity.getImptYn())
+                        .hits(noticeEntity.getHits())
+                        .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .build()).collect(Collectors.toList()))
+                .normalList(normalList.stream().map(noticeEntity -> NoticeTeacherVo
+                        .builder()
+                        .noticeId(noticeEntity.getNoticeId())
+                        .title(noticeEntity.getTitle())
+                        .imptYn(noticeEntity.getImptYn())
+                        .hits(noticeEntity.getHits())
+                        .createdAt(LocalDate.from(noticeEntity.getCreatedAt()))
+                        .build()).collect(Collectors.toList()))
+                .build();
+    }
+    }
+
 

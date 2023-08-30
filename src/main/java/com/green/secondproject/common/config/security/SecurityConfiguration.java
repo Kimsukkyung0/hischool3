@@ -39,7 +39,7 @@ public class SecurityConfiguration {
                             .requestMatchers(
                                     mvc.pattern("/api/teacher/**"),
                                     mvc.pattern(HttpMethod.POST, "/api/attendance"),
-                                    mvc.pattern(HttpMethod.PUT, "/api/attendance")).hasRole("TC")
+                                    mvc.pattern(HttpMethod.PUT, "/api/attendance")).hasAnyRole("TC", "ADMIN")
                             .requestMatchers(
                                     mvc.pattern("/api/student/**"),
                                     mvc.pattern("/api/meal/**")).hasRole("STD")
