@@ -126,12 +126,27 @@ public class AdminService {
                 .toList();
     }
 
-    public List<StudentClassVo> searchStudent(String search) {
+    public List<StudentClassVo> searchStudent(String search, int page) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Pageable pageable = PageRequest.of(page-1, 30, sort);  //페이징 처리 -1해서 슬픔
         List<UserEntity> entities = userRepository.findByNmContaining(search);
+        List<UserEntity> nulEntities = userRepository.findAllByAprYnAndEnrollStateAndRoleType(1, EnrollState.ENROLL, RoleType.STD, pageable);
 
 
-
-        return entities.stream().map(item -> StudentClassVo.builder()
+        if(search == null) {
+            return nulEntities.stream().map(item -> StudentClassVo.builder()
+                            .userId(item.getUserId())
+                            .nm(item.getNm())
+                            .email(item.getEmail())
+                            .phone(item.getPhone())
+                            .enrollState(item.getEnrollState())
+                            .grade(item.getVanEntity().getGrade())
+                            .classNum(item.getVanEntity().getClassNum())
+                            .build())
+                    .toList();
+        }
+        else {
+            return entities.stream().map(item -> StudentClassVo.builder()
                         .userId(item.getUserId())
                         .nm(item.getNm())
                         .email(item.getEmail())
@@ -141,6 +156,7 @@ public class AdminService {
                         .classNum(item.getVanEntity().getClassNum())
                         .build())
                 .toList();
+        }
     }
 
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {
