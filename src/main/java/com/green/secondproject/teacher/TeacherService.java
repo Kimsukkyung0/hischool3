@@ -263,8 +263,6 @@ public class TeacherService {
     public NoticeTeacherListVo NoticeTeacher(){
         MyUserDetails userDetails = facade.getLoginUser();  // 현재 로그인한 사용자의 정보
 
-        SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUserPk());
-
         UserEntity currentUser = userRepository.findById(userDetails.getUserId()).orElse(null);  // 사용자의 상세 정보를 가져옴
 
         if (currentUser == null) {
