@@ -1,5 +1,7 @@
-package com.green.secondproject.admin.schoolsubject.model;
+package com.green.secondproject.admin.schoolsubject;
 
+import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
+import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.*;
@@ -11,12 +13,14 @@ import com.green.secondproject.teacher.subject.model.SubjectVo2;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @ToString
@@ -59,11 +63,20 @@ public class ScSbjService {
             return fkResult;
         }
     }
-    public List<ScSbjVo> tcslist() {
+    public List<ScSbjVo> tcslist(int grade) {
         //schoolEntity 를 가져와서 학교별 저장된 목록을 가져온다
-        List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntity(usrRep.findByUserId(facade.getLoginUserPk())
-                .getVanEntity()
-                .getSchoolEntity());
+//        List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntity(usrRep.findByUserId(facade.getLoginUserPk())
+//                .getVanEntity()
+//                .getSchoolEntity());
+//   (2)     List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntityAndGrade(
+//                usrRep.findByUserId(facade.getLoginUserPk())
+//                        .getVanEntity()
+//                        .getSchoolEntity(),String.valueOf(grade));
+
+        List<ScSbjEntity> sbjEnti  = sbjRep.findDistinctBySchoolEntityAndGrade(
+                usrRep.findByUserId(facade.getLoginUserPk())
+                        .getVanEntity()
+                        .getSchoolEntity(),String.valueOf(grade));
 
         return sbjEnti.stream().map(item -> ScSbjVo.builder()
                 .id(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
@@ -72,13 +85,26 @@ public class ScSbjService {
 
 //    public List<ScSbjVo> smalllist(Long categoryId) {
 ////        SbjCategoryEntity sbjCategoryEntity = sbjRep.findBy(categoryId);
-//        List<SubjectEntity> subjectEntityList = sbjtRep.findAllBySbjCategoryEntity(categoryId);
+//        List<SubjectEntity> subjectEntityList = sbjtRep.fin
+//                findAllBySbjCategoryEntity(categoryId);
 //
 //        return subjectEntityList.stream().map(item -> ScSbjVo.builder()
 //                .id(item.getSubjectId())
 //                .nm(item.getNm()).build()).toList();
 //    }
 
+    public int delete(Long scSbjId) {
+
+        Optional<ScSbjEntity> optEntity =  sbjRep.findById(scSbjId);
+
+        if (optEntity.isPresent()){
+            sbjRep.deleteById(scSbjId);
+            return 1;
+        }
+        else{
+            return 0;
+        }
+    }
 
 }
 

@@ -1,16 +1,13 @@
-package com.green.secondproject.admin.schoolsubject.model;
+package com.green.secondproject.admin.schoolsubject;
 
 
-import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.teacher.subject.model.SubjectDetailVo2;
-import com.green.secondproject.teacher.subject.model.SubjectDto;
-import com.green.secondproject.teacher.subject.model.SubjectVo2;
+import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
+import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,12 +34,14 @@ public class ScSbjController {
 
 
     @GetMapping("/category/big")
-    @Operation(summary = "등록후 과목계열 리스트"
-            , description =
-            "출력값 : subjectid - subject 테이블에 과목 PK값" +
-                    "<br>nm - 세부과목이름")
-    List<ScSbjVo> adminList() {
-        return service.tcslist();
+    @Operation(summary = "학년별 과목계열 리스트(수정중-중복값처리x)"
+            , description = """
+                    입력값 :<br> (1)grade : 조회대상 학년(1-3)<br><br>
+                    출력값 : <br>(1)subjectid - subject 테이블에 과목 PK값
+                    <br>(2)nm - 카테고이름
+                    """)
+    List<ScSbjVo> adminList(int grade) {
+        return service.tcslist(grade);
     }
 
 //    @GetMapping("/category/small")
@@ -54,12 +53,10 @@ public class ScSbjController {
 //         return service.smalllist(categoryId);
 //    }
 
-//    @DeleteMapping
-//    @Operation(summary = "과목 삭제")
-//    ResponseEntity<Integer> delScSbj(@RequestParam Long subjectId){
-//        service.delete();
-//        return ResponseEntity.ok(1);
-//    }
+    @DeleteMapping
+    @Operation(summary = "과목 삭제")
+    ResponseEntity<Integer> delScSbj(@RequestParam Long scSbjId)
+    { return ResponseEntity.ok(service.delete(scSbjId)); }
 
 
 }

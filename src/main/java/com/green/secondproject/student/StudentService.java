@@ -149,7 +149,7 @@ public class StudentService {
         return null;
     }
 
-    List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
+    public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
         LocalDate now = LocalDate.now();
         dto.setYear(String.valueOf(now.getYear()));
 

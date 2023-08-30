@@ -20,6 +20,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByUserId(Long userId);
 
     List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType, Pageable page);
+//    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
 
     List<UserEntity> findByNmContaining(String search);
 
