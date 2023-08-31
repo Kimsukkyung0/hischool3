@@ -1,10 +1,7 @@
 package com.green.secondproject.admin.schoolsubject;
 
 
-import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo2;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
+import com.green.secondproject.admin.schoolsubject.model.*;
 import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
 import com.green.secondproject.teacher.subject.model.SubjectVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +28,8 @@ public class ScSbjController {
             출력값 : <br>(1)scSbjId : 등록번호 <br>
     (2)grade : 학년<br>
     (3)subjectId : 등록된 과목의 pk""")
-    ResponseEntity<List<ScSbjListVo>> regScSbj(@RequestParam List<Long> subjectIdList, @RequestParam int grade) {
-        List<ScSbjListVo> scSbjVoList = service.saveAll(subjectIdList,grade);
+    ResponseEntity<List<ScSbjListVo>> regScSbj(@RequestBody ScSbjListDto list, @RequestParam int grade) {
+        List<ScSbjListVo> scSbjVoList = service.saveAll(list,grade);
         return ResponseEntity.ok(scSbjVoList);
     }
     @GetMapping("/cate")

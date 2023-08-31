@@ -1,19 +1,12 @@
 package com.green.secondproject.admin.schoolsubject;
 
-import com.green.secondproject.admin.schoolsubject.model.ScCateVo;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo2;
-import com.green.secondproject.admin.schoolsubject.model.ScSbjVo;
+import com.green.secondproject.admin.schoolsubject.model.*;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
-import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
-import com.green.secondproject.teacher.subject.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.javassist.NotFoundException;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,21 +27,20 @@ public class ScSbjService {
     private final SbjCategoryRepository cateRep;
     private final SchoolRepository scRep;
 
-    public List<ScSbjListVo> saveAll(List<Long> subjectIdList, int grade) {
+    public List<ScSbjListVo> saveAll(ScSbjListDto list, int grade) {
         List<ScSbjListVo> fkResult = new ArrayList<>();
 
         if (grade > 0 && grade <= 3) {
             List<ScSbjEntity> sb = new ArrayList<>();
-            String strGrade = String.valueOf(grade);
             SchoolEntity scEnti = scAdRep.findById(facade.getLoginUserPk()).get().getSchoolEntity();
 //        List<SubjectEntity> sbjEnti = sbjtRep.findAllById(subjectIdList);
 
-            for (Long subjectId : subjectIdList) {
+            for (SbjDto subjectId : list.getList()) {
                 sb.add(ScSbjEntity
                         .builder()
-                        .subjectEntity(sbjtRep.getReferenceById(subjectId))
+                        .subjectEntity(sbjtRep.getReferenceById(subjectId.getSubjectId()))
                         .schoolEntity(scEnti)
-                        .grade(strGrade)
+                        .grade(String.valueOf(grade))
                         .build());
             }
             sbjRep.saveAll(sb);
@@ -62,21 +54,12 @@ public class ScSbjService {
             return fkResult;
         }
     }
-    public List<ScSbjListVo2> adminSbjList(int grade) {
-        //schoolEntity 를 가져와서 학교별 저장된 목록을 가져온다
-//        List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntity(usrRep.findByUserId(facade.getLoginUserPk())
-//                .getVanEntity()
-//                .getSchoolEntity());
-//   (2)     List<ScSbjEntity> sbjEnti  = sbjRep.findAllBySchoolEntityAndGrade(
-//                usrRep.findByUserId(facade.getLoginUserPk())
-//                        .getVanEntity()
-//                        .getSchoolEntity(),String.valueOf(grade));
 
+    public List<ScSbjListVo2> adminSbjList(int grade) {
         List<ScSbjListVo2> result = new ArrayList<>();
 
         if(grade>0 && grade<=3) {
-            List<ScSbjEntity> sbjEnti = sbjRep.findDistinctBySchoolEntityAndGrade(
-                    usrRep.findByUserId(facade.getLoginUserPk())
+            List<ScSbjEntity> sbjEnti = sbjRep.findAllBySchoolEntityAndGrade(usrRep.findByUserId(facade.getLoginUserPk())
                             .getVanEntity()
                             .getSchoolEntity(), String.valueOf(grade));
 
