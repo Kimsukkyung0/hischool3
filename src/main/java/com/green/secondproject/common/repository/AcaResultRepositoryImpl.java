@@ -18,7 +18,8 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     public List<AcaResultEntity> searchAcaResult(StudentAcaResultsParam param) {
         return jpaQueryFactory
                 .selectFrom(acaResult)
-                .where(yearEq(param.getYear()), semesterEq(param.getSemester()), midFinalEq(param.getMidFinal()))
+                .where(acaResult.userEntity.userId.eq(param.getUserId()),
+                        yearEq(param.getYear()), semesterEq(param.getSemester()), midFinalEq(param.getMidFinal()))
                 .fetch();
     }
 
