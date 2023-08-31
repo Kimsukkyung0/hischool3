@@ -179,15 +179,18 @@ public class AdminService {
         if (schoolOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
         }
+
+        SchoolEntity schoolEntity = schoolOpt.get();
+
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
-        Optional<SchoolEntity> schoolEntity = schoolRepository.findById(facade.getLoginUser().getSchoolId());
 
-        UserEntity user = new UserEntity();
 
-        Page<UserEntity> entities = userRepository.findByNmContainingAndRoleType(search, RoleType.STD, pageable);
-        Page<UserEntity> nulEntities = userRepository.findAllByRoleType(RoleType.STD, pageable);
+
+        List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
+        Page<UserEntity> entities = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanList, RoleType.STD, pageable);
+        Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
 
@@ -197,6 +200,7 @@ public class AdminService {
                 VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
+                        .schoolId(schoolEntity.getSchoolId())
                         .nm(entity.getNm())
                         .email(entity.getEmail())
                         .phone(entity.getPhone())
@@ -215,6 +219,7 @@ public class AdminService {
                 VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
+                        .schoolId(schoolEntity.getSchoolId())
                         .nm(entity.getNm())
                         .email(entity.getEmail())
                         .phone(entity.getPhone())
