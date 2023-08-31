@@ -47,7 +47,7 @@ public class AdminService {
         if (schoolAdmin == null) {
             throw new RuntimeException("존재하지 않는 이메일");
         }
-        if(!PW_ENCODER.matches(p.getPw(), schoolAdmin.getPw())) {
+        if (!PW_ENCODER.matches(p.getPw(), schoolAdmin.getPw())) {
             throw new RuntimeException("비밀번호 불일치");
         }
 
@@ -145,22 +145,22 @@ public class AdminService {
 
         List<StudentClassVo> result = new ArrayList<>();
 
-        for (UserEntity entity: list1) {
+        for (UserEntity entity : list1) {
             VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
             result.add(StudentClassVo.builder()
-                            .userId(entity.getUserId())
-                            .nm(entity.getNm())
-                            .email(entity.getEmail())
-                            .phone(entity.getPhone())
-                            .enrollState(entity.getEnrollState())
-                            .grade(vanEntity.getGrade())
-                            .classNum(vanEntity.getClassNum())
+                    .userId(entity.getUserId())
+                    .nm(entity.getNm())
+                    .email(entity.getEmail())
+                    .phone(entity.getPhone())
+                    .enrollState(entity.getEnrollState())
+                    .grade(vanEntity.getGrade())
+                    .classNum(vanEntity.getClassNum())
                     .build());
         }
 
         return StudentClassListVo.builder()
                 .list(result)
-                .totalCount((int)list1.getTotalElements())
+                .totalCount((int) list1.getTotalElements())
                 .totalPage(list1.getTotalPages())
                 .build();
     }
@@ -172,13 +172,13 @@ public class AdminService {
             throw new RuntimeException("관리자 로그인 필요");
         }
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page-1, 17, sort);
-        Page<UserEntity> entities = userRepository.findByNmContainingAndRoleType(search, RoleType.STD ,pageable);
+        Pageable pageable = PageRequest.of(page - 1, 17, sort);
+        Page<UserEntity> entities = userRepository.findByNmContainingAndRoleType(search, RoleType.STD, pageable);
         Page<UserEntity> nulEntities = userRepository.findAllByRoleType(RoleType.STD, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
 
-        if(search != null) {
+        if (search != null) {
             for (UserEntity entity : entities) {
                 VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
                 result.add(StudentClassVo.builder()
@@ -193,7 +193,7 @@ public class AdminService {
             }
             return StudentClassListVo.builder()
                     .list(result)
-                    .totalCount((int)entities.getTotalElements())
+                    .totalCount((int) entities.getTotalElements())
                     .totalPage(entities.getTotalPages())
                     .build();
         } else {
@@ -211,7 +211,7 @@ public class AdminService {
             }
             return StudentClassListVo.builder()
                     .list(result)
-                    .totalCount((int)nulEntities.getTotalElements())
+                    .totalCount((int) nulEntities.getTotalElements())
                     .totalPage(nulEntities.getTotalPages())
                     .build();
         }
@@ -223,7 +223,7 @@ public class AdminService {
         UserEntity entity = optEntity.get();
         VanEntity.builder()
                 .vanId(dto.getVanId())
-                        .build();
+                .build();
 
 //        entity.getVanEntity().setVanId(entity.getVanEntity().getVanId());
 
