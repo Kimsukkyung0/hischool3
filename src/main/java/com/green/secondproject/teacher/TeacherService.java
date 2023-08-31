@@ -255,20 +255,20 @@ public class TeacherService {
     }
 
     public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param) {
-        List<AcaResultEntity> resList = acaResultRepository.searchAcaResult(param);
+        return acaResultRepository.searchAcaResult(param);
 
-        return resList.stream().map(acaResultEntity -> StudentAcaResultWithIdVo.builder()
-                .resultId(acaResultEntity.getResultId())
-                .year(acaResultEntity.getYear())
-                .semester(acaResultEntity.getSemester())
-                .midFinal(acaResultEntity.getMidFinal())
-                .cateName(acaResultEntity.getSubjectEntity().getSbjCategoryEntity().getNm())
-                .nm(acaResultEntity.getSubjectEntity().getNm())
-                .score(acaResultEntity.getScore())
-                .rating(acaResultEntity.getRating())
-                .classRank(acaResultEntity.getClassRank())
-                .wholeRank(acaResultEntity.getWholeRank())
-                .build()).toList();
+//        return resList.stream().map(acaResultEntity -> StudentAcaResultWithIdVo.builder()
+//                .resultId(acaResultEntity.getResultId())
+//                .year(acaResultEntity.getYear())
+//                .semester(acaResultEntity.getSemester())
+//                .midFinal(acaResultEntity.getMidFinal())
+//                .cateName(acaResultEntity.getSubjectEntity().getSbjCategoryEntity().getNm())
+//                .nm(acaResultEntity.getSubjectEntity().getNm())
+//                .score(acaResultEntity.getScore())
+//                .rating(acaResultEntity.getRating())
+//                .classRank(acaResultEntity.getClassRank())
+//                .wholeRank(acaResultEntity.getWholeRank())
+//                .build()).toList();
         //return mapper.selAcaTestResultByDatesAndPeriodAndStudent(param);
     }
 

@@ -1,5 +1,6 @@
 package com.green.secondproject.student.model;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,4 +18,17 @@ public class StudentAcaResultWithIdVo {
     private int classRank;
     private int wholeRank;
 
+    @QueryProjection
+    public StudentAcaResultWithIdVo(Long resultId, String year, int semester, int midFinal, String cateName, String nm, int score, int rating, int classRank, int wholeRank) {
+        this.resultId = resultId;
+        this.year = year;
+        this.semester = semester;
+        this.midFinal = midFinal;
+        this.cateName = cateName;
+        this.nm = nm;
+        this.score = score;
+        this.rating = rating;
+        this.classRank = classRank;
+        this.wholeRank = wholeRank;
+    }
 }

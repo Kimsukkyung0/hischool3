@@ -8,6 +8,7 @@ import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.AcaResultRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.student.model.StudentAcaResultWithIdVo;
 import com.green.secondproject.student.model.StudentAcaResultsParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -70,28 +71,50 @@ public class RepositoryTest {
         long grade7 = Math.round(resultList.size() * sev);
         long grade8 = Math.round(resultList.size() * eig);
 
-        for (int i = 0; i < resultList.size(); i++) {
-            if (i < grade1) {
-                resultList.get(i).setRating(1);
-            } else if (i < grade2) {
-                resultList.get(i).setRating(2);
-            } else if (i < grade3) {
-                resultList.get(i).setRating(3);
-            } else if (i < grade4) {
-                resultList.get(i).setRating(4);
-            } else if (i < grade5) {
-                resultList.get(i).setRating(5);
-            } else if (i < grade6) {
-                resultList.get(i).setRating(6);
-            } else if (i < grade7) {
-                resultList.get(i).setRating(7);
-            } else if (i < grade8) {
-                resultList.get(i).setRating(8);
+        for (AcaResultEntity r : resultList) {
+            if (r.getWholeRank() <= grade1) {
+                r.setRating(1);
+            } else if (r.getWholeRank() <= grade2) {
+                r.setRating(2);
+            } else if (r.getWholeRank() <= grade3) {
+                r.setRating(3);
+            } else if (r.getWholeRank() <= grade4) {
+                r.setRating(4);
+            } else if (r.getWholeRank() <= grade5) {
+                r.setRating(5);
+            } else if (r.getWholeRank() <= grade6) {
+                r.setRating(6);
+            } else if (r.getWholeRank() <= grade7) {
+                r.setRating(7);
+            } else if (r.getWholeRank() <= grade8) {
+                r.setRating(8);
             } else {
-                resultList.get(i).setRating(9);
+                r.setRating(9);
             }
-            acaRepository.save(resultList.get(i));
+            acaRepository.save(r);
         }
+//        for (int i = 0; i < resultList.size(); i++) {
+//            if (i < grade1) {
+//                resultList.get(i).setRating(1);
+//            } else if (i < grade2) {
+//                resultList.get(i).setRating(2);
+//            } else if (i < grade3) {
+//                resultList.get(i).setRating(3);
+//            } else if (i < grade4) {
+//                resultList.get(i).setRating(4);
+//            } else if (i < grade5) {
+//                resultList.get(i).setRating(5);
+//            } else if (i < grade6) {
+//                resultList.get(i).setRating(6);
+//            } else if (i < grade7) {
+//                resultList.get(i).setRating(7);
+//            } else if (i < grade8) {
+//                resultList.get(i).setRating(8);
+//            } else {
+//                resultList.get(i).setRating(9);
+//            }
+//            acaRepository.save(resultList.get(i));
+//        } 동점자 무시
     }
 
     @Test
@@ -99,9 +122,9 @@ public class RepositoryTest {
         StudentAcaResultsParam p = StudentAcaResultsParam.builder()
                 .userId(1L)
                 .build();
-        List<AcaResultEntity> list = acaRepository.searchAcaResult(p);
-        for (AcaResultEntity acaResultEntity : list) {
-            System.out.println(acaResultEntity);
+        List<StudentAcaResultWithIdVo> list = acaRepository.searchAcaResult(p);
+        for (StudentAcaResultWithIdVo vo : list) {
+            System.out.println(vo);
         }
     }
 
