@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     List<UserEntity> findAllByAprYnAndRoleType(int aprYn, RoleType roleType, Pageable page);
 //    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
 
-    List<UserEntity> findByNmContaining(String search);
+    List<UserEntity> findByNmContaining(String search, Pageable page);
 
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);

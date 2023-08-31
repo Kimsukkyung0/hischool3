@@ -1,12 +1,14 @@
 package com.green.secondproject;
 
 import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.common.config.jpa.QueryDslConfig;
 import com.green.secondproject.common.config.security.PasswordEncoderConfiguration;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
-import com.green.secondproject.common.repository.AcaRepository;
+import com.green.secondproject.common.repository.AcaResultRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.student.model.StudentAcaResultsParam;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +26,12 @@ import java.util.List;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ActiveProfiles("test")
-@Import(PasswordEncoderConfiguration.class)
+@Import({PasswordEncoderConfiguration.class, QueryDslConfig.class})
 @Slf4j
+@Rollback(value = false)
 public class RepositoryTest {
     @Autowired
-    private AcaRepository acaRepository;
+    private AcaResultRepository acaRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -40,7 +43,17 @@ public class RepositoryTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
-    @Rollback(value = false)
+    void 내신_성적_조회() {
+        StudentAcaResultsParam p = StudentAcaResultsParam.builder()
+                .userId(1L)
+                .build();
+        List<AcaResultEntity> list = acaRepository.searchAcaResult(p);
+        for (AcaResultEntity acaResultEntity : list) {
+            System.out.println(acaResultEntity);
+        }
+    }
+
+    @Test
     void 전교_석차_계산() {
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
                 SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
@@ -62,7 +75,6 @@ public class RepositoryTest {
         }
     }
     @Test
-    @Rollback(value = false)
     void 반_석차_계산() {
         for (int classNum = 3; classNum <= 10; classNum++) {
             VanEntity vanEntity = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(
@@ -87,9 +99,8 @@ public class RepositoryTest {
     }
 
     @Test
-    @Rollback(value = false)
     void 내신성적_등록() {
-        for (long classNum = 10; classNum <= 10; classNum++) {
+        for (long classNum = 1; classNum <= 10; classNum++) {
             long startIdx = (classNum - 1) * 20 + 2;
             long endIdx = startIdx + 19;
 
@@ -110,7 +121,6 @@ public class RepositoryTest {
     }
 
     @Test
-    @Rollback(value = false)
     void 학생_등록() {
         for (int classNum = 3; classNum <= 10; classNum++) {
             VanEntity vanEntity = VanEntity.builder()
