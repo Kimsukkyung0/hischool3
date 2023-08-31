@@ -25,23 +25,21 @@ public interface SubjectMapper {
 
     int schoolnum(StudentSchoolDto dto);
 
-    int acasubject(List<AcaSubjectVo> list);
+
 
     //모의고사 시작
     List<MockSubjectBigVo> mockbiglist();
 
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
 
-    int mockins(List<MockSubjectVo> list);
 
-    List<MockGraphVo2> mockgraph(MockGraphDto dto);
 
     List<StudentListVo> stulist(StudentListDto dto);
 
-    Integer mocktotal(Long vanId); // 모의고사 퍼센트 계산용
 
-    List<ResultAcaVo> selaca(ResultAcaDto dto);
 
-    List<ResultMockVo> selmock(ResultMockDto dto);
+
+
+
 
 }

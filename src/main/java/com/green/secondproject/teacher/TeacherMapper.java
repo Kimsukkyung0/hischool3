@@ -2,6 +2,9 @@ package com.green.secondproject.teacher;
 
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
+import com.green.secondproject.teacher.subject.model.*;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -27,4 +30,13 @@ public interface TeacherMapper {
     List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
     double getNumberOfStudentByCate(TeacherGraphDto dto);
     String getLatestTest();
+
+    //===============subject- > teacher ======================================
+
+    int mockins(List<MockSubjectVo> list);
+    int acasubject(List<AcaSubjectVo> list);
+    Integer mocktotal(Long vanId); // 모의고사 퍼센트 계산용
+    List<MockGraphVo2> mockgraph(MockGraphDto dto);
+    List<ResultAcaVo> selaca(ResultAcaDto dto);
+    List<ResultMockVo> selmock(ResultMockDto dto);
 }
