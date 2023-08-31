@@ -17,10 +17,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
     UserEntity findByUserId(Long userId);
 
-    List<UserEntity> findAllByAprYnAndRoleType(int aprYn, RoleType roleType, Pageable page);
+    Page<UserEntity> findAllByAprYnAndRoleType(int aprYn, RoleType roleType, Pageable page);
 //    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
 
     List<UserEntity> findByNmContaining(String search, Pageable page);
+//    List<UserEntity> countAll(Long userId);
 
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);

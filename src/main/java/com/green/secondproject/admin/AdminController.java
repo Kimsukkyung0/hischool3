@@ -106,7 +106,7 @@ public class AdminController {
             "grade": 학년<br>
             "classNum": 반<br>
             """)
-    public List<StudentClassVo> getStudentClass(int page) {
+    public StudentClassListVo getStudentClass(int page) {
         return service.getStudentClass(page);
     }
 

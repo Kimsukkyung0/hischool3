@@ -1,8 +1,10 @@
 package com.green.secondproject.admin.model;
 
+import com.green.secondproject.admin.schoolsubject.model.ScSbjListVo2;
 import com.green.secondproject.common.config.etc.EnrollState;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -14,4 +16,7 @@ public class StudentClassVo {
     private EnrollState enrollState;
     private String grade;
     private String classNum;
+//    private List<StudentClassVo> list;
+//    private int totalCount;
+//    private int totalPage;
 }

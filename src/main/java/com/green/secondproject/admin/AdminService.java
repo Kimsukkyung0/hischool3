@@ -4,6 +4,7 @@ import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
@@ -11,6 +12,7 @@ import com.green.secondproject.common.utils.ResultUtils;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -37,6 +39,7 @@ public class AdminService {
     private final SchoolRepository schoolRepository;
     private final VanRepository vanRepository;
     private final NoticeRepository noticeRepository;
+    private Long schoolCode;
 
     public SignInResultDto signIn(SignInParam p, String ip) {
         final String ADMIN = "ROLE_ADMIN";
@@ -103,36 +106,87 @@ public class AdminService {
                 .build();
     }
 
-    public List<StudentClassVo> getStudentClass(int page) {
+//    public List<StudentClassVo> getStudentClass(int page) {
+//        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+//        if (schoolOpt.isEmpty()) {
+//            throw new RuntimeException("관리자 로그인 필요");
+//        }
+//        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+//        Pageable pageable = PageRequest.of(page-1, 17, sort);  //페이징 처리 -1해서 슬픔
+//        List<UserEntity> entities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+//
+//
+//        List<StudentClassVo> studentList = new ArrayList<>();
+//
+//
+//        return entities.stream().map(item -> StudentClassVo.builder()
+//                        .userId(item.getUserId())
+//                        .nm(item.getNm())
+//                        .email(item.getEmail())
+//                        .phone(item.getPhone())
+//                        .enrollState(item.getEnrollState())
+//                        .grade(item.getVanEntity().getGrade())
+//                        .classNum(item.getVanEntity().getClassNum())
+//                        .build())
+//                .toList();
+//    }
+
+
+    public StudentClassListVo getStudentClass(int page) {
         Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
         if (schoolOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
         }
-        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page-1, 17, sort);  //페이징 처리 -1해서 슬픔
-        List<UserEntity> entities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+        Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Pageable pageable = PageRequest.of(page - 1, 17, sort);  //페이징 처리 -1해서 슬픔
+
+        Page<UserEntity> list1 = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+//        List<UserEntity> list2 = userRepository.countAll();
 
 
-        List<StudentClassVo> studentList = new ArrayList<>();
+        List<StudentClassVo> result = new ArrayList<>();
 
+        for (UserEntity entity: list1) {
+            VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
+            result.add(StudentClassVo.builder()
+                            .userId(entity.getUserId())
+                            .nm(entity.getNm())
+                            .email(entity.getEmail())
+                            .phone(entity.getPhone())
+                            .enrollState(entity.getEnrollState())
+                            .grade(vanEntity.getGrade())
+                            .classNum(vanEntity.getClassNum())
+                    .build());
+        }
 
-        return entities.stream().map(item -> StudentClassVo.builder()
-                        .userId(item.getUserId())
-                        .nm(item.getNm())
-                        .email(item.getEmail())
-                        .phone(item.getPhone())
-                        .enrollState(item.getEnrollState())
-                        .grade(item.getVanEntity().getGrade())
-                        .classNum(item.getVanEntity().getClassNum())
-                        .build())
-                .toList();
+        return StudentClassListVo.builder()
+                .list(result)
+                .totalCount((int)list1.getTotalElements())
+                .totalPage(list1.getTotalPages())
+                .build();
+//        return StudentClassListVo.builder()
+//                .list1(list1.stream().map(item -> StudentClassVo
+//                        .builder()
+//                        .userId(item.getUserId())
+//                        .nm(item.getNm())
+//                        .email(item.getEmail())
+//                        .phone(item.getPhone())
+//                        .enrollState(item.getEnrollState())
+//                        .grade(item.getVanEntity().getGrade())
+//                        .classNum(item.getVanEntity().getClassNum())
+//                        .build()).toList())
+//                .list2(list1.stream().map(item -> StudentClassVo
+//                        .builder()
+//                        .totalCount(list1.size())
+//                        .build()).toList())
+//                .build();
     }
 
     public List<StudentClassVo> searchStudent(String search, int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page-1, 17, sort);
         List<UserEntity> entities = userRepository.findByNmContaining(search, pageable);
-        List<UserEntity> nulEntities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+        Page<UserEntity> nulEntities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
 
 
         if(search == null) {
