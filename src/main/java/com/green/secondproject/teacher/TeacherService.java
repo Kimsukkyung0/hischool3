@@ -268,7 +268,19 @@ public class TeacherService {
     }
 
     public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
-        return mapper.selMockTestResultByDates(dto);
+        List<MockResultEntity> resList = mockResultRepository.searchMockResult(dto);
+
+        return resList.stream().map(mockResultEntity -> StudentMockSumResultWithIdVo.builder()
+                .resultId(mockResultEntity.getResultId())
+                .year(mockResultEntity.getYear())
+                .mon(mockResultEntity.getMon())
+                .cateName(mockResultEntity.getSubjectEntity().getSbjCategoryEntity().getNm())
+                .nm(mockResultEntity.getSubjectEntity().getNm())
+                .standardScore(mockResultEntity.getStandardScore())
+                .rating(mockResultEntity.getRating())
+                .percent(mockResultEntity.getPercent())
+                .build()).toList();
+        //return mapper.selMockTestResultByDates(dto);
     }
     //공지사항
     public NoticeTeacherListVo NoticeTeacher(){

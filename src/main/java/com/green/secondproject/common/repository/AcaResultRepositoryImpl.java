@@ -20,6 +20,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .selectFrom(acaResult)
                 .where(acaResult.userEntity.userId.eq(param.getUserId()),
                         yearEq(param.getYear()), semesterEq(param.getSemester()), midFinalEq(param.getMidFinal()))
+                .orderBy(acaResult.year.desc(), acaResult.semester.desc(), acaResult.midFinal.desc())
                 .fetch();
     }
 
