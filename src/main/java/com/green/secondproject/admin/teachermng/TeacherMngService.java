@@ -104,7 +104,8 @@ public class TeacherMngService {
                     .detailAddr(en.getDetailAddr())
                     .role(en.getRoleType().toString())
                     .aprYn(en.getAprYn())
-                    .enrollState(en.getEnrollState()).build());
+                    .enrollState(en.getEnrollState())
+                    .build());
         }
 
         return TeacherMngVoContainer.builder()
