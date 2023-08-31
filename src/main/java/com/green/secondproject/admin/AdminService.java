@@ -136,19 +136,26 @@ public class AdminService {
         if (schoolOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
         }
+
+        SchoolEntity schoolEntity = schoolOpt.get();
+
         Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page - 1, 17, sort);  //페이징 처리 -1해서 슬픔
 
-        Page<UserEntity> list1 = userRepository.findAllByRoleType(RoleType.STD, pageable);
-//        List<UserEntity> list2 = userRepository.countAll();
+        //Page<UserEntity> list1 = userRepository.findAllByRoleType(RoleType.STD, pageable);
+        List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
+        Page<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD, pageable);
 
+
+//        SchoolEntity scEntity = schoolRepository.findBySchoolId(facade.getLoginUser().getSchoolId());
 
         List<StudentClassVo> result = new ArrayList<>();
 
-        for (UserEntity entity : list1) {
+        for (UserEntity entity : stdList) {
             VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
             result.add(StudentClassVo.builder()
                     .userId(entity.getUserId())
+                    .schoolId(schoolEntity.getSchoolId())
                     .nm(entity.getNm())
                     .email(entity.getEmail())
                     .phone(entity.getPhone())
@@ -158,10 +165,11 @@ public class AdminService {
                     .build());
         }
 
+
         return StudentClassListVo.builder()
                 .list(result)
-                .totalCount((int) list1.getTotalElements())
-                .totalPage(list1.getTotalPages())
+                .totalCount((int) stdList.getTotalElements())
+                .totalPage(stdList.getTotalPages())
                 .build();
     }
 
@@ -173,10 +181,16 @@ public class AdminService {
         }
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
+
+        Optional<SchoolEntity> schoolEntity = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+
+        UserEntity user = new UserEntity();
+
         Page<UserEntity> entities = userRepository.findByNmContainingAndRoleType(search, RoleType.STD, pageable);
         Page<UserEntity> nulEntities = userRepository.findAllByRoleType(RoleType.STD, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
+
 
         if (search != null) {
             for (UserEntity entity : entities) {
