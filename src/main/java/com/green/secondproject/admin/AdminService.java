@@ -131,7 +131,7 @@ public class AdminService {
     public List<StudentClassVo> searchStudent(String search, int page) {
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page-1, 17, sort);
-        List<UserEntity> entities = userRepository.findByNmContaining(search);
+        List<UserEntity> entities = userRepository.findByNmContaining(search, pageable);
         List<UserEntity> nulEntities = userRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
 
 
