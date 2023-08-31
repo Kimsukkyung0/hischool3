@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class ScSbjVo {
         private Long subjectId;
-        private String nm;
+        private String subjectNm;
 }
