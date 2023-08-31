@@ -7,10 +7,7 @@ import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
-import com.green.secondproject.common.repository.MockResultRepository;
-import com.green.secondproject.common.repository.NoticeRepository;
-import com.green.secondproject.common.repository.SchoolRepository;
-import com.green.secondproject.common.repository.UserRepository;
+import com.green.secondproject.common.repository.*;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
@@ -32,7 +29,7 @@ public class TeacherService {
     private final UserRepository userRepository;
     private final MockResultRepository mockResultRepository;
     private final AuthenticationFacade facade;
-    private final SchoolRepository schoolRepository;
+    private final AcaResultRepository acaResultRepository;
     private final NoticeRepository noticeRepository;
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
@@ -253,7 +250,21 @@ public class TeacherService {
     }
 
     public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param) {
-        return mapper.selAcaTestResultByDatesAndPeriodAndStudent(param);
+        List<AcaResultEntity> resList = acaResultRepository.searchAcaResult(param);
+
+        return resList.stream().map(acaResultEntity -> StudentAcaResultWithIdVo.builder()
+                .resultId(acaResultEntity.getResultId())
+                .year(acaResultEntity.getYear())
+                .semester(acaResultEntity.getSemester())
+                .midFinal(acaResultEntity.getMidFinal())
+                .cateName(acaResultEntity.getSubjectEntity().getSbjCategoryEntity().getNm())
+                .nm(acaResultEntity.getSubjectEntity().getNm())
+                .score(acaResultEntity.getScore())
+                .rating(acaResultEntity.getRating())
+                .classRank(acaResultEntity.getClassRank())
+                .wholeRank(acaResultEntity.getWholeRank())
+                .build()).toList();
+        //return mapper.selAcaTestResultByDatesAndPeriodAndStudent(param);
     }
 
     public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
