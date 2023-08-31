@@ -55,17 +55,16 @@ public class ScSbjService {
         }
     }
 
-    public List<ScSbjListVo2> adminSbjList(int grade) {
-        List<ScSbjListVo2> result = new ArrayList<>();
+    public List<ScSbjGradeVo> adminSbjList(int grade) {
+        List<ScSbjGradeVo> result = new ArrayList<>();
 
         if(grade>0 && grade<=3) {
-            List<ScSbjEntity> sbjEnti = sbjRep.findAllBySchoolEntityAndGrade(usrRep.findByUserId(facade.getLoginUserPk())
-                            .getVanEntity()
-                            .getSchoolEntity(), String.valueOf(grade));
+            List<ScSbjEntity> sbjEnti = sbjRep.findAllBySchoolEntityAndGrade(scAdRep.findById(facade.getLoginUserPk())
+                            .get().getSchoolEntity(), String.valueOf(grade));
 
-            result = sbjEnti.stream().map(item -> ScSbjListVo2.builder()
-                    .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
-                    .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+            result = sbjEnti.stream().map(item -> ScSbjGradeVo.builder()
+//                    .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+//                    .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
                     .subjectId(item.getSubjectEntity().getSubjectId())
                     .subjectNm(item.getSubjectEntity().getNm())
                     .scSbjId(item.getSchoolSbjId())

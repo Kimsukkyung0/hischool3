@@ -57,7 +57,7 @@ public class ScSbjController {
                     출력값 : <br> (1)categoryId : 카테고리pk <br>(2)categoryNm - 카테고리이름<br>(3)subjectid -  과목 PK값<br> (4)subjectNm : 세부과목<br> 
                     (5)scSbjId : 학교에 등록된 과목리스트 pk<br> 
                     """)
-    List<ScSbjListVo2> adminList(@PathVariable int grade) {
+    List<ScSbjGradeVo> adminList(@PathVariable int grade) {
         return service.adminSbjList(grade);
     }
 
