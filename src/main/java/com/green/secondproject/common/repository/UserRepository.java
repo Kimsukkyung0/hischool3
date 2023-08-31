@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -17,10 +16,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
     UserEntity findByUserId(Long userId);
 
-    Page<UserEntity> findAllByAprYnAndRoleType(int aprYn, RoleType roleType, Pageable page);
+    Page<UserEntity> findAllByRoleType(RoleType roleType, Pageable page);
 //    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
 
-    List<UserEntity> findByNmContaining(String search, Pageable page);
+    Page<UserEntity> findByNmContainingAndRoleType(String search, RoleType roleType,Pageable page);
 //    List<UserEntity> countAll(Long userId);
 
     //규진작업

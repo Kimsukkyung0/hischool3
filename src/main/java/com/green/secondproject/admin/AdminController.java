@@ -97,14 +97,18 @@ public class AdminController {
     @GetMapping("/student-list")
     @Operation(summary = "학생 리스트 조회", description = """
             입력 값<br>
-            "page": 페이지(1부터 시작, 현재 17명 당 1 페이지로 적용)<br><br>
+            (1)search : 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
+            (2)page : 페이지 (1부터 시작, 현재 17명 당 1 페이지로 적용)<br><br>
             출력 값:<br>
-            "nm": 이름<br>
-            "email": 이메일<br>
-            "phone": 전화번호<br>
-            "enrollState": 상태 (ENROLL = 재학, GRADUATE = 졸업, LEAVE = 자퇴, TRANSFER = 전학)<br>
-            "grade": 학년<br>
-            "classNum": 반<br>
+            (1)userId : 유저 PK값
+            (2)nm : 이름<br>
+            (3)email : 이메일<br>
+            (4)phone : 전화번호<br>
+            (5)enrollState : 상태(ENROLL = 재학, GRADUATE = 졸업, LEAVE = 자퇴, TRANSFER = 전학)<br>
+            (6)grade : 학년<br>
+            (7)classNum : 반<br>
+            (8)totalCount : 총 학생 수<br>
+            (9)totalPage : 총 페이지 수<br>
             """)
     public StudentClassListVo getStudentClass(int page) {
         return service.getStudentClass(page);
@@ -113,17 +117,20 @@ public class AdminController {
     @GetMapping("search-student")
     @Operation(summary = "이름으로 학생 검색", description = """
             입력 값<br>
-            "search": 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
-            "page": 페이지 (1부터 시작, 현재 17명 당 1 페이지로 적용)<br><br>
+            (1)search : 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
+            (2)page : 페이지 (1부터 시작, 현재 17명 당 1 페이지로 적용)<br><br>
             출력 값:<br>
-            "nm": 이름<br>
-            "email": 이메일<br>
-            "phone": 전화번호<br>
-            "enrollState": 상태(ENROLL = 재학, GRADUATE = 졸업, LEAVE = 자퇴, TRANSFER = 전학)<br>
-            "grade": 학년<br>
-            "classNum": 반<br>
+            (1)userId : 유저 PK값
+            (2)nm : 이름<br>
+            (3)email : 이메일<br>
+            (4)phone : 전화번호<br>
+            (5)enrollState : 상태(ENROLL = 재학, GRADUATE = 졸업, LEAVE = 자퇴, TRANSFER = 전학)<br>
+            (6)grade : 학년<br>
+            (7)classNum : 반<br>
+            (8)totalCount : 총 학생 수<br>
+            (9)totalPage : 총 페이지 수<br>
             """)
-    public List<StudentClassVo> searchStudent(@RequestParam(required = false) String search, int page) {
+    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
         return service.searchStudent(search, page);
     }
 
