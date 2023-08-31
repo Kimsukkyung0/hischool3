@@ -81,25 +81,6 @@
         </foreach>
     </insert>
 
-    <insert id="acasubject">
-        INSERT INTO aca_result
-        (user_id,subject_id,YEAR,semester,MID_final,score,rating,class_rank,whole_rank)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.semester},#{item.midfinal},
-            #{item.score},#{item.rating},#{item.classrank},#{item.wholerank})
-        </foreach>
-    </insert>
-
-    <insert id="mockins">
-        INSERT INTO mock_result
-        (user_id,subject_id,year,mon,standard_score,rating,percent)
-        VALUES
-        <foreach collection="list" item="item" separator=",">
-            (#{item.userid},#{item.subjectid},YEAR(NOW()),#{item.mon},#{item.standardscore},#{item.rating},#{item.percent})
-        </foreach>
-    </insert>
-
 <!--    <select id="stulist">-->
 <!--        SELECT nm FROM user-->
 <!--        WHERE role = "STD" AND class_id = #{classid}-->
@@ -109,68 +90,6 @@
     SELECT user_id userid,nm FROM user
     WHERE role_type = "STD" AND van_id = #{vanId}
     and apr_yn = 1 and user_id = #{userid}
-    </select>
-
-    <select id="mockgraph">
-<!--        SELECT B.nm, rating, COUNT(rating) ratio-->
-<!--        FROM mock_result A-->
-<!--        INNER JOIN subject B-->
-<!--        ON A.subject_id = B.subject_id-->
-<!--        INNER JOIN sbj_category C-->
-<!--        on B.category_id = c.category_id-->
-<!--        INNER JOIN user D-->
-<!--        ON A.user_id = D.user_id-->
-<!--        WHERE D.class_id = #{classId} and B.category_id = #{categoryId}-->
-<!--        and A.year = year(NOW()) and mon = 6-->
-<!--        GROUP BY B.nm, rating;-->
-        SELECT B.nm, rating, COUNT(rating) ratio
-        FROM mock_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        on B.category_id = c.category_id
-        INNER JOIN user D
-        ON A.user_id = D.user_id
-        WHERE D.van_id = #{vanId} and B.category_id = #{categoryId}
-        and A.year = year(NOW()) and mon = 6
-        GROUP BY B.nm, rating;
-
-    </select>
-
-    <select id="mocktotal">
-        SELECT SUM(cnt_rating)
-        FROM (
-        SELECT COUNT(rating) AS cnt_rating
-        FROM mock_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        ON B.category_id = c.category_id
-        INNER JOIN user D
-        ON A.user_id = D.user_id
-        WHERE D.van_id = #{vanId} AND B.category_id = 2 AND A.year = YEAR(NOW())
-        AND mon = 6
-        GROUP BY B.nm, rating
-        ) AS derived_table;
-    </select>
-
-    <select id="selaca">
-        SELECT B.category_id categoryId, A.subject_id subjectId,A.score,A.rating,A.class_rank classRank ,A.whole_rank
-        wholeRank, A.semester,A.mid_final midfinal FROM
-        aca_result A
-        INNER JOIN
-        subject B
-        ON A.subject_id = B.subject_id
-        WHERE result_id = #{resultId}
-    </select>
-    <select id="selmock">
-        SELECT B.category_id categoryId , A.subject_id subjectId,A.standard_score standardScore,A.rating,A.percent,A.mon
-        FROM
-        mock_result A
-        INNER join
-        subject B
-        ON A.subject_id = B.subject_id
-        WHERE result_id = #{resultId};
     </select>
 
 </mapper>
