@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum EnrollState {
     ENROLL("재학"),
     GRADUATION("졸업"),
-    TRANSFER("전학"),
-    LEAVE("자퇴");
+    TRANSFER("전학, 전근"),
+    LEAVE("자퇴, 퇴직");
 
     private final String displayName;
 }

@@ -43,6 +43,58 @@ public class RepositoryTest {
     private PasswordEncoder passwordEncoder;
 
     @Test
+    void 내신_등급_계산() {
+        final double one = 0.04;
+        final double two = 0.11;
+        final double thr = 0.23;
+        final double fou = 0.4;
+        final double fiv = 0.6;
+        final double six = 0.77;
+        final double sev = 0.89;
+        final double eig = 0.96;
+
+        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+                SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
+        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+        List<AcaResultEntity> resultList =
+                acaRepository.findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
+                        stdList, 1, SubjectEntity.builder().subjectId(1L).build(), 1, "2023"
+                );
+
+        long grade1 = Math.round(resultList.size() * one);
+        long grade2 = Math.round(resultList.size() * two);
+        long grade3 = Math.round(resultList.size() * thr);
+        long grade4 = Math.round(resultList.size() * fou);
+        long grade5 = Math.round(resultList.size() * fiv);
+        long grade6 = Math.round(resultList.size() * six);
+        long grade7 = Math.round(resultList.size() * sev);
+        long grade8 = Math.round(resultList.size() * eig);
+
+        for (int i = 0; i < resultList.size(); i++) {
+            if (i < grade1) {
+                resultList.get(i).setRating(1);
+            } else if (i < grade2) {
+                resultList.get(i).setRating(2);
+            } else if (i < grade3) {
+                resultList.get(i).setRating(3);
+            } else if (i < grade4) {
+                resultList.get(i).setRating(4);
+            } else if (i < grade5) {
+                resultList.get(i).setRating(5);
+            } else if (i < grade6) {
+                resultList.get(i).setRating(6);
+            } else if (i < grade7) {
+                resultList.get(i).setRating(7);
+            } else if (i < grade8) {
+                resultList.get(i).setRating(8);
+            } else {
+                resultList.get(i).setRating(9);
+            }
+            acaRepository.save(resultList.get(i));
+        }
+    }
+
+    @Test
     void 내신_성적_조회() {
         StudentAcaResultsParam p = StudentAcaResultsParam.builder()
                 .userId(1L)

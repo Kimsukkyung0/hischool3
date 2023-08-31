@@ -160,4 +160,14 @@ public class MyPageService {
         }
         return 1;
     }
+
+    public int pwCheck(PwDto dto) {
+        Optional<UserEntity> opt = userRepository.findById(facade.getLoginUserPk());
+        if (opt.isEmpty()) {
+            throw new RuntimeException("유효하지 않은 사용자");
+        }
+
+        UserEntity entity = opt.get();
+        return PW_ENCODER.matches(dto.getPw(), entity.getPw()) ? 1 : 0;
+    }
 }
