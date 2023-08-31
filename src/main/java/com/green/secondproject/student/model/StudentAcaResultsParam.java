@@ -8,5 +8,4 @@ public class StudentAcaResultsParam {
     private Integer semester;
     private Integer midFinal;
     private Long userId;
-
 }

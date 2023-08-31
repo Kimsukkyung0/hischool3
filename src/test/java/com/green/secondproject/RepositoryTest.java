@@ -4,7 +4,7 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.PasswordEncoderConfiguration;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
-import com.green.secondproject.common.repository.AcaRepository;
+import com.green.secondproject.common.repository.AcaResultRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.List;
 @Slf4j
 public class RepositoryTest {
     @Autowired
-    private AcaRepository acaRepository;
+    private AcaResultRepository acaRepository;
 
     @Autowired
     private UserRepository userRepository;
