@@ -5,6 +5,8 @@ import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
+import com.green.secondproject.teacher.subject.model.*;
+import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -247,5 +249,60 @@ public class TeacherController {
             "hits": 조회수 """)
     public NoticeTeacherListVo NoticeTeacher(){
         return service.NoticeTeacher();
+    }
+
+
+    //===============subject- > teacher ======================================
+
+    @PostMapping("/subject/mock-ins")
+    @Operation(summary = "모의고사 성적등록"
+            , description = "subjectid - 과목 번호<br>" +
+            "mon - 달<br>" +
+            "standardscore - 표준점수"
+            + "<br> rating - 등급"
+            + "<br> percent - 백분율")
+    int mockins(@RequestBody mockDto2 dto) {
+        return service.mockins(dto);
+    }
+
+    @PostMapping("/subject/aca-ins")
+    @Operation(summary = "학생별 내신성적등록",
+            description = "subjectid - 과목 번호<br>"
+                    + "<br> semester - 학기<br>"
+                    + "<br>midfinal - 중간,기말(1,2)"
+                    + "<br>score - 점수"
+                    + "<br>rating - 등급"
+                    + "<br>classrank - 반석차"
+                    + "<br>woleranke - 전교석차")
+    int acasubject(@RequestBody AcalistDto2 dto) {
+        return service.acasubject(dto);
+    }
+
+    @GetMapping("/subject/mock-graph")
+    @Operation(summary = "6월 모의고사 성적조회",
+            description = "nm - 과목이름<br>"+
+                    "rating - 등급" +
+                    "ratio - 등급별 인원 퍼센트(100%기준)")
+    MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user) {
+        return service.mockgraph(user);
+    }
+
+    @GetMapping("/subject/aca-result")
+    @Operation(summary = "내신성적 출력")
+    List<ResultAcaVo> selaca(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long resultId) {
+        ResultAcaDto dto = new ResultAcaDto();
+        dto.setUserId(user.getUserId());
+        dto.setResultId(resultId);
+        return service.selaca(dto);
+    }
+
+    @GetMapping("/subject/mock-result")
+    @Operation(summary = "모의고사 성적출력")
+    List<ResultMockVo> selmock(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long resultId) {
+
+        ResultMockDto dto = new ResultMockDto();
+        dto.setUserId(user.getUserId());
+        dto.setResultId(resultId);
+        return service.selmock(dto);
     }
 }

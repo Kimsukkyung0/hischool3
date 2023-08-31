@@ -120,7 +120,8 @@ public class ScSbjService {
     public List<ScCateVo> getCateList() {
         List<SbjCategoryEntity> categoryEntities =  cateRep.findAllByTypeIsOrderByNm(1);
         return categoryEntities.stream().map(item -> ScCateVo.builder()
-                .categoryId(item.getCategoryId()).nm(item.getNm()).build()).toList();
+                .categoryNm(item.getNm())
+                .categoryId(item.getCategoryId()).build()).toList();
     }
 
     public List<ScSbjVo> getSubjectListByCate(Long categoryId){
@@ -129,7 +130,7 @@ public class ScSbjService {
 
         return sbjEntityList.stream().map(item -> ScSbjVo.builder()
                 .subjectId(item.getSubjectId())
-                .nm(item.getNm()).build()).toList();
+                .subjectNm(item.getNm()).build()).toList();
     }
 }
 

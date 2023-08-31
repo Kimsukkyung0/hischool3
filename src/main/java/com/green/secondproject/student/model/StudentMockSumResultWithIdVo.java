@@ -6,12 +6,12 @@ import lombok.Data;
 @Data
 @Builder
 public class StudentMockSumResultWithIdVo {
-    private String resultId;
+    private Long resultId;
     private String year;
     private String mon;
     private String cateName;
     private String nm;
-    private String standardScore;
-    private String rating;
-    private String percent;
+    private int standardScore;
+    private int rating;
+    private int percent;
 }
