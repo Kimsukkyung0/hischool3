@@ -265,19 +265,6 @@ public class TeacherController {
         return service.mockins(dto);
     }
 
-    @PostMapping("/subject/aca-ins")
-    @Operation(summary = "학생별 내신성적등록",
-            description = "subjectid - 과목 번호<br>"
-                    + "<br> semester - 학기<br>"
-                    + "<br>midfinal - 중간,기말(1,2)"
-                    + "<br>score - 점수"
-                    + "<br>rating - 등급"
-                    + "<br>classrank - 반석차"
-                    + "<br>woleranke - 전교석차")
-    int acasubject(@RequestBody AcalistDto2 dto) {
-        return service.acasubject(dto);
-    }
-
     @GetMapping("/subject/mock-graph")
     @Operation(summary = "6월 모의고사 성적조회",
             description = "nm - 과목이름<br>"+
@@ -304,5 +291,20 @@ public class TeacherController {
         dto.setUserId(user.getUserId());
         dto.setResultId(resultId);
         return service.selmock(dto);
+    }
+
+    //====================성적자동 입력시 수정필요한 부분
+
+    @PostMapping("/subject/aca-ins")
+    @Operation(summary = "학생별 내신성적등록",
+            description = "subjectid - 과목 번호<br>"
+                    + "<br> semester - 학기<br>"
+                    + "<br>midfinal - 중간,기말(1,2)"
+                    + "<br>score - 점수"
+                    + "<br>rating - 등급"
+                    + "<br>classrank - 반석차"
+                    + "<br>woleranke - 전교석차")
+    int acasubject(@RequestBody AcalistDto2 dto) {
+        return service.acasubject(dto);
     }
 }

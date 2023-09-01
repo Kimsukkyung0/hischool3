@@ -13,8 +13,6 @@ public interface SubjectMapper {
 
     List<SubjectDetailVo> subject(Long categoryid);
 
-    List<SubjectDetailVo2> tcslist(SubjectDetailDto dto);
-
     int instcsbj(List<SubjectInsVo> list);
 
     List<SubjectVo2> smalllist(SubjectDto dto);
@@ -24,11 +22,13 @@ public interface SubjectMapper {
     int schoolnum(StudentSchoolDto dto);
 
     //모의고사 시작
-    List<MockSubjectBigVo> mockbiglist();
 
+    List<MockSubjectBigVo> mockbiglist();
     List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
 
     List<StudentListVo> stulist(StudentListDto dto);
+
+    List<SubjectVo> tcslist(int grade, Long schoolId);
 
 
 

@@ -341,24 +341,6 @@ public class TeacherService {
         return mapper.mockins(list);
     }
 
-    public int acasubject(AcalistDto2 dto) {
-        List<AcaSubjectVo> list = new LinkedList<>();
-        for (int i = 0; i <dto.getList().size() ; i++) {
-            AcaSubjectVo vo = new AcaSubjectVo();
-
-            vo.setMidfinal(dto.getList().get(i).getMidfinal());
-            vo.setClassrank(dto.getList().get(i).getClassrank());
-            vo.setScore(dto.getList().get(i).getScore());
-            vo.setSemester(dto.getList().get(i).getSemester());
-            vo.setSubjectid(dto.getList().get(i).getSubjectid());
-            vo.setRating(dto.getList().get(i).getRating());
-            vo.setWholerank(dto.getList().get(i).getWholerank());
-            vo.setUserid(dto.getList().get(i).getUserid());
-            list.add(vo);
-        }
-        return mapper.acasubject(list);
-    }
-
     public MockGraphVo mockgraph(@AuthenticationPrincipal MyUserDetails user){
         Long classId = user.getVanId();
         Integer mockTotal = mapper.mocktotal(classId);
@@ -492,5 +474,24 @@ public class TeacherService {
         return mapper.selmock(dto);
     }
 
+//=========================================수정요 ======================================================
+
+    public int acasubject(AcalistDto2 dto) {
+        List<AcaSubjectVo> list = new LinkedList<>();
+        for (int i = 0; i <dto.getList().size() ; i++) {
+            AcaSubjectVo vo = new AcaSubjectVo();
+
+            vo.setMidfinal(dto.getList().get(i).getMidfinal());
+            vo.setClassrank(dto.getList().get(i).getClassrank());
+            vo.setScore(dto.getList().get(i).getScore());
+            vo.setSemester(dto.getList().get(i).getSemester());
+            vo.setSubjectid(dto.getList().get(i).getSubjectid());
+            vo.setRating(dto.getList().get(i).getRating());
+            vo.setWholerank(dto.getList().get(i).getWholerank());
+            vo.setUserid(dto.getList().get(i).getUserid());
+            list.add(vo);
+        }
+        return mapper.acasubject(list);
+    }
 }
 

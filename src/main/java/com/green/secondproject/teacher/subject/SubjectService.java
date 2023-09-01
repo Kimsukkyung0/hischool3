@@ -39,11 +39,6 @@ public class SubjectService {
         return mapper.subject(categoryid);
     }
 
-public List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user) {
-        SubjectDetailDto dto = new SubjectDetailDto();
-        dto.setUserid(user.getUserId());
-        return mapper.tcslist(dto);
-    }
 
     public List<SubjectVo2> smalllist(SubjectDto dto) {
         return mapper.smalllist(dto);
@@ -98,7 +93,7 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
 
         for (int i = 0; i < dto.getList().size(); i++) {
             SubjectInsVo vo = new SubjectInsVo();
-            vo.setSubjectid(dto.getList().get(i).getSubjectid());
+            vo.setSubjectid(dto.getList().get(i).getSubjectId());
             vo.setUserid(facade.getLoginUserPk());
             list.add(vo);
         }
@@ -110,5 +105,11 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
        return mapper.stulist(dto);
     };
 
+   //===================================================================================
+   public List<SubjectVo> tcslist(int grade) {
+
+       return mapper.tcslist(grade,facade.getLoginUser().getSchoolId());
+
+   }
 }
 

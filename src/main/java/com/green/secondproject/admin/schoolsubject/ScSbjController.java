@@ -2,8 +2,6 @@ package com.green.secondproject.admin.schoolsubject;
 
 
 import com.green.secondproject.admin.schoolsubject.model.*;
-import com.green.secondproject.teacher.subject.model.SubjectDetailVo;
-import com.green.secondproject.teacher.subject.model.SubjectVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

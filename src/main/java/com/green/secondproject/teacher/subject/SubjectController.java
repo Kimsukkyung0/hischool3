@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.admin.schoolsubject.ScSbjService;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
@@ -22,6 +23,7 @@ public class SubjectController {
 
     private final SubjectService serivce;
     private final AuthenticationFacade facade;
+    private final ScSbjService scSbjService;
 
 
     @GetMapping("/category")
@@ -30,7 +32,6 @@ public class SubjectController {
     List<SubjectVo> subcate() {
         return serivce.subcate();
     }
-
 
     @GetMapping()
     @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정",
@@ -41,14 +42,15 @@ public class SubjectController {
         return serivce.subject(categoryid);
     }
 
+    //====================================관리자 과목권한 이전으로 수정된부분
     @GetMapping("/category/big")
     @Operation(summary = "등록후 과목계열 리스트"
             , description =
-            "출력값 : subjectid - subject 테이블에 과목 PK값" +
-                    "<br>nm - 세부과목이름" +
-                    "<br> userid - 유저 pk값")
-    List<SubjectDetailVo2> tcslist(@AuthenticationPrincipal MyUserDetails user) {
-        return serivce.tcslist(user);
+            """
+                    출력값 : subjectid - subject 테이블에 과목 PK값
+                    "<br>nm - 세부과목이름""")
+    List<SubjectVo> tcslist(int grade) {
+        return serivce.tcslist(grade);
     }
 
     @GetMapping("/category/small")

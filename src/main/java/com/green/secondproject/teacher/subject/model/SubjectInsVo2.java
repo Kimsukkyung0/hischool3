@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class SubjectInsVo2 {
-private Long subjectid;
+private Long subjectId;
 }

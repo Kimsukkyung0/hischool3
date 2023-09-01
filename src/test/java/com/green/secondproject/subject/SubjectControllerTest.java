@@ -75,7 +75,7 @@ public class SubjectControllerTest {
         String nm = "국어";
         SubjectVo vo = new SubjectVo();
         vo.setNm("국어");
-        vo.setCategoryid(1L);
+        vo.setCategoryId(1L);
 
         list.add(vo);
 

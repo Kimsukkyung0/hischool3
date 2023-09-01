@@ -6,36 +6,26 @@
 
 
     <select id="subCate" resultType="SubjectVo">
-        SELECT category_id categoryid,nm
+        SELECT category_id categoryId, nm
         FROM sbj_category
         WHERE TYPE = 1
     </select>
 
     <select id="subject">
-        select DISTINCT A.subject_id subjectid ,A.nm ,A.category_id categoryid FROM
+        select DISTINCT A.subject_id subjectId ,A.nm ,A.category_id categoryid FROM
         subject A
         INNER JOIN sbj_category B
         ON A.category_id = B.category_id
         WHERE B.`type` =1 and A.category_id = #{categoryid};
     </select>
-    <select id="tcslist" resultType="SubjectDetailVo2">
-        SELECT DISTINCT B.subject_id subjectid,A.nm,C.user_id userid
-        FROM sbj_category A
-        INNER JOIN subject B
-        ON A.category_id = B.category_id
-        INNER JOIN sc_sbj C
-        ON B.subject_id = C.subject_id
-        INNER JOIN user D
-        ON C.user_id = D.user_id
-        WHERE A.`type`= 1 AND C.user_id = #{userid} and D.apr_yn = 1
-        group BY A.nm
 
-    </select>
+
+
     <select id="smalllist" resultType="SubjectVo2">
         SELECT A.subject_id subjectId,A.nm,B.user_id userId FROM subject A
         INNER JOIN sc_sbj B
         ON A.subject_id = B.subject_id
-        INNER JOIN `user` C
+        INNER JOIN user C
         ON C.user_id = B.user_id
         WHERE B.user_id = #{userId} AND A.category_id = #{category_id};
     </select>
@@ -58,7 +48,7 @@
     </select>
 
     <select id="mockbiglist" resultType="MockSubjectBigVo">
-        SELECT DISTINCT B.category_id categoryid,B.nm
+        SELECT DISTINCT B.category_id categoryId,B.nm
         from subject A
         INNER JOIN sbj_category B
         ON A.category_id = B.category_id
@@ -90,6 +80,21 @@
     SELECT user_id userid,nm FROM user
     WHERE role_type = "STD" AND van_id = #{vanId}
     and apr_yn = 1 and user_id = #{userid}
+    </select>
+
+    <!-- 3차 수정-->
+
+    <select id="tcslist" resultType="SubjectVo">
+        SELECT DISTINCT B.category_id categoryId, A.nm nm
+        FROM sbj_category A
+        INNER JOIN subject B
+        ON A.category_id = B.category_id
+        INNER JOIN sc_sbj C
+        ON B.subject_id = C.subject_id
+        INNER JOIN school D
+        ON C.school_id = D.school_id
+        WHERE A.`type`= 1 AND C.grade = #{grade} AND D.school_id = #{schoolId}
+        group BY A.nm
     </select>
 
 </mapper>
