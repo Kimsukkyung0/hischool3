@@ -201,6 +201,9 @@ public class TeacherMngService {
                 return "권한이없는 유저에 대한 요청";
             }
 
+
+
+            
 //EntityManager em = entityManagerFactory.createEntityManager();
 //        EntityTransaction tx = em.getTransaction();
 //        tx.begin(); //트랜잭션 시작

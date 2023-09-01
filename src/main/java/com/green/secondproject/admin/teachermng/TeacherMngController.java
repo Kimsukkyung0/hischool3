@@ -6,6 +6,7 @@ import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +28,7 @@ public class TeacherMngController {
         private final TeacherMngService teacherMngService;
 
     @GetMapping("/{userId}")
-    @Operation(summary = "승인처리용 교원신청데이터(잘 작동합니다)", description = "요구값 : <br> (1)userId : 조회대상선생님pk <br><br> 출력값 : <br> (1)userId : 유저pk<br>(2)grade : 담당학년 <br> (3)vanNum : 담당학반 <br>(4)email : 교원email <br> (5)nm : 교원이름<br> (6)birth : 생년월일<br>(7)phone :교원연락처<br>"+
+    @Operation(summary = "승인처리용 교원신청데이터", description = "요구값 : <br> (1)userId : 조회대상선생님pk <br><br> 출력값 : <br> (1)userId : 유저pk<br>(2)grade : 담당학년 <br> (3)vanNum : 담당학반 <br>(4)email : 교원email <br> (5)nm : 교원이름<br> (6)birth : 생년월일<br>(7)phone :교원연락처<br>"+
             "(8)address : 상위주소<br> (9)detailAddr : 상세주소 <br> (10)role : 권한명(TC : 선생님) <br> (11)aprYn : 승인여부(0:미승인)"+
             "(12)enrollState : 재직상태(ENROLL : 재직중)<br>(13)aprPic : 이미지주소 <br>(ex:http://192.168.0.144:5003/img/hiSchool/userApr3a75053c5-b0f7-4537-8d3f-cbcd270e420a.jpg)")
     TeacherMngWithPicVo teacherDetailNotApr(@PathVariable Long userId){
@@ -54,7 +55,7 @@ public class TeacherMngController {
             (11)enrollState : 재직상태<br>
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page,String search){
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(@RequestBody Pageable page, @RequestParam(required = false) String search){
         return ResponseEntity.ok(teacherMngService.teacherListOfTheSchool(page,search));
     }
 
