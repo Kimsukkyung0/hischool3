@@ -1,5 +1,6 @@
 package com.green.secondproject.student.model;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -9,12 +10,12 @@ import lombok.ToString;
 @ToString
 public class StudentSummarySubjectVo {
     private String nm;
-    private String rating;
+    private int rating;
 
-    public StudentSummarySubjectVo(String nm, String rating) {
+    @QueryProjection
+    public StudentSummarySubjectVo(String nm, int rating) {
         this.nm = nm;
         this.rating = rating;
     }
-
 }
 

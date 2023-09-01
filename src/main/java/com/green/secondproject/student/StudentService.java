@@ -6,6 +6,7 @@ import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.repository.AcaResultRepository;
 import com.green.secondproject.common.repository.MockResultRepository;
 import com.green.secondproject.common.repository.NoticeRepository;
 import com.green.secondproject.common.repository.UserRepository;
@@ -27,6 +28,7 @@ public class StudentService {
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
     private final MockResultRepository mockResultRepository;
+    private final AcaResultRepository acaResultRepository;
 
     public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mockResultRepository.searchMockResult(dto);
@@ -34,28 +36,29 @@ public class StudentService {
     }
 
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
-        return mapper.getHighestRatingsOfMockTest(userId);
+        return mockResultRepository.getHighestRatingsOfMockTest(userId);
+        //return mapper.getHighestRatingsOfMockTest(userId);
     }
 
     public StudentSumContainerVo getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-        dto.setMon(String.valueOf(now.getMonthValue()));
-        try{
-        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
-        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
-
-        for (StudentTestSumGraphVo vo : sub) {
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-            result.add(tmpVo);
-        }
-
-        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
-
-        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//        LocalDate now = LocalDate.now();
+//        dto.setYear(String.valueOf(now.getYear()));
+//        dto.setMon(String.valueOf(now.getMonthValue()));
+//        try{
+//        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
+//        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
+//
+//        for (StudentTestSumGraphVo vo : sub) {
+//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+//            result.add(tmpVo);
+//        }
+//
+//        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
+//
+//        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
         return null;
     }
 
@@ -129,8 +132,9 @@ public class StudentService {
 
     //내신 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param) {
-        return mapper.selAcaTestResultByDatesAndPeriod(param);
+    public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param) {
+        return acaResultRepository.searchAcaResult(param);
+        // return mapper.selAcaTestResultByDatesAndPeriod(param);
     }
 
     public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
@@ -141,22 +145,22 @@ public class StudentService {
 
     public StudentSumContainerVo getLatestRatingsOfAcaTest(Long userId) {
         //결과값 : List<2023 2-2 국수영한 등급>
-        try{
-        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
-
-        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
-
-        for(StudentTestSumGraphVo vo : subList){
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-            tmp.add(tmpVo);
-        }
-
-         String date = getMidFinalFormOfDate(subList.get(0).getDate());
-
-         return new StudentSumContainerVo(date,tmp);}
-        catch (Exception e){
-            e.printStackTrace();
-        }
+//        try{
+//        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
+//
+//        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
+//
+//        for(StudentTestSumGraphVo vo : subList){
+//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+//            tmp.add(tmpVo);
+//        }
+//
+//         String date = getMidFinalFormOfDate(subList.get(0).getDate());
+//
+//         return new StudentSumContainerVo(date,tmp);}
+//        catch (Exception e){
+//            e.printStackTrace();
+//        }
         return null;
     }
 
