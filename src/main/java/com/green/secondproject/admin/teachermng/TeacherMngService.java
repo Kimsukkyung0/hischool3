@@ -178,42 +178,6 @@ public class TeacherMngService {
 
     }
 
-
-
-    public TeacherMngWithPicVo teacherDetailNotApr2(Long signedinId, Long userId) {
-        //진정한 학교관리자인지 확인한다!
-        SchoolAdminEntity sdAdminEnti = scAdminRep.getReferenceById(signedinId);
-        UserEntity userEnti = userRepository.findByUserId(userId);
-
-        //로그인한 관리자의 소속학급과 조회대상유저의 아이디가 일치한다면
-
-        if (sdAdminEnti.getSchoolEntity().getSchoolId()
-                .equals(userEnti.getVanEntity().getSchoolEntity().getSchoolId())) {
-
-            String aprPicPath = aprimgPath + userId + userEnti.getAprPic();
-            return TeacherMngWithPicVo.builder()
-                    .aprPic(aprPicPath)
-                    .userId(userEnti.getUserId())
-                    .schoolNm(userEnti.getVanEntity().getSchoolEntity().getNm())
-                    .grade(userEnti.getVanEntity().getGrade())
-                    .vanNum(userEnti.getVanEntity().getClassNum())
-                    .email(userEnti.getEmail())
-                    .nm(userEnti.getNm())
-                    .birth(userEnti.getBirth())
-                    .phone(userEnti.getPhone())
-                    .address(userEnti.getAddress())
-                    .detailAddr(userEnti.getDetailAddr())
-                    .role(userEnti.getRoleType().toString())
-                    .aprYn(userEnti.getAprYn())
-                    .enrollState(userEnti.getEnrollState())
-                    .build();
-        } else {
-            return null;
-        }
-
-    }
-
-
         public String teacherAprv(Long teacherId,Long schoolId) {
             UserEntity getUserInfo = userRepository.findByUserId(teacherId);
             //선생님 확인과정

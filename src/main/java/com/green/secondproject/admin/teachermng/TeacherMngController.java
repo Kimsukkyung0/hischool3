@@ -34,12 +34,6 @@ public class TeacherMngController {
         return teacherMngService.teacherDetailNotApr(userId);
     }
 
-    @GetMapping("/1/{userId}")
-    @Operation(summary = "교원디테일2-예외처리중/수정중")
-    TeacherMngWithPicVo teacherDetailNotApr2(@AuthenticationPrincipal MyUserDetails myuser, @PathVariable @RequestParam Long userId){
-        return teacherMngService.teacherDetailNotApr2(myuser.getUserId(),userId);
-    }
-
     @GetMapping
     @Operation(summary = "각 학교의 승인대기중 교원목록", description = "요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>" +
             "(3)sort : 정렬기준 컬럼(default : 승인신청일자,이름 오름차순  / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br><br>"+
