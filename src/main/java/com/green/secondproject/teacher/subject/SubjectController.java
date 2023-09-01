@@ -49,8 +49,8 @@ public class SubjectController {
             """
                     출력값 : subjectid - subject 테이블에 과목 PK값
                     "<br>nm - 세부과목이름""")
-    List<SubjectVo> tcslist(int grade) {
-        return serivce.tcslist(grade);
+    List<SubjectVo> tcslist() {
+        return serivce.tcslist();
     }
 
     @GetMapping("/category/small")
@@ -58,12 +58,8 @@ public class SubjectController {
             , description =
             "categoryid - category 테이블에 세부과목 PK값" +
                     "<br>nm - 학생이름")
-    List<SubjectVo2> smalllist(@AuthenticationPrincipal MyUserDetails user, @RequestParam Long categoryId) {
-        SubjectDto dto = new SubjectDto();
-        dto.setCategoryId(categoryId);
-        dto.setUserId(user.getUserId());
-
-        return serivce.smalllist(dto);
+    List<SubjectVo3> smalllist(@RequestParam Long categoryId) {
+          return serivce.smallList(categoryId);
     }
 
 //    @GetMapping("/class-num")

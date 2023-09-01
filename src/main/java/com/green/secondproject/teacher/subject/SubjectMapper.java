@@ -15,20 +15,21 @@ public interface SubjectMapper {
 
     int instcsbj(List<SubjectInsVo> list);
 
-    List<SubjectVo2> smalllist(SubjectDto dto);
-
     int classnum(StudentClassDto dto);
 
     int schoolnum(StudentSchoolDto dto);
 
+
     //모의고사 시작
-
     List<MockSubjectBigVo> mockbiglist();
-    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
 
+    List<MockSubjcetSmallVo> mocksmalllist(Long categoryid);
     List<StudentListVo> stulist(StudentListDto dto);
 
-    List<SubjectVo> tcslist(int grade, Long schoolId);
+    List<SubjectVo> tcslist(String grade, Long schoolId);
+
+    List<SubjectVo3> smallList(Long categoryId, String grade, Long schoolId);
+
 
 
 

@@ -19,16 +19,6 @@
         WHERE B.`type` =1 and A.category_id = #{categoryid};
     </select>
 
-
-
-    <select id="smalllist" resultType="SubjectVo2">
-        SELECT A.subject_id subjectId,A.nm,B.user_id userId FROM subject A
-        INNER JOIN sc_sbj B
-        ON A.subject_id = B.subject_id
-        INNER JOIN user C
-        ON C.user_id = B.user_id
-        WHERE B.user_id = #{userId} AND A.category_id = #{category_id};
-    </select>
     <select id="classnum">
         SELECT COUNT(C.van_id) vanId FROM van A
         INNER JOIN school B
@@ -97,5 +87,14 @@
         group BY A.nm
     </select>
 
+    <select id="smallList" resultType="SubjectVo3">
+        SELECT A.subject_id subjectId,A.nm
+        FROM subject A
+        INNER JOIN sc_sbj B
+        ON A.subject_id = B.subject_id
+        INNER JOIN school C
+        ON B.school_id = C.school_id
+        WHERE C.school_id = #{schoolId} AND B.grade = #{grade} AND A.category_id=#{categoryId}
+    </select>
 </mapper>
 

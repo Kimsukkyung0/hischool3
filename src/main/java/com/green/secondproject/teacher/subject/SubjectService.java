@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.common.repository.VanRepository;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
@@ -28,6 +29,7 @@ public class SubjectService {
     private final SubjectMapper mapper;
     private final AuthenticationFacade facade;
     private final SubjectRepository subjectRepository;
+    private final VanRepository vanRep;
 
 
    public List<SubjectVo> subcate() {
@@ -39,10 +41,6 @@ public class SubjectService {
         return mapper.subject(categoryid);
     }
 
-
-    public List<SubjectVo2> smalllist(SubjectDto dto) {
-        return mapper.smalllist(dto);
-    }
 
     public int classnum(StudentClassDto dto) {
         return mapper.classnum(dto);
@@ -106,10 +104,18 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
     };
 
    //===================================================================================
-   public List<SubjectVo> tcslist(int grade) {
-
-       return mapper.tcslist(grade,facade.getLoginUser().getSchoolId());
-
+   public List<SubjectVo> tcslist() {
+       MyUserDetails myuser = facade.getLoginUser();
+       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
+       Long schoolId = myuser.getSchoolId();
+       return mapper.tcslist(grade,schoolId);
    }
+
+   public List<SubjectVo3> smallList(Long categoryId) {
+       MyUserDetails myuser = facade.getLoginUser();
+       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
+       Long schoolId = myuser.getSchoolId();
+        return mapper.smallList(categoryId,grade,schoolId);
+    }
 }
 
