@@ -4,6 +4,7 @@ import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
@@ -13,42 +14,41 @@ import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class TeacherMngService {
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    SchoolRepository scRep;
-    @Autowired
-    VanRepository vanRep;
 
-    @Autowired
-    SchoolAdminRepository scAdminRep;
+    private final UserRepository userRepository;
+    private final SchoolRepository scRep;
+    private final VanRepository vanRep;
+    private final AuthenticationFacade facade;
+    private final SchoolAdminRepository scAdminRep;
 
 
     @Value("${file.aprimgPath}")
     private String aprimgPath;
 
-    private String schoolCode;
 
-    public TeacherMngVoContainer teacherNotapprovedList(Long schoolId, Pageable pageable) {
-        schoolCode = scRep.findBySchoolId(schoolId).getCode();
-        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
+    public TeacherMngVoContainer teacherNotapprovedList( Pageable pageable) {
+      SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
         pageable = PageRequest.of(pageable.getPageNumber()-1,  16);
         Page<UserEntity> tcList = userRepository.findUsersByConditions(vanEnti, RoleType.TC, 0, EnrollState.ENROLL, pageable);
@@ -79,39 +79,72 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Long schoolId, Pageable pageable) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable,String search) {
 
-        schoolCode = scRep.findBySchoolId(schoolId).getCode();
-        SchoolEntity scEnti = scRep.findByCode(schoolCode);//학교 코드로 학교 entity 가져오기
+        Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
+        if (scEntiOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
+        SchoolEntity scEnti = scEntiOpt.get();
+        pageable = PageRequest.of(pageable.getPageNumber()-1,  16);
+
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
 
-        pageable = PageRequest.of(pageable.getPageNumber()-1,  16);
-        Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-        for (UserEntity en : tcList) {
-            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-            subResult.add(TeacherMngVo.builder()
-                    .userId(en.getUserId())
-                    .schoolNm(scEnti.getNm())
-                    .grade(vanEntity.getGrade())
-                    .vanNum(vanEntity.getClassNum())
-                    .email(en.getEmail())
-                    .nm(en.getNm())
-                    .birth(en.getBirth())
-                    .phone(en.getPhone())
-                    .address(en.getAddress())
-                    .detailAddr(en.getDetailAddr())
-                    .role(en.getRoleType().toString())
-                    .aprYn(en.getAprYn())
-                    .enrollState(en.getEnrollState())
-                    .build());
+        if(search==null) {
+            Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
+            for (UserEntity en : tcList) {
+                VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+                subResult.add(TeacherMngVo.builder()
+                        .userId(en.getUserId())
+                        .schoolNm(scEnti.getNm())
+                        .grade(vanEntity.getGrade())
+                        .vanNum(vanEntity.getClassNum())
+                        .email(en.getEmail())
+                        .nm(en.getNm())
+                        .birth(en.getBirth())
+                        .phone(en.getPhone())
+                        .address(en.getAddress())
+                        .detailAddr(en.getDetailAddr())
+                        .role(en.getRoleType().toString())
+                        .aprYn(en.getAprYn())
+                        .enrollState(en.getEnrollState())
+                        .build());
+            }
+
+            return TeacherMngVoContainer.builder()
+                    .list(subResult)
+                    .totalCount((int) tcList.getTotalElements())
+                    .totalPage(tcList.getTotalPages()).build();
         }
 
-        return TeacherMngVoContainer.builder()
-                .list(subResult)
-                .totalCount((int)tcList.getTotalElements())
-                .totalPage(tcList.getTotalPages()).build();
+        else{
+            Page<UserEntity> tcResearchList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search,vanEnti,RoleType.TC,pageable);
+                for (UserEntity en : tcResearchList) {
+                    VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+                    subResult.add(TeacherMngVo.builder()
+                            .userId(en.getUserId())
+                            .schoolNm(scEnti.getNm())
+                            .grade(vanEntity.getGrade())
+                            .vanNum(vanEntity.getClassNum())
+                            .email(en.getEmail())
+                            .nm(en.getNm())
+                            .birth(en.getBirth())
+                            .phone(en.getPhone())
+                            .address(en.getAddress())
+                            .detailAddr(en.getDetailAddr())
+                            .role(en.getRoleType().toString())
+                            .aprYn(en.getAprYn())
+                            .enrollState(en.getEnrollState())
+                            .build());
+                }
+
+                return TeacherMngVoContainer.builder()
+                        .list(subResult)
+                        .totalCount((int) tcResearchList.getTotalElements())
+                        .totalPage(tcResearchList.getTotalPages()).build();
+            }
     }
 
 

@@ -46,21 +46,22 @@ public class TeacherMngController {
             "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
             "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
             "(11)enrollState : 재직상태(ENROLL : 재직중)<br> (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 \"")
-    ResponseEntity<TeacherMngVoContainer> teacherNotapprovedListTmp(@AuthenticationPrincipal MyUserDetails myuser, Pageable page){
-        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList(myuser.getSchoolId(),page));
+    ResponseEntity<TeacherMngVoContainer> teacherNotapprovedListTmp(Pageable page){
+        return ResponseEntity.ok(teacherMngService.teacherNotapprovedList(page));
     }
 
     @GetMapping("/all")
-    @Operation(summary = "각 학교의 전체 교원목록", description = "요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>" +
-            "(3)sort : 정렬기준 컬럼(default : 이름 오름차순 / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br><br>"+
-            "출력값 : <br><br> (1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>"+
-            "(7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)"+
-            "(11)enrollState : 재직상태<br>" +
-            "(ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>" +
-            "(12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 ")
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(@AuthenticationPrincipal MyUserDetails myuser,Pageable page){
-
-        return ResponseEntity.ok(teacherMngService.teacherListOfTheSchool(myuser.getSchoolId(),page));
+    @Operation(summary = "각 학교의 전체 교원목록", description = """
+            요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>
+            (3)sort : 정렬기준 컬럼(default : 이름 오름차순 / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br>
+            (4)search : 검색어 (이름 검색)<br><br>
+            출력값 : <br>(1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>
+            (7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)
+            (11)enrollState : 재직상태<br>
+            (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
+            (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page,String search){
+        return ResponseEntity.ok(teacherMngService.teacherListOfTheSchool(page,search));
     }
 
 
