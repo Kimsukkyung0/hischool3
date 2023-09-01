@@ -4,16 +4,16 @@ package com.green.secondproject.admin.teachermng;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
-import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.apache.catalina.User;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -75,11 +75,9 @@ public class TeacherMngController {
     String setAprYnOnTeacherAcnt(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam Long userId){
         return service.teacherAprv(userId ,myuser.getSchoolId());
     }
-//
-//    @PutMapping("/status")
-//    void updTeacherStatus(EnrollState enrollState){
-//        return service.
-//    }
 
-//    findUsersByVanEntityAndRoleType
+//    @PutMapping("/{userId}")
+//    TeacherMngVo updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
+//        return service.teacherStatUpd(dto);
+//    }
 }

@@ -59,21 +59,10 @@ public class ScSbjController {
         return service.adminSbjList(grade);
     }
 
-//    @GetMapping("/category/small")
-//    @Operation(summary = "등록후 세부과목 리스트"
-//            , description =
-//            "categoryid - category 테이블에 세부과목 PK값" +
-//                    "<br>nm - 학생이름")
-//    List<ScSbjVo> smalllist(@RequestParam Long categoryId) {
-//         return service.smalllist(categoryId);
-//    }
-
     @DeleteMapping
     @Operation(summary = "학교별 과목 삭제")
     ResponseEntity<Integer> delScSbj(@RequestParam Long scSbjId)
     { return ResponseEntity.ok(service.delete(scSbjId)); }
-
-
 
 
 }

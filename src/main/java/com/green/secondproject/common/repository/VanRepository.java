@@ -13,4 +13,5 @@ public interface VanRepository extends JpaRepository<VanEntity, Long> {
     List<VanEntity> findAllBySchoolEntityAndGradeAndYear(SchoolEntity schoolEntity, String grade, String year);
     List<VanEntity> findDistinctBySchoolEntity(SchoolEntity schoolEntity);
     VanEntity findByVanId(Long vanId);
+    VanEntity findByGradeAndSchoolEntity(String grade, SchoolEntity schoolEntity);
 }

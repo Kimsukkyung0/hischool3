@@ -8,5 +8,7 @@ import lombok.Getter;
 public class ScSbjGradeVo {
     private Long subjectId;
     private String subjectNm;
+    private Long categoryId;
+    private String categoryNm;
     private Long scSbjId;
 }
