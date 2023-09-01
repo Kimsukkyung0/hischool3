@@ -18,9 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URLDecoder;
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/api/admin/tc")
@@ -72,12 +69,14 @@ public class TeacherMngController {
             (4) 권한이없는 유저에 대한 요청 : 같은 학교 소속이 아닌 유저를 승인처리 시도 <br>
             (5) 존재하지 않는 유저입니다 : 존재하지 않는 유저를 승인처리 시도 <br>
             """)
-    String setAprYnOnTeacherAcnt(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam Long userId){
+    public String setAprYnOnTeacherAcnt(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam Long userId){
         return service.teacherAprv(userId ,myuser.getSchoolId());
     }
 
-//    @PutMapping("/{userId}")
-//    TeacherMngVo updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
-//        return service.teacherStatUpd(dto);
-//    }
+    @PatchMapping
+    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
+        log.info("dto : {}",dto);
+        TeacherMngVo vo = service.teacherStatUpd(dto);
+        return ResponseEntity.ok(vo);
+    }
 }
