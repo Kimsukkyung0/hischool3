@@ -6,5 +6,5 @@ import lombok.Data;
 public class StudentTestSumGraphVo {
     private String date;
     private String nm;
-    private String rating;
+    private int rating;
 }
