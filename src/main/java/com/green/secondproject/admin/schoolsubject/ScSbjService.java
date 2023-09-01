@@ -114,5 +114,35 @@ public class ScSbjService {
                 .subjectId(item.getSubjectId())
                 .subjectNm(item.getNm()).build()).toList();
     }
+
+//    public List<ScSbjListVo> updateCateListBySchool(ScSbjListDto list,int grade){
+//        List<ScSbjListVo> fkResult = new ArrayList<>();
+//
+//        if (grade > 0 && grade <= 3) {
+//            List<ScSbjEntity> sb = new ArrayList<>();
+//            SchoolEntity scEnti = scAdRep.findById(facade.getLoginUserPk()).get().getSchoolEntity();
+////        List<SubjectEntity> sbjEnti = sbjtRep.findAllById(subjectIdList);
+//
+//
+//            for (SbjDto subjectId : list.getList()) {
+//                sb.add(ScSbjEntity
+//                        .builder()
+//                        .subjectEntity(sbjtRep.getReferenceById(subjectId.getSubjectId()))
+//                        .schoolEntity(scEnti)
+//                        .grade(String.valueOf(grade))
+//                        .build());
+//            }
+//            sbjRep.saveAll(sb);
+//
+//            return sb.stream().map(item -> ScSbjListVo.builder()
+//                    .subjectId(item.getSubjectEntity().getSubjectId())
+//                    .grade(item.getGrade())
+//                    .scSbjId(item.getSchoolSbjId())
+//                    .build()).toList();
+//        } else {
+//            return fkResult;
+//        }
+//    }
+
 }
 
