@@ -10,6 +10,7 @@ import com.green.secondproject.sign.model.SignInResultDto;
 import com.green.secondproject.sign.model.TokenDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.activation.UnsupportedDataTypeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +22,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.List;
 
 @Slf4j
@@ -130,7 +135,9 @@ public class AdminController {
             (8)totalCount : 총 학생 수<br>
             (9)totalPage : 총 페이지 수<br>
             """)
-    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
+    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) throws UnsupportedEncodingException {
+        String charset = "UTF-8";
+        search = URLDecoder.decode(search, charset);
         return service.searchStudent(search, page);
     }
 
