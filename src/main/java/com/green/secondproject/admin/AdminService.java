@@ -1,5 +1,6 @@
 package com.green.secondproject.admin;
 
+import com.fasterxml.jackson.dataformat.yaml.UTF8Reader;
 import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
@@ -18,6 +19,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -173,7 +176,6 @@ public class AdminService {
                 .build();
     }
 
-
     public StudentClassListVo searchStudent(String search, int page) {
         Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
         if (schoolOpt.isEmpty()) {
@@ -184,6 +186,7 @@ public class AdminService {
 
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
+
 
 
 
