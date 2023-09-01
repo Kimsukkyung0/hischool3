@@ -41,24 +41,24 @@ public class StudentService {
     }
 
     public StudentSumContainerVo getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
-//        LocalDate now = LocalDate.now();
-//        dto.setYear(String.valueOf(now.getYear()));
-//        dto.setMon(String.valueOf(now.getMonthValue()));
-//        try{
-//        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
-//        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
-//
-//        for (StudentTestSumGraphVo vo : sub) {
-//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-//            result.add(tmpVo);
-//        }
-//
-//        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
-//
-//        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
+        LocalDate now = LocalDate.now();
+        dto.setYear(String.valueOf(now.getYear()));
+        dto.setMon(String.valueOf(now.getMonthValue()));
+        try{
+        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
+        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
+
+        for (StudentTestSumGraphVo vo : sub) {
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            result.add(tmpVo);
+        }
+
+        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
+
+        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -144,23 +144,23 @@ public class StudentService {
     }
 
     public StudentSumContainerVo getLatestRatingsOfAcaTest(Long userId) {
-        //결과값 : List<2023 2-2 국수영한 등급>
-//        try{
-//        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
-//
-//        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
-//
-//        for(StudentTestSumGraphVo vo : subList){
-//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-//            tmp.add(tmpVo);
-//        }
-//
-//         String date = getMidFinalFormOfDate(subList.get(0).getDate());
-//
-//         return new StudentSumContainerVo(date,tmp);}
-//        catch (Exception e){
-//            e.printStackTrace();
-//        }
+//        결과값 : List<2023 2-2 국수영한 등급>
+        try{
+        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
+
+        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
+
+        for(StudentTestSumGraphVo vo : subList){
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            tmp.add(tmpVo);
+        }
+
+         String date = getMidFinalFormOfDate(subList.get(0).getDate());
+
+         return new StudentSumContainerVo(date,tmp);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return null;
     }
 
