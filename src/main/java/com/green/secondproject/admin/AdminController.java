@@ -114,7 +114,7 @@ public class AdminController {
         return service.getStudentClass(page);
     }
 
-    @GetMapping("search-student")
+    @GetMapping("name-student-list")
     @Operation(summary = "이름으로 학생 검색", description = """
             입력 값<br>
             (1)search : 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
