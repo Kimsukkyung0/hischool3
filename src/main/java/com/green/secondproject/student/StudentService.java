@@ -6,6 +6,7 @@ import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.repository.MockResultRepository;
 import com.green.secondproject.common.repository.NoticeRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.student.model.*;
@@ -25,9 +26,11 @@ public class StudentService {
     private final AuthenticationFacade facade;
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
+    private final MockResultRepository mockResultRepository;
 
-    public List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
-        return mapper.selMockTestResultByDates(dto);
+    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
+        return mockResultRepository.searchMockResult(dto);
+        //return mapper.selMockTestResultByDates(dto);
     }
 
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {

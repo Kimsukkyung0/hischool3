@@ -185,9 +185,11 @@ public class SignService {
 
         log.info("[getSignInResult] access_token 객체 생성");
         String accessToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
-                Collections.singletonList(user.getRoleType().getCode()), JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
+                Collections.singletonList(user.getRoleType().getCode()),
+                JWT_PROVIDER.ACCESS_TOKEN_VALID_MS, JWT_PROVIDER.ACCESS_KEY);
         String refreshToken = JWT_PROVIDER.generateJwtToken(String.valueOf(user.getUserId()),
-                Collections.singletonList(user.getRoleType().getCode()), JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
+                Collections.singletonList(user.getRoleType().getCode()),
+                JWT_PROVIDER.REFRESH_TOKEN_VALID_MS, JWT_PROVIDER.REFRESH_KEY);
 
         redisService.setData(redisKey, refreshToken);
 

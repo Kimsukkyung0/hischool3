@@ -23,7 +23,7 @@ public class StudentController {
     @Operation(summary = "모의고사성적관리 테이블",  description = "요구값 : <br>" + "(1)year - 조회기준연도(yyyy) <br>"+"(2)mon - 조회기준월(1~12)<br><br>"+
             "<br><br>출력값 : <br>" + "(1)year - 연도<br>"+"(2)mon - 월<br>"+
             "(3)nm - 과목이름<br>"+"(4)cateNm - 과목계열이름 <br>"+"(5)standardScore - 표준점수<br> "+"(6)rating - 등급<br> (7)percent - 백분위 ※ 연도 - 월 - 과목계열 내림차순 / 수정완료※<br>")
-    public List<StudentMockSumResultVo> selMockTestResultByDates(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam(required = false) String year, @RequestParam(required = false) String mon){
+    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam(required = false) String year, @RequestParam(required = false) String mon){
         StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
         dto.setUserId(myuser.getUserId());
         dto.setYear(year);
