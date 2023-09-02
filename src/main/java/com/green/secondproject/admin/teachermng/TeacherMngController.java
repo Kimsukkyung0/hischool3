@@ -54,7 +54,7 @@ public class TeacherMngController {
             (11)enrollState : 재직상태<br>
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(@RequestBody Pageable page, @RequestParam(required = false) String search){
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search){
         return ResponseEntity.ok(service.teacherListOfTheSchool(page,search));
     }
 
@@ -96,12 +96,13 @@ public class TeacherMngController {
 //        return ResponseEntity.ok(vo);
 //    }
 
-//    @PatchMapping
-//    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
-//    //        log.info("dto : {}",dto);
-//        log.info("TeacherStatUpdDto dto : {}",dto.getUserId());
-//        TeacherMngVo vo = service.teacherStatUpd(dto);
-//        return ResponseEntity.ok(vo);
-//    }
+    @PatchMapping
+    @Operation(summary = "선생님재직여부/학반 변경(수정중)")
+    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
+    //        log.info("dto : {}",dto);
+        log.info("TeacherStatUpdDto dto : {}",dto.getUserId());
+        TeacherMngVo vo = service.teacherStatUpd(dto);
+        return ResponseEntity.ok(vo);
+    }
 
 }

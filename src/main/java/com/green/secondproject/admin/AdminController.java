@@ -225,7 +225,6 @@ public class AdminController {
     public int leaveUser(@RequestParam long userId) {
         return service.leaveUser(userId);
     }
-
 }
 
 //야 남규ㅠ진 코드 잘 짜면 다냐/?

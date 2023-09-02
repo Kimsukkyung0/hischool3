@@ -10,6 +10,7 @@ public class TeacherStatUpdDto {
     private EnrollState enrollState;
     private int classNum;
     private int grade;
+    private String year;
 
     public Long getUserId() {
         return userId;
@@ -20,9 +21,9 @@ public class TeacherStatUpdDto {
     public int getClassNum() {
         return classNum;
     }
-
     public int getGrade() {
         return grade;
     }
+    public String getYear(){return year;}
 
 }
