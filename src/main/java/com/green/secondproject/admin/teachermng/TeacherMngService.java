@@ -1,5 +1,9 @@
 package com.green.secondproject.admin.teachermng;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
@@ -16,7 +20,9 @@ import com.green.secondproject.common.repository.SchoolAdminRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.sign.SignService;
+import com.green.secondproject.sign.model.ClassVo;
 import com.green.secondproject.sign.model.SchoolParam;
 import com.green.secondproject.teacher.model.TeacherEntity;
 import jakarta.persistence.EntityNotFoundException;
@@ -35,6 +41,7 @@ import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,6 +61,8 @@ public class TeacherMngService {
 
     @Value("${file.aprimgPath}")
     private String aprimgPath;
+    @Value("${my-api.key}")
+    private String myApiKey;
 
 
     public TeacherMngVoContainer teacherNotapprovedList( Pageable pageable) {
@@ -208,142 +217,268 @@ public class TeacherMngService {
             }
         }
 
-    public TeacherMngVo teacherStatUpd (TeacherStatUpdDto dto){
-        log.info("dto : {}",dto);
-        Optional<VanEntity> vanEnti = null;
-        Optional<SchoolEntity> scEntiOpt;
-        Optional<UserEntity> tcEntiOpt;
+//    public TeacherMngVo teacherStatUpd (TeacherStatUpdDto dto){
+//
+//        log.info("dto.getUserId : {}",dto.getUserId());
+//        Optional<VanEntity> vanEnti = null;
+//        Optional<SchoolEntity> scEntiOpt;
+//        Optional<UserEntity> tcEntiOpt;
+//
+//
+//        Long schoolId = facade.getLoginUser().getSchoolId();
+//        int grade = dto.getGrade();
+//        Long vanId = 0L;
+//        String notClassifiedVan = "0";
+//        String notClassifiedYear = "0000";
+//
+//
+//        Optional<SchoolAdminEntity> scAdminEntiOpt = Optional.of(scAdminRep.findByEmail(facade.getLoginUser().getEmail()));
+//
+//
+//            //관리자로그인 확인
+//            if (scAdminEntiOpt.isEmpty()
+//                    || !(scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId))
+//                    ) {
+//            throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
+//
+//        }
+//
+//            if(dto == null){
+//                    //dto 에 값이 들어있지않은 경우
+//                    throw new InvalidParameterException("올바른 값이 아닙니다");
+//            }
+//            //DTO에 값이 들어있는 경우
+//            else {
+//                //유저확인
+//                tcEntiOpt = userRepository.findById(dto.getUserId());
+//                scEntiOpt = scRep.findById(schoolId);
+//
+//                if(tcEntiOpt.isEmpty()){
+//                     throw new EntityNotFoundException("해당하는 유저가 존재하지 않습니다");
+//                }
+//
+//                //txEntiOpt 에 값이 담겨있는 경우
+//                else if(grade>=0 && grade<=3) {
+//                    if (dto.getGrade() == 0) {
+//                        vanEnti = Optional.of(vanRep.findByGradeAndSchoolEntity(String.valueOf(grade), scEntiOpt.get()));
+//
+//                        //학교에 소속없음에 해당하는 학급이 존재하는지 확인
+//                        //존재한다면 값을 넣고
+//                        if (vanEnti.isPresent()) {
+//                            vanId = vanEnti.get().getVanId();
+//                        } else if (vanEnti.isEmpty()) {
+//                            //존재하지않는다면 삽입
+//                            vanId = Optional.of(vanRep.save(VanEntity.builder()
+//                                    .grade(notClassifiedVan)
+//                                    .classNum(notClassifiedVan)
+//                                    .year(notClassifiedYear)
+//                                    .build())).get().getVanId();
+//
+//                        }
+//                    }
+//                    //학년 학반이 있는 경우
+//                    else {
+//                        String year = String.valueOf(LocalDate.now().getYear());
+//                        String strGrade = String.valueOf(grade);
+//                        String classNum = String.valueOf(dto.getClassNum());
+//                        vanEnti = Optional.of(vanRep.findBySchoolEntityAndYearAndGradeAndClassNum(scEntiOpt.get(),
+//                                year, strGrade, classNum));
+//
+//                        if (vanEnti.isEmpty()) {
+//                            vanEnti = Optional.of(VanEntity.builder()
+//                                    .schoolEntity(scEntiOpt.get())
+//                                    .year(year)
+//                                    .grade(strGrade)
+//                                    .classNum(classNum)
+//                                    .build());
+//                            vanId = vanRep.save(vanEnti.get()).getVanId();
+//                        }
+//                    }
+//                }
+//                 tcEntiOpt.get().getVanEntity().setVanId(vanId);
+//
+//
+//
+//        }
+//            UserEntity ue = userRepository.save(UserEntity.builder().userId(dto.getUserId()).enrollState(dto.getEnrollState()).vanEntity(vanEnti.get()).build());
+//            //모든 검증과정을 거치면, UPDATE!!!!!!!!!!!!!!!!
+//            return TeacherMngVo.builder()
+//                    .userId(ue.getUserId())
+//                    .schoolNm(ue.getNm())
+//                    .grade(vanEnti.get().getGrade())
+//                    .vanNum(vanEnti.get().getClassNum())
+//                    .email(ue.getEmail())
+//                    .nm(ue.getNm())
+//                    .birth(ue.getBirth())
+//                    .phone(ue.getPhone())
+//                    .address(ue.getAddress())
+//                    .detailAddr(ue.getDetailAddr())
+//                    .role(ue.getRoleType().toString())
+//                    .aprYn(ue.getAprYn())
+//                    .enrollState(ue.getEnrollState())
+//                    .build();
+//
+//    }
 
 
-        Long schoolId = facade.getLoginUser().getSchoolId();
-        int grade = dto.getGrade();
-        Long vanId = 0L;
-        String notClassifiedVan = "0";
-        String notClassifiedYear = "0000";
+
+//    public TeacherMngVo teacherStatUpd (TeacherStatUpdDto dto){
+//        Long schoolId = facade.getLoginUser().getSchoolId();
+//        int grade = dto.getGrade();
+//
+//        log.info("dto.getUserId : {}",dto.getUserId());
+//        log.info("grade : {}", grade);
+//        log.info("dto.getClassNum : {}",dto.getClassNum());
+//        log.info("dto.getEnrollState : {}",dto.getEnrollState());
+//
+//        Optional<UserEntity> tcEntiOpt = userRepository.findById(dto.getUserId());
+//        Optional<SchoolEntity> scEntiOpt= Optional.ofNullable(tcEntiOpt.get().getVanEntity().getSchoolEntity());
+//        Optional<SchoolAdminEntity> scAdminEntiOpt = Optional.of(scAdminRep.findByEmail(facade.getLoginUser().getEmail()));
+//
+//        //아직 모르는 반변경
+////        Optional<VanEntity> vanEnti;
+//
+//        //만약, 0반이 존재하지않았을대 insert용
+//        Long vanId = 0L;
+//        String notClassifiedVan = "0";
+//        String notClassifiedYear = "0000";
+//
+//        //관리자로그인 확인
+//        if (!scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId) ) {
+//
+//            throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
+//
+//        } else if(tcEntiOpt.isEmpty() || tcEntiOpt.get().getRoleType().equals(RoleType.STD)){
+//
+//            throw new RuntimeException("수정대상 유저가 아닙니다");
+//
+//        } else if (grade>=0 && grade<=3) { //입력된 학년 값이 0에서 3학년일 경우 이 문장이 실행된다.
+//
+//            Optional<VanEntity> vanEnti = Optional.of(vanRep.findByGradeAndSchoolEntity(String.valueOf(grade),scEntiOpt.get()));
+//
+//            //case 1: 0반이고 학교에 0반이 없을 경우
+//            //case 2: 0반이고 학교에 0반이 있 경우
+//                    if(grade== 0) {
+//                        if (vanEnti==null) {
+//                            VanEntity newVan = VanEntity.builder().grade(String.valueOf(vanId)).classNum(notClassifiedVan).year(notClassifiedYear).build();
+//                            vanId = vanRep.save(newVan).getVanId();
+//                        }
+//                        else if(vanEnti.isPresent()){
+//                            vanId = vanEnti.get().getVanId();
+//                        }
+//                    }
+////                    else{
+////                        if(){
+////
+////                        }
+//                    }
+//
+//
+//
+//            //case 3: 1-3학년인데 해당연도에 학반이 없을 경우
+//
+//            //case 4: 1-3학년인데 해당연도에 학반이 있을 경우
+//
+//
+//        return null;
+//
+//    }
+
+    public List<Integer> getClassListForTeacher(int grade, int year){
+        //접속시 바로 관리자 로그인 확인
+        MyUserDetails myUser = facade.getLoginUser();
+
+        //학교 코드로 학교 entity 가져오기
+        Optional<SchoolEntity> scEntiOpt = scRep.findById(myUser.getSchoolId());
 
 
-        Optional<SchoolAdminEntity> scAdminEntiOpt = Optional.of(scAdminRep.findByEmail(facade.getLoginUser().getEmail()));
-
-
-            //관리자로그인 확인
-            if (scAdminEntiOpt.isEmpty()
-                    || !(scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId))
-                    ) {
-            throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
-
+        if (scEntiOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
         }
 
-            if(dto == null){
-                    //dto 에 값이 들어있지않은 경우
-                    throw new InvalidParameterException("올바른 값이 아닙니다");
+        List<Integer> classList = new ArrayList<>();
+        //학년이 0에서 3일경우
+        if(grade>=0 && grade<=3){
+            if(grade==0){
+                List<Integer> unClassified = new ArrayList<>();
+                unClassified.add(0);
+               return unClassified;
+            } else {//학년이 1-3학년일 경우
+                SchoolParam scP = new SchoolParam();
+                scP.setSchoolCode(scEntiOpt.get().getCode());
+                scP.setGrade(String.valueOf(grade));
+                classList = getClassList(scP,year);
             }
-            //DTO에 값이 들어있는 경우
-            else {
-                //유저확인
-                tcEntiOpt = userRepository.findById(dto.getUserId());
-                scEntiOpt = scRep.findById(schoolId);
-
-                if(tcEntiOpt.isEmpty()){
-                     throw new EntityNotFoundException("해당하는 유저가 존재하지 않습니다");
-                }
-
-                //txEntiOpt 에 값이 담겨있는 경우
-                else if(grade>=0 && grade<=3) {
-                    if (dto.getGrade() == 0) {
-                        vanEnti = Optional.of(vanRep.findByGradeAndSchoolEntity(String.valueOf(grade), scEntiOpt.get()));
-
-                        //학교에 소속없음에 해당하는 학급이 존재하는지 확인
-                        //존재한다면 값을 넣고
-                        if (vanEnti.isPresent()) {
-                            vanId = vanEnti.get().getVanId();
-                        } else if (vanEnti.isEmpty()) {
-                            //존재하지않는다면 삽입
-                            vanId = Optional.of(vanRep.save(VanEntity.builder()
-                                    .grade(notClassifiedVan)
-                                    .classNum(notClassifiedVan)
-                                    .year(notClassifiedYear)
-                                    .build())).get().getVanId();
-
-                        }
-                    }
-                    //학년 학반이 있는 경우
-                    else {
-                        String year = String.valueOf(LocalDate.now().getYear());
-                        String strGrade = String.valueOf(grade);
-                        String classNum = String.valueOf(dto.getClassNum());
-                        vanEnti = Optional.of(vanRep.findBySchoolEntityAndYearAndGradeAndClassNum(scEntiOpt.get(),
-                                year, strGrade, classNum));
-
-                        if (vanEnti.isEmpty()) {
-                            vanEnti = Optional.of(VanEntity.builder()
-                                    .schoolEntity(scEntiOpt.get())
-                                    .year(year)
-                                    .grade(strGrade)
-                                    .classNum(classNum)
-                                    .build());
-                            vanId = vanRep.save(vanEnti.get()).getVanId();
-                        }
-                    }
-                }
-                 tcEntiOpt.get().getVanEntity().setVanId(vanId);
+            }
+        else{
+            throw new RuntimeException("올바른 연도 혹은 학년 값이 아닙니다");
+        }
 
 
+            return classList;
 
         }
-            UserEntity ue = userRepository.save(UserEntity.builder().userId(dto.getUserId()).enrollState(dto.getEnrollState()).vanEntity(vanEnti.get()).build());
-            //모든 검증과정을 거치면, UPDATE!!!!!!!!!!!!!!!!
-            return TeacherMngVo.builder()
-                    .userId(ue.getUserId())
-                    .schoolNm(ue.getNm())
-                    .grade(vanEnti.get().getGrade())
-                    .vanNum(vanEnti.get().getClassNum())
-                    .email(ue.getEmail())
-                    .nm(ue.getNm())
-                    .birth(ue.getBirth())
-                    .phone(ue.getPhone())
-                    .address(ue.getAddress())
-                    .detailAddr(ue.getDetailAddr())
-                    .role(ue.getRoleType().toString())
-                    .aprYn(ue.getAprYn())
-                    .enrollState(ue.getEnrollState())
-                    .build();
 
+    public List<Integer> getClassList(SchoolParam p, int year) {
+        int thisYear = LocalDate.now().getYear();
+        String strThisYear = String.valueOf(thisYear);
+        String strYear = String.valueOf(year);
+        List<Integer> list = new ArrayList<>();
+
+        //올해 혹은 후년인지 검사
+        if(strYear.equals(strThisYear) || year==thisYear+1) {
+            String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/classInfo")
+                            .queryParam("KEY", myApiKey)
+                            .queryParam("Type", "json")
+                            .queryParam("pIndex", 1)
+                            .queryParam("pSize", 500)
+                            .queryParam("ATPT_OFCDC_SC_CODE", "D10")
+                            .queryParam("SD_SCHUL_CODE", p.getSchoolCode())
+                            .queryParam("AY", year)
+                            .queryParam("GRADE", p.getGrade())
+                            .build()
+                    ).retrieve().bodyToMono(String.class)
+                    .block();
+
+            ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            List<String> classList = new ArrayList<>();
+            try {
+                JsonNode jsonNode = om.readTree(json);
+                List<ClassVo> classVoList = om.convertValue(jsonNode.at("/classInfo/1/row"), new TypeReference<>() {
+                });
+                for (ClassVo vo : classVoList) {
+                    classList.add(vo.getClassNm());
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if(classList.isEmpty()){
+                throw new RuntimeException("해당연도에 해당하는 학반 값이 없습니다");
+            }
+
+            list = classList.stream()
+                    .map(Integer::parseInt)
+                    .toList();
+            Collections.sort(list);
+
+
+            return list;
+        }
+        else {
+            throw new RuntimeException("해당연도에 해당하는 학반 값이 없습니다");
+        }
     }
 
-//    public List<Integer> getClassListForTeacher(int grade){
-//        //접속시 바로 관리자 로그인 확인
-//        MyUserDetails myUser = facade.getLoginUser();
-//        Optional<SchoolEntity> scEntiOpt = scRep.findById(myUser.getSchoolId());//학교 코드로 학교 entity 가져오기
-//        if (scEntiOpt.isEmpty()) {
-//            throw new RuntimeException("관리자 로그인 필요");
-//        }
-//
-//        //학년이 0에서 3일경우
-//        if(grade>=0 && grade<=3){
-////            if(grade==0){
-////                Optional<VanEntity> vanEnti = Optional.of(vanRep.findByGrade(grade));
-////                String notClassifiedVan = "0";
-////                Long vanId;
-////
-////                if(vanEnti.isPresent()){
-////                    vanId = vanEnti.get().getVanId();
-////                }else{
-////                    vanEnti = Optional.of(vanRep.save(VanEntity.builder().grade(notClassifiedVan).classNum(notClassifiedVan).build()));
-////                    vanId = vanEnti.get().getVanId();
-////                }
-//            }
-//
-//            //학년이 1-3학년일 경우
-//            SchoolParam scP = new SchoolParam();
-//            scP.setSchoolCode(scEntiOpt.get().getCode());
-//            scP.setGrade(String.valueOf(grade));
-//            List<Integer> classList = signService.getClassList(scP);
-//
-//            return classList;
-//
-//        }
-//    }
-    //학반 보여주는 api 끌어오기
+    public List<String> getTeacherStatList(){
+        List<String> teacherStatList = new ArrayList<>();
+        teacherStatList.add(EnrollState.ENROLL.toString());
+        teacherStatList.add(EnrollState.GRADUATION.toString());
+        teacherStatList.add(EnrollState.TRANSFER.toString());
+        teacherStatList.add(EnrollState.LEAVE.toString());
+        return teacherStatList;
+    }
+
 
 
 

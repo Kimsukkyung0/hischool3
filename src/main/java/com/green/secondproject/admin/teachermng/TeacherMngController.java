@@ -6,9 +6,7 @@ import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.common.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -55,7 +55,6 @@ public class TeacherMngController {
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
     ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(@RequestBody Pageable page, @RequestParam(required = false) String search){
-//        search = URLDecoder.decode(search);
         return ResponseEntity.ok(service.teacherListOfTheSchool(page,search));
     }
 
@@ -72,11 +71,37 @@ public class TeacherMngController {
     public String setAprYnOnTeacherAcnt(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam Long userId){
         return service.teacherAprv(userId ,myuser.getSchoolId());
     }
-
-    @PatchMapping
-    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
-        log.info("dto : {}",dto);
-        TeacherMngVo vo = service.teacherStatUpd(dto);
-        return ResponseEntity.ok(vo);
+    @GetMapping("/{year}/{grade}")
+    @Operation(summary = "학반정보" , description = """
+            요구값 : <br>(1) year : 변경대상연도<br> (2) grade : 변경대상학년<br><br>
+            출력값 : <br>(1)List<number> : api에 존재하는 해당연도/학년에 속해있는 학반 값(ex) 1,2,3,4,...) <br>
+            <연도값의 경우 올해/혹은 후년만 해당되는지 검사합니다><br>
+            <학반 값이 api 에 등록되어있지 않은경우 '해당 학반 값 없음'메세지가 출력됩니다.""")
+    public List<Integer> getClassListForTeacher(@PathVariable int year, @PathVariable int grade){
+        return service.getClassListForTeacher(grade,year);
     }
+    @GetMapping("/stat")
+    @Operation(summary = "선생님재직여부변경리스트" , description = """
+            요구값 : 없음<br><br>
+            출력값 : <br>(1)ENROLL : 재직  <br>(2)GRADUATION : 퇴직 <br> (3)TRANSFER : 전근 <br>(3)LEAVE : 휴직 <br>""")
+    public List<String> getTeacherStatList(){
+        return service.getTeacherStatList();
+    }
+
+//    @PatchMapping
+//    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestParam Long userId){ //TeacherStatUpdDto dto
+////        log.info("dto : {}",dto);
+//        log.info("userId : {}",userId);
+//        TeacherMngVo vo = service.teacherStatUpd(dto);
+//        return ResponseEntity.ok(vo);
+//    }
+
+//    @PatchMapping
+//    public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
+//    //        log.info("dto : {}",dto);
+//        log.info("TeacherStatUpdDto dto : {}",dto.getUserId());
+//        TeacherMngVo vo = service.teacherStatUpd(dto);
+//        return ResponseEntity.ok(vo);
+//    }
+
 }

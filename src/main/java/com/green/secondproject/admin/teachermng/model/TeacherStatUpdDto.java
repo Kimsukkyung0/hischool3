@@ -1,13 +1,28 @@
 package com.green.secondproject.admin.teachermng.model;
 
 import com.green.secondproject.common.config.etc.EnrollState;
-import lombok.Data;
+import lombok.Setter;
 
-@Data
+@Setter
 public class TeacherStatUpdDto {
+
     private Long userId;
     private EnrollState enrollState;
     private int classNum;
     private int grade;
+
+    public Long getUserId() {
+        return userId;
+    }
+    public EnrollState getEnrollState() {
+        return enrollState;
+    }
+    public int getClassNum() {
+        return classNum;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
 
 }
