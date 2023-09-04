@@ -97,7 +97,13 @@ public class TeacherMngController {
 //    }
 
     @PatchMapping
-    @Operation(summary = "선생님재직여부/학반 변경(수정중)")
+    @Operation(summary = "선생님재직여부/학반 변경" , description = """
+            요구값 : <br>(1)userId : 변경대상유저 pk <br>(2)enrollState : 변경<br>(3)year : 변경대상연도<br>
+            (4)grade : 변경학년(0일경우 해당없음으로 변경)<br>(5)classNum : 변경대상학반<br><br>
+            출력값 : <br> <br> (1)userId : 변경대상선생님pk<br> (2)schoolNm : 학교이름 <br>(3)grade : 변경된 학년 <br> 
+            (4)vanNum : 변경된 학반 <br>(5)email : 교원email <br> (6)nm : 교원이름<br> (7)birth : 생년월일<br>(8)phone :교원연락처<br>"+
+            "(9)address : 상위주소<br> (10)detailAddr : 상세주소 <br> (11)role : 권한명(TC : 선생님) <br> (12)aprYn : 승인여부(0:미승인)"+
+            "(13)enrollState : 변경된 재직상태(ENROLL : 재직중)<br>""")
     public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
     //        log.info("dto : {}",dto);
         log.info("TeacherStatUpdDto dto : {}",dto.getUserId());

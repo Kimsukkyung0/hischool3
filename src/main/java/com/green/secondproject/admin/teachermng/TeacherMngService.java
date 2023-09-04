@@ -213,7 +213,7 @@ public class TeacherMngService {
                 return "올바른 요청이 아닙니다 : " + getUserInfo.getRoleType();
             }
         } else {
-            return "권한이없는 유저에 대한 요청";
+            throw new RuntimeException("권한이없는 유저에 대한 요청");
         }
     }
 
@@ -445,6 +445,8 @@ public class TeacherMngService {
             throw new RuntimeException("수정대상 유저가 아닙니다");
 
         } else if (grade >= 0 && grade <= 3) { //입력된 학년 값이 0에서 3학년일 경우 이 구문이 실행됨
+
+
             //case 1: 0반이고 학교에 0반이 없을 경우
             //case 2: 0반이고 학교에 0반이 있 경우
             if (grade == 0) {
@@ -454,12 +456,14 @@ public class TeacherMngService {
                     vanEnti = vanRep.save(newVan);
                     vanId = vanEnti.getVanId();
 
-                    log.info("case 1 / vanId : {}",vanId);
+                    log.info("case 1 / vanId : {}", vanId);
                 } else {
                     vanId = vanEnti.getVanId();
-                    log.info("case 2 / vanId : {}",vanId);
+                    log.info("case 2 / vanId : {}", vanId);
                 }
             }
+
+
             //case 3: 1-3학년인데 해당연도에 학반이 없을 경우
             //case 4: 1-3학년인데 해당연도에 학반이 있을 경우
             else {
@@ -473,23 +477,40 @@ public class TeacherMngService {
                             .classNum(String.valueOf(dto.getClassNum()))
                             .build());
                     vanId = vanEnti.getVanId();
-                    log.info("case 3 / vanId : {}",vanId);
+                    log.info("case 3 / vanId : {}", vanId);
                 } else {
                     vanId = vanEnti.getVanId();
-                    log.info("case 4 / vanId : {}",vanId);
+                    log.info("case 4 / vanId : {}", vanId);
                 }
             }
-            log.info("FIN vanId : {}",vanId);
+            log.info("FIN vanId : {}", vanId);
 
 
-
-        }
-        //좀이따 더티체킹 가능한지 확인.
-                return null;
-
-}
-
+        }   VanEntity newVan = vanRep.findByVanId(vanId);
+            tcEntiOpt.get().setEnrollState(dto.getEnrollState());
+            tcEntiOpt.get().setVanEntity(newVan);
+            //더티체킹 확인. - 안되는 이유 ? ? ?
+            log.info(tcEntiOpt.get().toString());
+            UserEntity savedUser = userRepository.save(tcEntiOpt.get());
+            return TeacherMngVo.builder()
+                    .userId(savedUser.getUserId())
+                    .schoolNm(scEntiOpt.get().getNm())
+                    .enrollState(savedUser.getEnrollState())
+                    .grade(newVan.getGrade())
+                    .vanNum(newVan.getClassNum())
+                    .email(savedUser.getEmail())
+                    .nm(savedUser.getNm())
+                    .birth(savedUser.getBirth())
+                    .phone(savedUser.getPhone())
+                    .address(savedUser.getAddress())
+                    .detailAddr(savedUser.getDetailAddr())
+                    .role(savedUser.getRoleType().toString())
+                    .aprYn(savedUser.getAprYn())
+                    .enrollState(savedUser.getEnrollState()).build();
 
     }
+
+
+}
 
 
