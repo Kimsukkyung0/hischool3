@@ -77,7 +77,7 @@ public class TeacherMngController {
             출력값 : <br>(1)List<number> : api에 존재하는 해당연도/학년에 속해있는 학반 값(ex) 1,2,3,4,...) <br>
             <연도값의 경우 올해/혹은 후년만 해당되는지 검사합니다><br>
             <학반 값이 api 에 등록되어있지 않은경우 '해당 학반 값 없음'메세지가 출력됩니다.""")
-    public List<Integer> getClassListForTeacher(@PathVariable int year, @PathVariable int grade){
+    public List<Integer> getClassListForTeacher(@PathVariable int grade, @PathVariable int year){
         return service.getClassListForTeacher(grade,year);
     }
     @GetMapping("/stat")
