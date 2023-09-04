@@ -117,6 +117,26 @@ public class ScSbjService {
                 .subjectNm(item.getNm()).build()).toList();
     }
 
+//    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(ScSbjListDto dto, int grade) {
+//        List<ScSbjListVo2> Result = new ArrayList<>();
+//        int idx = 0;
+//        if (grade > 0 && grade <= 3) {
+//            List<ScSbjEntity> sb = new ArrayList<>();
+//            SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
+//            List<ScSbjEntity> sbjEntityList = sbjRep.findAllBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
+//            for(ScSbjEntity sc : sbjEntityList){
+//                if(sc.getSubjectEntity().getSubjectId() == dto.getList().get(idx).getSubjectId()) {
+//                    sc.getSubjectEntity().
+//
+//                }
+//            }
+//
+//
+//
+//        } else {
+//            throw new RuntimeException("올바른 요청 값이 아닙니다");
+//        }
+//    }
 
 }
 

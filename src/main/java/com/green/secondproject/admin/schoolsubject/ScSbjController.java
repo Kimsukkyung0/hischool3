@@ -47,7 +47,6 @@ public class ScSbjController {
         return service.getSubjectListByCate(categoryId);
     }
 
-
     @GetMapping("/category/{grade}")
     @Operation(summary = "학년별 등록과목 리스트"
             , description = """
@@ -63,6 +62,12 @@ public class ScSbjController {
     @Operation(summary = "학교별 과목 삭제")
     ResponseEntity<Integer> delScSbj(@RequestParam Long scSbjId)
     { return ResponseEntity.ok(service.delete(scSbjId)); }
-
+//
+//    @PutMapping
+//    @Operation(summary = "학교별 과목 수정")
+//    ResponseEntity<List<ScSbjListVo2>> updSubjectsBySchoolAndGrade(@RequestBody ScSbjListDto list, @RequestParam int grade){
+//        List<ScSbjListVo2> vo = service.updSubjectsBySchoolAndGrade(list, grade);
+//        return ResponseEntity.ok(vo);
+//    }
 
 }
