@@ -1,9 +1,12 @@
 package com.green.secondproject.notice;
 
+import com.green.secondproject.admin.model.StudentClassVo;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
+import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.repository.NoticeRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.notice.model.*;
@@ -11,6 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Not;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -53,8 +59,9 @@ public class NoticeService {
         }
         return list;
     }
+
     //en dto ->
-    public NoticeVo saveByNotice(NoticeInsDto dto){
+    public NoticeVo saveByNotice(NoticeInsDto dto) {
         MyUserDetails userDetails = facade.getLoginUser();
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
 
@@ -74,25 +81,26 @@ public class NoticeService {
                 .build();
     }
 
-    public NoticeVo findBySchoolNotice(Long noticeId){
+    public NoticeVo findBySchoolNotice(Long noticeId) {
         MyUserDetails userDetails = facade.getLoginUser();
 
-      NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
+        NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
 
 
-      NoticeVo vo = NoticeVo.builder()
-              .noticeId(sel.getNoticeId())
-              .title(sel.getTitle())
-              .content(sel.getContent())
-              .createdAt(sel.getCreatedAt())
-              .userId(userDetails.getUserId())
-              .imptYn(sel.getImptYn())
-              .hits(sel.getHits())
-              .build();
+        NoticeVo vo = NoticeVo.builder()
+                .noticeId(sel.getNoticeId())
+                .title(sel.getTitle())
+                .content(sel.getContent())
+                .createdAt(sel.getCreatedAt())
+                .userId(userDetails.getUserId())
+                .imptYn(sel.getImptYn())
+                .hits(sel.getHits())
+                .build();
 
-     return vo;
+        return vo;
     }
-    public NoticeVo2 upNotice(NoticePatchDto dto){
+
+    public NoticeVo2 upNotice(NoticePatchDto dto) {
         MyUserDetails userDetails = facade.getLoginUser();
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
         NoticeEntity entity = NoticeEntity.builder()
@@ -112,7 +120,8 @@ public class NoticeService {
                 .imptyn(result.getImptYn())
                 .build();
     }
-    public void delNotice(Long noticeId){
+
+    public void delNotice(Long noticeId) {
         NoticeEntity entity = noticeRepository.getReferenceById(noticeId);
         noticeRepository.delete(entity);
     }
@@ -128,4 +137,36 @@ public class NoticeService {
         noticeRepository.save(entity);
         return entity.getHits();
     }
-}
+//    public List<NoticeVo> searchNotice(String search, int page) {
+//        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
+//        Pageable pageable = PageRequest.of(page-1, 17, sort);
+//        List<NoticeEntity> entities = noticeRepository.findByNmContaining(search);
+//        List<NoticeEntity> nulEntities = noticeRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
+//
+//
+//        if(search == null) {
+//            return nulEntities.stream().map(item -> NoticeVo.builder()
+//                            .userId(item.getNoticeId())
+//                            .noticeId(item.getNoticeId())
+//                            .title(item.getTitle())
+//                            .content(item.getContent())
+//                            .imptYn(item.getImptYn())
+//                            .createdAt(item.getCreatedAt())
+//                            .hits(item.getHits())
+//                            .build())
+//                    .toList();
+//        }
+//        else {
+//            return entities.stream().map(item -> NoticeVo.builder()
+//                            .userId(item.getNoticeId())
+//                            .noticeId(item.getNoticeId())
+//                            .title(item.getTitle())
+//                            .content(item.getContent())
+//                            .imptYn(item.getImptYn())
+//                            .createdAt(item.getCreatedAt())
+//                            .hits(item.getHits())
+//                            .build())
+//                    .toList();
+//        }
+//    }
+    }

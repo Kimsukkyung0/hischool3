@@ -19,7 +19,8 @@ public class CareerController {
     @GetMapping
     @Operation(summary = "학생 진로지도 (학생보기)"
             ,description = "<br>" +
-            "userId:\n" +"유저pk값<br>\n"+
+            "userId:\n" +"유저pk값(외래키)<br>\n"+
+            "careerId:\n" +"진로지도 pk값\n"+
             "grade:\n" +"학년<br>\n"+
             "interest:\n" +"특기 및 흥미<br>\n"+
             "stdHope:\n" +"학생 진로희망<br>\n"+
@@ -33,7 +34,8 @@ public class CareerController {
     @GetMapping("/by")
     @Operation(summary = "학생별 선택"
             ,description = "<br>" +
-            "userId:\n" +"유저pk값<br>\n"+
+            "userId:\n" +"유저pk값(외래키)<br>\n"+
+            "careerId:\n" +"진로지도 pk값\n"+
             "grade:\n" +"학년<br>\n"+
             "interest:\n" +"특기 및 흥미<br>\n"+
             "stdHope:\n" +"학생 진로희망<br>\n"+
@@ -49,7 +51,8 @@ public class CareerController {
     @PostMapping("/text")
     @Operation(summary = "진로지도 입력"
             ,description = "<br>" +
-            "userId:\n" +"유저pk값<br>\n"+
+            "userId:\n" +"유저pk값(외래키)<br>\n"+
+            "careerId:\n" +"진로지도 pk값\n"+
             "grade:\n" +"학년<br>\n"+
             "interest:\n" +"특기 및 흥미<br>\n"+
             "stdHope:\n" +"학생 진로희망<br>\n"+
@@ -63,7 +66,8 @@ public class CareerController {
     @PatchMapping("/clear")
     @Operation(summary = "진로지도 수정"
             ,description = "<br>" +
-            "userId:\n" +"유저pk값<br>\n"+
+            "userId:\n" +"유저pk값(외래키)<br>\n"+
+            "careerId:\n" +"진로지도 pk값\n"+
             "grade:\n" +"학년<br>\n"+
             "interest:\n" +"특기 및 흥미<br>\n"+
             "stdHope:\n" +"학생 진로희망<br>\n"+
@@ -77,7 +81,8 @@ public class CareerController {
     @GetMapping("/hope")
     @Operation(summary = "희망대학,희망학과 출력"
             ,description = "<br>" +
-            "userId:\n" +"유저pk값<br>\n"+
+            "userId:\n" +"유저pk값(외래키)<br>\n"+
+            "careerId:\n" +"진로지도 pk값\n"+
             "grade:\n" +"학년<br>\n"+
             "interest:\n" +"특기 및 흥미<br>\n"+
             "stdHope:\n" +"학생 진로희망<br>\n"+

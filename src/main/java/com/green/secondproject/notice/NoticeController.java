@@ -1,5 +1,6 @@
 package com.green.secondproject.notice;
 
+import com.green.secondproject.admin.model.StudentClassVo;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.notice.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,9 +26,6 @@ public class NoticeController {
     public List<NoticeVo> noticeList(){
         return service.noticeList();
     }
-//    @PostMapping
-//    @Operation(summary = "공지사항 입력")
-//    public
 
     @PostMapping
     @Operation(summary = "공지사항등록")
@@ -59,4 +57,12 @@ public class NoticeController {
     public int upHits(Long noticeId) {
         return service.upHits(noticeId);
     }
+//
+//    @GetMapping("/search")
+//    @Operation(summary = "검색기능")
+//
+//    public List<NoticeVo> searchNotice(@RequestParam(required = false) String search, int page) {
+//        return service.searchNotice(search, page);
+//    }
+
 }

@@ -157,7 +157,7 @@ public class CareerService {
         entity.setGrade(dto.getGrade());
         entity.setInterest(dto.getInterest());
         entity.setHope_dept(dto.getHopeDept());
-
+        entity.setParent_hope(dto.getParentHope());
         entity.setSpecial_note(dto.getSpecialNote());
         entity.setStd_hope(dto.getStdHope());
         entity.setHope_univ(dto.getHopeUniv());
