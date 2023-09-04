@@ -5,6 +5,7 @@ import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,8 +55,8 @@ public class TeacherMngController {
             (11)enrollState : 재직상태<br>
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search){
-        return ResponseEntity.ok(service.teacherListOfTheSchool(page,search));
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search, @RequestParam(required = false)EnrollState enrollState){
+        return ResponseEntity.ok(service.teacherListOfTheSchool(page,search,enrollState));
     }
 
 

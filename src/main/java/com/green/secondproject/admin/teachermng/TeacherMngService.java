@@ -99,7 +99,7 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search,EnrollState enrollState) {
 
         Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
         if (scEntiOpt.isEmpty()) {
@@ -112,7 +112,7 @@ public class TeacherMngService {
 
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-        if (search == null) {
+        if (search == null && enrollState == null) {//둘다없을때
             Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
             for (UserEntity en : tcList) {
                 VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
@@ -137,7 +137,9 @@ public class TeacherMngService {
                     .list(subResult)
                     .totalCount((int) tcList.getTotalElements())
                     .totalPage(tcList.getTotalPages()).build();
-        } else {
+
+        } else {//검색어 혹은 필터링이 존재할때
+
             Page<UserEntity> tcResearchList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
             for (UserEntity en : tcResearchList) {
                 VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
