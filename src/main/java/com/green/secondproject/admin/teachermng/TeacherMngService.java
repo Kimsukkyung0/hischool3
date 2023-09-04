@@ -99,7 +99,7 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search,EnrollState enrollState) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search, EnrollState enrollState) {
 
         Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
         if (scEntiOpt.isEmpty()) {
@@ -109,62 +109,70 @@ public class TeacherMngService {
         pageable = PageRequest.of(pageable.getPageNumber() - 1, 16);
 
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-
+        Page<UserEntity> tcList;
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-        if (search == null && enrollState == null) {//둘다없을때
-            Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
-            for (UserEntity en : tcList) {
-                VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-                subResult.add(TeacherMngVo.builder()
-                        .userId(en.getUserId())
-                        .schoolNm(scEnti.getNm())
-                        .grade(vanEntity.getGrade())
-                        .vanNum(vanEntity.getClassNum())
-                        .email(en.getEmail())
-                        .nm(en.getNm())
-                        .birth(en.getBirth())
-                        .phone(en.getPhone())
-                        .address(en.getAddress())
-                        .detailAddr(en.getDetailAddr())
-                        .role(en.getRoleType().toString())
-                        .aprYn(en.getAprYn())
-                        .enrollState(en.getEnrollState())
-                        .build());
-            }
 
-            return TeacherMngVoContainer.builder()
-                    .list(subResult)
-                    .totalCount((int) tcList.getTotalElements())
-                    .totalPage(tcList.getTotalPages()).build();
 
-        } else {//검색어 혹은 필터링이 존재할때
-
-            Page<UserEntity> tcResearchList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
-            for (UserEntity en : tcResearchList) {
-                VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-                subResult.add(TeacherMngVo.builder()
-                        .userId(en.getUserId())
-                        .schoolNm(scEnti.getNm())
-                        .grade(vanEntity.getGrade())
-                        .vanNum(vanEntity.getClassNum())
-                        .email(en.getEmail())
-                        .nm(en.getNm())
-                        .birth(en.getBirth())
-                        .phone(en.getPhone())
-                        .address(en.getAddress())
-                        .detailAddr(en.getDetailAddr())
-                        .role(en.getRoleType().toString())
-                        .aprYn(en.getAprYn())
-                        .enrollState(en.getEnrollState())
-                        .build());
-            }
-
-            return TeacherMngVoContainer.builder()
-                    .list(subResult)
-                    .totalCount((int) tcResearchList.getTotalElements())
-                    .totalPage(tcResearchList.getTotalPages()).build();
+        if(search != null && enrollState!=null){
+            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
+            log.info("case 1 : {멀티 필터링}");
+        } else if(search != null && enrollState == null)//검색어 O
+        {
+            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
+            log.info("case 2 : {검색어만 존재}");
+        } else if(enrollState != null && search == null) {//역할필터링 O
+            tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollState(vanEnti, RoleType.TC, enrollState, pageable);
+            log.info("case 3 : {상태값만 존재}");
+        }else {//둘다 있을때
+            tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
+            log.info("case 4 : {둘다 없을때-기본정렬}");
         }
+
+
+//
+//
+//            //둘중 뭔가 하나있을 때
+//            if(search != null && enrollState == null)//검색어 O
+//            {
+//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
+//                log.info("case 1 : {검색어만 존재}");
+//            }
+//            else if(enrollState != null && search == null) {//역할필터링 O
+//                tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollState(vanEnti,RoleType.TC, enrollState ,pageable);
+//                log.info("case 2 : {상태값만 존재}");
+//            }else if (search != null && enrollState!=null){ //둘다없을때
+//                tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
+//                log.info("case 3 : {둘다 없을때-기본정렬}");
+//            }
+//            else {//둘다 있을때
+//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
+//                log.info("case 4 : {멀티 필터링}");
+//            }
+
+        for (UserEntity en : tcList) {
+            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+            subResult.add(TeacherMngVo.builder()
+                    .userId(en.getUserId())
+                    .schoolNm(scEnti.getNm())
+                    .grade(vanEntity.getGrade())
+                    .vanNum(vanEntity.getClassNum())
+                    .email(en.getEmail())
+                    .nm(en.getNm())
+                    .birth(en.getBirth())
+                    .phone(en.getPhone())
+                    .address(en.getAddress())
+                    .detailAddr(en.getDetailAddr())
+                    .role(en.getRoleType().toString())
+                    .aprYn(en.getAprYn())
+                    .enrollState(en.getEnrollState())
+                    .build());
+        }
+
+        return TeacherMngVoContainer.builder()
+                .list(subResult)
+                .totalCount((int) tcList.getTotalElements())
+                .totalPage(tcList.getTotalPages()).build();
     }
 
 
@@ -237,7 +245,7 @@ public class TeacherMngService {
 
         List<Integer> classList = new ArrayList<>();
         //학년이 0에서 3일경우
-        if ((grade >= 0 && grade <= 3)&&((strYear.equals(strThisYear) || year == thisYear + 1))) {
+        if ((grade >= 0 && grade <= 3) && ((strYear.equals(strThisYear) || year == thisYear + 1))) {
             if (grade == 0) {
 
                 List<Integer> unClassified = new ArrayList<>();
@@ -264,7 +272,7 @@ public class TeacherMngService {
         List<Integer> list = new ArrayList<>();
 
         //올해 혹은 후년인지 검사
-        if (p.toString()!=null) {
+        if (p.toString() != null) {
             String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/classInfo")
                             .queryParam("KEY", myApiKey)
                             .queryParam("Type", "json")
@@ -300,7 +308,6 @@ public class TeacherMngService {
                     .toList();
             List<Integer> mutableList = new ArrayList<>(list); // 불변 리스트를 수정 가능한 리스트로 복사
             Collections.sort(mutableList);
-
 
 
             return mutableList;
@@ -391,27 +398,28 @@ public class TeacherMngService {
             log.info("FIN vanId : {}", vanId);
 
 
-        }   VanEntity newVan = vanRep.findByVanId(vanId);
-            tcEntiOpt.get().setEnrollState(dto.getEnrollState());
-            tcEntiOpt.get().setVanEntity(newVan);
-            //더티체킹 확인. - 안되는 이유 ? ? ?
-            log.info(tcEntiOpt.get().toString());
-            UserEntity savedUser = userRepository.save(tcEntiOpt.get());
-            return TeacherMngVo.builder()
-                    .userId(savedUser.getUserId())
-                    .schoolNm(scEntiOpt.get().getNm())
-                    .enrollState(savedUser.getEnrollState())
-                    .grade(newVan.getGrade())
-                    .vanNum(newVan.getClassNum())
-                    .email(savedUser.getEmail())
-                    .nm(savedUser.getNm())
-                    .birth(savedUser.getBirth())
-                    .phone(savedUser.getPhone())
-                    .address(savedUser.getAddress())
-                    .detailAddr(savedUser.getDetailAddr())
-                    .role(savedUser.getRoleType().toString())
-                    .aprYn(savedUser.getAprYn())
-                    .enrollState(savedUser.getEnrollState()).build();
+        }
+        VanEntity newVan = vanRep.findByVanId(vanId);
+        tcEntiOpt.get().setEnrollState(dto.getEnrollState());
+        tcEntiOpt.get().setVanEntity(newVan);
+        //더티체킹 확인. - 안되는 이유 ? ? ?
+        log.info(tcEntiOpt.get().toString());
+        UserEntity savedUser = userRepository.save(tcEntiOpt.get());
+        return TeacherMngVo.builder()
+                .userId(savedUser.getUserId())
+                .schoolNm(scEntiOpt.get().getNm())
+                .enrollState(savedUser.getEnrollState())
+                .grade(newVan.getGrade())
+                .vanNum(newVan.getClassNum())
+                .email(savedUser.getEmail())
+                .nm(savedUser.getNm())
+                .birth(savedUser.getBirth())
+                .phone(savedUser.getPhone())
+                .address(savedUser.getAddress())
+                .detailAddr(savedUser.getDetailAddr())
+                .role(savedUser.getRoleType().toString())
+                .aprYn(savedUser.getAprYn())
+                .enrollState(savedUser.getEnrollState()).build();
 
     }
 
