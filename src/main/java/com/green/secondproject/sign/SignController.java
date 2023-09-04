@@ -3,10 +3,12 @@ package com.green.secondproject.sign;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,8 +29,8 @@ public class SignController {
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
-            "email": ex) "test@gmail.com"<br>
-            "pw": ex) "1111"
+            "email": 이메일<br>
+            "pw": 비밀번호
             """)
     public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) {
         String ip = req.getRemoteAddr();
@@ -43,18 +45,18 @@ public class SignController {
     }
 
     @Operation(summary = "회원가입", description = """
-            "email": ex) "std1@gmail.com"<br>
-            "pw": ex) "1111"<br>
-            "nm": ex) "김학생"<br>
-            "schoolCode": 사용자가 선택한 학교의 학교코드 ex) 7240223<br>
-            "schoolNm": ex) 강동고등학교<br>
-            "grade": ex) "1"<br>
-            "classNum": ex) "1"<br>
-            "birth": ex) "2003-08-02"<br>
-            "phone": ex) "010-2739-3928"<br>
-            "address": ex) "대구광역시 중구 중앙대로 394"<br>
-            "detailAddress": ex) "제일빌딩 5F"<br>
-            "role": ex) 선생님이면 TC, 학생이면 STD<br><br>
+            "email": 이메일<br>
+            "pw": 비밀번호<br>
+            "nm": 이름<br>
+            "schoolCode": 사용자가 선택한 학교의 학교코드<br>
+            "schoolNm": 학교명<br>
+            "grade": 학년<br>
+            "classNum": 반<br>
+            "birth": 생일<br>
+            "phone": 연락처<br>
+            "address": 주소<br>
+            "detailAddress": 상세주소<br>
+            "role": 권한 ex) 선생님(TC), 학생(STD)<br><br>
             "pic": 프로필 사진<br>
             "aprPic": 선생님 인증사진
             """)
@@ -83,7 +85,7 @@ public class SignController {
             인증 성공(1), 실패(0)<br>
             인증 코드는 1분간 유효
             """)
-    public int codeConfirm(@RequestParam String code) {
+    public int codeConfirm(@Parameter(description = "인증코드") @RequestParam String code) {
         return emailService.verifyEmail(code);
     }
 
@@ -115,11 +117,8 @@ public class SignController {
     }
 
     @GetMapping("/class-list")
-    @Operation(summary = "선택한 학교, 학년의 반 리스트", description = """
-            "schoolCode": ex) "7240223"<br>
-            "grade": ex) "1"<br>
-            """)
-    public List<Integer> getClassList(SchoolParam p) {
+    @Operation(summary = "선택한 학교, 학년의 반 리스트")
+    public List<Integer> getClassList(@ParameterObject SchoolParam p) {
         return SERVICE.getClassList(p);
     }
 

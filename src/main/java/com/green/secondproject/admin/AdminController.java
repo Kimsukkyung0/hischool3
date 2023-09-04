@@ -2,33 +2,26 @@ package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.etc.CommonRes;
-import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.SignInParam;
 import com.green.secondproject.sign.model.SignInResultDto;
 import com.green.secondproject.sign.model.TokenDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.activation.UnsupportedDataTypeException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.el.stream.Optional;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.web.config.PageableHandlerMethodArgumentResolverCustomizer;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,16 +30,13 @@ import java.util.List;
 @Tag(name = "관리자")
 
 public class AdminController {
-
-
     private final AdminService service;
     private final SignService signService;
 
-
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
-            "email": ex) "test@gmail.com"<br>
-            "pw": ex) "1111"
+            "email": 이메일<br>
+            "pw": 비밀번호
             """)
     public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) {
         String ip = req.getRemoteAddr();
@@ -135,9 +125,7 @@ public class AdminController {
             (8)totalCount : 총 학생 수<br>
             (9)totalPage : 총 페이지 수<br>
             """)
-    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) throws UnsupportedEncodingException {
-        String charset = "UTF-8";
-        search = URLDecoder.decode(search, charset);
+    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
         return service.searchStudent(search, page);
     }
 

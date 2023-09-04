@@ -5,6 +5,7 @@ import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
 import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
 import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -54,8 +55,8 @@ public class TeacherMngController {
             (11)enrollState : 재직상태<br>
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search){
-        return ResponseEntity.ok(service.teacherListOfTheSchool(page,search));
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search, @RequestParam(required = false)EnrollState enrollState){
+        return ResponseEntity.ok(service.teacherListOfTheSchool(page,search,enrollState));
     }
 
 
@@ -77,7 +78,7 @@ public class TeacherMngController {
             출력값 : <br>(1)List<number> : api에 존재하는 해당연도/학년에 속해있는 학반 값(ex) 1,2,3,4,...) <br>
             <연도값의 경우 올해/혹은 후년만 해당되는지 검사합니다><br>
             <학반 값이 api 에 등록되어있지 않은경우 '해당 학반 값 없음'메세지가 출력됩니다.""")
-    public List<Integer> getClassListForTeacher(@PathVariable int year, @PathVariable int grade){
+    public List<Integer> getClassListForTeacher(@PathVariable int grade, @PathVariable int year){
         return service.getClassListForTeacher(grade,year);
     }
     @GetMapping("/stat")
@@ -97,7 +98,13 @@ public class TeacherMngController {
 //    }
 
     @PatchMapping
-    @Operation(summary = "선생님재직여부/학반 변경(수정중)")
+    @Operation(summary = "선생님재직여부/학반 변경" , description = """
+            요구값 : <br>(1)userId : 변경대상유저 pk <br>(2)enrollState : 변경<br>(3)year : 변경대상연도<br>
+            (4)grade : 변경학년(0일경우 해당없음으로 변경)<br>(5)classNum : 변경대상학반<br><br>
+            출력값 : <br> <br> (1)userId : 변경대상선생님pk<br> (2)schoolNm : 학교이름 <br>(3)grade : 변경된 학년 <br> 
+            (4)vanNum : 변경된 학반 <br>(5)email : 교원email <br> (6)nm : 교원이름<br> (7)birth : 생년월일<br>(8)phone :교원연락처<br>"+
+            "(9)address : 상위주소<br> (10)detailAddr : 상세주소 <br> (11)role : 권한명(TC : 선생님) <br> (12)aprYn : 승인여부(0:미승인)"+
+            "(13)enrollState : 변경된 재직상태(ENROLL : 재직중)<br>""")
     public ResponseEntity<TeacherMngVo> updTeacherStatusAndVan(@RequestBody TeacherStatUpdDto dto){
     //        log.info("dto : {}",dto);
         log.info("TeacherStatUpdDto dto : {}",dto.getUserId());

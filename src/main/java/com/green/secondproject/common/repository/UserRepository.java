@@ -14,10 +14,12 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
     UserEntity findByEmail(String email);
+
     UserEntity findByUserId(Long userId);
 
     Page<UserEntity> findAllByRoleTypeAndVanEntityIn(RoleType roleType, List<VanEntity> vanEntity, Pageable page);
-//    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
+
+    //    List<UserEntity> findAllByAprYnAndEnrollStateAndRoleType(int aprYn, EnrollState enrollState, RoleType roleType);
     Page<UserEntity> findAllByVanEntityInAndRoleType(List<VanEntity> vanEntity, RoleType roleType, Pageable pageable);
 
     Page<UserEntity> findByNmContainingAndVanEntityInAndRoleType(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page);
@@ -25,14 +27,22 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);
+
     List<UserEntity> findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(VanEntity vanEntity, int aprYn, EnrollState enrollState, RoleType roleType);
+
     List<UserEntity> findAllByVanEntityAndRoleType(VanEntity vanEntity, RoleType roleType);
+
     List<UserEntity> findAllByVanEntityInAndRoleType(List<VanEntity> vanEntity, RoleType roleType);
 
     //석경작업
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
-    Page<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState,Pageable pageable);
+    Page<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState, Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType")
-    Page<UserEntity> findUsersByVanEntityAndRoleType(List<VanEntity> vanEnti,RoleType roleType,Pageable pageable);
+    Page<UserEntity> findUsersByVanEntityAndRoleType(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
+
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState}")
+    Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
+
+    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(String search, List<VanEntity> vanEntity, RoleType roleType,EnrollState enrollState, Pageable page);
 }

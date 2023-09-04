@@ -8,9 +8,9 @@ public class TeacherStatUpdDto {
 
     private Long userId;
     private EnrollState enrollState;
-    private int classNum;
-    private int grade;
     private String year;
+    private int grade;
+    private int classNum;
 
     public Long getUserId() {
         return userId;

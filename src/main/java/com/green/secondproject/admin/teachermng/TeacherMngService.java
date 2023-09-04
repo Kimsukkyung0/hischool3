@@ -99,7 +99,7 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search, EnrollState enrollState) {
 
         Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
         if (scEntiOpt.isEmpty()) {
@@ -109,60 +109,70 @@ public class TeacherMngService {
         pageable = PageRequest.of(pageable.getPageNumber() - 1, 16);
 
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-
+        Page<UserEntity> tcList;
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-        if (search == null) {
-            Page<UserEntity> tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
-            for (UserEntity en : tcList) {
-                VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-                subResult.add(TeacherMngVo.builder()
-                        .userId(en.getUserId())
-                        .schoolNm(scEnti.getNm())
-                        .grade(vanEntity.getGrade())
-                        .vanNum(vanEntity.getClassNum())
-                        .email(en.getEmail())
-                        .nm(en.getNm())
-                        .birth(en.getBirth())
-                        .phone(en.getPhone())
-                        .address(en.getAddress())
-                        .detailAddr(en.getDetailAddr())
-                        .role(en.getRoleType().toString())
-                        .aprYn(en.getAprYn())
-                        .enrollState(en.getEnrollState())
-                        .build());
-            }
 
-            return TeacherMngVoContainer.builder()
-                    .list(subResult)
-                    .totalCount((int) tcList.getTotalElements())
-                    .totalPage(tcList.getTotalPages()).build();
-        } else {
-            Page<UserEntity> tcResearchList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
-            for (UserEntity en : tcResearchList) {
-                VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
-                subResult.add(TeacherMngVo.builder()
-                        .userId(en.getUserId())
-                        .schoolNm(scEnti.getNm())
-                        .grade(vanEntity.getGrade())
-                        .vanNum(vanEntity.getClassNum())
-                        .email(en.getEmail())
-                        .nm(en.getNm())
-                        .birth(en.getBirth())
-                        .phone(en.getPhone())
-                        .address(en.getAddress())
-                        .detailAddr(en.getDetailAddr())
-                        .role(en.getRoleType().toString())
-                        .aprYn(en.getAprYn())
-                        .enrollState(en.getEnrollState())
-                        .build());
-            }
 
-            return TeacherMngVoContainer.builder()
-                    .list(subResult)
-                    .totalCount((int) tcResearchList.getTotalElements())
-                    .totalPage(tcResearchList.getTotalPages()).build();
+        if(search != null && enrollState!=null){
+            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
+            log.info("case 1 : {멀티 필터링}");
+        } else if(search != null && enrollState == null)//검색어 O
+        {
+            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
+            log.info("case 2 : {검색어만 존재}");
+        } else if(enrollState != null && search == null) {//역할필터링 O
+            tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollState(vanEnti, RoleType.TC, enrollState, pageable);
+            log.info("case 3 : {상태값만 존재}");
+        }else {//둘다 있을때
+            tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
+            log.info("case 4 : {둘다 없을때-기본정렬}");
         }
+
+
+//
+//
+//            //둘중 뭔가 하나있을 때
+//            if(search != null && enrollState == null)//검색어 O
+//            {
+//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
+//                log.info("case 1 : {검색어만 존재}");
+//            }
+//            else if(enrollState != null && search == null) {//역할필터링 O
+//                tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollState(vanEnti,RoleType.TC, enrollState ,pageable);
+//                log.info("case 2 : {상태값만 존재}");
+//            }else if (search != null && enrollState!=null){ //둘다없을때
+//                tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
+//                log.info("case 3 : {둘다 없을때-기본정렬}");
+//            }
+//            else {//둘다 있을때
+//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
+//                log.info("case 4 : {멀티 필터링}");
+//            }
+
+        for (UserEntity en : tcList) {
+            VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());
+            subResult.add(TeacherMngVo.builder()
+                    .userId(en.getUserId())
+                    .schoolNm(scEnti.getNm())
+                    .grade(vanEntity.getGrade())
+                    .vanNum(vanEntity.getClassNum())
+                    .email(en.getEmail())
+                    .nm(en.getNm())
+                    .birth(en.getBirth())
+                    .phone(en.getPhone())
+                    .address(en.getAddress())
+                    .detailAddr(en.getDetailAddr())
+                    .role(en.getRoleType().toString())
+                    .aprYn(en.getAprYn())
+                    .enrollState(en.getEnrollState())
+                    .build());
+        }
+
+        return TeacherMngVoContainer.builder()
+                .list(subResult)
+                .totalCount((int) tcList.getTotalElements())
+                .totalPage(tcList.getTotalPages()).build();
     }
 
 
@@ -213,17 +223,21 @@ public class TeacherMngService {
                 return "올바른 요청이 아닙니다 : " + getUserInfo.getRoleType();
             }
         } else {
-            return "권한이없는 유저에 대한 요청";
+            throw new RuntimeException("권한이없는 유저에 대한 요청");
         }
     }
 
     public List<Integer> getClassListForTeacher(int grade, int year) {
+        int thisYear = LocalDate.now().getYear();
+        String strThisYear = String.valueOf(thisYear);
+        String strYear = String.valueOf(year);
+
         //접속시 바로 관리자 로그인 확인
         MyUserDetails myUser = facade.getLoginUser();
 
         //학교 코드로 학교 entity 가져오기
         Optional<SchoolEntity> scEntiOpt = scRep.findById(myUser.getSchoolId());
-
+        log.info(scEntiOpt.get().getNm());
 
         if (scEntiOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
@@ -231,12 +245,15 @@ public class TeacherMngService {
 
         List<Integer> classList = new ArrayList<>();
         //학년이 0에서 3일경우
-        if (grade >= 0 && grade <= 3) {
+        if ((grade >= 0 && grade <= 3) && ((strYear.equals(strThisYear) || year == thisYear + 1))) {
             if (grade == 0) {
+
                 List<Integer> unClassified = new ArrayList<>();
                 unClassified.add(0);
                 return unClassified;
+
             } else {//학년이 1-3학년일 경우
+
                 SchoolParam scP = new SchoolParam();
                 scP.setSchoolCode(scEntiOpt.get().getCode());
                 scP.setGrade(String.valueOf(grade));
@@ -251,13 +268,11 @@ public class TeacherMngService {
     }
 
     public List<Integer> getClassList(SchoolParam p, int year) {
-        int thisYear = LocalDate.now().getYear();
-        String strThisYear = String.valueOf(thisYear);
-        String strYear = String.valueOf(year);
+
         List<Integer> list = new ArrayList<>();
 
         //올해 혹은 후년인지 검사
-        if (strYear.equals(strThisYear) || year == thisYear + 1) {
+        if (p.toString() != null) {
             String json = ApiUtils.createWebClient().get().uri(uriBuilder -> uriBuilder.path("/classInfo")
                             .queryParam("KEY", myApiKey)
                             .queryParam("Type", "json")
@@ -291,10 +306,12 @@ public class TeacherMngService {
             list = classList.stream()
                     .map(Integer::parseInt)
                     .toList();
-            Collections.sort(list);
+            List<Integer> mutableList = new ArrayList<>(list); // 불변 리스트를 수정 가능한 리스트로 복사
+            Collections.sort(mutableList);
 
 
-            return list;
+            return mutableList;
+
         } else {
             throw new RuntimeException("해당연도에 해당하는 학반 값이 없습니다");
         }
@@ -308,111 +325,6 @@ public class TeacherMngService {
         teacherStatList.add(EnrollState.LEAVE.toString());
         return teacherStatList;
     }
-
-
-//    public TeacherMngVo teacherStatUpd (TeacherStatUpdDto dto){
-//
-//        log.info("dto.getUserId : {}",dto.getUserId());
-//        Optional<VanEntity> vanEnti = null;
-//        Optional<SchoolEntity> scEntiOpt;
-//        Optional<UserEntity> tcEntiOpt;
-//
-//
-//        Long schoolId = facade.getLoginUser().getSchoolId();
-//        int grade = dto.getGrade();
-//        Long vanId = 0L;
-//        String notClassifiedVan = "0";
-//        String notClassifiedYear = "0000";
-//
-//
-//        Optional<SchoolAdminEntity> scAdminEntiOpt = Optional.of(scAdminRep.findByEmail(facade.getLoginUser().getEmail()));
-//
-//
-//            //관리자로그인 확인
-//            if (scAdminEntiOpt.isEmpty()
-//                    || !(scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId))
-//                    ) {
-//            throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
-//
-//        }
-//
-//            if(dto == null){
-//                    //dto 에 값이 들어있지않은 경우
-//                    throw new InvalidParameterException("올바른 값이 아닙니다");
-//            }
-//            //DTO에 값이 들어있는 경우
-//            else {
-//                //유저확인
-//                tcEntiOpt = userRepository.findById(dto.getUserId());
-//                scEntiOpt = scRep.findById(schoolId);
-//
-//                if(tcEntiOpt.isEmpty()){
-//                     throw new EntityNotFoundException("해당하는 유저가 존재하지 않습니다");
-//                }
-//
-//                //txEntiOpt 에 값이 담겨있는 경우
-//                else if(grade>=0 && grade<=3) {
-//                    if (dto.getGrade() == 0) {
-//                        vanEnti = Optional.of(vanRep.findByGradeAndSchoolEntity(String.valueOf(grade), scEntiOpt.get()));
-//
-//                        //학교에 소속없음에 해당하는 학급이 존재하는지 확인
-//                        //존재한다면 값을 넣고
-//                        if (vanEnti.isPresent()) {
-//                            vanId = vanEnti.get().getVanId();
-//                        } else if (vanEnti.isEmpty()) {
-//                            //존재하지않는다면 삽입
-//                            vanId = Optional.of(vanRep.save(VanEntity.builder()
-//                                    .grade(notClassifiedVan)
-//                                    .classNum(notClassifiedVan)
-//                                    .year(notClassifiedYear)
-//                                    .build())).get().getVanId();
-//
-//                        }
-//                    }
-//                    //학년 학반이 있는 경우
-//                    else {
-//                        String year = String.valueOf(LocalDate.now().getYear());
-//                        String strGrade = String.valueOf(grade);
-//                        String classNum = String.valueOf(dto.getClassNum());
-//                        vanEnti = Optional.of(vanRep.findBySchoolEntityAndYearAndGradeAndClassNum(scEntiOpt.get(),
-//                                year, strGrade, classNum));
-//
-//                        if (vanEnti.isEmpty()) {
-//                            vanEnti = Optional.of(VanEntity.builder()
-//                                    .schoolEntity(scEntiOpt.get())
-//                                    .year(year)
-//                                    .grade(strGrade)
-//                                    .classNum(classNum)
-//                                    .build());
-//                            vanId = vanRep.save(vanEnti.get()).getVanId();
-//                        }
-//                    }
-//                }
-//                 tcEntiOpt.get().getVanEntity().setVanId(vanId);
-//
-//
-//
-//        }
-//            UserEntity ue = userRepository.save(UserEntity.builder().userId(dto.getUserId()).enrollState(dto.getEnrollState()).vanEntity(vanEnti.get()).build());
-//            //모든 검증과정을 거치면, UPDATE!!!!!!!!!!!!!!!!
-//            return TeacherMngVo.builder()
-//                    .userId(ue.getUserId())
-//                    .schoolNm(ue.getNm())
-//                    .grade(vanEnti.get().getGrade())
-//                    .vanNum(vanEnti.get().getClassNum())
-//                    .email(ue.getEmail())
-//                    .nm(ue.getNm())
-//                    .birth(ue.getBirth())
-//                    .phone(ue.getPhone())
-//                    .address(ue.getAddress())
-//                    .detailAddr(ue.getDetailAddr())
-//                    .role(ue.getRoleType().toString())
-//                    .aprYn(ue.getAprYn())
-//                    .enrollState(ue.getEnrollState())
-//                    .build();
-//
-//    }
-
 
     public TeacherMngVo teacherStatUpd(TeacherStatUpdDto dto) {
         Long schoolId = facade.getLoginUser().getSchoolId();
@@ -445,6 +357,8 @@ public class TeacherMngService {
             throw new RuntimeException("수정대상 유저가 아닙니다");
 
         } else if (grade >= 0 && grade <= 3) { //입력된 학년 값이 0에서 3학년일 경우 이 구문이 실행됨
+
+
             //case 1: 0반이고 학교에 0반이 없을 경우
             //case 2: 0반이고 학교에 0반이 있 경우
             if (grade == 0) {
@@ -454,12 +368,14 @@ public class TeacherMngService {
                     vanEnti = vanRep.save(newVan);
                     vanId = vanEnti.getVanId();
 
-                    log.info("case 1 / vanId : {}",vanId);
+                    log.info("case 1 / vanId : {}", vanId);
                 } else {
                     vanId = vanEnti.getVanId();
-                    log.info("case 2 / vanId : {}",vanId);
+                    log.info("case 2 / vanId : {}", vanId);
                 }
             }
+
+
             //case 3: 1-3학년인데 해당연도에 학반이 없을 경우
             //case 4: 1-3학년인데 해당연도에 학반이 있을 경우
             else {
@@ -473,23 +389,41 @@ public class TeacherMngService {
                             .classNum(String.valueOf(dto.getClassNum()))
                             .build());
                     vanId = vanEnti.getVanId();
-                    log.info("case 3 / vanId : {}",vanId);
+                    log.info("case 3 / vanId : {}", vanId);
                 } else {
                     vanId = vanEnti.getVanId();
-                    log.info("case 4 / vanId : {}",vanId);
+                    log.info("case 4 / vanId : {}", vanId);
                 }
             }
-            log.info("FIN vanId : {}",vanId);
-
+            log.info("FIN vanId : {}", vanId);
 
 
         }
-        //좀이따 더티체킹 가능한지 확인.
-                return null;
-
-}
-
+        VanEntity newVan = vanRep.findByVanId(vanId);
+        tcEntiOpt.get().setEnrollState(dto.getEnrollState());
+        tcEntiOpt.get().setVanEntity(newVan);
+        //더티체킹 확인. - 안되는 이유 ? ? ?
+        log.info(tcEntiOpt.get().toString());
+        UserEntity savedUser = userRepository.save(tcEntiOpt.get());
+        return TeacherMngVo.builder()
+                .userId(savedUser.getUserId())
+                .schoolNm(scEntiOpt.get().getNm())
+                .enrollState(savedUser.getEnrollState())
+                .grade(newVan.getGrade())
+                .vanNum(newVan.getClassNum())
+                .email(savedUser.getEmail())
+                .nm(savedUser.getNm())
+                .birth(savedUser.getBirth())
+                .phone(savedUser.getPhone())
+                .address(savedUser.getAddress())
+                .detailAddr(savedUser.getDetailAddr())
+                .role(savedUser.getRoleType().toString())
+                .aprYn(savedUser.getAprYn())
+                .enrollState(savedUser.getEnrollState()).build();
 
     }
+
+
+}
 
 
