@@ -49,7 +49,7 @@ public class TeacherMngController {
     @Operation(summary = "각 학교의 전체 교원목록", description = """
             요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>
             (3)sort : 정렬기준 컬럼(default : 이름 오름차순 / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br>
-            (4)search : 검색어 (이름 검색)<br><br>
+            (4)search(선택) : 검색어 (이름 검색)<br>(5)enrollState(선택) : 상태값정렬 <br><br>
             출력값 : <br>(1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>
             (7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)
             (11)enrollState : 재직상태<br>
