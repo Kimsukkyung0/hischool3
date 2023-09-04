@@ -135,9 +135,7 @@ public class AdminController {
             (8)totalCount : 총 학생 수<br>
             (9)totalPage : 총 페이지 수<br>
             """)
-    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) throws UnsupportedEncodingException {
-        String charset = "UTF-8";
-        search = URLDecoder.decode(search, charset);
+    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
         return service.searchStudent(search, page);
     }
 
