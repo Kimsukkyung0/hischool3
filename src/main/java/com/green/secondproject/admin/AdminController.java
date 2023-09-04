@@ -35,8 +35,8 @@ public class AdminController {
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
-            "email": ex) "test@gmail.com"<br>
-            "pw": ex) "1111"
+            "email": 이메일<br>
+            "pw": 비밀번호
             """)
     public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) {
         String ip = req.getRemoteAddr();

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,12 +58,13 @@ public class NoticeController {
     public int upHits(Long noticeId) {
         return service.upHits(noticeId);
     }
-//
-//    @GetMapping("/search")
-//    @Operation(summary = "검색기능")
-//
-//    public List<NoticeVo> searchNotice(@RequestParam(required = false) String search, int page) {
-//        return service.searchNotice(search, page);
-//    }
+
+    @GetMapping("/search")
+    @Operation(summary = "검색기능")
+
+    public List<NoticeVo2> searchNotice(@RequestParam(required = false) String search, int page) {
+
+        return service.searchNotice(search, page);
+    }
 
 }

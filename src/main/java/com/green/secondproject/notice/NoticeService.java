@@ -7,19 +7,23 @@ import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.entity.VanEntity;
 import com.green.secondproject.common.repository.NoticeRepository;
 import com.green.secondproject.common.repository.SchoolRepository;
+import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.notice.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.weaver.ast.Not;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +36,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
     private final AuthenticationFacade facade;
     private final SchoolRepository schoolRepository;
+    private final UserRepository userRepository;
 
     public List<NoticeVo> noticeList() {
         NoticeSelDto dto = new NoticeSelDto();
@@ -86,7 +91,6 @@ public class NoticeService {
 
         NoticeEntity sel = noticeRepository.findByNoticeId(noticeId);
 
-
         NoticeVo vo = NoticeVo.builder()
                 .noticeId(sel.getNoticeId())
                 .title(sel.getTitle())
@@ -117,7 +121,7 @@ public class NoticeService {
                 .title(result.getTitle())
                 .content(result.getContent())
                 .noticeId(result.getNoticeId())
-                .imptyn(result.getImptYn())
+                .imptYn(result.getImptYn())
                 .build();
     }
 
@@ -137,36 +141,50 @@ public class NoticeService {
         noticeRepository.save(entity);
         return entity.getHits();
     }
-//    public List<NoticeVo> searchNotice(String search, int page) {
-//        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
-//        Pageable pageable = PageRequest.of(page-1, 17, sort);
-//        List<NoticeEntity> entities = noticeRepository.findByNmContaining(search);
-//        List<NoticeEntity> nulEntities = noticeRepository.findAllByAprYnAndRoleType(1, RoleType.STD, pageable);
-//
-//
-//        if(search == null) {
-//            return nulEntities.stream().map(item -> NoticeVo.builder()
-//                            .userId(item.getNoticeId())
-//                            .noticeId(item.getNoticeId())
-//                            .title(item.getTitle())
-//                            .content(item.getContent())
-//                            .imptYn(item.getImptYn())
-//                            .createdAt(item.getCreatedAt())
-//                            .hits(item.getHits())
-//                            .build())
-//                    .toList();
-//        }
-//        else {
-//            return entities.stream().map(item -> NoticeVo.builder()
-//                            .userId(item.getNoticeId())
-//                            .noticeId(item.getNoticeId())
-//                            .title(item.getTitle())
-//                            .content(item.getContent())
-//                            .imptYn(item.getImptYn())
-//                            .createdAt(item.getCreatedAt())
-//                            .hits(item.getHits())
-//                            .build())
-//                    .toList();
-//        }
-//    }
+
+
+    public List<NoticeVo2> searchNotice(String search, int page) {
+        MyUserDetails userDetails = facade.getLoginUser();
+        Long userSchoolId = userDetails.getSchoolId();
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, 10, sort);
+
+        List<NoticeVo2> result = new ArrayList<>();
+
+        // 중요공지 (imptYn이 1인 공지)를 먼저 추가
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L);
+        for (NoticeEntity entity : importantNotices) {
+            result.add(NoticeVo2.builder()
+                    .noticeId(entity.getNoticeId())
+                    .title(entity.getTitle())
+                    .imptYn(entity.getImptYn())
+                    .hits(entity.getHits())
+                    .createdAt(entity.getCreatedAt())
+                    .content(entity.getContent())
+                    .schoolId(entity.getSchoolEntity().getSchoolId())
+                    .build());
+        }
+
+        // 그 다음 검색 조건에 따른 나머지 공지를 추가
+        if (search != null) {
+            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByTitleContainingAndImptYnNot(search, 1, pageable); // imptYn이 1이 아닌 공지만 검색
+
+            for (NoticeEntity entity : noticeEntityPage) {
+                SchoolEntity school = entity.getSchoolEntity();
+                if (school.getSchoolId().equals(userSchoolId)) {
+                    result.add(NoticeVo2.builder()
+                            .noticeId(entity.getNoticeId())
+                            .title(entity.getTitle())
+                            .imptYn(entity.getImptYn())
+                            .hits(entity.getHits())
+                            .createdAt(entity.getCreatedAt())
+                            .content(entity.getContent())
+                            .schoolId(school.getSchoolId())
+                            .build());
+                }
+            }
+        }
+        return result;
     }
+}

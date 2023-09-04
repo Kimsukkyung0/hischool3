@@ -3,10 +3,12 @@ package com.green.secondproject.sign;
 import com.green.secondproject.common.config.etc.CommonRes;
 import com.green.secondproject.sign.model.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,8 +29,8 @@ public class SignController {
 
     @PostMapping("/sign-in")
     @Operation(summary = "로그인", description = """
-            "email": ex) "test@gmail.com"<br>
-            "pw": ex) "1111"
+            "email": 이메일<br>
+            "pw": 비밀번호
             """)
     public SignInResultDto signIn(HttpServletRequest req, @RequestBody SignInParam p) {
         String ip = req.getRemoteAddr();
@@ -83,7 +85,7 @@ public class SignController {
             인증 성공(1), 실패(0)<br>
             인증 코드는 1분간 유효
             """)
-    public int codeConfirm(@RequestParam String code) {
+    public int codeConfirm(@Parameter(description = "인증코드") @RequestParam String code) {
         return emailService.verifyEmail(code);
     }
 
@@ -115,11 +117,8 @@ public class SignController {
     }
 
     @GetMapping("/class-list")
-    @Operation(summary = "선택한 학교, 학년의 반 리스트", description = """
-            "schoolCode": ex) "7240223"<br>
-            "grade": ex) "1"<br>
-            """)
-    public List<Integer> getClassList(SchoolParam p) {
+    @Operation(summary = "선택한 학교, 학년의 반 리스트")
+    public List<Integer> getClassList(@ParameterObject SchoolParam p) {
         return SERVICE.getClassList(p);
     }
 
