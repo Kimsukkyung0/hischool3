@@ -10,7 +10,6 @@ public class UserStateUpdVo {
 //    private String grade;
 //    private String classNum;
     private long userId;
-    private long vanId;
     private String schoolNm;
     private String grade;
     private String classNum;

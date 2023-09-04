@@ -23,7 +23,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findByNmContainingAndVanEntityInAndRoleType(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page);
 
-    @Query("SELECT new ")
 
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);

@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class UserStateUpdDto {
     private long userId;
-    private long vanId;
     private String year;
     private int grade;
     private int classNum;
@@ -15,9 +14,6 @@ public class UserStateUpdDto {
 
     public long getUserId() {
         return userId;
-    }
-    public long getVanId() {
-        return vanId;
     }
     public String getYear() {
         return year;
