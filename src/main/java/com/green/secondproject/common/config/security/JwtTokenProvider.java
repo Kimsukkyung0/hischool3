@@ -27,8 +27,8 @@ public class JwtTokenProvider {
     public final Key ACCESS_KEY;
     public final Key REFRESH_KEY;
     public final String TOKEN_TYPE;
-    //public final long ACCESS_TOKEN_VALID_MS = 1000L * 30; // 30초
-    public final long ACCESS_TOKEN_VALID_MS = 1000L * 60 * 30; // 30분
+    public final long ACCESS_TOKEN_VALID_MS = 1000L * 30; // 30초
+    //public final long ACCESS_TOKEN_VALID_MS = 1000L * 60 * 30; // 30분
     public final long REFRESH_TOKEN_VALID_MS = 1_296_000_000L; // 1000L * 60 * 60 * 24 * 15 -> 15일
     private final UserRepository userRepository;
     private final SchoolAdminRepository adminRepository;

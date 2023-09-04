@@ -43,18 +43,18 @@ public class SignController {
     }
 
     @Operation(summary = "회원가입", description = """
-            "email": ex) "std1@gmail.com"<br>
-            "pw": ex) "1111"<br>
-            "nm": ex) "김학생"<br>
-            "schoolCode": 사용자가 선택한 학교의 학교코드 ex) 7240223<br>
-            "schoolNm": ex) 강동고등학교<br>
-            "grade": ex) "1"<br>
-            "classNum": ex) "1"<br>
-            "birth": ex) "2003-08-02"<br>
-            "phone": ex) "010-2739-3928"<br>
-            "address": ex) "대구광역시 중구 중앙대로 394"<br>
-            "detailAddress": ex) "제일빌딩 5F"<br>
-            "role": ex) 선생님이면 TC, 학생이면 STD<br><br>
+            "email": 이메일<br>
+            "pw": 비밀번호<br>
+            "nm": 이름<br>
+            "schoolCode": 사용자가 선택한 학교의 학교코드<br>
+            "schoolNm": 학교명<br>
+            "grade": 학년<br>
+            "classNum": 반<br>
+            "birth": 생일<br>
+            "phone": 연락처<br>
+            "address": 주소<br>
+            "detailAddress": 상세주소<br>
+            "role": 권한 ex) 선생님(TC), 학생(STD)<br><br>
             "pic": 프로필 사진<br>
             "aprPic": 선생님 인증사진
             """)

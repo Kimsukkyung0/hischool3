@@ -184,11 +184,8 @@ public class AdminService {
 
         SchoolEntity schoolEntity = schoolOpt.get();
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Sort sort = Sort.by(Sort.Direction.ASC, "VanEntity", "nm");
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
-
-
-
 
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
@@ -196,7 +193,6 @@ public class AdminService {
         Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
-
 
         if (search != null) {
             for (UserEntity entity : entities) {
@@ -242,13 +238,13 @@ public class AdminService {
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {
         Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
 
+
         UserEntity entity = optEntity.get();
         VanEntity.builder()
                 .vanId(dto.getVanId())
                 .build();
 
 //        entity.getVanEntity().setVanId(entity.getVanEntity().getVanId());
-
 
         userRepository.save(entity);
 
