@@ -188,9 +188,6 @@ public class AdminService {
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
 
-
-
-
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
         Page<UserEntity> entities = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanList, RoleType.STD, pageable);
         Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);

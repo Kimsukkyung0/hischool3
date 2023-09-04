@@ -13,5 +13,6 @@ public class NoticeVo2 {
     private String content;
     private LocalDateTime createdAt;
     private int hits;
-    private int imptyn;
+    private int imptYn;
+    private Long schoolId;
 }
