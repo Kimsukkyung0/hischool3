@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.acaResult.model.CalcClassRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.StudentService;
@@ -306,5 +307,11 @@ public class TeacherController {
                     + "<br>woleranke - 전교석차")
     int acasubject(@RequestBody AcalistDto2 dto) {
         return service.acasubject(dto);
+    }
+
+    @PatchMapping("/rank")
+    @Operation(summary = "반, 전교 석차, 등급 계산")
+    public int calcRank(@RequestBody CalcClassRankParam p) {
+        return service.calcRank(p);
     }
 }
