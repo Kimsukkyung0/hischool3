@@ -2,6 +2,7 @@ package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.SignInParam;
@@ -125,8 +126,14 @@ public class AdminController {
             (8)totalCount : 총 학생 수<br>
             (9)totalPage : 총 페이지 수<br>
             """)
-     StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
-        return service.searchStudent(search, page);
+    public StudentClassListVo searchStudent(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String classNum,
+            @RequestParam(required = false) String grade,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) EnrollState enrollState) {
+
+        return service.searchStudent(search, classNum, grade, page, enrollState);
     }
 
 
@@ -145,12 +152,7 @@ public class AdminController {
     }
 
     @PatchMapping("/user-statement")
-    @Operation(summary = "학생 학년,반 변경" , description = """
-            요구값 : <br>(1)userId : 변경대상유저 pk <br>(2)year : 변경대상연도<br>
-            (3)grade : 변경학년(0일경우 해당없음으로 변경)<br>(4)classNum : 변경대상학반<br><br>
-            출력값 : <br> <br> (1)userId : 변경 대상 학생 PK<br> (2)schoolNm : 학교 이름<br>
-            (3)grade : 변경된 학년 <br> (4)vanNum : 변경된 학반 <br> (5)nm : 학생 이름"+
-            """)
+    @Operation(summary = "학생 학년,반 변경 (수정중)")
     public ResponseEntity<UserStateUpdVo> updUserState(@RequestBody UserStateUpdDto dto) {
         UserStateUpdVo vo = service.updUserState(dto);
         return ResponseEntity.ok(vo);

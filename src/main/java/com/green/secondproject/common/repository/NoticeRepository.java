@@ -35,8 +35,10 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
 
     NoticeEntity findByNoticeId(Long noticeId);
 
-    Page<NoticeEntity> findByTitleContaining(String search,Pageable pageable);
-    List<NoticeEntity> findByImptYn(Long imptYn);
+    List<NoticeEntity> findByImptYn(Long imptYn,Pageable pageable);
 
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
+
+    long count();
+
 }

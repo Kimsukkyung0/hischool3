@@ -1,5 +1,8 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.acaResult.AcaResultMapper;
+import com.green.secondproject.acaResult.model.CalcClassRankParam;
+import com.green.secondproject.acaResult.model.CalcWholeRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.admin.model.NoticeTeacherVo;
 import com.green.secondproject.common.config.etc.EnrollState;
@@ -19,6 +22,7 @@ import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,6 +40,8 @@ public class TeacherService {
     private final AuthenticationFacade facade;
     private final AcaResultRepository acaResultRepository;
     private final NoticeRepository noticeRepository;
+    private final AcaResultMapper acaResultMapper;
+
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
                 VanEntity.builder()
@@ -477,21 +483,40 @@ public class TeacherService {
 //=========================================수정요 ======================================================
 
     public int acasubject(AcalistDto2 dto) {
-        List<AcaSubjectVo> list = new LinkedList<>();
-        for (int i = 0; i <dto.getList().size() ; i++) {
-            AcaSubjectVo vo = new AcaSubjectVo();
+//        acaResultRepository.saveAll();
+//        List<AcaSubjectVo> list = new LinkedList<>();
+//        for (int i = 0; i <dto.getList().size() ; i++) {
+//            AcaSubjectVo vo = new AcaSubjectVo();
+//
+//            vo.setMidfinal(dto.getList().get(i).getMidfinal());
+//            vo.setClassrank(dto.getList().get(i).getClassrank());
+//            vo.setScore(dto.getList().get(i).getScore());
+//            vo.setSemester(dto.getList().get(i).getSemester());
+//            vo.setSubjectid(dto.getList().get(i).getSubjectid());
+//            vo.setRating(dto.getList().get(i).getRating());
+//            vo.setWholerank(dto.getList().get(i).getWholerank());
+//            vo.setUserid(dto.getList().get(i).getUserid());
+//            list.add(vo);
+//        }
+//        return mapper.acasubject(list);
+        return 0;
+    }
 
-            vo.setMidfinal(dto.getList().get(i).getMidfinal());
-            vo.setClassrank(dto.getList().get(i).getClassrank());
-            vo.setScore(dto.getList().get(i).getScore());
-            vo.setSemester(dto.getList().get(i).getSemester());
-            vo.setSubjectid(dto.getList().get(i).getSubjectid());
-            vo.setRating(dto.getList().get(i).getRating());
-            vo.setWholerank(dto.getList().get(i).getWholerank());
-            vo.setUserid(dto.getList().get(i).getUserid());
-            list.add(vo);
-        }
-        return mapper.acasubject(list);
+    public int calcRank(CalcClassRankParam p) {
+        String year = String.valueOf(LocalDate.now().getYear());
+        MyUserDetails user = facade.getLoginUser();
+
+        p.setVanId(user.getVanId());
+        p.setYear(year);
+        acaResultMapper.calcClassRank(p);
+
+        return acaResultMapper.calcWholeRankAndRating(CalcWholeRankParam.builder()
+                .semester(p.getSemester())
+                .midFinal(p.getMidFinal())
+                .year(year)
+                .schoolId(user.getSchoolId())
+                .grade(user.getGrade())
+                .build());
     }
 }
 
