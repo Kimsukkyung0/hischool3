@@ -62,7 +62,7 @@ public class NoticeController {
     @GetMapping("/search")
     @Operation(summary = "검색기능")
 
-    public List<NoticeVo2> searchNotice(@RequestParam(required = false) String search, int page) {
+    public NoticeListVo searchNotice(@RequestParam(required = false) String search, int page) {
 
         return service.searchNotice(search, page);
     }

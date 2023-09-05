@@ -143,19 +143,18 @@ public class NoticeService {
     }
 
 
-    public List<NoticeVo2> searchNotice(String search, int page) {
+    public NoticeListVo searchNotice(String search, int page) {
         MyUserDetails userDetails = facade.getLoginUser();
         Long userSchoolId = userDetails.getSchoolId();
 
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
-        Pageable pageable = PageRequest.of(page - 1, 10, sort);
-
-        List<NoticeVo2> result = new ArrayList<>();
-
+        Pageable pageable = PageRequest.of(page - 1, 14, sort);
+        List<NoticeTotalVo> result = new ArrayList<>();
+int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L,pageable);
         for (NoticeEntity entity : importantNotices) {
-            result.add(NoticeVo2.builder()
+            result.add(NoticeTotalVo.builder()
                     .noticeId(entity.getNoticeId())
                     .title(entity.getTitle())
                     .imptYn(entity.getImptYn())
@@ -166,14 +165,15 @@ public class NoticeService {
                     .build());
         }
 
-        // 그 다음 검색 조건에 따른 나머지 공지를 추가
-        if (search != null) {
-            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByTitleContainingAndImptYnNot(search, 1, pageable); // imptYn이 1이 아닌 공지만 검색
+        int remainingNotices = 14 - importantNotices.size();
+        if (remainingNotices > 0 && search != null) {
+            pageable = PageRequest.of(page - 1, remainingNotices, sort);  // Reset pageable to fetch the remaining notices
+            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByTitleContainingAndImptYnNot(search, 1, pageable);
 
             for (NoticeEntity entity : noticeEntityPage) {
                 SchoolEntity school = entity.getSchoolEntity();
                 if (school.getSchoolId().equals(userSchoolId)) {
-                    result.add(NoticeVo2.builder()
+                    result.add(NoticeTotalVo.builder()
                             .noticeId(entity.getNoticeId())
                             .title(entity.getTitle())
                             .imptYn(entity.getImptYn())
@@ -185,6 +185,17 @@ public class NoticeService {
                 }
             }
         }
-        return result;
+
+
+
+        long total = noticeRepository.count();
+
+        NoticeListVo list = NoticeListVo.builder()
+        .list(result)
+        .total(total)
+        .totalPage(total/totalPag+1)
+        .build();
+
+        return list;
     }
 }
