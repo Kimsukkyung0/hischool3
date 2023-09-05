@@ -15,6 +15,7 @@ import javax.security.auth.Subject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @ToString
@@ -121,21 +122,23 @@ public class ScSbjService {
     }
 
     public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<ScSbjListDto2> dto, int grade) {
-//        List<ScSbjEntity> sbjEnti = new ArrayList<>();
-        List<ScSbjListVo2> result = new ArrayList<>();
+        List<ScSbjEntity> midResult = new ArrayList<>();
+        List<ScSbjListVo2> finResult = new ArrayList<>();
         List<Long> sbjIdList = new ArrayList<>();
 
         if (grade > 0 && grade <= 3) {
+
             SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
 
             //요청받은 리스트->Long List 로 변환
             for (int i = 0; i < dto.size(); i++) {
                 sbjIdList.add(dto.get(i).getSubjectId());
             }
+
             //기존에 등록되어 있는 리스트를 Long List로
             List<Long> preListSubjectId = sbjRep.findAllSubjectIdBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
 
-            //case 1 : 1차로 기존 목록에 대비, 삭제할 부분 찾기
+            //case 1 : 1차로 기존등록리스트에서, newlist를 대비해 존재하는 아이디찾기
             List<Long> excludedIdList = preListSubjectId.stream().filter(item -> !sbjIdList.contains(item)).toList();
             for(Long ex: excludedIdList){
                 log.info("ex : {}",ex);
@@ -149,22 +152,28 @@ public class ScSbjService {
 
 
             //case 2 : 새로운 부분 찾아내기 -요청받은 리스트에서 새로운 부분 찾기
-//            sbjIdList.stream().filter(item -> )
+            List<Long> newSbjList = sbjIdList.stream().filter(item -> !preListSubjectId.contains(item)).toList();
+            for(Long n: newSbjList){
+                log.info("new : {}",n);
+            }
 
-
-
-
-            List<SubjectEntity> newSubjectEntityList = sbjtRep.findAllBySubjectIdList(sbjIdList);
-
-            //case 3 : 리스트에 저장되어있지 않은 새로운 값이라면 서브젝트 엔티티를 찾아서,
-
-
-
-
-
-//            List<Long> preList = preListSubjectId.stream().filter(item -> sbjIdList.contains(item)).toList();
-
-            return result;
+            midResult = sbjRep.saveAll(newSbjList.stream().map(item->ScSbjEntity.builder().schoolEntity(scEnti).grade(String.valueOf(grade))
+                    .subjectEntity(SubjectEntity.builder().subjectId(item).build()).build()).toList());
+            for(ScSbjEntity sb : midResult){
+                log.info("sb : {}",sb);
+            }
+            finResult = midResult.stream()
+                    .map(item -> ScSbjListVo2.builder()
+                            .scSbjId(item.getSchoolSbjId())
+                            .subjectId(item.getSubjectEntity().getSubjectId())
+                            .subjectNm(item.getSubjectEntity().getNm())
+//                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+                            .build())
+                    .collect(Collectors.toList());
+            for(ScSbjListVo2 sb : finResult){
+                log.info("vo : {}",sb);
+            }
+            return finResult;
 
         } else {
             throw new RuntimeException("올바른 요청 값이 아닙니다");
