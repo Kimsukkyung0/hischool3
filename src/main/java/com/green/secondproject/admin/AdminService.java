@@ -179,7 +179,7 @@ public class AdminService {
                 .build();
     }
 
-    public StudentClassListVo searchStudent(String search, int page) {
+    public StudentClassListVo searchStudent(String search,  EnrollState enrollState, String grade, String classNum, int page) {
         Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
         if (schoolOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
@@ -194,6 +194,7 @@ public class AdminService {
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
         Page<UserEntity> entities = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanList, RoleType.STD, pageable);
         Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);
+//        Page<UserEntity> aaa = userRepository.findByNmContainingAndEnrollStateAndVanEntityAndVanEntity(search, enrollState, grade, classNum, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
 
@@ -328,7 +329,7 @@ public class AdminService {
 
         return UserStateUpdVo.builder()
                 .userId(savedUser.getUserId())
-                .schoolNm(stdEntiOpt.get().getNm())
+                .schoolNm(scEntiOpt.get().getNm())
                 .grade(newVan.getGrade())
                 .classNum(newVan.getClassNum())
                 .nm(savedUser.getNm())

@@ -4,6 +4,7 @@ import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findByNmContainingAndVanEntityInAndRoleType(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page);
 
+
+//    @Query("SELECT u,v.grade,v.classNum FROM UserEntity u " +
+//            "JOIN u.vanEntity v " +
+//            "WHERE u.enrollState = :#{enrollState} AND v.grade = :#{grade} AND v.classNum = :#{classNum}")
+//    Page<UserEntity> findByNmContainingAndEnrollStateAndVanEntityAndVanEntity(@Param("search") String search, EnrollState enrollState, String grade, String classNum, Pageable pageable);
 
     //규진작업
     long countByVanEntityInAndRoleTypeAndAprYn(List<VanEntity> vanEntity, RoleType roleType, int aprYn);
