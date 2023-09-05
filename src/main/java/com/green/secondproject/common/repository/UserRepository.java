@@ -55,10 +55,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             + "AND (:classNum IS NULL OR v.classNum = :classNum) "
             + "AND (:grade IS NULL OR v.grade = :grade) "
             + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)")
+
     Page<UserEntity> findByCriteria(
             @Param("search") String search,
             @Param("classNum") String classNum,
             @Param("grade") String grade,
             @Param("enrollState") EnrollState enrollState,
             Pageable pageable);
+
 }

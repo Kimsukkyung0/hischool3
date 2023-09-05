@@ -190,14 +190,15 @@ public class AdminService {
             Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
             Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
-            List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
 
             // 필터링 조건을 사용하여 학생을 검색
             Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, enrollState, pageable);
 
+
             List<StudentClassVo> result = new ArrayList<>();
             for (UserEntity entity : entities) {
                 VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
+
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
                         .schoolId(schoolEntity.getSchoolId())
