@@ -65,7 +65,7 @@ public class ScSbjController {
 
     @PutMapping
     @Operation(summary = "학교별 과목 수정")
-    ResponseEntity<List<ScSbjListVo2>> updSubjectsBySchoolAndGrade(@RequestBody ScSbjListDto list, @RequestParam int grade){
+    ResponseEntity<List<ScSbjListVo2>> updSubjectsBySchoolAndGrade(@RequestBody List<ScSbjListDto2> list, @RequestParam int grade){
         List<ScSbjListVo2> vo = service.updSubjectsBySchoolAndGrade(list, grade);
         return ResponseEntity.ok(vo);
     }

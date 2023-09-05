@@ -1,9 +1,7 @@
 package com.green.secondproject.common.repository;
 
-import com.green.secondproject.admin.schoolsubject.model.SbjDto;
 import com.green.secondproject.common.entity.SbjCategoryEntity;
 import com.green.secondproject.common.entity.SubjectEntity;
-import com.green.secondproject.common.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

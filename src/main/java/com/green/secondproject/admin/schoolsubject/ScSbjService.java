@@ -4,13 +4,15 @@ import com.green.secondproject.admin.schoolsubject.model.*;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.Subject;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 @ToString
 @RequiredArgsConstructor
 @Slf4j
+@DynamicUpdate
 public class ScSbjService {
     private final ScSbjRepository sbjRep;
     private final AuthenticationFacade facade;
@@ -26,6 +29,7 @@ public class ScSbjService {
     private final SubjectRepository sbjtRep;
     private final SbjCategoryRepository cateRep;
     private final SchoolRepository scRep;
+    private final EntityManager em;
 
     public List<ScSbjListVo> saveAll(ScSbjListDto list, int grade) {
         List<ScSbjListVo> fkResult = new ArrayList<>();
@@ -116,60 +120,55 @@ public class ScSbjService {
                 .subjectNm(item.getNm()).build()).toList();
     }
 
-    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(ScSbjListDto dto, int grade) {
+    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<ScSbjListDto2> dto, int grade) {
+//        List<ScSbjEntity> sbjEnti = new ArrayList<>();
         List<ScSbjListVo2> result = new ArrayList<>();
-        List<Long> sbjList = new ArrayList<>();
-        int idx = 0;
+        List<Long> sbjIdList = new ArrayList<>();
 
         if (grade > 0 && grade <= 3) {
             SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
 
-
-            for (int i = 0; i < dto.getList().size(); i++) {
-                sbjList.add(dto.getList().get(i).getSubjectId());
+            //요청받은 리스트->Long List 로 변환
+            for (int i = 0; i < dto.size(); i++) {
+                sbjIdList.add(dto.get(i).getSubjectId());
             }
-            List<SubjectEntity> list = sbjtRep.findAllBySubjectIdList(sbjList);
+            //기존에 등록되어 있는 리스트를 Long List로
+            List<Long> preListSubjectId = sbjRep.findAllSubjectIdBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
 
-            List<ScSbjEntity> sbjEnti = new ArrayList<>();
-            list.stream().map(item -> sbjEnti.add(ScSbjEntity.builder()
-                    .schoolEntity(scEnti)
-                    .subjectEntity(item)
-                    .grade(String.valueOf(grade))
-                    .build())).toList();
+            //case 1 : 1차로 기존 목록에 대비, 삭제할 부분 찾기
+            List<Long> excludedIdList = preListSubjectId.stream().filter(item -> !sbjIdList.contains(item)).toList();
+            for(Long ex: excludedIdList){
+                log.info("ex : {}",ex);
+            }
+            List<SubjectEntity> targets4Del = sbjtRep.findAllBySubjectIdList(excludedIdList);
+            for(SubjectEntity tg: targets4Del){
+                log.info("tg : {}",tg);
+            }
+            int delResult = sbjRep.deleteAllBySubjectEntity(targets4Del);
+            log.info("delResult : {}",delResult);
 
-            sbjRep.saveAll(sbjEnti);
 
-            sbjEnti.stream().map(item -> result.add(
-                    ScSbjListVo2.builder()
-                            .subjectNm(item.getSubjectEntity().getNm())
-                            .subjectId(item.getSubjectEntity().getSubjectId())
-                            .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
-                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
-                            .scSbjId(item.getSchoolSbjId()).build())).toList();
+            //case 2 : 새로운 부분 찾아내기 -요청받은 리스트에서 새로운 부분 찾기
+//            sbjIdList.stream().filter(item -> )
+
+
+
+
+            List<SubjectEntity> newSubjectEntityList = sbjtRep.findAllBySubjectIdList(sbjIdList);
+
+            //case 3 : 리스트에 저장되어있지 않은 새로운 값이라면 서브젝트 엔티티를 찾아서,
+
+
+
+
+
+//            List<Long> preList = preListSubjectId.stream().filter(item -> sbjIdList.contains(item)).toList();
+
             return result;
 
         } else {
             throw new RuntimeException("올바른 요청 값이 아닙니다");
         }
     }
-    //            //접속한 관리자 아이디를 통해 관리자 entity 찾기
-//            SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
-//            //관리자의 학교, 수정대상 학년 정보를 불러오기.
-//            Optional<List<ScSbjEntity>> sbjEntityList = Optional.of(sbjRep.findAllBySchoolEntityAndGrade(scEnti, String.valueOf(grade)));
-//            for (int i = 0; i < sbjEntityList.get().size(); i++) {
-//                if (sbjEntityList.get().contains(dto.getList().get(i))) {
-//                    SubjectEntity sbjtEnti = sbjtRep.findById(dto.getList().get(i).getSubjectId()).get();
-//                    dto.getList().stream().map(item -> result.add(
-//                            ScSbjListVo2.builder()
-//                                    .subjectNm(sbjtEnti.getNm())
-//                                    .subjectId(sbjtEnti.getSubjectId())
-//                                    .categoryId(sbjtEnti.getSbjCategoryEntity().getCategoryId())
-//                                    .categoryNm(sbjtEnti.getSbjCategoryEntity().getNm()).build()));
-//                }
-//            } return sbjRep.saveAll(sbjEntityList);
-
-//            List<ScSbjEntity> sbjEntityList = sbjRep.findAllBySchoolEntityAndGrade(scEnti, String.valueOf(grade));
-
-
 }
 
