@@ -10,5 +10,7 @@ import java.util.List;
 public interface ScSbjRepository extends JpaRepository<ScSbjEntity, Long> {
 //    List<ScSbjEntity> findAllBySchoolEntity(SchoolEntity schoolEntity);
     List<ScSbjEntity> findAllBySchoolEntityAndGrade(SchoolEntity schoolEntity,String grade);
-    List<ScSbjEntity> findDistinctBySchoolEntityAndGrade(SchoolEntity schoolEntity,String grade);
+
+
 }
+

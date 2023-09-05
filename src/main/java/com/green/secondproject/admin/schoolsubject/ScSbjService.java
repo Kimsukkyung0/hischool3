@@ -58,9 +58,9 @@ public class ScSbjService {
     public List<ScSbjGradeVo> adminSbjList(int grade) {
         List<ScSbjGradeVo> result = new ArrayList<>();
 
-        if(grade>0 && grade<=3) {
+        if (grade > 0 && grade <= 3) {
             List<ScSbjEntity> sbjEnti = sbjRep.findAllBySchoolEntityAndGrade(scAdRep.findById(facade.getLoginUserPk())
-                            .get().getSchoolEntity(), String.valueOf(grade));
+                    .get().getSchoolEntity(), String.valueOf(grade));
 
             result = sbjEnti.stream().map(item -> ScSbjGradeVo.builder()
 //                    .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
@@ -90,25 +90,24 @@ public class ScSbjService {
 
     public int delete(Long scSbjId) {
 
-        Optional<ScSbjEntity> optEntity =  sbjRep.findById(scSbjId);
+        Optional<ScSbjEntity> optEntity = sbjRep.findById(scSbjId);
 
-        if (optEntity.isPresent()){
+        if (optEntity.isPresent()) {
             sbjRep.deleteById(scSbjId);
             return 1;
-        }
-        else{
+        } else {
             return 0;
         }
     }
 
     public List<ScCateVo> getCateList() {
-        List<SbjCategoryEntity> categoryEntities =  cateRep.findAllByTypeIsOrderByNm(1);
+        List<SbjCategoryEntity> categoryEntities = cateRep.findAllByTypeIsOrderByNm(1);
         return categoryEntities.stream().map(item -> ScCateVo.builder()
                 .categoryNm(item.getNm())
                 .categoryId(item.getCategoryId()).build()).toList();
     }
 
-    public List<ScSbjVo> getSubjectListByCate(Long categoryId){
+    public List<ScSbjVo> getSubjectListByCate(Long categoryId) {
         SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
         List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
 
@@ -117,26 +116,60 @@ public class ScSbjService {
                 .subjectNm(item.getNm()).build()).toList();
     }
 
-//    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(ScSbjListDto dto, int grade) {
-//        List<ScSbjListVo2> Result = new ArrayList<>();
-//        int idx = 0;
-//        if (grade > 0 && grade <= 3) {
-//            List<ScSbjEntity> sb = new ArrayList<>();
+    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(ScSbjListDto dto, int grade) {
+        List<ScSbjListVo2> result = new ArrayList<>();
+        List<Long> sbjList = new ArrayList<>();
+        int idx = 0;
+
+        if (grade > 0 && grade <= 3) {
+            SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
+
+
+            for (int i = 0; i < dto.getList().size(); i++) {
+                sbjList.add(dto.getList().get(i).getSubjectId());
+            }
+            List<SubjectEntity> list = sbjtRep.findAllBySubjectIdList(sbjList);
+
+            List<ScSbjEntity> sbjEnti = new ArrayList<>();
+            list.stream().map(item -> sbjEnti.add(ScSbjEntity.builder()
+                    .schoolEntity(scEnti)
+                    .subjectEntity(item)
+                    .grade(String.valueOf(grade))
+                    .build())).toList();
+
+            sbjRep.saveAll(sbjEnti);
+
+            sbjEnti.stream().map(item -> result.add(
+                    ScSbjListVo2.builder()
+                            .subjectNm(item.getSubjectEntity().getNm())
+                            .subjectId(item.getSubjectEntity().getSubjectId())
+                            .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+                            .scSbjId(item.getSchoolSbjId()).build())).toList();
+            return result;
+
+        } else {
+            throw new RuntimeException("올바른 요청 값이 아닙니다");
+        }
+    }
+    //            //접속한 관리자 아이디를 통해 관리자 entity 찾기
 //            SchoolEntity scEnti = scRep.findBySchoolId(facade.getLoginUser().getSchoolId());
-//            List<ScSbjEntity> sbjEntityList = sbjRep.findAllBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
-//            for(ScSbjEntity sc : sbjEntityList){
-//                if(sc.getSubjectEntity().getSubjectId() == dto.getList().get(idx).getSubjectId()) {
-//                    sc.getSubjectEntity().
-//
+//            //관리자의 학교, 수정대상 학년 정보를 불러오기.
+//            Optional<List<ScSbjEntity>> sbjEntityList = Optional.of(sbjRep.findAllBySchoolEntityAndGrade(scEnti, String.valueOf(grade)));
+//            for (int i = 0; i < sbjEntityList.get().size(); i++) {
+//                if (sbjEntityList.get().contains(dto.getList().get(i))) {
+//                    SubjectEntity sbjtEnti = sbjtRep.findById(dto.getList().get(i).getSubjectId()).get();
+//                    dto.getList().stream().map(item -> result.add(
+//                            ScSbjListVo2.builder()
+//                                    .subjectNm(sbjtEnti.getNm())
+//                                    .subjectId(sbjtEnti.getSubjectId())
+//                                    .categoryId(sbjtEnti.getSbjCategoryEntity().getCategoryId())
+//                                    .categoryNm(sbjtEnti.getSbjCategoryEntity().getNm()).build()));
 //                }
-//            }
-//
-//
-//
-//        } else {
-//            throw new RuntimeException("올바른 요청 값이 아닙니다");
-//        }
-//    }
+//            } return sbjRep.saveAll(sbjEntityList);
+
+//            List<ScSbjEntity> sbjEntityList = sbjRep.findAllBySchoolEntityAndGrade(scEnti, String.valueOf(grade));
+
 
 }
 
