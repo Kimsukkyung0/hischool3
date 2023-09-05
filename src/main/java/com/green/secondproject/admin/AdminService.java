@@ -179,25 +179,23 @@ public class AdminService {
                 .build();
     }
 
-    public StudentClassListVo searchStudent(String search, int page) {
-        Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
-        if (schoolOpt.isEmpty()) {
-            throw new RuntimeException("관리자 로그인 필요");
-        }
 
-        SchoolEntity schoolEntity = schoolOpt.get();
+        public StudentClassListVo searchStudent(String search, String classNum, String grade, int page, EnrollState enrollState) {
+            Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
+            if (schoolOpt.isEmpty()) {
+                throw new RuntimeException("관리자 로그인 필요");
+            }
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "VanEntity", "nm");
-        Pageable pageable = PageRequest.of(page - 1, 17, sort);
+            SchoolEntity schoolEntity = schoolOpt.get();
+            Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
+            Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
+            List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
 
-        List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
-        Page<UserEntity> entities = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanList, RoleType.STD, pageable);
-        Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);
+            // 필터링 조건을 사용하여 학생을 검색
+            Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, enrollState, pageable);
 
-        List<StudentClassVo> result = new ArrayList<>();
-
-        if (search != null) {
+            List<StudentClassVo> result = new ArrayList<>();
             for (UserEntity entity : entities) {
                 VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
                 result.add(StudentClassVo.builder()
@@ -211,32 +209,14 @@ public class AdminService {
                         .classNum(vanEntity.getClassNum())
                         .build());
             }
+
             return StudentClassListVo.builder()
                     .list(result)
                     .totalCount((int) entities.getTotalElements())
                     .totalPage(entities.getTotalPages())
                     .build();
-        } else {
-            for (UserEntity entity : nulEntities) {
-                VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
-                result.add(StudentClassVo.builder()
-                        .userId(entity.getUserId())
-                        .schoolId(schoolEntity.getSchoolId())
-                        .nm(entity.getNm())
-                        .email(entity.getEmail())
-                        .phone(entity.getPhone())
-                        .enrollState(entity.getEnrollState())
-                        .grade(vanEntity.getGrade())
-                        .classNum(vanEntity.getClassNum())
-                        .build());
-            }
-            return StudentClassListVo.builder()
-                    .list(result)
-                    .totalCount((int) nulEntities.getTotalElements())
-                    .totalPage(nulEntities.getTotalPages())
-                    .build();
         }
-    }
+
 
 
 //    public StudentClassVo filterStudent(Pageable page, EnrollState enrollState, String grade, String classNum) {

@@ -2,6 +2,7 @@ package com.green.secondproject.admin;
 
 import com.green.secondproject.admin.model.*;
 import com.green.secondproject.common.config.etc.CommonRes;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.entity.SchoolAdminEntity;
 import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.SignInParam;
@@ -125,8 +126,14 @@ public class AdminController {
             (8)totalCount : 총 학생 수<br>
             (9)totalPage : 총 페이지 수<br>
             """)
-    public StudentClassListVo searchStudent(@RequestParam(required = false) String search, int page) {
-        return service.searchStudent(search, page);
+    public StudentClassListVo searchStudent(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String classNum,
+            @RequestParam(required = false) String grade,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(required = false) EnrollState enrollState) {
+
+        return service.searchStudent(search, classNum, grade, page, enrollState);
     }
 
 
