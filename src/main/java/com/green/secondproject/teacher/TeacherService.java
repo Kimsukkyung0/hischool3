@@ -1,6 +1,7 @@
 package com.green.secondproject.teacher;
 
 import com.green.secondproject.acaResult.AcaResultMapper;
+import com.green.secondproject.acaResult.model.AcaResultInsDto;
 import com.green.secondproject.acaResult.model.CalcClassRankParam;
 import com.green.secondproject.acaResult.model.CalcWholeRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
@@ -22,7 +23,6 @@ import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -482,8 +482,17 @@ public class TeacherService {
 
 //=========================================수정요 ======================================================
 
-    public int acasubject(AcalistDto2 dto) {
-//        acaResultRepository.saveAll();
+    public List<AcaResultEntity> saveAcaResult(AcaResultInsDto dto) {
+        List<AcaResultEntity> list = dto.getList().stream().map(item -> AcaResultEntity.builder()
+                .userEntity(UserEntity.builder().userId(dto.getUserId()).build())
+                .subjectEntity(SubjectEntity.builder().subjectId(item.getSubjectId()).build())
+                .semester(dto.getSemester())
+                .midFinal(dto.getMidFinal())
+                .score(item.getScore())
+                .year(String.valueOf(LocalDate.now().getYear()))
+                .build()).collect(Collectors.toList());
+
+        return acaResultRepository.saveAll(list);
 //        List<AcaSubjectVo> list = new LinkedList<>();
 //        for (int i = 0; i <dto.getList().size() ; i++) {
 //            AcaSubjectVo vo = new AcaSubjectVo();
@@ -499,7 +508,6 @@ public class TeacherService {
 //            list.add(vo);
 //        }
 //        return mapper.acasubject(list);
-        return 0;
     }
 
     public int calcRank(CalcClassRankParam p) {
