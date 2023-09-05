@@ -63,4 +63,5 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             @Param("enrollState") EnrollState enrollState,
             Pageable pageable);
 
+
 }

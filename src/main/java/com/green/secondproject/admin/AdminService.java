@@ -188,7 +188,7 @@ public class AdminService {
 
         SchoolEntity schoolEntity = schoolOpt.get();
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
-        Pageable pageable = PageRequest.of(page - 1, 1, sort);
+        Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
 
