@@ -6,6 +6,7 @@ import com.green.secondproject.common.entity.SubjectEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -19,9 +20,11 @@ public interface ScSbjRepository extends JpaRepository<ScSbjEntity, Long> {
     @Query("Select u.subjectEntity.subjectId FROM ScSbjEntity u WHERE u.schoolEntity IN :schoolEntity AND u.grade = :grade")
     List<Long> findAllSubjectIdBySchoolEntityAndGrade(SchoolEntity schoolEntity, String grade);
 
+    @Transactional
     @Modifying
     @Query("DELETE FROM ScSbjEntity u WHERE u.subjectEntity IN :subjectEntities")
     int deleteAllBySubjectEntity(List<SubjectEntity> subjectEntities);
+
 
 }
 
