@@ -12,7 +12,7 @@ import java.util.Optional;
 @Builder
 public class StudentClassVo {
     private long userId;
-    private long schoolId;
+    private Long schoolId;
     private String nm;
     private String email;
     private String phone;
