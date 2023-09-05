@@ -143,8 +143,6 @@ public class RepositoryTest {
 
     @Test
     void 전교_석차_계산() {
-
-
 //        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
 //                SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
 //        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
@@ -190,19 +188,23 @@ public class RepositoryTest {
 
     @Test
     void 내신성적_등록() {
-        for (long classNum = 1; classNum <= 10; classNum++) {
+        final String year = "2023";
+        final long subjectId = 126L;
+        final int midFinal = 1;
+        final int semester = 2;
+
+        for (long classNum = 2; classNum <= 10; classNum++) {
             long startIdx = (classNum - 1) * 20 + 2;
             long endIdx = startIdx + 19;
 
             for (long i = startIdx; i <= endIdx; i++) {
                 acaRepository.save(AcaResultEntity.builder()
                         .userEntity(UserEntity.builder().userId(i).build())
-                        .subjectEntity(SubjectEntity.builder().subjectId(1L).build())
-                        .year("2023")
-                        .midFinal(1)
-                        .rating((int)(Math.random() * 9) + 1)
+                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                        .year(year)
+                        .midFinal(midFinal)
                         .score((int)(Math.random() * 101))
-                        .semester(1)
+                        .semester(semester)
                         .createdAt(LocalDateTime.now())
                         .updatedAt(LocalDateTime.now())
                         .build());

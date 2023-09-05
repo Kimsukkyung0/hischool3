@@ -1,8 +1,10 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.acaResult.model.AcaResultInsDto;
 import com.green.secondproject.acaResult.model.CalcClassRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
+import com.green.secondproject.common.entity.AcaResultEntity;
 import com.green.secondproject.student.StudentService;
 import com.green.secondproject.student.model.*;
 import com.green.secondproject.teacher.model.*;
@@ -296,21 +298,23 @@ public class TeacherController {
 
     //====================성적자동 입력시 수정필요한 부분
 
-    @PostMapping("/subject/aca-ins")
-    @Operation(summary = "학생별 내신성적등록",
-            description = "subjectid - 과목 번호<br>"
-                    + "<br> semester - 학기<br>"
-                    + "<br>midfinal - 중간,기말(1,2)"
-                    + "<br>score - 점수"
-                    + "<br>rating - 등급"
-                    + "<br>classrank - 반석차"
-                    + "<br>woleranke - 전교석차")
-    int acasubject(@RequestBody AcalistDto2 dto) {
-        return service.acasubject(dto);
+    @PostMapping("/aca-result")
+    @Operation(summary = "학생별 내신 성적 등록", description = """
+                    userId - 학생 PK<br>
+                    semester - 학기<br>
+                    midFinal - 중간(1), 기말(2)<br><br>
+                    subjectId - 과목 PK<br>
+                    score - 점수
+                    """)
+    public List<AcaResultEntity> postAcaResult(@RequestBody AcaResultInsDto dto) {
+        return service.saveAcaResult(dto);
     }
 
     @PatchMapping("/rank")
-    @Operation(summary = "반, 전교 석차, 등급 계산")
+    @Operation(summary = "반, 전교 석차, 등급 계산", description = """
+            semester : 학기<br>
+            midFinal : 중간(1), 기말(2)
+            """)
     public int calcRank(@RequestBody CalcClassRankParam p) {
         return service.calcRank(p);
     }
