@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 @EqualsAndHashCode(callSuper = true)
@@ -28,10 +29,12 @@ public class AcaResultEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private UserEntity userEntity;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", nullable = false)
+    @JsonIgnore
     private SubjectEntity subjectEntity;
 
     @Column(columnDefinition = "char(4)", nullable = false)
@@ -47,11 +50,14 @@ public class AcaResultEntity extends BaseEntity {
     private int score;
 
     @Column(nullable = false, columnDefinition = "tinyint unsigned")
+    @ColumnDefault(value = "0")
     private int rating;
 
-    @Column(columnDefinition = "tinyint unsigned")
+    @Column(nullable = false, columnDefinition = "tinyint unsigned")
+    @ColumnDefault(value = "0")
     private int classRank;
 
-    @Column(columnDefinition = "int unsigned")
+    @Column(nullable = false, columnDefinition = "int unsigned")
+    @ColumnDefault(value = "0")
     private int wholeRank;
 }

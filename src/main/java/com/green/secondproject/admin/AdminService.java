@@ -179,30 +179,33 @@ public class AdminService {
                 .build();
     }
 
-    public StudentClassListVo searchStudent(String search, int page) {
+
+    public StudentClassListVo searchStudent(String search, String classNum, String grade, int page, EnrollState enrollState) {
         Optional<SchoolEntity> schoolOpt = schoolRepository.findById(facade.getLoginUser().getSchoolId());
         if (schoolOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
         }
 
         SchoolEntity schoolEntity = schoolOpt.get();
-
-        Sort sort = Sort.by(Sort.Direction.ASC, "VanEntity", "nm");
+        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
-
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
-        Page<UserEntity> entities = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanList, RoleType.STD, pageable);
-        Page<UserEntity> nulEntities = userRepository.findAllByRoleTypeAndVanEntityIn(RoleType.STD, vanList, pageable);
+
+        // 필터링 조건을 사용하여 학생을 검색
+        Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, enrollState, pageable);
 
         List<StudentClassVo> result = new ArrayList<>();
+        for (UserEntity entity : entities) {
+            // 사용자와 밴 정보를 연결하여 학교 정보를 가져옴
+            VanEntity vanEntity = entity.getVanEntity();
+            SchoolEntity userSchool = vanEntity.getSchoolEntity();
 
-        if (search != null) {
-            for (UserEntity entity : entities) {
-                VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
+            if (userSchool.getSchoolId().equals(schoolEntity.getSchoolId())) {
+                // 현재 관리자와 동일한 학교에 속한 경우만 결과에 추가
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
-                        .schoolId(schoolEntity.getSchoolId())
+                        .schoolId(userSchool.getSchoolId())
                         .nm(entity.getNm())
                         .email(entity.getEmail())
                         .phone(entity.getPhone())
@@ -211,31 +214,16 @@ public class AdminService {
                         .classNum(vanEntity.getClassNum())
                         .build());
             }
-            return StudentClassListVo.builder()
-                    .list(result)
-                    .totalCount((int) entities.getTotalElements())
-                    .totalPage(entities.getTotalPages())
-                    .build();
-        } else {
-            for (UserEntity entity : nulEntities) {
-                VanEntity vanEntity = vanRepository.findByVanId(entity.getVanEntity().getVanId());
-                result.add(StudentClassVo.builder()
-                        .userId(entity.getUserId())
-                        .schoolId(schoolEntity.getSchoolId())
-                        .nm(entity.getNm())
-                        .email(entity.getEmail())
-                        .phone(entity.getPhone())
-                        .enrollState(entity.getEnrollState())
-                        .grade(vanEntity.getGrade())
-                        .classNum(vanEntity.getClassNum())
-                        .build());
-            }
-            return StudentClassListVo.builder()
-                    .list(result)
-                    .totalCount((int) nulEntities.getTotalElements())
-                    .totalPage(nulEntities.getTotalPages())
-                    .build();
         }
+
+        int totalCount = result.size();
+        int size = pageable.getPageSize();
+
+        return StudentClassListVo.builder()
+                .list(result)
+                .totalCount(totalCount)
+                .totalPage((int)Math.ceil(totalCount/size))
+                .build();
     }
 
 
