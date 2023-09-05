@@ -146,7 +146,7 @@ public class AdminService {
         SchoolEntity schoolEntity = schoolOpt.get();
 
         Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
-        Pageable pageable = PageRequest.of(page - 1, 2, sort);  //페이징 처리 -1해서 슬픔
+        Pageable pageable = PageRequest.of(page - 1, 17, sort);  //페이징 처리 -1해서 슬픔
 
         //Page<UserEntity> list1 = userRepository.findAllByRoleType(RoleType.STD, pageable);
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
@@ -188,7 +188,7 @@ public class AdminService {
 
         SchoolEntity schoolEntity = schoolOpt.get();
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
-        Pageable pageable = PageRequest.of(page - 1, 1, sort);
+        Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
 
@@ -216,12 +216,13 @@ public class AdminService {
             }
         }
 
-        long totalCount = result.size();
+        int totalCount = result.size();
+        int size = pageable.getPageSize();
 
         return StudentClassListVo.builder()
                 .list(result)
-                .totalCount((int) totalCount)
-                .totalPage(entities.getTotalPages())
+                .totalCount(totalCount)
+                .totalPage((int)Math.ceil(totalCount/size))
                 .build();
     }
 
