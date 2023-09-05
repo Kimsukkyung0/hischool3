@@ -1,5 +1,6 @@
 package com.green.secondproject.common.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.secondproject.common.config.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

@@ -1,5 +1,6 @@
 package com.green.secondproject.teacher.subject.model;
 
+import com.green.secondproject.common.entity.AcaResultEntity;
 import lombok.Data;
 
 import java.util.List;

@@ -22,11 +22,15 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @Import({PasswordEncoderConfiguration.class, QueryDslConfig.class})
 @Slf4j
 @Rollback(value = false)
@@ -43,6 +47,15 @@ public class RepositoryTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Test
+    void 랭크함수_테스트() {
+//        List<AcaResultEntity> list = acaRepository.findAll();
+//        List<Integer> rankList = new java.util.ArrayList<>(list.stream().map(AcaResultEntity::getWholeRank).toList());
+//        Collections.sort(rankList);
+//        System.out.println(rankList);
+//        System.out.println(acaRepository.rank());
+//        assertEquals(rankList, acaRepository.rank());
+    }
     @Test
     void 내신_등급_계산() {
         final double one = 0.04;
@@ -130,24 +143,26 @@ public class RepositoryTest {
 
     @Test
     void 전교_석차_계산() {
-        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
-                SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
-        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
-        List<AcaResultEntity> resultList =
-                acaRepository.findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
-                        stdList, 1, SubjectEntity.builder().subjectId(1L).build(), 1, "2023"
-                );
 
-        for (AcaResultEntity res1 : resultList) {
-            int rank = 1;
-            for (AcaResultEntity res2 : resultList) {
-                if (res1.getScore() < res2.getScore()) {
-                    rank++;
-                }
-            }
-            res1.setWholeRank(rank);
-            acaRepository.save(res1);
-        }
+
+//        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+//                SchoolEntity.builder().schoolId(70L).build(), "1", "2023");
+//        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+//        List<AcaResultEntity> resultList =
+//                acaRepository.findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
+//                        stdList, 1, SubjectEntity.builder().subjectId(1L).build(), 1, "2023"
+//                );
+//
+//        for (AcaResultEntity res1 : resultList) {
+//            int rank = 1;
+//            for (AcaResultEntity res2 : resultList) {
+//                if (res1.getScore() < res2.getScore()) {
+//                    rank++;
+//                }
+//            }
+//            res1.setWholeRank(rank);
+//            acaRepository.save(res1);
+//        }
     }
     @Test
     void 반_석차_계산() {
@@ -209,12 +224,12 @@ public class RepositoryTest {
                     vanEntity.getSchoolEntity(), vanEntity.getYear(), vanEntity.getGrade(), vanEntity.getClassNum());
 
             if (van == null) {
-                vanRepository.save(vanEntity);
+                van = vanRepository.save(vanEntity);
             }
 
             for (int i = 1; i <= 20; i++) {
                 userRepository.save(UserEntity.builder()
-                        .vanEntity(vanEntity)
+                        .vanEntity(van)
                         .email("1G" + classNum + "Cstd" + i + "@naver.com")
                         .pw(passwordEncoder.encode("1111"))
                         .nm("1학년" + classNum + "반학생" + i)
@@ -229,6 +244,41 @@ public class RepositoryTest {
                         .updatedAt(LocalDateTime.now())
                         .build());
             }
+        }
+    }
+
+    @Test
+    void 선생님_등록() {
+        for (int classNum = 1; classNum <= 10; classNum++) {
+            VanEntity vanEntity = VanEntity.builder()
+                    .schoolEntity(SchoolEntity.builder().schoolId(70L).build())
+                    .year("2023")
+                    .grade("1")
+                    .classNum(String.valueOf(classNum))
+                    .build();
+
+            VanEntity van = vanRepository.findBySchoolEntityAndYearAndGradeAndClassNum(
+                    vanEntity.getSchoolEntity(), vanEntity.getYear(), vanEntity.getGrade(), vanEntity.getClassNum());
+
+            if (van == null) {
+                van = vanRepository.save(vanEntity);
+            }
+
+            userRepository.save(UserEntity.builder()
+                    .vanEntity(van)
+                    .email("1G" + classNum + "CTC@naver.com")
+                    .pw(passwordEncoder.encode("gkrtod123!"))
+                    .nm("1학년" + classNum + "반선생님")
+                    .pic("1학년" + classNum + "반선생님.jpg")
+                    .birth(LocalDate.now())
+                    .phone("010-0000-0000")
+                    .address("대구시 중구")
+                    .detailAddr("중앙빌딩 5F")
+                    .roleType(RoleType.TC)
+                    .enrollState(EnrollState.ENROLL)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build());
         }
     }
 }
