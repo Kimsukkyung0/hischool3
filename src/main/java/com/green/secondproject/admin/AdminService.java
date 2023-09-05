@@ -2,6 +2,8 @@ package com.green.secondproject.admin;
 
 import com.fasterxml.jackson.dataformat.yaml.UTF8Reader;
 import com.green.secondproject.admin.model.*;
+import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.JwtTokenProvider;
@@ -18,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -235,23 +238,102 @@ public class AdminService {
         }
     }
 
+
+//    public StudentClassVo filterStudent(Pageable page, EnrollState enrollState, String grade, String classNum) {
+//
+//
+//    }
+
+
+//    public UserStateUpdVo updUserState(UserStateUpdDto dto) {
+//        Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
+//
+//
+//        UserEntity entity = optEntity.get();
+//        VanEntity.builder()
+//                .vanId(dto.getVanId())
+//                .build();
+//
+////        entity.getVanEntity().setVanId(entity.getVanEntity().getVanId());
+//
+//        userRepository.save(entity);
+//
+//        return UserStateUpdVo.builder()
+////                .vanId(entity.getVanEntity().getVanId())
+//                .vanId(entity.getVanEntity().getVanId())
+//                .build();
+//    }
+
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {
-        Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
+        Long schoolId = facade.getLoginUser().getSchoolId();
+//        Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
+//        long userId = dto.getUserId();
+        int grade = dto.getGrade();
 
 
-        UserEntity entity = optEntity.get();
-        VanEntity.builder()
-                .vanId(dto.getVanId())
-                .build();
+        Optional<UserEntity> stdEntiOpt = userRepository.findById(dto.getUserId());
+        Optional<SchoolEntity> scEntiOpt = Optional.ofNullable(stdEntiOpt.get().getVanEntity().getSchoolEntity());
+        Optional<SchoolAdminEntity> scAdminEntiOpt = Optional.of(adminRepository.findByEmail(facade.getLoginUser().getEmail()));
 
-//        entity.getVanEntity().setVanId(entity.getVanEntity().getVanId());
+        Long vanId = 0L;
+        String notClassifiedVan = "0";
+        String notClassifiedYear = "0000";
 
-        userRepository.save(entity);
+
+        //관리자로그인 확인
+        if (!scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId)) {
+
+            throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
+
+        } else if (stdEntiOpt.isEmpty() || stdEntiOpt.get().getRoleType().equals(RoleType.TC)) {
+
+            throw new RuntimeException("수정대상 유저가 아닙니다");
+
+        } else if (grade >= 0 && grade <= 3) { //입력된 학년 값이 0에서 3학년일 경우 이 구문이 실행됨
+
+
+            //case 1: 0반이고 학교에 0반이 없을 경우
+            //case 2: 0반이고 학교에 0반이 있 경우
+            if (grade == 0) {
+                VanEntity vanEnti = vanRepository.findByGradeAndSchoolEntity(String.valueOf(grade), scEntiOpt.get());
+                if (vanEnti == null) {
+                    VanEntity newVan = VanEntity.builder().grade(notClassifiedVan).classNum(notClassifiedVan).year(notClassifiedYear).schoolEntity(scEntiOpt.get()).build();
+                    vanEnti = vanRepository.save(newVan);
+                    vanId = vanEnti.getVanId();
+
+                } else {
+                    vanId = vanEnti.getVanId();
+                }
+            }
+            else {
+                VanEntity vanEnti =
+                        vanRepository.findByGradeAndClassNumAndYearAndSchoolEntity(String.valueOf(grade), String.valueOf(dto.getClassNum()), dto.getYear(), scEntiOpt.get());
+                if (vanEnti == null) {
+                    vanEnti = vanRepository.save(VanEntity.builder()
+                            .schoolEntity(scEntiOpt.get())
+                            .year(dto.getYear())
+                            .grade(String.valueOf(grade))
+                            .classNum(String.valueOf(dto.getClassNum()))
+                            .build());
+                    vanId = vanEnti.getVanId();
+                } else {
+                    vanId = vanEnti.getVanId();
+                }
+            }
+        }
+        VanEntity newVan = vanRepository.findByVanId(vanId);
+        stdEntiOpt.get().setVanEntity(newVan);
+
+        UserEntity savedUser = userRepository.save(stdEntiOpt.get());
 
         return UserStateUpdVo.builder()
-//                .vanId(entity.getVanEntity().getVanId())
-                .vanId(entity.getVanEntity().getVanId())
+                .userId(savedUser.getUserId())
+                .schoolNm(stdEntiOpt.get().getNm())
+                .grade(newVan.getGrade())
+                .classNum(newVan.getClassNum())
+                .nm(savedUser.getNm())
                 .build();
+
     }
 
 
