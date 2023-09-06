@@ -1,6 +1,7 @@
 package com.green.secondproject.volunteerwork;
 
 import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VolunteerWorkEntity;
 import com.green.secondproject.common.repository.UserRepository;
@@ -23,7 +24,8 @@ public class VolunteerWorkService {
 
     public VolWorkVo postVolunteerWork(VolWorkInsDto dto){
         UserEntity usrEnti = usrRep.findByUserId(dto.getUserId());
-        if(facade.getLoginUser().getSchoolId() == usrEnti.getVanEntity().getSchoolEntity().getSchoolId()) {
+        if(facade.getLoginUser().getSchoolId() == usrEnti.getVanEntity().getSchoolEntity().getSchoolId()
+        && usrEnti.getRoleType().equals(RoleType.STD)) {
 //            List<VolunteerWorkEntity> volEnti = volRep.findAllByUserEntityAndGrade(usrEnti,grade);
             int totalHrs = volRep.findTotalHrsByUserEntity(usrEnti);
             VolunteerWorkEntity postUsrVolRec = volRep.save(VolunteerWorkEntity.builder()
