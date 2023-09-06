@@ -145,7 +145,7 @@ public class AdminService {
 
         SchoolEntity schoolEntity = schoolOpt.get();
 
-        Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
+        Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "vanEntity", "nm");      //학년 반 순으로 정렬 어케할건지 고쳐야하맘함함함
         Pageable pageable = PageRequest.of(page - 1, 17, sort);  //페이징 처리 -1해서 슬픔
 
         //Page<UserEntity> list1 = userRepository.findAllByRoleType(RoleType.STD, pageable);
@@ -188,7 +188,7 @@ public class AdminService {
 
 
         SchoolEntity schoolEntity = schoolOpt.get();
-        Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
+        Sort sort = Sort.by(Sort.Direction.ASC, "enrollState", "vanEntity", "nm");
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
