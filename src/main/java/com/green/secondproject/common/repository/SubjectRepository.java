@@ -14,4 +14,7 @@ public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
     @Query("SELECT u FROM SubjectEntity u WHERE u.subjectId IN :#{#list}")
     List<SubjectEntity> findAllBySubjectIdList(List<Long> list);
 //    List<SubjectEntity> findAllBySbjCategoryEntity(Long categoryId);
+
+
+
 }

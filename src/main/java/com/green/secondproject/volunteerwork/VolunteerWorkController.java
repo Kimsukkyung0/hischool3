@@ -22,7 +22,7 @@ public class VolunteerWorkController {
     private final VolunteerWorkService service;
 
     @PostMapping
-    @Operation(summary = "학생별 과목등록"
+    @Operation(summary = "봉사활동 등록"
             , description = """
                     입력값 :<br> (1)userId : 입력대상학생pk <br>(2)grade : 입력대상학년 <br>
                     (3)startDate : 봉사활동시작일 <br>(4)endDate : 봉사활동종료일 <br>(5)place : 봉사장소 <br>

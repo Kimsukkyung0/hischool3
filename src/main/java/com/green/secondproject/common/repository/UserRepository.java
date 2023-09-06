@@ -57,14 +57,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             + "AND (:classNum IS NULL OR v.classNum = :classNum) "
             + "AND (:grade IS NULL OR v.grade = :grade) "
             + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)"
+            + "AND (u.aprYn = :#{#aprYn})"
             + "AND (u.roleType = 'STD')")
     Page<UserEntity> findByCriteria(
             @Param("search") String search,
             @Param("classNum") String classNum,
             @Param("grade") String grade,
+            @Param("aprYn") int aprYn,
             @Param("enrollState") EnrollState enrollState,
             Pageable pageable);
-
 
 
     @Query("SELECT count(*) FROM UserEntity u JOIN u.vanEntity v WHERE "
@@ -72,6 +73,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             + "AND (:classNum IS NULL OR v.classNum = :classNum) "
             + "AND (:grade IS NULL OR v.grade = :grade) "
             + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)"
+            + "AND (u.aprYn = :#{#aprYn})"
             + "AND (u.roleType = 'STD')"
             + "AND (v.schoolEntity.schoolId = :schoolId)")
     long countByCriteria(
@@ -79,5 +81,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             @Param("classNum") String classNum,
             @Param("grade") String grade,
             @Param("enrollState") EnrollState enrollState,
+            @Param("aprYn") int aprYn,
             @Param("schoolId") long schoolId);
 }
