@@ -2,6 +2,7 @@ package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.config.etc.EnrollState;
+import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -44,7 +46,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState}")
     Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
 
-    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(String search, List<VanEntity> vanEntity, RoleType roleType,EnrollState enrollState, Pageable page);
+    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
 
 
     //정민+수천 합체
@@ -56,7 +58,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             + "AND (:grade IS NULL OR v.grade = :grade) "
             + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)"
             + "AND (u.roleType = 'STD')")
-
     Page<UserEntity> findByCriteria(
             @Param("search") String search,
             @Param("classNum") String classNum,
@@ -65,4 +66,18 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             Pageable pageable);
 
 
+
+    @Query("SELECT count(*) FROM UserEntity u JOIN u.vanEntity v WHERE "
+            + "(:search IS NULL OR u.nm LIKE CONCAT('%', :search, '%')) "
+            + "AND (:classNum IS NULL OR v.classNum = :classNum) "
+            + "AND (:grade IS NULL OR v.grade = :grade) "
+            + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)"
+            + "AND (u.roleType = 'STD')"
+            + "AND (v.schoolEntity.schoolId = :schoolId)")
+    long countByCriteria(
+            @Param("search") String search,
+            @Param("classNum") String classNum,
+            @Param("grade") String grade,
+            @Param("enrollState") EnrollState enrollState,
+            @Param("schoolId") long schoolId);
 }
