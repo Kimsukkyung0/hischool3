@@ -54,7 +54,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             + "(:search IS NULL OR u.nm LIKE CONCAT('%', :search, '%')) "
             + "AND (:classNum IS NULL OR v.classNum = :classNum) "
             + "AND (:grade IS NULL OR v.grade = :grade) "
-            + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)")
+            + "AND (:enrollState IS NULL OR u.enrollState = :enrollState)"
+            + "AND (u.roleType = 'STD')")
 
     Page<UserEntity> findByCriteria(
             @Param("search") String search,
