@@ -143,10 +143,12 @@ public class StudentService {
         return mapper.getHighestRatingsOfAcaTest(dto);
     }
 
-    public StudentSumContainerVo getLatestRatingsOfAcaTest(Long userId) {
+    public StudentSumContainerVo getLatestRatingsOfAcaTest() {
 //        결과값 : List<2023 2-2 국수영한 등급>
+
         try{
-        List<StudentTestSumGraphVo> subList = mapper.getLatestRatingsOfAcaTest(userId);
+        List<StudentTestSumGraphVo> subList =
+                acaResultRepository.findAllByUserEntity(userRepository.findByUserId(facade.getLoginUserPk()));
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
 
@@ -155,10 +157,11 @@ public class StudentService {
             tmp.add(tmpVo);
         }
 
-         String date = getMidFinalFormOfDate(subList.get(0).getDate());
+         String date = getMidFinalFormOfDate(acaResultRepository.findLatestTest());
 
          return new StudentSumContainerVo(date,tmp);}
-        catch (Exception e){
+
+        catch (Exception e) {
             e.printStackTrace();
         }
         return null;
