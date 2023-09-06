@@ -150,7 +150,7 @@ public class NoticeService {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(page - 1, 14, sort);
         List<NoticeTotalVo> result = new ArrayList<>();
-int totalPag = pageable.getPageSize();
+        int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
         List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L,pageable);
         for (NoticeEntity entity : importantNotices) {
@@ -167,7 +167,7 @@ int totalPag = pageable.getPageSize();
 
         int remainingNotices = 14 - importantNotices.size();
         if (remainingNotices > 0 && search != null) {
-            pageable = PageRequest.of(page - 1, remainingNotices, sort);  // Reset pageable to fetch the remaining notices
+            pageable = PageRequest.of(page - 1, remainingNotices, sort);
             Page<NoticeEntity> noticeEntityPage = noticeRepository.findByTitleContainingAndImptYnNot(search, 1, pageable);
 
             for (NoticeEntity entity : noticeEntityPage) {
@@ -187,13 +187,15 @@ int totalPag = pageable.getPageSize();
         }
 
 
-
         long total = noticeRepository.count();
+        long searchpage = noticeRepository.countBy(search);
+        long searchp = searchpage/totalPag;
 
         NoticeListVo list = NoticeListVo.builder()
         .list(result)
         .total(total)
         .totalPage(total/totalPag+1)
+        .searchPage(searchp+1)
         .build();
 
         return list;

@@ -1,5 +1,6 @@
 package com.green.secondproject.common.repository;
 
+import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
@@ -40,5 +41,7 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
 
     long count();
-
+    @Query("SELECT count(*) FROM NoticeEntity WHERE"+
+    "(:search IS NULL OR title LIKE CONCAT('%', :search, '%'))")
+    long countBy(@Param("search") String search);
 }
