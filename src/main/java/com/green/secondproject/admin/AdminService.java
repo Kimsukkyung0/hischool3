@@ -195,14 +195,14 @@ public class AdminService {
         // 필터링 조건을 사용하여 학생을 검색
         Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, enrollState, pageable);
 
+
         List<StudentClassVo> result = new ArrayList<>();
         for (UserEntity entity : entities) {
-            // 사용자와 밴 정보를 연결하여 학교 정보를 가져옴
             VanEntity vanEntity = entity.getVanEntity();
             SchoolEntity userSchool = vanEntity.getSchoolEntity();
 
+            // 현재 관리자와 동일한 학교에 속한 경우만 결과에 추가
             if (userSchool.getSchoolId().equals(schoolEntity.getSchoolId())) {
-                // 현재 관리자와 동일한 학교에 속한 경우만 결과에 추가
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
                         .schoolId(userSchool.getSchoolId())
@@ -216,12 +216,15 @@ public class AdminService {
             }
         }
 
-        int totalCount = result.size();
-        int size = pageable.getPageSize();
+//        long totalCount = entities.getTotalElements();
+        long totalCount = userRepository.countByCriteria(search, classNum, grade, enrollState, schoolEntity.getSchoolId());
+
+
+        double size = pageable.getPageSize();
 
         return StudentClassListVo.builder()
                 .list(result)
-                .totalCount(totalCount)
+                .totalCount((int)totalCount)
                 .totalPage((int)Math.ceil(totalCount/size))
                 .build();
     }

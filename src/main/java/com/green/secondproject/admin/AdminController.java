@@ -152,7 +152,7 @@ public class AdminController {
     }
 
     @PatchMapping("/user-statement")
-    @Operation(summary = "학생 학년,반 변경 (수정중)")
+    @Operation(summary = "학생 학년,반 변경")
     public ResponseEntity<UserStateUpdVo> updUserState(@RequestBody UserStateUpdDto dto) {
         UserStateUpdVo vo = service.updUserState(dto);
         return ResponseEntity.ok(vo);
