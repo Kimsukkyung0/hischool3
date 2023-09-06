@@ -5,6 +5,6 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class ScSbjListDto {
-    private List<SbjDto> list;
+public class ScSbjUpdDto {
+    private List<Long> list;
 }

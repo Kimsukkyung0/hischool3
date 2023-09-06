@@ -112,8 +112,6 @@ public class TeacherMngService {
         Page<UserEntity> tcList;
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-
-
         if(search != null && enrollState!=null){
             tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
             log.info("case 1 : {멀티 필터링}");
@@ -128,27 +126,6 @@ public class TeacherMngService {
             tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
             log.info("case 4 : {둘다 없을때-기본정렬}");
         }
-
-
-//
-//
-//            //둘중 뭔가 하나있을 때
-//            if(search != null && enrollState == null)//검색어 O
-//            {
-//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
-//                log.info("case 1 : {검색어만 존재}");
-//            }
-//            else if(enrollState != null && search == null) {//역할필터링 O
-//                tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollState(vanEnti,RoleType.TC, enrollState ,pageable);
-//                log.info("case 2 : {상태값만 존재}");
-//            }else if (search != null && enrollState!=null){ //둘다없을때
-//                tcList = userRepository.findUsersByVanEntityAndRoleType(vanEnti, RoleType.TC, pageable);
-//                log.info("case 3 : {둘다 없을때-기본정렬}");
-//            }
-//            else {//둘다 있을때
-//                tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(search, vanEnti, RoleType.TC, enrollState, pageable);
-//                log.info("case 4 : {멀티 필터링}");
-//            }
 
         for (UserEntity en : tcList) {
             VanEntity vanEntity = vanRep.findByVanId(en.getVanEntity().getVanId());

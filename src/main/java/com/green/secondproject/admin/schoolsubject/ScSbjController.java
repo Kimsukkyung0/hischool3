@@ -47,7 +47,6 @@ public class ScSbjController {
         return service.getSubjectListByCate(categoryId);
     }
 
-
     @GetMapping("/category/{grade}")
     @Operation(summary = "학년별 등록과목 리스트"
             , description = """
@@ -64,5 +63,17 @@ public class ScSbjController {
     ResponseEntity<Integer> delScSbj(@RequestParam Long scSbjId)
     { return ResponseEntity.ok(service.delete(scSbjId)); }
 
+    @PutMapping
+    @Operation(summary = "학교별 과목수정"
+            , description = """
+                    입력값 :<br> (1)subjectId(List) : 수정대상 과목 id <br><br>
+                    출력값 : <br> (1)categoryId : 카테고리pk <br>(2)categoryNm - 카테고리이름<br>(3)subjectid -  과목 PK값<br> (4)subjectNm : 세부과목<br> 
+                    (5)scSbjId : 학교에 등록된 과목리스트 pk<br><br> 
+                    **** 기존 목록을 자동으로 비교하여 사라진과목은 자동삭제/ 추가된 과목은 자동추가 됩니다 ****<br> 
+                    """)
+    ResponseEntity<List<ScSbjListVo2>> updSubjectsBySchoolAndGrade(@RequestBody List<SbjDto> list, @RequestParam int grade){
+        List<ScSbjListVo2> vo = service.updSubjectsBySchoolAndGrade(list, grade);
+        return ResponseEntity.ok(vo);
+    }
 
 }
