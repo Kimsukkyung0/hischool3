@@ -186,14 +186,17 @@ public class AdminService {
             throw new RuntimeException("관리자 로그인 필요");
         }
 
+
         SchoolEntity schoolEntity = schoolOpt.get();
         Sort sort = Sort.by(Sort.Direction.ASC, "vanEntity", "nm");
         Pageable pageable = PageRequest.of(page - 1, 17, sort);
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntity(schoolEntity);
 
+
+
         // 필터링 조건을 사용하여 학생을 검색
-        Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, enrollState, pageable);
+        Page<UserEntity> entities = userRepository.findByCriteria(search, classNum, grade, 1, enrollState, pageable);
 
 
         List<StudentClassVo> result = new ArrayList<>();
@@ -217,7 +220,7 @@ public class AdminService {
         }
 
 //        long totalCount = entities.getTotalElements();
-        long totalCount = userRepository.countByCriteria(search, classNum, grade, enrollState, schoolEntity.getSchoolId());
+        long totalCount = userRepository.countByCriteria(search, classNum, grade, enrollState, 1, schoolEntity.getSchoolId());
 
 
         double size = pageable.getPageSize();
