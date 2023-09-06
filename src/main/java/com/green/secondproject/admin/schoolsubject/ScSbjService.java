@@ -121,7 +121,7 @@ public class ScSbjService {
                 .subjectNm(item.getNm()).build()).toList();
     }
 
-    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<ScSbjListDto2> dto, int grade) {
+    public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<SbjDto> dto, int grade) {
         List<ScSbjEntity> midResult = new ArrayList<>();
         List<ScSbjListVo2> finResult = new ArrayList<>();
         List<Long> sbjIdList = new ArrayList<>();
