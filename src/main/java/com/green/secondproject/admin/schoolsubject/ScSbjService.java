@@ -136,6 +136,7 @@ public class ScSbjService {
             }
 
             //기존에 등록되어 있는 리스트를 Long List로
+            List<ScSbjEntity> preListEnti = sbjRep.findAllBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
             List<Long> preListSubjectId = sbjRep.findAllSubjectIdBySchoolEntityAndGrade(scEnti,String.valueOf(grade));
 
             //case 1 : 1차로 기존등록리스트에서, newlist를 대비해 존재하는 아이디찾기
@@ -156,25 +157,41 @@ public class ScSbjService {
             for(Long n: newSbjList){
                 log.info("new : {}",n);
             }
+//
+//            midResult = sbjRep.saveAll(newSbjList.stream().map(item->ScSbjEntity.builder().schoolEntity(scEnti).grade(String.valueOf(grade))
+//                    .subjectEntity(SubjectEntity.builder().subjectId(item).build()).build()).toList());
+//            for(ScSbjEntity sb : midResult){
+//                log.info("sb : {}",sb);
+//            }
+//            finResult = midResult.stream()
+//                    .map(item -> ScSbjListVo2.builder()
+//                            .scSbjId(item.getSchoolSbjId())
+//                            .subjectId(item.getSubjectEntity().getSubjectId())
+//                            .subjectNm(item.getSubjectEntity().getNm())
+////                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+//                            .build())
+//                    .collect(Collectors.toList());
+//            for(ScSbjListVo2 sb : finResult){
+//                log.info("vo : {}",sb);
+//            }
+//            return finResult;
 
             midResult = sbjRep.saveAll(newSbjList.stream().map(item->ScSbjEntity.builder().schoolEntity(scEnti).grade(String.valueOf(grade))
                     .subjectEntity(SubjectEntity.builder().subjectId(item).build()).build()).toList());
             for(ScSbjEntity sb : midResult){
                 log.info("sb : {}",sb);
             }
-            finResult = midResult.stream()
+            finResult = preListEnti.stream()
                     .map(item -> ScSbjListVo2.builder()
                             .scSbjId(item.getSchoolSbjId())
                             .subjectId(item.getSubjectEntity().getSubjectId())
                             .subjectNm(item.getSubjectEntity().getNm())
-//                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
+                            .categoryId(item.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+                            .categoryNm(item.getSubjectEntity().getSbjCategoryEntity().getNm())
                             .build())
                     .collect(Collectors.toList());
-            for(ScSbjListVo2 sb : finResult){
-                log.info("vo : {}",sb);
-            }
             return finResult;
-
+//다 들어오는게 아니라 , 수정된 애들만 들어오게되어있음.
         } else {
             throw new RuntimeException("올바른 요청 값이 아닙니다");
         }
