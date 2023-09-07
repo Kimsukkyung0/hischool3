@@ -47,11 +47,9 @@ public class NoticeService {
         List<NoticeTotalVo> result = new ArrayList<>();
         int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId);
         for (NoticeEntity entity : importantNotices) {
 
-            SchoolEntity school = entity.getSchoolEntity();
-            if (school.getSchoolId().equals(userSchoolId)) {
                 result.add(NoticeTotalVo.builder()
                         .noticeId(entity.getNoticeId())
                         .title(entity.getTitle())
@@ -59,14 +57,14 @@ public class NoticeService {
                         .hits(entity.getHits())
                         .createdAt(entity.getCreatedAt())
                         .content(entity.getContent())
-                        .schoolId(school.getSchoolId())
+                        .schoolId(entity.getSchoolEntity().getSchoolId())
                         .build());
             }
-        }
+
         int remainingNotices = 14 - importantNotices.size();
         if (remainingNotices > 0 ) {
             pageable = PageRequest.of(page - 1, remainingNotices, sort);
-            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByImptYnNot(1, pageable);
+            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByImptYnNotAndSchoolEntitySchoolId(1,userSchoolId, pageable);
 
             for (NoticeEntity entity : noticeEntityPage) {
                 SchoolEntity school = entity.getSchoolEntity();
@@ -85,12 +83,12 @@ public class NoticeService {
         }
 
 
-        long total = noticeRepository.count();
+        long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
         NoticeListVo list = NoticeListVo.builder()
                 .list(result)
                 .total(total)
-                .totalPage(total/totalPag+1)
+                .totalPage((int)Math.ceil((double) total/totalPag))
                 .build();
 
         return list;
@@ -174,7 +172,7 @@ public class NoticeService {
     }
 
 
-    public NoticeListVo searchNotice(String search, int page) {
+    public NoticeListVo2 searchNotice(String search, int page) {
         MyUserDetails userDetails = facade.getLoginUser();
         Long userSchoolId = userDetails.getSchoolId();
 
@@ -183,22 +181,19 @@ public class NoticeService {
         List<NoticeTotalVo> result = new ArrayList<>();
         int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId);
         for (NoticeEntity entity : importantNotices) {
-
-            SchoolEntity school = entity.getSchoolEntity();
-            if (school.getSchoolId().equals(userSchoolId)) {
-                result.add(NoticeTotalVo.builder()
-                        .noticeId(entity.getNoticeId())
-                        .title(entity.getTitle())
-                        .imptYn(entity.getImptYn())
-                        .hits(entity.getHits())
-                        .createdAt(entity.getCreatedAt())
-                        .content(entity.getContent())
-                        .schoolId(school.getSchoolId())
-                        .build());
-            }
+            result.add(NoticeTotalVo.builder()
+                    .noticeId(entity.getNoticeId())
+                    .title(entity.getTitle())
+                    .imptYn(entity.getImptYn())
+                    .hits(entity.getHits())
+                    .createdAt(entity.getCreatedAt())
+                    .content(entity.getContent())
+                    .schoolId(entity.getSchoolEntity().getSchoolId())
+                    .build());
         }
+
         int remainingNotices = 14 - importantNotices.size();
         if (remainingNotices > 0 && search != null) {
             pageable = PageRequest.of(page - 1, remainingNotices, sort);
@@ -221,14 +216,19 @@ public class NoticeService {
         }
 
 
-        long total = noticeRepository.count();
-//        long searchpage = noticeRepository.countBy(search);
-//        long searchp = searchpage/totalPag;
+        long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
-        NoticeListVo list = NoticeListVo.builder()
+        long totalSearch = 0L;
+        if (search != null) {
+            totalSearch = noticeRepository.countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(search, 1L, userSchoolId);
+        }
+
+        NoticeListVo2 list = NoticeListVo2.builder()
         .list(result)
         .total(total)
-        .totalPage(total/totalPag+1)
+        .totalPage((int)Math.ceil((double) total/totalPag))
+        .searchTotal(totalSearch)
+        .searchPage((long) Math.ceil((double) totalSearch/totalPag))
         .build();
 
         return list;
