@@ -38,9 +38,13 @@ public class NoticeService {
     private final SchoolRepository schoolRepository;
     private final UserRepository userRepository;
 
-    public List<NoticeVo> noticeList() {
+    public List<NoticeVo> noticeList(int page) {
+
         NoticeSelDto dto = new NoticeSelDto();
         MyUserDetails userDetails = facade.getLoginUser();
+
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(page - 1, 14, sort);
 
         SchoolEntity entityschool = schoolRepository.getReferenceById(userDetails.getSchoolId());
         dto.setSchoolId(entityschool.getSchoolId());
@@ -48,7 +52,7 @@ public class NoticeService {
                 .schoolId(dto.getSchoolId())
                 .build();
 
-        List<NoticeEntity> noticeList = noticeRepository.findByschoolEntity(schoolEntity);
+        List<NoticeEntity> noticeList = noticeRepository.findByschoolEntity(schoolEntity, pageable);
         List<NoticeVo> list = new ArrayList<>();
 
 
@@ -152,19 +156,22 @@ public class NoticeService {
         List<NoticeTotalVo> result = new ArrayList<>();
         int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L,pageable);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYn(1L);
         for (NoticeEntity entity : importantNotices) {
-            result.add(NoticeTotalVo.builder()
-                    .noticeId(entity.getNoticeId())
-                    .title(entity.getTitle())
-                    .imptYn(entity.getImptYn())
-                    .hits(entity.getHits())
-                    .createdAt(entity.getCreatedAt())
-                    .content(entity.getContent())
-                    .schoolId(entity.getSchoolEntity().getSchoolId())
-                    .build());
-        }
 
+            SchoolEntity school = entity.getSchoolEntity();
+            if (school.getSchoolId().equals(userSchoolId)) {
+                result.add(NoticeTotalVo.builder()
+                        .noticeId(entity.getNoticeId())
+                        .title(entity.getTitle())
+                        .imptYn(entity.getImptYn())
+                        .hits(entity.getHits())
+                        .createdAt(entity.getCreatedAt())
+                        .content(entity.getContent())
+                        .schoolId(school.getSchoolId())
+                        .build());
+            }
+        }
         int remainingNotices = 14 - importantNotices.size();
         if (remainingNotices > 0 && search != null) {
             pageable = PageRequest.of(page - 1, remainingNotices, sort);
