@@ -24,7 +24,7 @@ public class NoticeController {
     @GetMapping
     @Operation(summary = "공지사항 리스트"
     ,description = "")
-    public List<NoticeVo> noticeList(int page){
+    public NoticeListVo noticeList(int page){
         return service.noticeList(page);
     }
 
@@ -67,9 +67,4 @@ public class NoticeController {
         return service.searchNotice(search, page);
     }
 
-//    @GetMapping("/re")
-//    @Operation(summary = "공지사항 리스트 리빌딩")
-//    public NoticeTotalVo2 pageNotice(){
-//        return service.
-//    }
 }
