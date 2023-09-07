@@ -137,64 +137,32 @@ public class StudentService {
         // return mapper.selAcaTestResultByDatesAndPeriod(param);
     }
 
-    public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto) {
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-        return mapper.getHighestRatingsOfAcaTest(dto);
-    }
-
     public StudentSumContainerVo getLatestRatingsOfAcaTest() {
 //        결과값 : List<2023 2-2 국수영한 등급>
 
-        try{
         List<StudentTestSumGraphVo> subList =
-                acaResultRepository.findAllByUserEntity(userRepository.findByUserId(facade.getLoginUserPk()));
+                acaResultRepository.getLatestRatingsOfAcaTest(userRepository.findByUserId(facade.getLoginUserPk()));
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<>();
 
-//        for(StudentTestSumGraphVo vo : subList){
-//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-//            tmp.add(tmpVo);
-//        }
+        for(StudentTestSumGraphVo vo : subList){
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            tmp.add(tmpVo);
+        }
 
          String date = getMidFinalFormOfDate(acaResultRepository.findLatestTest());
 
          return new StudentSumContainerVo(date,tmp);}
 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
 
-    public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-
-        //mapper로 부터 가져온 리스트
-        try {
-            List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
-            log.info("subList : {}", subList);
-            List<StudentTestSumGraphVo> result = new ArrayList<>();
-
-                //for문에서 날짜수정작업
-                for (StudentTestSumGraphVo vo : subList) {
-                    StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-                    subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
-                    subResult.setNm(vo.getNm());
-                    subResult.setRating(vo.getRating());
-                    result.add(subResult);
-                }
-            return result;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     public String getMidFinalFormOfDate(String date){
 
-        StringBuffer sb = new StringBuffer(date);
+        StringBuffer sb = new StringBuffer(date.replaceAll(",",""));
         String dateStrTmp = sb.insert(4,'-').toString();
         log.info("dateStrTmp : {}",dateStrTmp);
 
@@ -246,4 +214,38 @@ public class StudentService {
                         .build()).collect(Collectors.toList()))
                 .build();
     }
+
+    //3차 JPA 적용 부분
+
+    public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
+        LocalDate now = LocalDate.now();
+        dto.setYear(String.valueOf(now.getYear()));
+
+        //mapper로 부터 가져온 리스트
+        try {
+            List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
+            log.info("subList : {}", subList);
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
+
+            //for문에서 날짜수정작업
+            for (StudentTestSumGraphVo vo : subList) {
+                StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
+                subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
+                subResult.setNm(vo.getNm());
+                subResult.setRating(vo.getRating());
+                result.add(subResult);
+            }
+            return result;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest() {
+        UserEntity userEnti = userRepository.findByUserId(facade.getLoginUserPk());
+//        mapper.getHighestRatingsOfAcaTest(userEnti);
+        return acaResultRepository.getHighestRatingOfAcaTest(userEnti);
+    }
+
 }
