@@ -90,7 +90,7 @@ public class AdminController {
         return service.getStatus();
     }
 
-    @GetMapping("/student-list")
+    @GetMapping("/apr-student-list")
     @Operation(summary = "학생 리스트 조회", description = """
             입력 값<br>
             (1)search : 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
@@ -110,7 +110,7 @@ public class AdminController {
         return service.getStudentClass(page);
     }
 
-    @GetMapping("name-student-list")
+    @GetMapping("student-list")
     @Operation(summary = "이름으로 학생 검색", description = """
             입력 값<br>
             (1)search : 이름 검색 (입력 값 없을 시 학생 전원 출력)<br>
@@ -127,7 +127,7 @@ public class AdminController {
             (9)totalPage : 총 페이지 수<br>
             """)
     public StudentClassListVo searchStudent(
-            @RequestParam(required = false) String search,
+            @RequestParam(required = false,defaultValue = "") String search,
             @RequestParam(required = false) String classNum,
             @RequestParam(required = false) String grade,
             @RequestParam(defaultValue = "1") int page,
