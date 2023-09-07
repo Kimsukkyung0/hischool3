@@ -39,6 +39,8 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     List<NoticeEntity> findByImptYn(Long imptYn);
 
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
+    Page<NoticeEntity> findByImptYnNot(int i, Pageable pageable);
+
 
     long count();
     @Query("SELECT count(*) FROM NoticeEntity WHERE"+
