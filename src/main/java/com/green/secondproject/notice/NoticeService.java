@@ -222,8 +222,8 @@ public class NoticeService {
 
 
         long total = noticeRepository.count();
-        long searchpage = noticeRepository.countBy(search);
-        long searchp = searchpage/totalPag;
+//        long searchpage = noticeRepository.countBy(search);
+//        long searchp = searchpage/totalPag;
 
         NoticeListVo list = NoticeListVo.builder()
         .list(result)
