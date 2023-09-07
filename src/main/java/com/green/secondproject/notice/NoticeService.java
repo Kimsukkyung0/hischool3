@@ -172,7 +172,7 @@ public class NoticeService {
     }
 
 
-    public NoticeListVo searchNotice(String search, int page) {
+    public NoticeListVo2 searchNotice(String search, int page) {
         MyUserDetails userDetails = facade.getLoginUser();
         Long userSchoolId = userDetails.getSchoolId();
 
@@ -218,10 +218,17 @@ public class NoticeService {
 
         long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
-        NoticeListVo list = NoticeListVo.builder()
+        long totalSearch = 0L;
+        if (search != null) {
+            totalSearch = noticeRepository.countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(search, 1L, userSchoolId);
+        }
+
+        NoticeListVo2 list = NoticeListVo2.builder()
         .list(result)
         .total(total)
         .totalPage((int)Math.ceil((double) total/totalPag))
+        .searchTotal(totalSearch)
+        .searchPage((long) Math.ceil((double) totalSearch/totalPag))
         .build();
 
         return list;
