@@ -91,4 +91,21 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
      int[] stList = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(),acaResultEntity.getMidFinal()};
      return stList;
     }
+
+    @Override
+    public List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity){
+        String nowYear = String.valueOf(LocalDate.now().getYear());
+        return jpaQueryFactory.select(new QStudentSummarySubjectVo(
+                        acaResult.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                        , acaResult.rating.min().as("rating")))
+                .from(acaResult)
+                .join(acaResult.subjectEntity, sbj)
+                .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
+                .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
+                        .and(cate.categoryId.in(1,3,6,7))
+                        .and(acaResult.year.loe(nowYear)))
+                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
+                .groupBy(cate.nm)
+                .fetch();
+    }
 }
