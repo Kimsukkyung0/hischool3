@@ -9,17 +9,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+
 public class StudentTestSumGraphVo {
     private String date;
     private String nm;
-    private NumberExpression<Integer> rating;
+    private int rating;
 
-    @QueryProjection
-    public StudentTestSumGraphVo(StringExpression date, StringExpression nm, NumberExpression<Integer> rating) {
-        this.date = date.toString();
-        this.nm = nm.toString();
-        this.rating = rating.intValue();
-    }
 }
 

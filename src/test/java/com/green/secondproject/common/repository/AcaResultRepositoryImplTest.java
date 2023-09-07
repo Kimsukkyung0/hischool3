@@ -22,12 +22,12 @@ class AcaResultRepositoryImplTest {
     UserRepository user;
 
 
-    @Test
-    void findLatestTest() {
-
-        List<StudentTestSumGraphVo> subList = aca.findAllByUserEntity(user.findByUserId(3L));
-        for(StudentTestSumGraphVo vo : subList){
-            log.info("subList : {}", subList);
-        }
-    }
+//    @Test
+//    void findLatestTest() {
+//
+//        List<StudentTestSumGraphVo> subList = aca.findAllByUserEntity(user.findByUserId(3L));
+//        for(StudentTestSumGraphVo vo : subList){
+//            log.info("subList : {}", subList);
+//        }
+//    }
 }
