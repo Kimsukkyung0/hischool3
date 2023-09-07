@@ -64,7 +64,7 @@ public class NoticeService {
         int remainingNotices = 14 - importantNotices.size();
         if (remainingNotices > 0 ) {
             pageable = PageRequest.of(page - 1, remainingNotices, sort);
-            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByImptYnNot(1, pageable);
+            Page<NoticeEntity> noticeEntityPage = noticeRepository.findByImptYnNotAndSchoolEntitySchoolId(1,userSchoolId, pageable);
 
             for (NoticeEntity entity : noticeEntityPage) {
                 SchoolEntity school = entity.getSchoolEntity();
