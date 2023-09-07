@@ -14,7 +14,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
-    List<NoticeEntity> findByschoolEntity(SchoolEntity entity);
+    List<NoticeEntity> findByschoolEntity(SchoolEntity entity,Pageable pageable);
     List<NoticeEntity> findByImptYnAndSchoolEntityOrderByNoticeIdDesc(int imptYn, SchoolEntity schoolEntity);
     List<NoticeEntity> findTop8ByImptYnAndSchoolEntityOrderByNoticeIdDesc(int imptYn, SchoolEntity schoolEntity);
 
@@ -36,7 +36,7 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
 
     NoticeEntity findByNoticeId(Long noticeId);
 
-    List<NoticeEntity> findByImptYn(Long imptYn,Pageable pageable);
+    List<NoticeEntity> findByImptYn(Long imptYn);
 
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
 
@@ -44,4 +44,6 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     @Query("SELECT count(*) FROM NoticeEntity WHERE"+
     "(:search IS NULL OR title LIKE CONCAT('%', :search, '%'))")
     long countBy(@Param("search") String search);
+
+
 }
