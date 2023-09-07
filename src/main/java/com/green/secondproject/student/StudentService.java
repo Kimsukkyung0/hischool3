@@ -48,10 +48,10 @@ public class StudentService {
         List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
         List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
 
-        for (StudentTestSumGraphVo vo : sub) {
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-            result.add(tmpVo);
-        }
+//        for (StudentTestSumGraphVo vo : sub) {
+//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+//            result.add(tmpVo);
+//        }
 
         StringBuffer sb = new StringBuffer(sub.get(0).getDate());
 
@@ -150,12 +150,12 @@ public class StudentService {
         List<StudentTestSumGraphVo> subList =
                 acaResultRepository.findAllByUserEntity(userRepository.findByUserId(facade.getLoginUserPk()));
 
-        List<StudentSummarySubjectVo> tmp = new ArrayList<StudentSummarySubjectVo>();
+        List<StudentSummarySubjectVo> tmp = new ArrayList<>();
 
-        for(StudentTestSumGraphVo vo : subList){
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-            tmp.add(tmpVo);
-        }
+//        for(StudentTestSumGraphVo vo : subList){
+//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+//            tmp.add(tmpVo);
+//        }
 
          String date = getMidFinalFormOfDate(acaResultRepository.findLatestTest());
 
@@ -175,7 +175,7 @@ public class StudentService {
         try {
             List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
             log.info("subList : {}", subList);
-            List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
 
                 //for문에서 날짜수정작업
                 for (StudentTestSumGraphVo vo : subList) {
@@ -210,7 +210,8 @@ public class StudentService {
             dateStrTmp = dateStrTmp.substring(0,len);
             dateStrTmp += " 기말";
         }
-        return dateStrTmp;
+
+        return dateStrTmp.substring(2);
     }
 
     public NoticeTeacherListVo NoticeTeacher(){

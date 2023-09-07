@@ -2,11 +2,13 @@ package com.green.secondproject.common.utils;
 
 import com.green.secondproject.teacher.model.TeacherGraphVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Component
 public class
 MyGradeGraphUtils {
     private final Long[] cateIdForAca = {1L,3L,6L,7L};

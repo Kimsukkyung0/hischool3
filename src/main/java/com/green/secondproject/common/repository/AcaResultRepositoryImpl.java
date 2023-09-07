@@ -26,7 +26,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     private final QAcaResultEntity acaResult = QAcaResultEntity.acaResultEntity;
     private final QSbjCategoryEntity cate = QSbjCategoryEntity.sbjCategoryEntity;
     private final QSubjectEntity sbj = QSubjectEntity.subjectEntity;
-    private final MyGradeGraphUtils myGrade;
+//    private final MyGradeGraphUtils myGrade;
 
     @Override
     public List<StudentAcaResultWithIdVo> searchAcaResult(StudentAcaResultsParam param) {
@@ -64,11 +64,17 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .join(acaResult.subjectEntity, sbj)
                 .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
                 .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-                        .and(cate.categoryId.in(myGrade.getCateIdForAca()))
-                        .andAnyOf((select(acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.toString()))
-                                .from(acaResult)
-                                .where(acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.toString()).eq(findLatestTest())))));
-                
+                                .and(acaResult.year.eq("2023"))
+                        .and(acaResult.semester.eq(2)
+                                .and(acaResult.midFinal.eq(2))));
+
+
+//                        acaResult.userEntity.userId.eq(userEntity.getUserId())
+//                        .and(cate.categoryId.in(myGrade.getCateIdForAca()))
+//                        .andAnyOf((select(acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.toString()))
+//                                .from(acaResult)
+//                                .where(acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.toString()).eq(findLatestTest())))));
+
 
         return query.fetch();
     }
