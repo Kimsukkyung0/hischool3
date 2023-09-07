@@ -88,7 +88,7 @@ public class NoticeService {
         NoticeListVo list = NoticeListVo.builder()
                 .list(result)
                 .total(total)
-                .totalPage((long) Math.ceil(total/totalPag))
+                .totalPage((int)Math.ceil((double) total/totalPag))
                 .build();
 
         return list;
@@ -217,13 +217,11 @@ public class NoticeService {
 
 
         long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
-        long searchpage = noticeRepository.countBy(search);
-        long searchp = searchpage/totalPag;
 
         NoticeListVo list = NoticeListVo.builder()
         .list(result)
         .total(total)
-        .totalPage((long) Math.ceil(total/totalPag))
+        .totalPage((int)Math.ceil((double) total/totalPag))
         .build();
 
         return list;

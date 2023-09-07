@@ -11,6 +11,6 @@ import java.util.List;
 public class NoticeListVo {
     private List<NoticeTotalVo> list;
     private Long total;
-    private Long totalPage;
+    private int totalPage;
 
 }
