@@ -27,7 +27,7 @@ public class HeaderService {
     private final VanRepository vanRepository;
 
     public SelSchoolInfoVo selSchoolInfo(MyUserDetails myuser) {
-//        SelSchoolInfoDto dto = new SelSchoolInfoDto();
+//        SelSchoolInfoDtzo dto = new SelSchoolInfoDto();
 //        dto.setUserId(myuser.getUserId());
 //        return mapper.selSchoolInfo(dto);
 //        MyUserDetails userDetails = FACADE.getLoginUser();
