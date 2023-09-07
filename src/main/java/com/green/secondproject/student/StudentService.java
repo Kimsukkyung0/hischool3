@@ -146,26 +146,26 @@ public class StudentService {
     public StudentSumContainerVo getLatestRatingsOfAcaTest() {
 //        결과값 : List<2023 2-2 국수영한 등급>
 
-        try{
         List<StudentTestSumGraphVo> subList =
-                acaResultRepository.findAllByUserEntity(userRepository.findByUserId(facade.getLoginUserPk()));
+                acaResultRepository.getLatestRatingsOfAcaTest(userRepository.findByUserId(facade.getLoginUserPk()));
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<>();
 
-//        for(StudentTestSumGraphVo vo : subList){
-//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-//            tmp.add(tmpVo);
-//        }
+        for(StudentTestSumGraphVo vo : subList){
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            tmp.add(tmpVo);
+        }
 
          String date = getMidFinalFormOfDate(acaResultRepository.findLatestTest());
 
          return new StudentSumContainerVo(date,tmp);}
 
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+
+
 
     public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
         LocalDate now = LocalDate.now();
@@ -194,7 +194,7 @@ public class StudentService {
 
     public String getMidFinalFormOfDate(String date){
 
-        StringBuffer sb = new StringBuffer(date);
+        StringBuffer sb = new StringBuffer(date.replaceAll(",",""));
         String dateStrTmp = sb.insert(4,'-').toString();
         log.info("dateStrTmp : {}",dateStrTmp);
 

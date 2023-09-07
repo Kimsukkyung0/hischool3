@@ -9,7 +9,5 @@ import java.util.List;
 
 public interface AcaResultRepositoryCustom {
     List<StudentAcaResultWithIdVo> searchAcaResult(StudentAcaResultsParam param);
-
-
-    List<StudentTestSumGraphVo> findAllByUserEntity(UserEntity userEntity);
+    List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(UserEntity userEntity);
 }
