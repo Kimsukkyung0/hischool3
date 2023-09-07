@@ -6,6 +6,7 @@ import com.green.secondproject.common.config.security.PasswordEncoderConfigurati
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.AcaResultRepository;
+import com.green.secondproject.common.repository.SchoolRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import com.green.secondproject.student.model.StudentAcaResultWithIdVo;
@@ -30,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@ActiveProfiles("test")
+@ActiveProfiles("test")
 @Import({PasswordEncoderConfiguration.class, QueryDslConfig.class})
 @Slf4j
 @Rollback(value = false)
@@ -46,6 +47,9 @@ public class RepositoryTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SchoolRepository schoolRepository;
 
     @Test
     void 랭크함수_테스트() {
@@ -188,37 +192,56 @@ public class RepositoryTest {
 
     @Test
     void 내신성적_등록() {
+        final long schoolId = 3L;
+        final String grade = "3";
         final String year = "2023";
-        final long subjectId = 126L;
-        final int midFinal = 1;
+        final long subjectId = 92L;
+        final int midFinal = 2;
         final int semester = 2;
 
-        for (long classNum = 2; classNum <= 10; classNum++) {
-            long startIdx = (classNum - 1) * 20 + 2;
-            long endIdx = startIdx + 19;
+        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+                SchoolEntity.builder().schoolId(schoolId).build(), grade, year);
+        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-            for (long i = startIdx; i <= endIdx; i++) {
-                acaRepository.save(AcaResultEntity.builder()
-                        .userEntity(UserEntity.builder().userId(i).build())
-                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-                        .year(year)
-                        .midFinal(midFinal)
-                        .score((int)(Math.random() * 101))
-                        .semester(semester)
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build());
-            }
+        for (UserEntity entity : stdList) {
+            acaRepository.save(AcaResultEntity.builder()
+                    .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                    .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                    .year(year)
+                    .midFinal(midFinal)
+                    .score((int)(Math.random() * 101))
+                    .semester(semester)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build());
         }
+//        for (long classNum = 2; classNum <= 10; classNum++) {
+//            long startIdx = (classNum - 1) * 20 + 2;
+//            long endIdx = startIdx + 19;
+//
+//            for (long i = startIdx; i <= endIdx; i++) {
+//                acaRepository.save(AcaResultEntity.builder()
+//                        .userEntity(UserEntity.builder().userId(i).build())
+//                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+//                        .year(year)
+//                        .midFinal(midFinal)
+//                        .score((int)(Math.random() * 101))
+//                        .semester(semester)
+//                        .createdAt(LocalDateTime.now())
+//                        .updatedAt(LocalDateTime.now())
+//                        .build());
+//            }
+//        }
     }
 
     @Test
     void 학생_등록() {
-        for (int classNum = 3; classNum <= 10; classNum++) {
+        final long schoolId = 3L;
+        for (int classNum = 1; classNum <= 1; classNum++) {
             VanEntity vanEntity = VanEntity.builder()
-                    .schoolEntity(SchoolEntity.builder().schoolId(70L).build())
+                    .schoolEntity(schoolRepository.getReferenceById(schoolId))
                     .year("2023")
-                    .grade("1")
+                    .grade("3")
                     .classNum(String.valueOf(classNum))
                     .build();
 
@@ -232,12 +255,12 @@ public class RepositoryTest {
             for (int i = 1; i <= 20; i++) {
                 userRepository.save(UserEntity.builder()
                         .vanEntity(van)
-                        .email("1G" + classNum + "Cstd" + i + "@naver.com")
-                        .pw(passwordEncoder.encode("1111"))
-                        .nm("1학년" + classNum + "반학생" + i)
-                        .pic("1학년" + classNum + "반학생" + i + ".jpg")
+                        .email("std3" + classNum + i + "@naver.com")
+                        .pw(passwordEncoder.encode("gkrtod123!"))
+                        .nm("3학년" + classNum + "반학생" + i)
+                        .pic("3학년" + classNum + "반학생" + i + ".jpg")
                         .birth(LocalDate.now())
-                        .phone("010-0000-0000")
+                        .phone("010-1234-5678")
                         .address("대구시 중구")
                         .detailAddr("중앙빌딩 5F")
                         .roleType(RoleType.STD)
