@@ -40,9 +40,10 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
 
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
     Page<NoticeEntity> findByImptYnNot(int i, Pageable pageable);
+    List<NoticeEntity> findByImptYnAndSchoolEntitySchoolId(Long imptYn, Long schoolId);
 
+    long countBySchoolEntitySchoolId(Long schoolId);
 
-    long count();
     @Query("SELECT count(*) FROM NoticeEntity WHERE"+
     "(:search IS NULL OR title LIKE CONCAT('%', :search, '%'))")
     long countBy(@Param("search") String search);
