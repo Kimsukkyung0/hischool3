@@ -1,13 +1,14 @@
 package com.green.secondproject.teacher.subject;
 
+import com.green.secondproject.common.config.security.model.RoleType;
+import com.green.secondproject.common.entity.*;
+import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.common.entity.SbjCategoryEntity;
-import com.green.secondproject.common.entity.SubjectEntity;
 import com.green.secondproject.common.repository.SubjectRepository;
 import com.green.secondproject.teacher.subject.model.*;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +32,7 @@ public class SubjectService {
     private final AuthenticationFacade facade;
     private final SubjectRepository subjectRepository;
     private final VanRepository vanRep;
-
+    private final UserRepository userRepository;
 
    public List<SubjectVo> subcate() {
         return mapper.subCate();
@@ -47,10 +49,17 @@ public class SubjectService {
     }
 
     public int schoolnum(@AuthenticationPrincipal MyUserDetails user) {
-        StudentSchoolDto dto = new StudentSchoolDto();
-        dto.setGrade(user.getGrade());
-        dto.setSchoolNm(user.getSchoolNm());
-        return mapper.schoolnum(dto);
+        List<VanEntity> vanList = vanRep.findAllBySchoolEntityAndGradeAndYear(
+                SchoolEntity.builder().schoolId(user.getSchoolId()).build(), user.getGrade(),
+                String.valueOf(LocalDate.now().getYear()));
+       List<UserEntity> list = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+
+       return list.size();
+
+//        StudentSchoolDto dto = new StudentSchoolDto();
+//        dto.setGrade(user.getGrade());
+//        dto.setSchoolNm(user.getSchoolNm());
+//        return mapper.schoolnum(dto);
     }
 
 public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {

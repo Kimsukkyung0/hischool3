@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class SubjectController2 {
     private final SubjectService serivce;
 
-
     @GetMapping("/class-num")
     @Operation(summary = "반석차 반전체인원")
     int classnum(@AuthenticationPrincipal MyUserDetails user){
