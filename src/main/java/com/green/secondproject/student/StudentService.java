@@ -156,6 +156,7 @@ public class StudentService {
         }
         else if(dateStrTmp.endsWith("2")){
             //기말일때
+
 //            StringUtils.removeEnd(dateStrTmp, "2");
             dateStrTmp = dateStrTmp.substring(0,len);
             dateStrTmp += " 기말";
