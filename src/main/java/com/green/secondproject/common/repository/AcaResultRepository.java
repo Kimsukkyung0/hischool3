@@ -12,8 +12,5 @@ import java.util.List;
 public interface AcaResultRepository extends JpaRepository<AcaResultEntity, Long>, AcaResultRepositoryCustom {
     List<AcaResultEntity> findAllByUserEntityInAndSemesterAndSubjectEntityAndMidFinalAndYearOrderByScoreDesc(
             List<UserEntity> userEntity, int semester, SubjectEntity subjectEntity, int midFinal, String year);
-    String findLatestTest();
-
-
 
 }

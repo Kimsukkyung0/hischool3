@@ -220,29 +220,8 @@ public class TeacherService {
             }
         }
 
-
-
-//0점 없이 작동하는 애들
-//        for (int i = 0; i < cateIdForAca.length; i++) {
-//            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
-//            subResult.add(tmpVo);
-//        }
-//        for (int i = 0; i < cateIdForAca.length; i++) {
-//            subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
-//        }
-//
-//안되는애들 하다 포기한 애들
-//        for (int i = 0; i < cateNm.length; i++) {
-//            List<TeacherGraphVo> tmpVo = mapper.teacherAcaGraph(classId,cateIdForAca[i]);
-//            subResult.add(tmpVo);
-//            getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build()));
-//
-////            for (int j = 1; j <=RATING_NUM; j++) {
-////                subResult.add(getSubResult(subResult.get(i), mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().categoryId(cateIdForAca[i]).classId(classId).build())));
-////            }
-//
-//        }
-        String date = stService.getMidFinalFormOfDate(mapper.getLatestTest());
+        //FIXME : 학생서비스를 수정하면서 생긴 부차적인 오류. 수정할것
+        String date = ""; //stService.getMidFinalFormOfDate(mapper.getLatestTest());
         return TeacherGraphContainerVo.builder().date(date).list(subResult).build();
     }
 

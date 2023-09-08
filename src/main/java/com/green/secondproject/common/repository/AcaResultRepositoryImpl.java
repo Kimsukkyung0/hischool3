@@ -24,6 +24,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     private final QSubjectEntity sbj = QSubjectEntity.subjectEntity;
     private final MyGradeGraphUtils myGrade;
 
+
     @Override
     public List<StudentAcaResultWithIdVo> searchAcaResult(StudentAcaResultsParam param) {
         return jpaQueryFactory
@@ -51,6 +52,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
 
     @Override
     public List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(UserEntity userEntity) {
+        int[] latestTest = getLatestTest(userEntity);
         return jpaQueryFactory.select(new QStudentTestSumGraphVo((acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.stringValue()).as("date"))
                         , acaResult.subjectEntity.sbjCategoryEntity.nm.as("nm")
                         , acaResult.rating.as("rating")))
@@ -58,40 +60,24 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .join(acaResult.subjectEntity, sbj)
                 .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
                 .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-                                .and(cate.categoryId.in(1,3,6,7))
-                                .and(acaResult.year.eq(String.valueOf(findLatestTest()[0])))
-                .and(acaResult.semester.eq(findLatestTest()[1]))
-                .and(acaResult.midFinal.eq(findLatestTest()[2]))
+                                .and(cate.categoryId.in(myGrade.getCateIdForAca()))
+                                .and(acaResult.year.eq(String.valueOf(latestTest[0])))
+                .and(acaResult.semester.eq(latestTest[1]))
+                .and(acaResult.midFinal.eq(latestTest[2]))
                 )
 //                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
 //                        .and(acaResult.year.concat(String.valueOf(acaResult.semester)).concat(acaResult.midFinal.toString()).eq(findLatestTest()))
                 .fetch();
     }
 
-//    @Override
-//    public List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(UserEntity userEntity) {
-//        return jpaQueryFactory.select(new QStudentTestSumGraphVo((acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.stringValue()).as("date"))
-//                        , acaResult.subjectEntity.nm.as("nm")
-//                        , acaResult.rating.as("rating")))
-//                .from(acaResult)
-//                .join(acaResult.subjectEntity, sbj)
-//                .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
-//                .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-//                        .and(cate.categoryId.in(myGrade.getCateIdForAca()))
-//                        .and(acaResult.year.loe(String.valueOf(LocalDate.now().getYear()))))
-//                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
-////                        .and(acaResult.year.concat(String.valueOf(acaResult.semester)).concat(acaResult.midFinal.toString()).eq(findLatestTest()))
-//                .fetch();
-//    }
-
-    public int[] findLatestTest() {
+    public int[] getLatestTest(UserEntity userEntity) {
         AcaResultEntity acaResultEntity = jpaQueryFactory
-                .selectFrom(acaResult)
+                .selectFrom(new QAcaResultEntity(acaResult))
+                .where(acaResult.userEntity.userId.eq(userEntity.getUserId()))
                 .orderBy(acaResult.year.desc(), acaResult.semester.desc(), acaResult.midFinal.desc()).fetchFirst();
-     int[] stList = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(),acaResultEntity.getMidFinal()};
-     return stList;
+        int[] stList = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(),acaResultEntity.getMidFinal()};
+        return stList;
     }
-
     @Override
     public List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity){
         String nowYear = String.valueOf(LocalDate.now().getYear());
@@ -102,10 +88,13 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .join(acaResult.subjectEntity, sbj)
                 .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
                 .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-                        .and(cate.categoryId.in(1,3,6,7))
+                        .and(cate.categoryId.in(myGrade.getCateIdForAca()))
                         .and(acaResult.year.loe(nowYear)))
                 .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
                 .groupBy(cate.nm)
                 .fetch();
     }
+
+
+
 }

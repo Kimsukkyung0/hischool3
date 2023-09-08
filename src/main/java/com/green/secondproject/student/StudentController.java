@@ -31,24 +31,6 @@ public class StudentController {
         return service.selMockTestResultByDates(dto);
     }
 
-    @GetMapping("/mock-highest")
-    @Operation(summary = "모의고사-학생별 가장 높은 등급", description =
-            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>" + "※국어,수학,영어 한국사※")
-    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser) {
-        Long userId = myuser.getUserId();
-        return service.getHighestRatingsOfMockTest(userId);
-    }
-
-    @GetMapping("/mock-latest")
-    @Operation(summary = "모의고사- 최근응시 시험 등급", description =
-            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>"
-                    + "※국어,수학,영어 한국사※")
-    public StudentSumContainerVo getLatestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser) {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(myuser.getUserId());
-        return service.getLatestRatingsOfMockTest(dto);
-    }
-
     @GetMapping("/mock-graph")
     @Operation(summary = "모의고사그래프-올해 응시시험 성적", description =
             "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>"
@@ -102,7 +84,7 @@ public class StudentController {
     }
 
 
-    //3차 JPA 적용부분
+    //3차 JPA 적용부분////////////////////3차 JPA 적용부분//////////////////
 
     @GetMapping("/aca-latest")
     @Operation(summary = "내신 : 학생별 최신성적", description = "출력값 : <br>" + "date - (연도)-(학기) (중간/기말) "
@@ -117,5 +99,21 @@ public class StudentController {
             "(1)nm - 과목계열이름<br>(2)rating - 등급<br>")
     public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest() {
         return service.getHighestRatingsOfAcaTest();
+    }
+
+    @GetMapping("/mock-latest")
+    @Operation(summary = "모의고사- 최근응시 시험 등급", description =
+            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>"
+                    + "※국어,수학,영어 한국사※")
+    public StudentSumContainerVo getLatestRatingsOfMockTest() {
+        return service.getLatestRatingsOfMockTest();
+    }
+
+    @GetMapping("/mock-highest")
+    @Operation(summary = "모의고사-학생별 가장 높은 등급", description =
+            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>" + "※국어,수학,영어 한국사※")
+    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser) {
+        Long userId = myuser.getUserId();
+        return service.getHighestRatingsOfMockTest(userId);
     }
 }
