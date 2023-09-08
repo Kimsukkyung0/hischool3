@@ -11,6 +11,7 @@ import com.green.secondproject.teacher.model.*;
 import com.green.secondproject.teacher.subject.model.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -254,7 +255,7 @@ public class TeacherController {
 
     @GetMapping("/student-list")
     @Operation(summary = "반 학생 목록")
-    public List<StudentVo> getStudentList(String name) {
+    public List<StudentVo> getStudentList(@Parameter(description = "학생 이름") @RequestParam(required = false) String name) {
         return service.getStudentList(name);
     }
 }
