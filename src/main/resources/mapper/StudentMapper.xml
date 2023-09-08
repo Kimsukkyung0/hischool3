@@ -24,42 +24,6 @@
     ORDER BY A.year desc, A.mon desc, cateName asc
     </select>
 
-
-
-
-
-    <select id="getMockTestGraph">
-        select concat(A.year,'0',A.mon) as date, C.nm as nm,A.rating as rating
-        from mock_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        on B.category_id = c.category_id
-        where A.user_id = #{userId} and B.category_id in(2,5,4,8)and A.year = #{year} and A.mon <![CDATA[>=]]> ( select MAX(A.mon) from mock_result where A.user_id=#{userId} )
-        ORDER BY A.year,A.mon,C.nm
-    </select>
-
-    <select id = "selAcaTestResultByDatesAndPeriod">
-        SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
-        A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
-        FROM aca_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        ON C.category_id = B.category_id
-        where A.user_id = #{userId}
-        <if test='year != null and year != ""'>
-            AND A.year = #{year}
-        </if>
-        <if test='semester != null and semester != ""'>
-            AND A.semester = #{semester}
-        </if>
-        <if test='midFinal != null and midFinal != ""'>
-            AND A.mid_final = #{midFinal}
-        </if>
-        ORDER BY A.year desc , A.semester desc, midFinal desc
-    </select>
-
     <!-- 3차 JPA 적용부분 -->
 
 <!--
@@ -89,6 +53,39 @@
         order by A.mon desc, C.nm
         limit 4
     </select>
+
+       <select id="getAcaTestGraph">
+        select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
+        from aca_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
+        ORDER BY A.year,A.semester,A.mid_final
+    </select>
+
+        <select id = "selAcaTestResultByDatesAndPeriod">
+        SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
+        A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
+        FROM aca_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        ON C.category_id = B.category_id
+        where A.user_id = #{userId}
+        <if test='year != null and year != ""'>
+            AND A.year = #{year}
+        </if>
+        <if test='semester != null and semester != ""'>
+            AND A.semester = #{semester}
+        </if>
+        <if test='midFinal != null and midFinal != ""'>
+            AND A.mid_final = #{midFinal}
+        </if>
+        ORDER BY A.year desc , A.semester desc, midFinal desc
+    </select>
+
     -->
 
     <select id="getHighestRatingsOfMockTest">
@@ -102,15 +99,15 @@
         group by C.nm
     </select>
 
-    <select id="getAcaTestGraph">
-        select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
-        from aca_result A
+    <select id="getMockTestGraph">
+        select concat(A.year,'0',A.mon) as date, C.nm as nm,A.rating as rating
+        from mock_result A
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
         on B.category_id = c.category_id
-        where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
-        ORDER BY A.year,A.semester,A.mid_final
+        where A.user_id = #{userId} and B.category_id in(2,5,4,8)and A.year = #{year} and A.mon <![CDATA[>=]]> ( select MAX(A.mon) from mock_result where A.user_id=#{userId} )
+        ORDER BY A.year,A.mon,C.nm
     </select>
 
 </mapper>

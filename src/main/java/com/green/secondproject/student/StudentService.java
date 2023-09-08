@@ -38,82 +38,6 @@ public class StudentService {
     private final MockResultRepository mockResultRepository;
     private final AcaResultRepository acaResultRepository;
 
-    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
-        return mockResultRepository.searchMockResult(dto);
-        //return mapper.selMockTestResultByDates(dto);
-    }
-
-    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
-        return mockResultRepository.getHighestRatingsOfMockTest(userId);
-        //return mapper.getHighestRatingsOfMockTest(userId);
-    }
-
-//    public List<StudentSummaryContainerVo> getMockTestGraph(StudentSummaryParam param){
-//        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(param);
-//
-//        List<StudentSummaryContainerVo> result=null;
-//        for (StudentMockSumGraphVo vo : tmp) {
-////            String date = String.format("%s%s",vo.getYear(),vo.getMon());
-////
-//            StudentMockSumGraphVo mockSumGraphVo = new StudentMockSumGraphVo();
-//            mockSumGraphVo.setNm(vo.getNm());
-//            mockSumGraphVo.setRating(vo.getRating());
-//            tmp.add(mockSumGraphVo);
-//        }
-//
-//
-//        return result;
-//    }
-
-    public List<StudentTestSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto) {
-        //dto로 날짜 전달
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-        dto.setMon(String.valueOf(now.getMonthValue()));
-
-        try {
-            List<StudentTestSumGraphVo> sub = mapper.getMockTestGraph(dto);
-            List<StudentTestSumGraphVo> result = new ArrayList<>();
-            for (StudentTestSumGraphVo vo : sub) {
-                log.info("vo : {}", vo);
-                StringBuffer sb = new StringBuffer(vo.getDate());
-                vo.setDate(sb.insert(4, "-").toString());
-                result.add(vo);
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-//
-//        //controller로 원하는 값 전달
-//
-//        //날자, 이름, 등급만 담은 리스트
-//        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(dto);
-//
-//        List<StudentSummarySubjectVo> sublist = new ArrayList<StudentSummarySubjectVo>();
-//        List<StudentSummaryContainerVo> result = new ArrayList<StudentSummaryContainerVo>(); //일자 + 과목이름
-//
-//                loop:
-//                for (int i = 0; i < tmp.size(); i++) {
-//                 StudentSummarySubjectVo vo = new StudentSummarySubjectVo(tmp.get(i).getNm(),tmp.get(i).getRating());
-//                 log.info("vo : {}",vo);
-//                 sublist.add(vo);
-//                 if(tmp.get(i).getDate() != tmp.get(i+1).getDate())////검사
-//                     continue loop;
-//                }//시험응시월 수로 studentsummarysubjectVo 가 만들어짐
-//
-//        for (int i = 0; i < sublist.size(); i++) {
-//            //날짜형식 변경 후 데이터 보내주기
-//            StringBuffer sb = new StringBuffer(tmp.get(i).getDate());
-//            String tmpDate = sb.insert(3,"-").toString();
-//            StudentSummaryContainerVo tmpresult = new StudentSummaryContainerVo(tmpDate,sublist);
-//            result.add(tmpresult);
-//        }
-
 
     //내신 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -256,8 +180,8 @@ public class StudentService {
         return null;
     }
 
-    public List<StudentTestSumGraphVo> getAcaTestGraph() {
-        UserEntity userEnti = userRepository.findByUserId(facade.getLoginUserPk());
+    public List<StudentTestSumGraphVo> getAcaTestGraph(Long userId) {
+        UserEntity userEnti = userRepository.findByUserId(userId);
 
         //mapper로 부터 가져온 리스트
         try {
@@ -272,6 +196,35 @@ public class StudentService {
                 subResult.setNm(vo.getNm());
                 subResult.setRating(vo.getRating());
                 result.add(subResult);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
+        return mockResultRepository.searchMockResult(dto);
+        //return mapper.selMockTestResultByDates(dto);
+    }
+
+    public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
+        return mockResultRepository.getHighestRatingsOfMockTest(userId);
+        //return mapper.getHighestRatingsOfMockTest(userId);
+    }
+
+
+    public List<StudentTestSumGraphVo> getMockTestGraph(Long userId) {
+
+        try {
+            List<StudentTestSumGraphVo> sub = mockResultRepository.getMockTestGraph(userId);
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
+            for (StudentTestSumGraphVo vo : sub) {
+                log.info("vo : {}", vo);
+                StringBuffer sb = new StringBuffer(vo.getDate());
+                vo.setDate(sb.insert(4, "-").toString());
+                result.add(vo);
             }
             return result;
         } catch (Exception e) {

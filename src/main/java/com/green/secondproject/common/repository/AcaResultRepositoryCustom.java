@@ -13,4 +13,6 @@ public interface AcaResultRepositoryCustom {
     List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity);
     int[] getLatestTest(UserEntity userEntity);
     List<StudentTestSumGraphVo> getAcaTestGraph(UserEntity userEntity);
+
+
 }

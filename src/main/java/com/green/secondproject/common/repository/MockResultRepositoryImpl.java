@@ -10,6 +10,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -85,5 +86,49 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
         String[] array = {mockEnti.getYear(), mockEnti.getMon()};
         return array;
     }
+
+//
+//    List<StudentTestSumGraphVo> getMockTestGraph(Long userId){
+//        LocalDate now = LocalDate.now();
+//        String year = String.valueOf(now.getYear());
+//        return jpaQueryFactory.select(
+//                        new QStudentTestSumGraphVo((m.year.concat(m.mon.stringValue())
+//                                .concat(a1.midFinal.stringValue()).as("date"))
+//                                ,a1.subjectEntity.sbjCategoryEntity.nm.as("nm")
+//                                , a1.rating.as("rating")))
+//                .from(a1)
+//                .join(a1.subjectEntity, s)
+//                .join(a1.subjectEntity.sbjCategoryEntity, c)
+//                .where(a1.userEntity.userId.eq(userEntity.getUserId())
+//                        .and(c.categoryId.in(myGrade.getCateIdForAca()))
+//                        .and(a1.year.loe(year)))
+//                .orderBy(a1.year.asc(),a1.semester.asc(),a1.midFinal.asc())
+//                .fetch();
+//    }
+
+//
+//
+//
+//        <select id = "selAcaTestResultByDatesAndPeriod">
+//    SELECT A.year, A.semester, A.mid_final midFinal, C.nm cateName, B.nm nm,
+//    A.score, A.rating, A.class_rank classRank, A.whole_rank wholeRank
+//    FROM aca_result A
+//    INNER JOIN subject B
+//    ON A.subject_id = B.subject_id
+//    INNER JOIN sbj_category C
+//    ON C.category_id = B.category_id
+//    where A.user_id = #{userId}
+//        <if test='year != null and year != ""'>
+//    AND A.year = #{year}
+//        </if>
+//        <if test='semester != null and semester != ""'>
+//    AND A.semester = #{semester}
+//        </if>
+//        <if test='midFinal != null and midFinal != ""'>
+//    AND A.mid_final = #{midFinal}
+//        </if>
+//    ORDER BY A.year desc , A.semester desc, midFinal desc
+//            </select>
+//
 
 }

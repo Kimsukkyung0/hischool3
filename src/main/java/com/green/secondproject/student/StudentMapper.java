@@ -10,7 +10,7 @@ public interface StudentMapper {
     List<StudentMockSumResultVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
     List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId);
     List<StudentTestSumGraphVo> getLatestRatingsOfMockTest(StudentSummarySubjectDto dto);
-    List<StudentTestSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto);
+//    List<StudentTestSumGraphVo> getMockTestGraph(StudentSummarySubjectDto dto);
 
     List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param);
 //    List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto);
