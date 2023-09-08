@@ -40,28 +40,6 @@ public class StudentService {
         //return mapper.getHighestRatingsOfMockTest(userId);
     }
 
-    public StudentSumContainerVo getLatestRatingsOfMockTest(StudentSummarySubjectDto dto) {
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-        dto.setMon(String.valueOf(now.getMonthValue()));
-        try{
-        List<StudentTestSumGraphVo> sub = mapper.getLatestRatingsOfMockTest(dto);
-        List<StudentSummarySubjectVo> result = new ArrayList<StudentSummarySubjectVo>();
-
-//        for (StudentTestSumGraphVo vo : sub) {
-//            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-//            result.add(tmpVo);
-//        }
-
-        StringBuffer sb = new StringBuffer(sub.get(0).getDate());
-
-        return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
-        catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
 //    public List<StudentSummaryContainerVo> getMockTestGraph(StudentSummaryParam param){
 //        List<StudentMockSumGraphVo> tmp = mapper.getMockTestGraph(param);
 //
@@ -139,9 +117,9 @@ public class StudentService {
 
     public StudentSumContainerVo getLatestRatingsOfAcaTest() {
 //        결과값 : List<2023 2-2 국수영한 등급>
-
+        UserEntity userEnti = userRepository.findByUserId(facade.getLoginUserPk());
         List<StudentTestSumGraphVo> subList =
-                acaResultRepository.getLatestRatingsOfAcaTest(userRepository.findByUserId(facade.getLoginUserPk()));
+                acaResultRepository.getLatestRatingsOfAcaTest(userEnti);
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<>();
 
@@ -150,7 +128,7 @@ public class StudentService {
             tmp.add(tmpVo);
         }
 
-         String date = getMidFinalFormOfDate(acaResultRepository.findLatestTest());
+         String date = getMidFinalFormOfDate(acaResultRepository.getLatestTest(userEnti));
 
          return new StudentSumContainerVo(date,tmp);}
 
@@ -160,9 +138,9 @@ public class StudentService {
 //        return null;
 
 
-    public String getMidFinalFormOfDate(String date){
+    public String getMidFinalFormOfDate(int[] date){
 
-        StringBuffer sb = new StringBuffer(date.replaceAll(",",""));
+        StringBuffer sb = new StringBuffer(date.toString().replaceAll(",",""));
         String dateStrTmp = sb.insert(4,'-').toString();
         log.info("dateStrTmp : {}",dateStrTmp);
 
@@ -215,7 +193,7 @@ public class StudentService {
                 .build();
     }
 
-    //3차 JPA 적용 부분
+    //3차 JPA 적용 부분//////////////////////////////////////////////3차 JPA 적용 부분
 
     public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
         LocalDate now = LocalDate.now();
@@ -230,7 +208,8 @@ public class StudentService {
             //for문에서 날짜수정작업
             for (StudentTestSumGraphVo vo : subList) {
                 StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-                subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
+                //FIXME : 학생서비스를 수정하면서 생긴 부차적인 오류. 수정할것
+//                subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
                 subResult.setNm(vo.getNm());
                 subResult.setRating(vo.getRating());
                 result.add(subResult);
@@ -247,5 +226,29 @@ public class StudentService {
 //        mapper.getHighestRatingsOfAcaTest(userEnti);
         return acaResultRepository.getHighestRatingOfAcaTest(userEnti);
     }
+
+    public StudentSumContainerVo getLatestRatingsOfMockTest() {
+        UserEntity userEntity = userRepository.findByUserId(facade.getLoginUserPk());
+        try{
+            List<StudentTestSumGraphVo> sub = mockResultRepository.getLatestRatingsOfMockTest(userEntity);
+            log.info("sub : {}",sub);
+            List<StudentSummarySubjectVo> result = new ArrayList<>();
+
+        for (StudentTestSumGraphVo vo : sub) {
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+            result.add(tmpVo);
+            log.info("tmpVo : {}",tmpVo);
+        }
+
+
+            StringBuffer sb = new StringBuffer(mockResultRepository.findLatestMock(userEntity).toString());
+            return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
 }

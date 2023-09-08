@@ -7,6 +7,9 @@ import java.util.List;
 
 public interface AcaResultRepositoryCustom {
     List<StudentAcaResultWithIdVo> searchAcaResult(StudentAcaResultsParam param);
+
+
     List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(UserEntity userEntity);
     List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity);
+    int[] getLatestTest(UserEntity userEntity);
 }

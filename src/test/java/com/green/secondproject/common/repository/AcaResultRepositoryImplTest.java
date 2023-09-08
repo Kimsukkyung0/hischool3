@@ -1,6 +1,7 @@
 package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.config.jpa.QueryDslConfig;
+import com.green.secondproject.common.entity.AcaResultEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import com.green.secondproject.student.model.StudentTestSumGraphVo;
@@ -17,12 +18,13 @@ import java.util.List;
 @Slf4j
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import({QueryDslConfig.class,MyGradeGraphUtils.class})
+@Import({QueryDslConfig.class,MyGradeGraphUtils.class, AcaResultEntity.class})
 class AcaResultRepositoryImplTest {
     @Autowired
     AcaResultRepository aca;
     @Autowired
     UserRepository user;
+
 //    @Autowired
 //    MyGradeGraphUtils utils;
 
@@ -37,7 +39,9 @@ class AcaResultRepositoryImplTest {
 
     @Test
     void findLatestTest(){
-        String latestTest = aca.findLatestTest();
+//        user.findById(5L).get();
+        UserEntity userEntity = user.findByUserId(5L);
+        int[] latestTest = aca.getLatestTest(userEntity);
         log.info("latestTest : {}",latestTest);
     }
 

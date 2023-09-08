@@ -1,5 +1,7 @@
 package com.green.secondproject.common.repository;
 
+import com.green.secondproject.common.entity.*;
+import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import com.green.secondproject.common.entity.QMockResultEntity;
 import com.green.secondproject.common.entity.QSbjCategoryEntity;
 import com.green.secondproject.student.model.*;
@@ -13,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+    private final MyGradeGraphUtils myGrade;
     private final QMockResultEntity m = QMockResultEntity.mockResultEntity;
     private final QSbjCategoryEntity s = QSbjCategoryEntity.sbjCategoryEntity;
 
@@ -55,4 +58,32 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
     private BooleanExpression monEq(String mon) {
         return mon != null ? m.mon.eq(mon) : null;
     }
+
+    @Override
+    public List<StudentTestSumGraphVo> getLatestRatingsOfMockTest(UserEntity userEntity) {
+        String[] latestMock = findLatestMock(userEntity);
+        return jpaQueryFactory.select(new QStudentTestSumGraphVo((m.year.concat(m.mon).as("date"))
+                        , m.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                        , m.rating.as("rating")))
+                .from(m)
+                .join(m.subjectEntity.sbjCategoryEntity, s)
+                .where(m.userEntity.userId.eq(userEntity.getUserId())
+                        .and(s.categoryId.in(myGrade.getCateIdForMockTest()))
+                        .and(m.year.eq(String.valueOf(latestMock[0])))
+                        .and(m.mon.eq(latestMock[1]))
+                )
+                .fetch();
+
+    }
+
+    public String[] findLatestMock(UserEntity userEntity) {
+
+        MockResultEntity mockEnti = jpaQueryFactory.selectFrom(m)
+                .orderBy(m.year.desc(), m.mon.desc())
+                .where(m.userEntity.userId.eq(userEntity.getUserId()))
+                .fetchFirst();
+        String[] array = {mockEnti.getYear(), mockEnti.getMon()};
+        return array;
+    }
+
 }

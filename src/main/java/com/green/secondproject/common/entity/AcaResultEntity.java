@@ -2,6 +2,7 @@ package com.green.secondproject.common.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.green.secondproject.common.config.jpa.BaseEntity;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -60,4 +61,7 @@ public class AcaResultEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "int unsigned")
     @ColumnDefault(value = "0")
     private int wholeRank;
+
+
+
 }
