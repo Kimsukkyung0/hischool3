@@ -215,23 +215,23 @@ public class StudentService {
     }
 
 
-    public List<StudentTestSumGraphVo> getMockTestGraph(Long userId) {
-
-        try {
-            List<StudentTestSumGraphVo> sub = mockResultRepository.getMockTestGraph(userId);
-            List<StudentTestSumGraphVo> result = new ArrayList<>();
-            for (StudentTestSumGraphVo vo : sub) {
-                log.info("vo : {}", vo);
-                StringBuffer sb = new StringBuffer(vo.getDate());
-                vo.setDate(sb.insert(4, "-").toString());
-                result.add(vo);
-            }
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public List<StudentTestSumGraphVo> getMockTestGraph(Long userId) {
+//
+//        try {
+//            List<StudentTestSumGraphVo> sub = mockResultRepository.getMockTestGraph(userId);
+//            List<StudentTestSumGraphVo> result = new ArrayList<>();
+//            for (StudentTestSumGraphVo vo : sub) {
+//                log.info("vo : {}", vo);
+//                StringBuffer sb = new StringBuffer(vo.getDate());
+//                vo.setDate(sb.insert(4, "-").toString());
+//                result.add(vo);
+//            }
+//            return result;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
 
     public void downloadMock(HttpServletResponse res, StudentSummarySubjectDto dto) throws IOException {
