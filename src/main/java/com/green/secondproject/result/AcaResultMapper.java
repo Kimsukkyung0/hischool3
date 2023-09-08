@@ -1,7 +1,7 @@
-package com.green.secondproject.acaResult;
+package com.green.secondproject.result;
 
-import com.green.secondproject.acaResult.model.CalcClassRankParam;
-import com.green.secondproject.acaResult.model.CalcWholeRankParam;
+import com.green.secondproject.result.model.CalcClassRankParam;
+import com.green.secondproject.result.model.CalcWholeRankParam;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,8 +1,6 @@
 package com.green.secondproject.admin;
 
-import com.fasterxml.jackson.dataformat.yaml.UTF8Reader;
 import com.green.secondproject.admin.model.*;
-import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.redis.RedisService;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
@@ -20,10 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -335,7 +330,7 @@ public class AdminService {
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(facade.getLoginUser().getSchoolId());
         List<NoticeEntity> imptList = noticeRepository.findByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 1, schoolEntity);
-        List<NoticeEntity> normalList = noticeRepository.findTop8ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
+        List<NoticeEntity> normalList = noticeRepository.findTop17ByImptYnAndSchoolEntityOrderByNoticeIdDesc(
                 0, schoolEntity);
 
         return MainNoticeListVo.builder()

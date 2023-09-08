@@ -1,10 +1,7 @@
 package com.green.secondproject.common.repository;
 
-import com.green.secondproject.common.config.etc.EnrollState;
-import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.NoticeEntity;
 import com.green.secondproject.common.entity.SchoolEntity;
-import com.green.secondproject.common.entity.VanEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +13,7 @@ import java.util.List;
 public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     List<NoticeEntity> findByschoolEntity(SchoolEntity entity,Pageable pageable);
     List<NoticeEntity> findByImptYnAndSchoolEntityOrderByNoticeIdDesc(int imptYn, SchoolEntity schoolEntity);
-    List<NoticeEntity> findTop8ByImptYnAndSchoolEntityOrderByNoticeIdDesc(int imptYn, SchoolEntity schoolEntity);
+    List<NoticeEntity> findTop17ByImptYnAndSchoolEntityOrderByNoticeIdDesc(int imptYn, SchoolEntity schoolEntity);
 
 
     @Query("SELECT n FROM NoticeEntity n " +

@@ -71,6 +71,9 @@ public class StudentController {
         param.setYear(year);
         param.setSemester(semester);
         param.setMidFinal(midFinal);
+        param.setVanId(myuser.getVanId());
+        param.setGrade(myuser.getGrade());
+        param.setSchoolId(myuser.getSchoolId());
         return service.selAcaTestResultByDatesAndPeriod(param);
     }
 
