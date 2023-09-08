@@ -82,7 +82,6 @@ public class NoticeService {
             }
         }
 
-
         long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
         NoticeListVo list = NoticeListVo.builder()
@@ -219,15 +218,20 @@ public class NoticeService {
         long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
         long totalSearch = 0L;
-        if (search != null) {
-            totalSearch = noticeRepository.countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(search, 1L, userSchoolId);
-        }
+        long searchImptYn = 0L;
+        long importantNoticesCount = 0L;  // 이 부분을 추가합니다.
 
+
+            totalSearch = noticeRepository.countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId
+                    (search,  1L,  userSchoolId);
+
+//        searchImptYn =noticeRepository.countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(search,0L,userSchoolId);
+        searchImptYn =noticeRepository.countByImptYnAndSchoolEntitySchoolId(1L,userSchoolId);
         NoticeListVo2 list = NoticeListVo2.builder()
         .list(result)
         .total(total)
         .totalPage((int)Math.ceil((double) total/totalPag))
-        .searchTotal(totalSearch)
+        .searchTotal(totalSearch+searchImptYn)
         .searchPage((long) Math.ceil((double) totalSearch/totalPag))
         .build();
 
