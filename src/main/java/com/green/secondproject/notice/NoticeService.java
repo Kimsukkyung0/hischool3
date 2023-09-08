@@ -151,7 +151,8 @@ public class NoticeService {
         Pageable pageable = PageRequest.of(page - 1, 14, sort);
         List<NoticeTotalVo> result = new ArrayList<>();
         int totalPag = pageable.getPageSize();
-        // 중요공지 (imptYn이 1인 공지)를 먼저 추가
+        // 중요공지 (imptYn이 1인 공지)를 먼저 추가 만약 공지사항 -> 중요공지사항 4개 imptYn = 1 -> 0
+
         List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId);
         for (NoticeEntity entity : importantNotices) {
             result.add(NoticeTotalVo.builder()
@@ -200,4 +201,36 @@ public class NoticeService {
                 .build();
         return list;
     }
+//    public NoticeVo saveByNotice(NoticeInsDto dto) {
+//        MyUserDetails userDetails = facade.getLoginUser();
+//        SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
+//
+//        //    만약 dto의 imptYn 값이 1이고, 현재 1인 공지사항이 이미 4개 있다면 5번째로 오래된 공지사항의 imptYn 값을 0으로 변경
+//        if (dto.getImptyn() == 1) {
+//            int countOfImportantNotices = noticeRepository.countByImptYnAndSchoolEntitySchoolId(1, schoolEntity.getSchoolId());
+//            if (countOfImportantNotices >= 4) {
+//                List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolIdOrderByCreatedAtDesc(1, schoolEntity.getSchoolId());
+//                if (importantNotices.size() > 4) {
+//                    NoticeEntity fifthOldestNotice = importantNotices.get(4);
+//                    fifthOldestNotice.setImptYn(0);
+//                    noticeRepository.save(fifthOldestNotice);
+//                }
+//            }
+//        }
+//
+//        NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent())
+//                .imptYn(dto.getImptyn()).schoolEntity(schoolEntity).build();
+//
+//        NoticeEntity result = noticeRepository.save(entity);
+//
+//        return NoticeVo.builder()
+//                .noticeId(result.getNoticeId())
+//                .title(result.getTitle())
+//                .content(result.getContent())
+//                .createdAt(result.getCreatedAt())
+//                .imptYn(result.getImptYn())
+//                .hits(result.getHits())
+//                .userId(userDetails.getUserId())
+//                .build();
+//    }
 }
