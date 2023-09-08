@@ -77,14 +77,7 @@ public class StudentController {
         return service.selAcaTestResultByDatesAndPeriod(param);
     }
 
-    @GetMapping("/aca-highest")
-    @Operation(summary = "내신:학생별 최고 등급", description = "출력값 : <br>" +
-            "(1)nm - 과목계열이름<br>(2)rating - 등급<br>")
-    public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(@AuthenticationPrincipal MyUserDetails myuser) {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(myuser.getUserId());
-        return service.getHighestRatingsOfAcaTest(dto);
-    }
+
 
     @GetMapping("/aca-graph")
     @Operation(summary = "내신그래프:올해 응시시험 성적", description = """
@@ -119,5 +112,13 @@ public class StudentController {
             + "세부리스트 항목 : <br>(1)nm - 과목계열이름<br>(2)rating - 등급<br>※수정완료※<br>")
     public StudentSumContainerVo getLatestRatingsOfAcaTest() {
         return service.getLatestRatingsOfAcaTest();
+    }
+
+
+    @GetMapping("/aca-highest")
+    @Operation(summary = "내신:학생별 최고 등급", description = "출력값 : <br>" +
+            "(1)nm - 과목계열이름<br>(2)rating - 등급<br>")
+    public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest() {
+        return service.getHighestRatingsOfAcaTest();
     }
 }

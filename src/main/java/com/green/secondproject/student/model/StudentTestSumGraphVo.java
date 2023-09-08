@@ -13,13 +13,16 @@ import lombok.NoArgsConstructor;
 public class StudentTestSumGraphVo {
     private String date;
     private String nm;
-    private NumberExpression<Integer> rating;
+    private int rating;
 
     @QueryProjection
-    public StudentTestSumGraphVo(StringExpression date, StringExpression nm, NumberExpression<Integer> rating) {
-        this.date = date.toString();
-        this.nm = nm.toString();
-        this.rating = rating.intValue();
+    public StudentTestSumGraphVo(String date, String nm, int rating) {
+        this.date = date;
+        this.nm = nm;
+        this.rating = rating;
     }
+
+
+
 }
 
