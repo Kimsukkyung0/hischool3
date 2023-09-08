@@ -140,8 +140,12 @@ public class StudentService {
 
     public String getMidFinalFormOfDate(int[] date){
 
-        StringBuffer sb = new StringBuffer(date.toString().replaceAll(",",""));
+        StringBuffer sb = new StringBuffer();
+        for (int d: date) {
+            sb.append(d);
+        }
         String dateStrTmp = sb.insert(4,'-').toString();
+        dateStrTmp.replaceAll(",","");
         log.info("dateStrTmp : {}",dateStrTmp);
 
         int len = dateStrTmp.length()-1;
