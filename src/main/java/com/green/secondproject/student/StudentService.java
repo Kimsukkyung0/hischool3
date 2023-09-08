@@ -239,9 +239,11 @@ public class StudentService {
             result.add(tmpVo);
             log.info("tmpVo : {}",tmpVo);
         }
-
-
-            StringBuffer sb = new StringBuffer(mockResultRepository.findLatestMock(userEntity).toString());
+            String[] st = mockResultRepository.findLatestMock(userEntity);
+            StringBuilder sb = new StringBuilder();
+            for (String s: st) {
+                sb.append(s);
+            }
             return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
         catch (Exception e){
             e.printStackTrace();
