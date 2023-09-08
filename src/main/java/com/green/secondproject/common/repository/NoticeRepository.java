@@ -35,6 +35,8 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     @Query("SELECT count(*) FROM NoticeEntity WHERE"+
             "(:search IS NULL OR title LIKE CONCAT('%', :search, '%'))")
     long countBy(@Param("search") String search);
+
+
 }
 
 
