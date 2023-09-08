@@ -1,6 +1,7 @@
 package com.green.secondproject.student;
 
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
+import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/student")
 @Tag(name = "학생")
 public class StudentController {
-
+    private final AuthenticationFacade facade;
     private final StudentService service;
 
     @GetMapping("/mock-table")
@@ -33,17 +34,6 @@ public class StudentController {
         dto.setMon(mon);
         return service.selMockTestResultByDates(dto);
     }
-
-    @GetMapping("/mock-graph")
-    @Operation(summary = "모의고사그래프-올해 응시시험 성적", description =
-            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>"
-                    + "※국수영한 순서/수정완료※")
-    public List<StudentTestSumGraphVo> getMockTestSumGraph(@AuthenticationPrincipal MyUserDetails myuser) {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(myuser.getUserId());
-        return service.getMockTestGraph(dto);
-    }
-
 
     @GetMapping("/aca-table")
     @Operation(summary = "내신성적관리 테이블", description = "요구값(선택) : <br>" + "(1)year - 조회기준연도(yyyy) <br>(2)semester - 학기(1,2)<br>(3)midFinal - (1:중간,2:기말)<br><br>"
@@ -64,17 +54,7 @@ public class StudentController {
 
 
 
-    @GetMapping("/aca-graph")
-    @Operation(summary = "내신그래프:올해 응시시험 성적", description = """
-            출력값 : <br>" + "(1)date - (연도)-(학기) (중간/기말)<br> 
-            (2)nm - 과목계열이름<br>
-            (3)rating - 등급<br>※수정완료※<br>""")
-    List<StudentTestSumGraphVo> getAcaTestGraph(@AuthenticationPrincipal MyUserDetails myuser) {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        Long userId = myuser.getUserId();
-        dto.setUserId(userId);
-        return service.getAcaTestGraph(dto);
-    }
+
 
     @GetMapping("/notice")
     @Operation(summary = "학생 페이지 공지사항", description = """
@@ -133,5 +113,22 @@ public class StudentController {
     @Operation(summary = "내신 성적 다운로드")
     public void downloadAca(HttpServletResponse res, @ParameterObject StudentAcaResultsParam p) throws IOException {
         service.downloadAca(res, p);
+    }
+
+    @GetMapping("/aca-graph")
+    @Operation(summary = "내신그래프:올해 응시시험 성적", description = """
+            출력값 : <br>" + "(1)date - (연도)-(학기) (중간/기말)<br> 
+            (2)nm - 과목계열이름<br>
+            (3)rating - 등급<br>※수정완료※<br>""")
+    List<StudentTestSumGraphVo> getAcaTestGraph() {
+        return service.getAcaTestGraph(facade.getLoginUserPk());
+    }
+
+    @GetMapping("/mock-graph")
+    @Operation(summary = "모의고사그래프-올해 응시시험 성적", description =
+            "출력값 : <br>" + "(1)nm - 과목명<br>" + "(2)rating - 등급(1-9)<br>"
+                    + "※국수영한 순서/수정완료※")
+    public List<StudentTestSumGraphVo> getMockTestSumGraph() {
+        return service.getMockTestGraph(facade.getLoginUserPk());
     }
 }
