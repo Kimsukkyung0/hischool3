@@ -61,4 +61,7 @@ public class AcaResultEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "int unsigned")
     @ColumnDefault(value = "0")
     private int wholeRank;
+
+
+
 }

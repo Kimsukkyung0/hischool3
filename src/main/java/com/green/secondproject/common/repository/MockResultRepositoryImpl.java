@@ -62,7 +62,7 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
     @Override
     public List<StudentTestSumGraphVo> getLatestRatingsOfMockTest(UserEntity userEntity) {
         String[] latestMock = findLatestMock(userEntity);
-        return jpaQueryFactory.select(new QStudentTestSumGraphVo((mockResult.year.concat(mockResult.mon).as("date"))
+        return jpaQueryFactory.select(new QStudentTestSumGraphVo((m.year.concat(m.mon).as("date"))
                         , m.subjectEntity.sbjCategoryEntity.nm.as("nm")
                         , m.rating.as("rating")))
                 .from(m)
@@ -82,7 +82,7 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
                 .orderBy(m.year.desc(), m.mon.desc())
                 .where(m.userEntity.userId.eq(userEntity.getUserId()))
                 .fetchFirst();
-        String[] array = {m.getYear(), m.getMon()};
+        String[] array = {mockEnti.getYear(), mockEnti.getMon()};
         return array;
     }
 
