@@ -81,17 +81,17 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
 
     @Override
     public List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(UserEntity userEntity) {
-        return jpaQueryFactory.select(new QStudentTestSumGraphVo((acaResult.year.concat(acaResult.semester.stringValue()).concat(acaResult.midFinal.stringValue()).as("date"))
-                        , acaResult.subjectEntity.sbjCategoryEntity.nm.as("nm")
-                        , acaResult.rating.as("rating")))
-                .from(acaResult)
-                .join(acaResult.subjectEntity, sbj)
-                .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
-                .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-                                .and(cate.categoryId.in(1,3,6,7))
-                                .and(acaResult.year.eq(String.valueOf(findLatestTest()[0])))
-                .and(acaResult.semester.eq(findLatestTest()[1]))
-                .and(acaResult.midFinal.eq(findLatestTest()[2]))
+        return jpaQueryFactory.select(new QStudentTestSumGraphVo((a1.year.concat(a1.semester.stringValue()).concat(a1.midFinal.stringValue()).as("date"))
+                        , a1.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                        , a1.rating.as("rating")))
+                .from(a1)
+                .join(a1.subjectEntity, s)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .where(a1.userEntity.userId.eq(userEntity.getUserId())
+                                .and(c.categoryId.in(1,3,6,7))
+                                .and(a1.year.eq(String.valueOf(findLatestTest()[0])))
+                .and(a1.semester.eq(findLatestTest()[1]))
+                .and(a1.midFinal.eq(findLatestTest()[2]))
                 )
 //                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
 //                        .and(acaResult.year.concat(String.valueOf(acaResult.semester)).concat(acaResult.midFinal.toString()).eq(findLatestTest()))
@@ -116,8 +116,8 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
 
     public int[] findLatestTest() {
         AcaResultEntity acaResultEntity = jpaQueryFactory
-                .selectFrom(acaResult)
-                .orderBy(acaResult.year.desc(), acaResult.semester.desc(), acaResult.midFinal.desc()).fetchFirst();
+                .selectFrom(a1)
+                .orderBy(a1.year.desc(), a1.semester.desc(), a1.midFinal.desc()).fetchFirst();
      int[] stList = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(),acaResultEntity.getMidFinal()};
      return stList;
     }
@@ -126,16 +126,16 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     public List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity){
         String nowYear = String.valueOf(LocalDate.now().getYear());
         return jpaQueryFactory.select(new QStudentSummarySubjectVo(
-                        acaResult.subjectEntity.sbjCategoryEntity.nm.as("nm")
-                        , acaResult.rating.min().as("rating")))
-                .from(acaResult)
-                .join(acaResult.subjectEntity, sbj)
-                .join(acaResult.subjectEntity.sbjCategoryEntity, cate)
-                .where(acaResult.userEntity.userId.eq(userEntity.getUserId())
-                        .and(cate.categoryId.in(1,3,6,7))
-                        .and(acaResult.year.loe(nowYear)))
-                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
-                .groupBy(cate.nm)
+                        a1.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                        , a1.rating.min().as("rating")))
+                .from(a1)
+                .join(a1.subjectEntity, s)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .where(a1.userEntity.userId.eq(userEntity.getUserId())
+                        .and(c.categoryId.in(1,3,6,7))
+                        .and(a1.year.loe(nowYear)))
+                .orderBy(a1.year.asc(),a1.semester.asc(),a1.midFinal.asc())
+                .groupBy(c.nm)
                 .fetch();
     }
 }
