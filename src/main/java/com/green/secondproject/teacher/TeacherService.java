@@ -512,5 +512,8 @@ public class TeacherService {
                 .build());
     }
 
+    public List<StudentVo> getStudentList(String name) {
+        return userRepository.studentList(name);
+    }
 }
 

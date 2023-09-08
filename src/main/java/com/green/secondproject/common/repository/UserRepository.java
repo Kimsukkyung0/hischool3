@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long> {
+public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRepositoryCustom {
     UserEntity findByEmail(String email);
 
     UserEntity findByUserId(Long userId);

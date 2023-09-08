@@ -251,6 +251,12 @@ public class TeacherController {
     public int calcRank(@RequestBody CalcClassRankParam p) {
         return service.calcRank(p);
     }
+
+    @GetMapping("/student-list")
+    @Operation(summary = "반 학생 목록")
+    public List<StudentVo> getStudentList(String name) {
+        return service.getStudentList(name);
+    }
 }
 
 
