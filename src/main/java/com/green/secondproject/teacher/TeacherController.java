@@ -255,11 +255,11 @@ public class TeacherController {
 
     @GetMapping("/student-list")
     @Operation(summary = "반 학생 목록")
-    public List<StudentVo> getStudentList(@Parameter(description = "학생 이름") @RequestParam(required = false) String name) {
+    public List<StudentVo> getStudentList(@Parameter(description = "학생 이름")
+                                              @RequestParam(required = false) String name) {
         return service.getStudentList(name);
     }
 }
-
 
 //    @GetMapping("/acaresult")
 //    @Operation(summary = "학생 내신 성적 조회",
