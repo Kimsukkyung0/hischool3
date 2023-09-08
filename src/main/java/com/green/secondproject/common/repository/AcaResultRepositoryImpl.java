@@ -33,7 +33,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     private final QVanEntity v = QVanEntity.vanEntity;
     private final QUserEntity u = QUserEntity.userEntity;
     private final QSchoolEntity sc = QSchoolEntity.schoolEntity;
-//    private final MyGradeGraphUtils myGrade;
+    private final MyGradeGraphUtils myGrade;
 
     @Override
     public List<StudentAcaResultWithIdVo> searchAcaResult(StudentAcaResultsParam param) {
@@ -123,4 +123,36 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .groupBy(c.nm)
                 .fetch();
     }
+
+    @Override
+    public List<StudentTestSumGraphVo> getAcaTestGraph(UserEntity userEntity){
+       LocalDate now = LocalDate.now();
+       String year = String.valueOf(now.getYear());
+        return jpaQueryFactory.select(
+                new QStudentTestSumGraphVo((a1.year.concat(a1.semester.stringValue())
+                        .concat(a1.midFinal.stringValue()).as("date"))
+                        ,a1.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                        , a1.rating.as("rating")))
+                .from(a1)
+                .join(a1.subjectEntity, s)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .where(a1.userEntity.userId.eq(userEntity.getUserId())
+                        .and(c.categoryId.in(myGrade.getCateIdForAca()))
+                        .and(a1.year.loe(year)))
+                .orderBy(a1.year.asc(),a1.semester.asc(),a1.midFinal.asc())
+//                .orderBy(acaResult.year.asc(),acaResult.semester.asc(),acaResult.midFinal.asc())
+//                        .and(acaResult.year.concat(String.valueOf(acaResult.semester)).concat(acaResult.midFinal.toString()).eq(findLatestTest()))
+                .fetch();
+    };
+
+//       <select id="getAcaTestGraph">
+//    select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
+//    from aca_result A
+//    INNER JOIN subject B
+//    ON A.subject_id = B.subject_id
+//    INNER JOIN sbj_category C
+//    on B.category_id = c.category_id
+//    where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
+//    ORDER BY A.year,A.semester,A.mid_final
+//            </select>
 }

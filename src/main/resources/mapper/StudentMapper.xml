@@ -60,18 +60,6 @@
         ORDER BY A.year desc , A.semester desc, midFinal desc
     </select>
 
-
-    <select id="getAcaTestGraph">
-        select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
-        from aca_result A
-        INNER JOIN subject B
-        ON A.subject_id = B.subject_id
-        INNER JOIN sbj_category C
-        on B.category_id = c.category_id
-        where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
-        ORDER BY A.year,A.semester,A.mid_final
-    </select>
-
     <!-- 3차 JPA 적용부분 -->
 
 <!--
@@ -112,6 +100,17 @@
         on B.category_id = c.category_id
         WHERE A.user_id = #{userId} and B.category_id in(2,5,4,8)
         group by C.nm
+    </select>
+
+    <select id="getAcaTestGraph">
+        select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
+        from aca_result A
+        INNER JOIN subject B
+        ON A.subject_id = B.subject_id
+        INNER JOIN sbj_category C
+        on B.category_id = c.category_id
+        where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
+        ORDER BY A.year,A.semester,A.mid_final
     </select>
 
 </mapper>

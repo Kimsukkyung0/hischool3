@@ -64,17 +64,7 @@ public class StudentController {
 
 
 
-    @GetMapping("/aca-graph")
-    @Operation(summary = "내신그래프:올해 응시시험 성적", description = """
-            출력값 : <br>" + "(1)date - (연도)-(학기) (중간/기말)<br> 
-            (2)nm - 과목계열이름<br>
-            (3)rating - 등급<br>※수정완료※<br>""")
-    List<StudentTestSumGraphVo> getAcaTestGraph(@AuthenticationPrincipal MyUserDetails myuser) {
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        Long userId = myuser.getUserId();
-        dto.setUserId(userId);
-        return service.getAcaTestGraph(dto);
-    }
+
 
     @GetMapping("/notice")
     @Operation(summary = "학생 페이지 공지사항", description = """
@@ -133,5 +123,14 @@ public class StudentController {
     @Operation(summary = "내신 성적 다운로드")
     public void downloadAca(HttpServletResponse res, @ParameterObject StudentAcaResultsParam p) throws IOException {
         service.downloadAca(res, p);
+    }
+
+    @GetMapping("/aca-graph")
+    @Operation(summary = "내신그래프:올해 응시시험 성적", description = """
+            출력값 : <br>" + "(1)date - (연도)-(학기) (중간/기말)<br> 
+            (2)nm - 과목계열이름<br>
+            (3)rating - 등급<br>※수정완료※<br>""")
+    List<StudentTestSumGraphVo> getAcaTestGraph() {
+        return service.getAcaTestGraph();
     }
 }

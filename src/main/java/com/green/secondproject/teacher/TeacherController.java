@@ -1,5 +1,7 @@
 package com.green.secondproject.teacher;
 
+import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.result.model.AcaResultInsDto;
 import com.green.secondproject.result.model.CalcClassRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
@@ -26,6 +28,7 @@ import java.util.List;
 public class TeacherController {
     private final TeacherService service;
     private final StudentService stdService;
+    private final UserRepository userRep;
 
     @GetMapping("/signed")
     @Operation(summary = "승인된 학생 리스트",
@@ -170,9 +173,8 @@ public class TeacherController {
     @GetMapping("/aca-graph/{userId}")
     @Operation(summary = "내신그래프- 학생별 올해 응시시험 성적",  description ="출력값 : <br>"+ "(1)date - (연도)-(학기) (중간/기말)<br> (2)nm - 과목계열이름<br>(3)rating - 등급<br>※수정완료※<br>")
     List<StudentTestSumGraphVo> getAcaTestGraph(@PathVariable Long userId){
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(userId);
-        return stdService.getAcaTestGraph(dto);
+        UserEntity user = userRep.findByUserId(userId);
+        return stdService.getAcaTestGraph();
     }
 
     @GetMapping("/notice")

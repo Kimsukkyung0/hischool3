@@ -15,6 +15,6 @@ public interface StudentMapper {
     List<StudentAcaResultVo> selAcaTestResultByDatesAndPeriod(StudentAcaResultsParam param);
 //    List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest(StudentSummarySubjectDto dto);
 //    List<StudentTestSumGraphVo> getLatestRatingsOfAcaTest(Long userId);
-    List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto);
+//    List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto);
 
 }

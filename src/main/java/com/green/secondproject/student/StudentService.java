@@ -73,7 +73,7 @@ public class StudentService {
 
         try {
             List<StudentTestSumGraphVo> sub = mapper.getMockTestGraph(dto);
-            List<StudentTestSumGraphVo> result = new ArrayList<StudentTestSumGraphVo>();
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
             for (StudentTestSumGraphVo vo : sub) {
                 log.info("vo : {}", vo);
                 StringBuffer sb = new StringBuffer(vo.getDate());
@@ -81,12 +81,11 @@ public class StudentService {
                 result.add(vo);
             }
             return result;
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
-        }
+    }
 
 
 //
@@ -131,49 +130,68 @@ public class StudentService {
 
         List<StudentSummarySubjectVo> tmp = new ArrayList<>();
 
-        for(StudentTestSumGraphVo vo : subList){
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
+        for (StudentTestSumGraphVo vo : subList) {
+            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(), vo.getRating());
             tmp.add(tmpVo);
         }
 
-         String date = getMidFinalFormOfDate(acaResultRepository.getLatestTest(userEnti));
+        String date = getMidFinalFormOfDate(acaResultRepository.getLatestTest(userEnti));
 
-         return new StudentSumContainerVo(date,tmp);}
+        return new StudentSumContainerVo(date, tmp);
+    }
 
-//        catch (Exception e) {
+    //        catch (Exception e) {
 //            e.printStackTrace();
 //        }
 //        return null;
+    public String getMidFinalFormOfDateByString(String date) {
 
+        StringBuffer sb = new StringBuffer(date);
+        String dateStrTmp = sb.insert(4, '-').toString();
 
-    public String getMidFinalFormOfDate(int[] date){
-
-        StringBuffer sb = new StringBuffer();
-        for (int d: date) {
-            sb.append(d);
-        }
-        String dateStrTmp = sb.insert(4,'-').toString();
-        dateStrTmp.replaceAll(",","");
-        log.info("dateStrTmp : {}",dateStrTmp);
-
-        int len = dateStrTmp.length()-1;
-        if(dateStrTmp.endsWith("1")){
+        int len = dateStrTmp.length() - 1;
+        if (dateStrTmp.endsWith("1")) {
             //중간고사
-            dateStrTmp = dateStrTmp.substring(0,len);
+            dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 중간";
-        }
-        else if(dateStrTmp.endsWith("2")){
+        } else if (dateStrTmp.endsWith("2")) {
             //기말일때
 
 //            StringUtils.removeEnd(dateStrTmp, "2");
-            dateStrTmp = dateStrTmp.substring(0,len);
+            dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 기말";
         }
 
         return dateStrTmp.substring(2);
     }
 
-    public NoticeTeacherListVo NoticeTeacher(){
+    public String getMidFinalFormOfDate(int[] date) {
+
+        StringBuffer sb = new StringBuffer();
+        for (int d : date) {
+            sb.append(d);
+        }
+        String dateStrTmp = sb.insert(4, '-').toString();
+        dateStrTmp.replaceAll(",", "");
+        log.info("dateStrTmp : {}", dateStrTmp);
+
+        int len = dateStrTmp.length() - 1;
+        if (dateStrTmp.endsWith("1")) {
+            //중간고사
+            dateStrTmp = dateStrTmp.substring(0, len);
+            dateStrTmp += " 중간";
+        } else if (dateStrTmp.endsWith("2")) {
+            //기말일때
+
+//            StringUtils.removeEnd(dateStrTmp, "2");
+            dateStrTmp = dateStrTmp.substring(0, len);
+            dateStrTmp += " 기말";
+        }
+
+        return dateStrTmp.substring(2);
+    }
+
+    public NoticeTeacherListVo NoticeTeacher() {
         MyUserDetails userDetails = facade.getLoginUser();  // 현재 로그인한 사용자의 정보
 
         UserEntity currentUser = userRepository.findById(userDetails.getUserId()).orElse(null);  // 사용자의 상세 정보를 가져옴
@@ -208,32 +226,6 @@ public class StudentService {
 
     //3차 JPA 적용 부분//////////////////////////////////////////////3차 JPA 적용 부분
 
-    public List<StudentTestSumGraphVo> getAcaTestGraph(StudentSummarySubjectDto dto){
-        LocalDate now = LocalDate.now();
-        dto.setYear(String.valueOf(now.getYear()));
-
-        //mapper로 부터 가져온 리스트
-        try {
-            List<StudentTestSumGraphVo> subList = mapper.getAcaTestGraph(dto);
-            log.info("subList : {}", subList);
-            List<StudentTestSumGraphVo> result = new ArrayList<>();
-
-            //for문에서 날짜수정작업
-            for (StudentTestSumGraphVo vo : subList) {
-                StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
-                //FIXME : 학생서비스를 수정하면서 생긴 부차적인 오류. 수정할것
-//                subResult.setDate(getMidFinalFormOfDate(vo.getDate()));
-                subResult.setNm(vo.getNm());
-                subResult.setRating(vo.getRating());
-                result.add(subResult);
-            }
-            return result;
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public List<StudentSummarySubjectVo> getHighestRatingsOfAcaTest() {
         UserEntity userEnti = userRepository.findByUserId(facade.getLoginUserPk());
 //        mapper.getHighestRatingsOfAcaTest(userEnti);
@@ -242,27 +234,52 @@ public class StudentService {
 
     public StudentSumContainerVo getLatestRatingsOfMockTest() {
         UserEntity userEntity = userRepository.findByUserId(facade.getLoginUserPk());
-        try{
+        try {
             List<StudentTestSumGraphVo> sub = mockResultRepository.getLatestRatingsOfMockTest(userEntity);
-            log.info("sub : {}",sub);
+            log.info("sub : {}", sub);
             List<StudentSummarySubjectVo> result = new ArrayList<>();
 
-        for (StudentTestSumGraphVo vo : sub) {
-            StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(),vo.getRating());
-            result.add(tmpVo);
-            log.info("tmpVo : {}",tmpVo);
-        }
+            for (StudentTestSumGraphVo vo : sub) {
+                StudentSummarySubjectVo tmpVo = new StudentSummarySubjectVo(vo.getNm(), vo.getRating());
+                result.add(tmpVo);
+                log.info("tmpVo : {}", tmpVo);
+            }
             String[] st = mockResultRepository.findLatestMock(userEntity);
             StringBuilder sb = new StringBuilder();
-            for (String s: st) {
+            for (String s : st) {
                 sb.append(s);
             }
-            return new StudentSumContainerVo(sb.insert(4,'-').toString(),result);}
-        catch (Exception e){
+            return new StudentSumContainerVo(sb.insert(4, '-').toString(), result);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
+    public List<StudentTestSumGraphVo> getAcaTestGraph() {
+        UserEntity userEnti = userRepository.findByUserId(facade.getLoginUserPk());
+
+        //mapper로 부터 가져온 리스트
+        try {
+            List<StudentTestSumGraphVo> subList = acaResultRepository.getAcaTestGraph(userEnti);
+            log.info("subList : {}", subList);
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
+
+            //for문에서 날짜수정작업
+            for (StudentTestSumGraphVo vo : subList) {
+                StudentTestSumGraphVo subResult = new StudentTestSumGraphVo();
+                subResult.setDate(getMidFinalFormOfDateByString(vo.getDate()));
+                subResult.setNm(vo.getNm());
+                subResult.setRating(vo.getRating());
+                result.add(subResult);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public void downloadMock(HttpServletResponse res, StudentSummarySubjectDto dto) throws IOException {
         dto.setUserId(facade.getLoginUserPk());
@@ -318,7 +335,7 @@ public class StudentService {
         Cell headerCell;
 
         headerRow = sheet.createRow(rowCount++);
-        for(int i = 0; i < headerNames.length; i++) {
+        for (int i = 0; i < headerNames.length; i++) {
             headerCell = headerRow.createCell(i);
             headerCell.setCellValue(headerNames[i]); // 데이터 추가
             headerCell.setCellStyle(headerXssfCellStyle); // 스타일 추가
@@ -433,7 +450,7 @@ public class StudentService {
         Cell headerCell;
 
         headerRow = sheet.createRow(rowCount++);
-        for(int i = 0; i < headerNames.length; i++) {
+        for (int i = 0; i < headerNames.length; i++) {
             headerCell = headerRow.createCell(i);
             headerCell.setCellValue(headerNames[i]); // 데이터 추가
             headerCell.setCellStyle(headerXssfCellStyle); // 스타일 추가
@@ -495,5 +512,6 @@ public class StudentService {
         servletOutputStream.flush();
         servletOutputStream.close();
     }
+
 
 }
