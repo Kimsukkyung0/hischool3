@@ -1,4 +1,4 @@
-package com.green.secondproject.acaResult.model;
+package com.green.secondproject.result.model;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.green.secondproject.aprPic;
+package com.green.secondproject.aprpic;
 
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.repository.UserRepository;
