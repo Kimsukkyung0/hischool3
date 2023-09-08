@@ -513,7 +513,8 @@ public class TeacherService {
     }
 
     public List<StudentVo> getStudentList(String name) {
-        return userRepository.studentList(name);
+        Long vanId = facade.getLoginUser().getVanId();
+        return userRepository.studentList(name, vanId);
     }
 }
 

@@ -5,10 +5,13 @@ import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.student.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -118,5 +121,17 @@ public class StudentController {
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(@AuthenticationPrincipal MyUserDetails myuser) {
         Long userId = myuser.getUserId();
         return service.getHighestRatingsOfMockTest(userId);
+    }
+
+    @GetMapping("/mock-download")
+    @Operation(summary = "모의고사 성적 다운로드")
+    public void downloadMock(HttpServletResponse res, @ParameterObject StudentSummarySubjectDto dto) throws IOException {
+        service.downloadMock(res, dto);
+    }
+
+    @GetMapping("/aca-download")
+    @Operation(summary = "내신 성적 다운로드")
+    public void downloadAca(HttpServletResponse res, @ParameterObject StudentAcaResultsParam p) throws IOException {
+        service.downloadAca(res, p);
     }
 }
