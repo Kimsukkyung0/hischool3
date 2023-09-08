@@ -2,6 +2,7 @@ package com.green.secondproject.teacher.subject;
 
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
+import com.green.secondproject.common.repository.SbjCategoryRepository;
 import com.green.secondproject.common.repository.UserRepository;
 import com.green.secondproject.common.repository.VanRepository;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
@@ -33,9 +34,25 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final VanRepository vanRep;
     private final UserRepository userRepository;
+    private final SbjCategoryRepository sbjCategoryRepository;
 
-   public List<SubjectVo> subcate() {
-        return mapper.subCate();
+
+//    public List<SubjectVo> subcate() {
+//        return mapper.subCate();
+//    }
+    public List<SubjectVo> subcate(){
+        MyUserDetails userDetails = facade.getLoginUser();//학교마다 과목안달라지면 안해도됨이거 ㅇㅇ 혹시모르니 추가
+        Long userSchoolId = userDetails.getSchoolId();
+        List<SubjectVo> result = new ArrayList<>();
+        List<SbjCategoryEntity> list = sbjCategoryRepository.findByType(1);
+
+        for (SbjCategoryEntity e : list) {
+            result.add(SubjectVo.builder()
+                    .nm(e.getNm())
+                    .categoryId(e.getCategoryId())
+                    .build());
+        }
+        return result;
     }
 
     public List<SubjectDetailVo> subject(Long categoryid) {
@@ -126,5 +143,6 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
        Long schoolId = myuser.getSchoolId();
         return mapper.smallList(categoryId,grade,schoolId);
     }
+
 }
 

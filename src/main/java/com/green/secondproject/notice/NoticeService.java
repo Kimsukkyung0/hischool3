@@ -82,7 +82,6 @@ public class NoticeService {
             }
         }
 
-
         long total = noticeRepository.countBySchoolEntitySchoolId(userSchoolId);
 
         NoticeListVo list = NoticeListVo.builder()

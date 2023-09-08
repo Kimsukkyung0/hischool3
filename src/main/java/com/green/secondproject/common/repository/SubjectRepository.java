@@ -16,5 +16,4 @@ public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
 //    List<SubjectEntity> findAllBySbjCategoryEntity(Long categoryId);
 
 
-
 }

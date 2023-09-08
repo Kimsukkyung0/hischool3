@@ -12,4 +12,8 @@ public interface SbjCategoryRepository extends JpaRepository<SbjCategoryEntity,L
 
 //    @Query("SELECT u FROM SbjCategoryEntity u WHERE u.SubjectEntity = :subjectId")
 //    SbjCategoryEntity findBySubjectId(Long SubjectId);
+
+    //2차작업
+
+    List<SbjCategoryEntity> findByType(int type);
 }

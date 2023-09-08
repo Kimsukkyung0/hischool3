@@ -5,11 +5,11 @@
 <mapper namespace="com.green.secondproject.teacher.subject.SubjectMapper">
 
 
-    <select id="subCate" resultType="SubjectVo">
-        SELECT category_id categoryId, nm
-        FROM sbj_category
-        WHERE TYPE = 1
-    </select>
+<!--    <select id="subCate" resultType="SubjectVo">-->
+<!--        SELECT category_id categoryId, nm-->
+<!--        FROM sbj_category-->
+<!--        WHERE TYPE = 1-->
+<!--    </select>-->
 
     <select id="subject">
         select DISTINCT A.subject_id subjectId ,A.nm ,A.category_id categoryid FROM

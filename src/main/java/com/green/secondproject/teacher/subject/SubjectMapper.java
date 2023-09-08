@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 
 public interface SubjectMapper {
-    List<SubjectVo> subCate();
+//    List<SubjectVo> subCate();
 
     List<SubjectDetailVo> subject(Long categoryid);
 
