@@ -1,4 +1,4 @@
-package com.green.secondproject.acaResult.model;
+package com.green.secondproject.result.model;
 
 import lombok.Builder;
 import lombok.Getter;

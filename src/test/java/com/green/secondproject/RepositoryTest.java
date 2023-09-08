@@ -5,10 +5,7 @@ import com.green.secondproject.common.config.jpa.QueryDslConfig;
 import com.green.secondproject.common.config.security.PasswordEncoderConfiguration;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
-import com.green.secondproject.common.repository.AcaResultRepository;
-import com.green.secondproject.common.repository.SchoolRepository;
-import com.green.secondproject.common.repository.UserRepository;
-import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.common.repository.*;
 import com.green.secondproject.student.model.StudentAcaResultWithIdVo;
 import com.green.secondproject.student.model.StudentAcaResultsParam;
 import lombok.extern.slf4j.Slf4j;
@@ -23,34 +20,42 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 @Import({PasswordEncoderConfiguration.class, QueryDslConfig.class})
 @Slf4j
 @Rollback(value = false)
 public class RepositoryTest {
     @Autowired
     private AcaResultRepository acaRepository;
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private VanRepository vanRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private SchoolRepository schoolRepository;
+    @Autowired
+    private MockResultRepository mockResultRepository;
+    @Autowired
+    private SchoolAdminRepository adminRepository;
 
+    @Test
+    void 사용자_비밀번호_변경() {
+        UserEntity user = userRepository.findById(1L).get();
+        user.setPw(passwordEncoder.encode("gkrtod123!"));
+        userRepository.save(user);
+    }
+    @Test
+    void 관리자_비밀번호_변경() {
+        SchoolAdminEntity admin = adminRepository.findById(3L).get();
+        admin.setPw(passwordEncoder.encode("gkrtod123!"));
+        adminRepository.save(admin);
+    }
     @Test
     void 랭크함수_테스트() {
 //        List<AcaResultEntity> list = acaRepository.findAll();
@@ -133,7 +138,6 @@ public class RepositoryTest {
 //            acaRepository.save(resultList.get(i));
 //        } 동점자 무시
     }
-
     @Test
     void 내신_성적_조회() {
         StudentAcaResultsParam p = StudentAcaResultsParam.builder()
@@ -144,7 +148,6 @@ public class RepositoryTest {
             System.out.println(vo);
         }
     }
-
     @Test
     void 전교_석차_계산() {
 //        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
@@ -189,31 +192,37 @@ public class RepositoryTest {
             }
         }
     }
-
     @Test
     void 내신성적_등록() {
-        final long schoolId = 3L;
-        final String grade = "3";
-        final String year = "2023";
-        final long subjectId = 92L;
-        final int midFinal = 2;
+        final long schoolId = 70L; // 청구고(3), 계성고(70)
+        final String grade = "1";
+        final String year = "2022";
+        long subjectId = 1L; // 화언(1), 공통수학1(126), 공통영어1(140), 한국사1(10)
         final int semester = 2;
+        final int midFinal = 1;
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
-                SchoolEntity.builder().schoolId(schoolId).build(), grade, year);
+                SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
         List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-        for (UserEntity entity : stdList) {
-            acaRepository.save(AcaResultEntity.builder()
-                    .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
-                    .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-                    .year(year)
-                    .midFinal(midFinal)
-                    .score((int)(Math.random() * 101))
-                    .semester(semester)
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .build());
+        for (int i = 0; i < 4; i++) {
+            switch (i) {
+                case 1 -> subjectId = 126L;
+                case 2 -> subjectId = 140L;
+                case 3 -> subjectId = 10L;
+            }
+            for (UserEntity entity : stdList) {
+                acaRepository.save(AcaResultEntity.builder()
+                        .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                        .year(year)
+                        .midFinal(midFinal)
+                        .score((int) (Math.random() * 101))
+                        .semester(semester)
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build());
+            }
         }
 //        for (long classNum = 2; classNum <= 10; classNum++) {
 //            long startIdx = (classNum - 1) * 20 + 2;
@@ -233,7 +242,40 @@ public class RepositoryTest {
 //            }
 //        }
     }
+    @Test
+    void 모의고사_성적_등록() {
+        final long schoolId = 70L; // 청구고(3), 계성고(70)
+        final String grade = "1";
+        final String year = "2022";
+        final String mon = "3";
+        long subjectId = 4L; // 국어(4), 수학(5), 영어(7), 한국사(9)
 
+        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+                SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
+        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+
+        for (int i = 0; i < 4; i++) {
+            switch (i) {
+                case 1 -> subjectId = 5L;
+                case 2 -> subjectId = 7L;
+                case 3 -> subjectId = 9L;
+            }
+
+            for (UserEntity entity : stdList) {
+                mockResultRepository.save(MockResultEntity.builder()
+                        .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                        .year(year)
+                        .mon(mon)
+                        .standardScore((int)(Math.random() * 201))
+                        .rating((int)(Math.random() * 9) + 1)
+                        .percent((int)(Math.random() * 101))
+                        .createdAt(LocalDateTime.now())
+                        .updatedAt(LocalDateTime.now())
+                        .build());
+            }
+        }
+    }
     @Test
     void 학생_등록() {
         final long schoolId = 3L;
@@ -271,7 +313,6 @@ public class RepositoryTest {
             }
         }
     }
-
     @Test
     void 선생님_등록() {
         for (int classNum = 1; classNum <= 10; classNum++) {

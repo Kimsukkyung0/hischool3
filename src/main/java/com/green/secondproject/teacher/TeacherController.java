@@ -1,7 +1,7 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.acaResult.model.AcaResultInsDto;
-import com.green.secondproject.acaResult.model.CalcClassRankParam;
+import com.green.secondproject.result.model.AcaResultInsDto;
+import com.green.secondproject.result.model.CalcClassRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.AcaResultEntity;

@@ -1,9 +1,9 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.acaResult.AcaResultMapper;
-import com.green.secondproject.acaResult.model.AcaResultInsDto;
-import com.green.secondproject.acaResult.model.CalcClassRankParam;
-import com.green.secondproject.acaResult.model.CalcWholeRankParam;
+import com.green.secondproject.result.AcaResultMapper;
+import com.green.secondproject.result.model.AcaResultInsDto;
+import com.green.secondproject.result.model.CalcClassRankParam;
+import com.green.secondproject.result.model.CalcWholeRankParam;
 import com.green.secondproject.admin.model.NoticeTeacherListVo;
 import com.green.secondproject.admin.model.NoticeTeacherVo;
 import com.green.secondproject.common.config.etc.EnrollState;
@@ -240,6 +240,12 @@ public class TeacherService {
     }
 
     public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param) {
+        UserEntity user = userRepository.findById(param.getUserId()).get();
+        VanEntity van = user.getVanEntity();
+        param.setVanId(van.getVanId());
+        param.setGrade(van.getGrade());
+        param.setSchoolId(van.getSchoolEntity().getSchoolId());
+
         return acaResultRepository.searchAcaResult(param);
 
 //        return resList.stream().map(acaResultEntity -> StudentAcaResultWithIdVo.builder()
