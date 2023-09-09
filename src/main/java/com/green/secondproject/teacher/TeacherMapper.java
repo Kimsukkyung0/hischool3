@@ -25,8 +25,6 @@ public interface TeacherMapper {
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
 
-    List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto);
-    List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriodAndStudent(StudentAcaResultsParam param);
     List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
     double getNumberOfStudentByCate(TeacherGraphDto dto);
     String getLatestTest();

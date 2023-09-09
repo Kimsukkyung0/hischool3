@@ -13,5 +13,5 @@ public interface MockResultRepositoryCustom {
     List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId);
 
     List<StudentTestSumGraphVo> getLatestRatingsOfMockTest(UserEntity userEntity);
-//    List<StudentTestSumGraphVo> getMockTestGraph(Long userId);
+    List<StudentTestSumGraphVo> getMockTestGraph(UserEntity userEntity);
 }

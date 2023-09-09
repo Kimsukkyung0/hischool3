@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class StudentService {
-    private final StudentMapper mapper;
     private final AuthenticationFacade facade;
     private final UserRepository userRepository;
     private final NoticeRepository noticeRepository;
@@ -64,10 +63,7 @@ public class StudentService {
         return new StudentSumContainerVo(date, tmp);
     }
 
-    //        catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
+
     public String getMidFinalFormOfDateByString(String date) {
 
         StringBuffer sb = new StringBuffer(date);
@@ -75,13 +71,13 @@ public class StudentService {
 
         int len = dateStrTmp.length() - 1;
         if (dateStrTmp.endsWith("1")) {
-            //중간고사
+
+            //중간
             dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 중간";
         } else if (dateStrTmp.endsWith("2")) {
-            //기말일때
 
-//            StringUtils.removeEnd(dateStrTmp, "2");
+            //기말
             dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 기말";
         }
@@ -101,13 +97,13 @@ public class StudentService {
 
         int len = dateStrTmp.length() - 1;
         if (dateStrTmp.endsWith("1")) {
-            //중간고사
+
+            //중간
             dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 중간";
         } else if (dateStrTmp.endsWith("2")) {
-            //기말일때
 
-//            StringUtils.removeEnd(dateStrTmp, "2");
+            //기말일때
             dateStrTmp = dateStrTmp.substring(0, len);
             dateStrTmp += " 기말";
         }
@@ -183,7 +179,6 @@ public class StudentService {
     public List<StudentTestSumGraphVo> getAcaTestGraph(Long userId) {
         UserEntity userEnti = userRepository.findByUserId(userId);
 
-        //mapper로 부터 가져온 리스트
         try {
             List<StudentTestSumGraphVo> subList = acaResultRepository.getAcaTestGraph(userEnti);
             log.info("subList : {}", subList);
@@ -206,32 +201,30 @@ public class StudentService {
 
     public List<StudentMockSumResultWithIdVo> selMockTestResultByDates(StudentSummarySubjectDto dto) {
         return mockResultRepository.searchMockResult(dto);
-        //return mapper.selMockTestResultByDates(dto);
     }
 
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
         return mockResultRepository.getHighestRatingsOfMockTest(userId);
-        //return mapper.getHighestRatingsOfMockTest(userId);
     }
 
 
-//    public List<StudentTestSumGraphVo> getMockTestGraph(Long userId) {
-//
-//        try {
-//            List<StudentTestSumGraphVo> sub = mockResultRepository.getMockTestGraph(userId);
-//            List<StudentTestSumGraphVo> result = new ArrayList<>();
-//            for (StudentTestSumGraphVo vo : sub) {
-//                log.info("vo : {}", vo);
-//                StringBuffer sb = new StringBuffer(vo.getDate());
-//                vo.setDate(sb.insert(4, "-").toString());
-//                result.add(vo);
-//            }
-//            return result;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+    public List<StudentTestSumGraphVo> getMockTestGraph(Long userId) {
+        UserEntity user = userRepository.findByUserId(userId);
+        try {
+            List<StudentTestSumGraphVo> sub = mockResultRepository.getMockTestGraph(user);
+            List<StudentTestSumGraphVo> result = new ArrayList<>();
+            for (StudentTestSumGraphVo vo : sub) {
+                log.info("vo : {}", vo);
+                StringBuffer sb = new StringBuffer(vo.getDate());
+                vo.setDate(sb.insert(4, "-").toString());
+                result.add(vo);
+            }
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
     public void downloadMock(HttpServletResponse res, StudentSummarySubjectDto dto) throws IOException {

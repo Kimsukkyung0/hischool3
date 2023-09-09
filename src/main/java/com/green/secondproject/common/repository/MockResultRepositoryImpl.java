@@ -18,7 +18,8 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
     private final MyGradeGraphUtils myGrade;
     private final QMockResultEntity m = QMockResultEntity.mockResultEntity;
-    private final QSbjCategoryEntity s = QSbjCategoryEntity.sbjCategoryEntity;
+    private final QSbjCategoryEntity c = QSbjCategoryEntity.sbjCategoryEntity;
+    private final QSubjectEntity s = QSubjectEntity.subjectEntity;
 
     @Override
     public List<StudentMockSumResultWithIdVo> searchMockResult(StudentSummarySubjectDto dto) {
@@ -37,18 +38,18 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
     @Override
     public List<StudentSummarySubjectVo> getHighestRatingsOfMockTest(Long userId) {
         return jpaQueryFactory
-                .select(new QStudentSummarySubjectVo(s.nm,
+                .select(new QStudentSummarySubjectVo(c.nm,
                         m.rating.min()))
                 .from(m)
-                .innerJoin(m.subjectEntity.sbjCategoryEntity, s)
+                .innerJoin(m.subjectEntity.sbjCategoryEntity, c)
                 .where(m.userEntity.userId.eq(userId),
-                        s.categoryId.in(JPAExpressions
-                                .select(s.categoryId)
-                                .from(s)
-                                .where(s.nm.in(
+                        c.categoryId.in(JPAExpressions
+                                .select(c.categoryId)
+                                .from(c)
+                                .where(c.nm.in(
                                         "국어","수학","영어","한국사"),
-                                s.type.eq(2))))
-                .groupBy(s.nm)
+                                c.type.eq(2))))
+                .groupBy(c.nm)
                 .fetch();
     }
 
@@ -67,9 +68,9 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
                         , m.subjectEntity.sbjCategoryEntity.nm.as("nm")
                         , m.rating.as("rating")))
                 .from(m)
-                .join(m.subjectEntity.sbjCategoryEntity, s)
+                .join(m.subjectEntity.sbjCategoryEntity, c)
                 .where(m.userEntity.userId.eq(userEntity.getUserId())
-                        .and(s.categoryId.in(myGrade.getCateIdForMockTest()))
+                        .and(c.categoryId.in(myGrade.getCateIdForMockTest()))
                         .and(m.year.eq(String.valueOf(latestMock[0])))
                         .and(m.mon.eq(latestMock[1]))
                 )
@@ -87,24 +88,25 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
         return array;
     }
 
-//
-//    List<StudentTestSumGraphVo> getMockTestGraph(Long userId){
-//        LocalDate now = LocalDate.now();
-//        String year = String.valueOf(now.getYear());
-//        return jpaQueryFactory.select(
-//                        new QStudentTestSumGraphVo((m.year.concat(m.mon.stringValue())
-//                                .concat(a1.midFinal.stringValue()).as("date"))
-//                                ,a1.subjectEntity.sbjCategoryEntity.nm.as("nm")
-//                                , a1.rating.as("rating")))
-//                .from(a1)
-//                .join(a1.subjectEntity, s)
-//                .join(a1.subjectEntity.sbjCategoryEntity, c)
-//                .where(a1.userEntity.userId.eq(userEntity.getUserId())
-//                        .and(c.categoryId.in(myGrade.getCateIdForAca()))
-//                        .and(a1.year.loe(year)))
-//                .orderBy(a1.year.asc(),a1.semester.asc(),a1.midFinal.asc())
-//                .fetch();
-//    }
+
+    public List<StudentTestSumGraphVo> getMockTestGraph(UserEntity userEntity){
+        LocalDate now = LocalDate.now();
+        String year = String.valueOf(now.getYear());
+        String mon = String.valueOf(now.getMonthValue());
+        return jpaQueryFactory.select(
+                        new QStudentTestSumGraphVo((m.year.concat(m.mon.stringValue()).as("date"))
+                                ,m.subjectEntity.sbjCategoryEntity.nm.as("nm")
+                                , m.rating.as("rating")))
+                .from(m)
+                .join(m.subjectEntity, s)
+                .join(m.subjectEntity.sbjCategoryEntity,c)
+                .where(m.userEntity.userId.eq(userEntity.getUserId())
+                        .and(c.categoryId.in(myGrade.getCateIdForAca()))
+                        .and(m.year.loe(year))
+                        .and(m.mon.loe(mon)))
+                .orderBy(m.year.asc(),m.mon.asc())
+                .fetch();
+    }
 
 //
 //

@@ -1,6 +1,5 @@
 package com.green.secondproject.teacher;
 
-import com.green.secondproject.student.StudentMapper;
 import com.green.secondproject.teacher.model.TeacherGraphDto;
 import com.green.secondproject.teacher.model.TeacherGraphVo;
 import org.junit.jupiter.api.DisplayName;

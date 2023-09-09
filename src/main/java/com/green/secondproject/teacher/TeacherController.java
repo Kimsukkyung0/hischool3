@@ -28,7 +28,6 @@ import java.util.List;
 public class TeacherController {
     private final TeacherService service;
     private final StudentService stdService;
-    private final UserRepository userRep;
 
     @GetMapping("/signed")
     @Operation(summary = "승인된 학생 리스트",
@@ -49,10 +48,6 @@ public class TeacherController {
     public List<SelUnsignedStudentVo> selectUnsignedStudent(@AuthenticationPrincipal MyUserDetails myuser) {
         return service.selUnsignedStudent(myuser);
     }
-
-
-
-
 
     @PatchMapping("/acpt-std")
     @Operation(summary = "학생 가입 승인",
@@ -162,19 +157,17 @@ public class TeacherController {
 
     @GetMapping("/mock-graph/{userId}")
     @Operation(summary = "모의고사그래프-학생 별 올해 응시시험 성적",  description =
-            "출력값 : <br>" + "(1)nm - 과목명<br>"+"(2)rating - 등급(1-9)<br>"
-                    +"※국수영한 순서/수정완료※")
+            """
+                    출력값 : <br>(1)nm - 과목명<br>(2)rating - 등급(1-9)<br>
+                    """)
     public List<StudentTestSumGraphVo> getMockTestSumGraph(@PathVariable Long userId){
-        StudentSummarySubjectDto dto = new StudentSummarySubjectDto();
-        dto.setUserId(userId);
-        return stdService.getMockTestGraph(dto);
+        return stdService.getMockTestGraph(userId);
     }
 
     @GetMapping("/aca-graph/{userId}")
     @Operation(summary = "내신그래프- 학생별 올해 응시시험 성적",  description ="출력값 : <br>"+ "(1)date - (연도)-(학기) (중간/기말)<br> (2)nm - 과목계열이름<br>(3)rating - 등급<br>※수정완료※<br>")
     List<StudentTestSumGraphVo> getAcaTestGraph(@PathVariable Long userId){
-        UserEntity user = userRep.findByUserId(userId);
-        return stdService.getAcaTestGraph();
+        return stdService.getAcaTestGraph(userId);
     }
 
     @GetMapping("/notice")
