@@ -41,12 +41,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
     Page<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState, Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType")
-    Page<UserEntity> findUsersByVanEntityAndRoleType(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
+    Page<UserEntity> findUsersByVanEntityAndRoleTypeOOrderByEnrollStateAscNmAsc(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
 
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState}")
-    Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollState(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
+    Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
 
-    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollState(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
 
 
     //정민+수천 합체
