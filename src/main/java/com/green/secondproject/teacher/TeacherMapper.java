@@ -25,9 +25,9 @@ public interface TeacherMapper {
     int classStudent(ClassStudentDto dto);
     int aprStudent(ClassStudentDto dto);
 
-    List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
-    double getNumberOfStudentByCate(TeacherGraphDto dto);
-    String getLatestTest();
+    //===========JPA 전환완료 =================================================
+    //    List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
+    //    String getLatestTest();
 
     //===============subject- > teacher ======================================
 

@@ -1,10 +1,12 @@
 package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.config.jpa.QueryDslConfig;
+import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.AcaResultEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import com.green.secondproject.student.model.StudentTestSumGraphVo;
+import com.green.secondproject.teacher.model.TeacherGraphVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +53,17 @@ class AcaResultRepositoryImplTest {
         log.info("userEntity : {}",userEntity);
     }
 
+    @Test
+    void countStudentsNumByVanAndCate() {
+        double num = aca.countStudentsNumByVanAndCate(1L, RoleType.STD, 1, 3L);
+        log.info("num : {}",num);
+    }
+
+    @Test
+    void teacherAcaGraph() {
+        List<TeacherGraphVo> tmpVoList = aca.teacherAcaGraph(1L,3L);
+        for(TeacherGraphVo vo : tmpVoList){
+            log.info("vo : {}",vo);
+        }
+    }
 }

@@ -34,13 +34,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TeacherService {
     private final TeacherMapper mapper;
-    private final StudentService stService;
     private final UserRepository userRepository;
     private final MockResultRepository mockResultRepository;
     private final AuthenticationFacade facade;
     private final AcaResultRepository acaResultRepository;
     private final NoticeRepository noticeRepository;
     private final AcaResultMapper acaResultMapper;
+    private final StudentService stService;
 
     public List<SelSignedStudentVo> selSignedStudent(MyUserDetails myuser) {
         List<UserEntity> stdList = userRepository.findAllByVanEntityAndAprYnAndEnrollStateAndRoleType(
@@ -192,14 +192,19 @@ public class TeacherService {
             List<TeacherGraphVo> subSubList = subResult.get(i);
 //            Long tmpCateIdForAca = cateIdForAca[i];
             Long tmpCateIdForAca = cateIdForAca[i];
-            double vanMemNum = mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
-                    categoryId(tmpCateIdForAca)
-                    .classId(classId)
-                    .build());
+
+//            acaResultRepository.getLatestTest()
+
+            double vanMemNum = acaResultRepository.countStudentsNumByVanAndCate(classId, RoleType.STD, 1,tmpCateIdForAca);
+
+//            double vanMemNum = mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
+//                    categoryId(tmpCateIdForAca)
+//                    .classId(classId)
+//                    .build());
             log.info("vanMemNum : {}", vanMemNum);
 
             //mapperList -  percentage = 인원수
-            List<TeacherGraphVo> tmpVoList = mapper.teacherAcaGraph(classId,tmpCateIdForAca);//1번
+            List<TeacherGraphVo> tmpVoList = acaResultRepository.teacherAcaGraph(classId,tmpCateIdForAca);
             log.info("tmpVoList : {}", tmpVoList);
             //과목 id
             log.info("cateIdForAca[i] : {}", cateIdForAca[i]);
@@ -219,9 +224,9 @@ public class TeacherService {
                 tmpSubResult.add(tmpSubList);
             }
         }
-
-        //FIXME : 학생서비스를 수정하면서 생긴 부차적인 오류. 수정할것
-        String date = ""; //stService.getMidFinalFormOfDate(mapper.getLatestTest());
+        //TODO:
+        //acaResultRepository.getLatestTest(u)
+        String date = stService.getMidFinalFormOfDateByString("202321");
         return TeacherGraphContainerVo.builder().date(date).list(subResult).build();
     }
 

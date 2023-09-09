@@ -26,26 +26,26 @@ class TeacherServiceTest {
     TeacherService service;
 
 
-    @Test
-    void teacherAcaGraph() {
-        //필요값 set
-        Long classId = 1L;
-        Long[] cateIdForAca = {1L,3L,6L,7L};
-        String[] cateNm = {"국어","수학","영어","한국사"};
-        int RATING_NUM = 9;
-        double vanMemNum = (double) 20;
-
-        List<List<TeacherGraphVo>> subResult = new ArrayList<>();
-
-        List<List<TeacherGraphVo>> tmpSubResult = new ArrayList<>();
-        List<TeacherGraphVo> tmpSubList = new ArrayList<>();
-        for (int i = 0; i < cateIdForAca.length; i++) {
-            tmpSubList.add(TeacherGraphVo.builder().cateNm(cateNm[i]).rating(i+1).percentage(i*10).build());
-            when(mapper.teacherAcaGraph(classId,cateIdForAca[i])).thenReturn(tmpSubList);
-        }
-        assertEquals(cateNm[0],tmpSubList.get(0).getCateNm());
-        assertEquals(4,tmpSubList.size());
-        service.teacherAcaGraph(classId);
-
-    }
+//    @Test
+//    void teacherAcaGraph() {
+//        //필요값 set
+//        Long classId = 1L;
+//        Long[] cateIdForAca = {1L,3L,6L,7L};
+//        String[] cateNm = {"국어","수학","영어","한국사"};
+//        int RATING_NUM = 9;
+//        double vanMemNum = (double) 20;
+//
+//        List<List<TeacherGraphVo>> subResult = new ArrayList<>();
+//
+//        List<List<TeacherGraphVo>> tmpSubResult = new ArrayList<>();
+//        List<TeacherGraphVo> tmpSubList = new ArrayList<>();
+//        for (int i = 0; i < cateIdForAca.length; i++) {
+//            tmpSubList.add(TeacherGraphVo.builder().cateNm(cateNm[i]).rating(i+1).percentage(i*10).build());
+//            when(mapper.teacherAcaGraph(classId,cateIdForAca[i])).thenReturn(tmpSubList);
+//        }
+//        assertEquals(cateNm[0],tmpSubList.get(0).getCateNm());
+//        assertEquals(4,tmpSubList.size());
+//        service.teacherAcaGraph(classId);
+//
+//    }
 }

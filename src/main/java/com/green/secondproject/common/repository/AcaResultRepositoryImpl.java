@@ -1,10 +1,13 @@
 package com.green.secondproject.common.repository;
 
+import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.student.model.QStudentAcaResultWithIdVo;
 import com.green.secondproject.student.model.StudentAcaResultWithIdVo;
 import com.green.secondproject.student.model.StudentAcaResultsParam;
 import com.green.secondproject.student.model.StudentTestSumGraphVo;
+import com.green.secondproject.teacher.model.QTeacherGraphVo;
+import com.green.secondproject.teacher.model.TeacherGraphVo;
 import com.querydsl.core.types.ExpressionUtils;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.utils.MyGradeGraphUtils;
@@ -20,6 +23,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.querydsl.core.types.ExpressionUtils.count;
 import static com.querydsl.jpa.JPAExpressions.select;
 
 @RequiredArgsConstructor
@@ -145,14 +149,47 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .fetch();
     };
 
-//       <select id="getAcaTestGraph">
-//    select concat(year,semester,mid_final) as date, C.nm as nm,A.rating as rating
-//    from aca_result A
-//    INNER JOIN subject B
-//    ON A.subject_id = B.subject_id
-//    INNER JOIN sbj_category C
-//    on B.category_id = c.category_id
-//    where A.user_id = #{userId} and B.category_id in(1,3,6,7) and A.year<![CDATA[<=]]>#{year}
-//    ORDER BY A.year,A.semester,A.mid_final
+    @Override
+    public double countStudentsNumByVanAndCate(Long classId, RoleType roleType, int aprYn, Long categoryId){
+        return jpaQueryFactory
+                .select(a1.count())
+                .from(a1)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .join(a1.userEntity,u)
+                .join(a1.userEntity.vanEntity,v)
+                .where(v.vanId.eq(classId)
+                        .and(u.roleType.eq(RoleType.STD))
+                        .and(u.aprYn.eq(1))
+                        .and(c.categoryId.eq(categoryId)))
+                .fetchFirst();
+    }
+
+    @Override
+    public List<TeacherGraphVo> teacherAcaGraph(Long classId, Long categoryId){
+        return jpaQueryFactory
+                .select(new QTeacherGraphVo(c.nm.as("cateNm")
+                        , a1.rating.as("rating")
+                        , a1.rating.count().castToNum(Double.class).as("percentage")
+                ))
+                .from(a1)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .join(a1.userEntity,u)
+                .join(a1.userEntity.vanEntity,v)
+                .where(v.vanId.eq(classId)
+                        .and(u.roleType.eq(RoleType.STD))
+                        .and(u.aprYn.eq(1))
+                        .and(c.categoryId.eq(categoryId)))
+                .fetch();
+    }
+//        <select id="teacherAcaGraph">
+//    select D.nm cateNm,B.rating rating, count(B.rating) as percentage
+//    from user A
+//    INNER JOIN aca_result B ON A.user_id = B.user_id
+//    INNER JOIN subject C ON B.subject_id = C.subject_id
+//    INNER JOIN sbj_category D on C.category_id = D.category_id
+//    where A.apr_yn=1 and A.role_type = 'STD' and C.category_id = #{categoryId} and A.van_id =#{classId} and
+//    concat(year,semester,mid_final) = 202312
+//    group by rating
 //            </select>
+
 }

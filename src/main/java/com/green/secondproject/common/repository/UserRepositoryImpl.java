@@ -3,9 +3,13 @@ package com.green.secondproject.common.repository;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.QUserEntity;
 import com.green.secondproject.common.entity.QVanEntity;
+import com.green.secondproject.common.entity.VanEntity;
+import com.green.secondproject.student.model.QStudentAcaResultWithIdVo;
 import com.green.secondproject.teacher.model.QStudentVo;
 import com.green.secondproject.teacher.model.StudentVo;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -30,4 +34,6 @@ public class UserRepositoryImpl implements UserRepositoryCustom {
     private BooleanExpression nameSearch(String name) {
         return name != null ? u.nm.contains(name) : null;
     }
+
+
 }
