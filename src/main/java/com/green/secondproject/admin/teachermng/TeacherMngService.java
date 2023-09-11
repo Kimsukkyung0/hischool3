@@ -24,21 +24,14 @@ import com.green.secondproject.common.utils.ApiUtils;
 import com.green.secondproject.sign.SignService;
 import com.green.secondproject.sign.model.ClassVo;
 import com.green.secondproject.sign.model.SchoolParam;
-import com.green.secondproject.teacher.model.TeacherEntity;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
