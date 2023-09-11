@@ -160,9 +160,6 @@ public class TeacherService {
         }
         acaResultRepository.deleteById(resultId);
         return 1;
-//        DelResultDto dto = new DelResultDto();
-//        dto.setResultId(resultId);
-//        return mapper.delAcaResult(dto);
     }
 
 

@@ -127,12 +127,11 @@ public class AdminController {
             (9)totalPage : 총 페이지 수<br>
             """)
     public StudentClassListVo searchStudent(
-            @RequestParam(required = false,defaultValue = "") String search,
+            @RequestParam(required = false) String search,
             @RequestParam(required = false) String classNum,
             @RequestParam(required = false) String grade,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(required = false) EnrollState enrollState) {
-
         return service.searchStudent(search, classNum, grade, page, enrollState);
     }
 
