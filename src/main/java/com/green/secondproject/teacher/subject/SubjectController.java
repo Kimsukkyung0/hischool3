@@ -49,6 +49,18 @@ public class SubjectController {
         return serivce.stulist(dto);
     }
 
+    @GetMapping("/aca-category")
+    @Operation(summary = "담당 학년 내신 과목계열 조회")
+    public List<AcaCategoryVo> getAcaCategory() {
+        return serivce.selAcaCategory();
+    }
+
+    @GetMapping("/aca-subject")
+    @Operation(summary = "선택한 계열 세부과목 조회")
+    public List<AcaResultSubVo> getAcaSubject(Long categoryId) {
+        return serivce.selAcaSubject(categoryId);
+    }
+
     //==================================3차 전환============== OR =====================
 
     //====================================관리자 과목권한 이전으로 삭된부분

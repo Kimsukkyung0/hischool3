@@ -16,6 +16,9 @@ public interface SubjectRepository extends JpaRepository<SubjectEntity, Long> {
     List<SubjectEntity> findAllBySubjectIdList(List<Long> list);
 //    List<SubjectEntity> findAllBySbjCategoryEntity(Long categoryId);
 
-//    @Query("SELECT s FROM SubjectEntity s WHERE s.sbjCategoryEntity = :category AND s.subjectId NOT IN (SELECT sc.subjectEntity.subjectId FROM ScSbjEntity sc WHERE sc.schoolEntity.schoolId = :schoolId)")
-//    List<SubjectEntity> findSubjectsNotInScSbjByCategoryAndSchoolId(@Param("category") SbjCategoryEntity category, @Param("schoolId") Long schoolId);
+    @Query("SELECT s FROM SubjectEntity s WHERE s.sbjCategoryEntity = :category AND s.subjectId NOT IN (SELECT sc.subjectEntity.subjectId FROM ScSbjEntity sc WHERE sc.schoolEntity.schoolId = :schoolId)")
+    List<SubjectEntity> findSubjectsNotInScSbjByCategoryAndSchoolId(@Param("category") SbjCategoryEntity category, @Param("schoolId") Long schoolId);
+
+    @Query("SELECT s FROM SubjectEntity s WHERE s.sbjCategoryEntity = :category AND s.subjectId NOT IN (SELECT sc.subjectEntity.subjectId FROM ScSbjEntity sc WHERE sc.schoolEntity.schoolId = :schoolId AND sc.grade = :grade)")
+    List<SubjectEntity> findSubjectsNotInScSbjByCategoryAndSchoolIdAndGrade(@Param("category") SbjCategoryEntity category, @Param("schoolId") Long schoolId, @Param("grade") String grade);
 }

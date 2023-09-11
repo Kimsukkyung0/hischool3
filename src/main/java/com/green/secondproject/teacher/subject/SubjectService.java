@@ -2,15 +2,12 @@ package com.green.secondproject.teacher.subject;
 
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
-import com.green.secondproject.common.repository.SbjCategoryRepository;
-import com.green.secondproject.common.repository.UserRepository;
-import com.green.secondproject.common.repository.VanRepository;
+import com.green.secondproject.common.repository.*;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphDto;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
-import com.green.secondproject.common.repository.SubjectRepository;
 import com.green.secondproject.teacher.subject.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -35,8 +32,7 @@ public class SubjectService {
     private final VanRepository vanRep;
     private final UserRepository userRepository;
     private final SbjCategoryRepository sbjCategoryRepository;
-
-
+    private final ScSbjRepository scSbjRepository;
 
     public int classnum(StudentClassDto dto) {
         return mapper.classnum(dto);
@@ -88,7 +84,24 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
        return mapper.stulist(dto);
     };
 
-   //=================================3차 과목관리 관리자 권한이전으로 인해 삭제된 부분 ==================================================
+    public List<AcaCategoryVo> selAcaCategory() {
+        MyUserDetails user = facade.getLoginUser();
+        return scSbjRepository.findCategoryList(user.getSchoolId(), user.getGrade());
+//        List<ScSbjEntity> list = scSbjRepository.findAllBySchoolEntityAndGrade(SchoolEntity.builder()
+//                .schoolId(user.getSchoolId()).build(), user.getGrade());
+//
+//        return list.stream().map(scSbjEntity -> AcaCategoryVo.builder()
+//                .categoryId(scSbjEntity.getSubjectEntity().getSbjCategoryEntity().getCategoryId())
+//                .nm(scSbjEntity.getSubjectEntity().getSbjCategoryEntity().getNm())
+//                .build()).toList();
+    }
+
+    public List<AcaResultSubVo> selAcaSubject(Long categoryId) {
+        MyUserDetails user = facade.getLoginUser();
+        return scSbjRepository.findSubList(categoryId, user.getSchoolId(), user.getGrade());
+    }
+
+    //=================================3차 과목관리 관리자 권한이전으로 인해 삭제된 부분 ==================================================
 //   public List<SubjectVo> tcslist() {
 //       MyUserDetails myuser = facade.getLoginUser();
 //       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
