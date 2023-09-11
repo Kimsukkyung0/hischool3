@@ -25,56 +25,6 @@ public class SubjectController {
     private final AuthenticationFacade facade;
     private final ScSbjService scSbjService;
 
-
-    @GetMapping("/category")
-    @Operation(summary = "선생님 과목계열 리스트",
-            description = "nm - 과목이름<br>" + "categoryid - 과목 계열pk값")
-    List<SubjectVo> subcate() {
-        return serivce.subcate();
-    }
-
-    @GetMapping()
-    @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정",
-            description = "subjectid - 세부과목 pk값" + "<br>nm - 과목이름" + "<br> userid = 회원id"
-                    + "<br> subjectid : pk값" +
-                    "<br>categoryid : 과목계열 pk값")
-    List<SubjectDetailVo> subject(@RequestParam Long categoryid) {
-        return serivce.subject(categoryid);
-    }
-
-    //====================================관리자 과목권한 이전으로 수정된부분
-    @GetMapping("/category/big")
-    @Operation(summary = "등록후 과목계열 리스트"
-            , description =
-            """
-                    출력값 : subjectid - subject 테이블에 과목 PK값
-                    "<br>nm - 세부과목이름""")
-    List<SubjectVo> tcslist() {
-        return serivce.tcslist();
-    }
-
-    @GetMapping("/category/small")
-    @Operation(summary = "등록후 세부과목 리스트"
-            , description =
-            "categoryid - category 테이블에 세부과목 PK값" +
-                    "<br>nm - 학생이름")
-    List<SubjectVo3> smalllist(@RequestParam Long categoryId) {
-          return serivce.smallList(categoryId);
-    }
-
-//    @GetMapping("/class-num")
-//    @Operation(summary = "반석차 반전체인원")
-//    int classnum(@AuthenticationPrincipal MyUserDetails user){
-//
-//        return serivce.classnum(user);
-//    }
-//
-//    @GetMapping("/school-snum")
-//    @Operation(summary = "학교 학년전체인원")
-//    int schoolnum(@AuthenticationPrincipal MyUserDetails user){
-//        return serivce.schoolnum(user);
-//    }
-
     //모의고사 시작
 
     @GetMapping("/mockbig-list")
@@ -99,15 +49,66 @@ public class SubjectController {
         return serivce.stulist(dto);
     }
 
-    //===================================Post====================================
+    //==================================3차 전환============== OR =====================
+
+    //====================================관리자 과목권한 이전으로 삭된부분
+
+//    @GetMapping("/category/big")
+//    @Operation(summary = "등록후 과목계열 리스트"제
+//            , description =
+//            """
+//                    출력값 : subjectid - subject 테이블에 과목 PK값
+//                    "<br>nm - 세부과목이름""")
+//    List<SubjectVo> tcslist() {
+//        return serivce.tcslist();
+//    }
+//
+//    @GetMapping("/category/small")
+//    @Operation(summary = "등록후 세부과목 리스트"
+//            , description =
+//            "categoryid - category 테이블에 세부과목 PK값" +
+//                    "<br>nm - 학생이름")
+//    List<SubjectVo3> smalllist(@RequestParam Long categoryId) {
+//        return serivce.smallList(categoryId);
+//    }
+
+//    @GetMapping("/class-num")
+//    @Operation(summary = "반석차 반전체인원")
+//    int classnum(@AuthenticationPrincipal MyUserDetails user){
+//
+//        return serivce.classnum(user);
+//    }
+//
+//    @GetMapping("/school-snum")
+//    @Operation(summary = "학교 학년전체인원")
+//    int schoolnum(@AuthenticationPrincipal MyUserDetails user){
+//        return serivce.schoolnum(user);
 
 
-    @PostMapping
-    @Operation(summary = "과목 등록",
-            description = "subjectid - 과목 번호<br>")
-    int instcsbj(@RequestBody SubjectInsDto2 dto) {
-        return serivce.instcsbj(dto);
-    }
+//    @GetMapping("/category")
+//    @Operation(summary = "선생님 과목계열 리스트",
+//            description = "nm - 과목이름<br>" + "categoryid - 과목 계열pk값")
+//    List<SubjectVo> subcate() {
+//        return serivce.subcate();
+//    }
+//
+//    @GetMapping()
+//    @Operation(summary = "선생님 세부과목 리스트 , 과목계열선택되면 그조건에 맞는것만 되도록 수정",
+//            description = "subjectid - 세부과목 pk값" + "<br>nm - 과목이름" + "<br> userid = 회원id"
+//                    + "<br> subjectid : pk값" +
+//                    "<br>categoryid : 과목계열 pk값")
+//    List<SubjectDetailVo> subject(@RequestParam Long categoryid) {
+//        return serivce.subject(categoryid);
+//    }
+//    }
+//
+//    @PostMapping
+//    @Operation(summary = "과목 등록",
+//            description = "subjectid - 과목 번호<br>")
+//    int instcsbj(@RequestBody SubjectInsDto2 dto) {
+//        return serivce.instcsbj(dto);
+//    }
+
 
 
 }

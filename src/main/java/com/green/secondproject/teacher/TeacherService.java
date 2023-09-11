@@ -154,9 +154,15 @@ public class TeacherService {
 
 
     public int delAcaRusult(Long resultId) {
-        DelResultDto dto = new DelResultDto();
-        dto.setResultId(resultId);
-        return mapper.delAcaResult(dto);
+        Optional<AcaResultEntity> opt = acaResultRepository.findById(resultId);
+        if(opt.isEmpty()) {
+            return 0;
+        }
+        acaResultRepository.deleteById(resultId);
+        return 1;
+//        DelResultDto dto = new DelResultDto();
+//        dto.setResultId(resultId);
+//        return mapper.delAcaResult(dto);
     }
 
 

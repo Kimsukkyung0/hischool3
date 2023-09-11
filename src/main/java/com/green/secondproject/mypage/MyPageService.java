@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.util.StringUtils;
 
@@ -70,8 +71,6 @@ public class MyPageService {
 //        userInfo.setPic(String.format("%s/%d/%s", imgPath, myuser.getUserId(), userInfo.getPic()));
 //        return userInfo;
     }
-
-
 
 
     public int updUserInfo(MultipartFile pic, UpdInfoParam p, MyUserDetails myuser) {
@@ -160,6 +159,55 @@ public class MyPageService {
         }
         return 1;
     }
+
+//    @Transactional
+//    public int updUserInfo(MultipartFile pic, UpdInfoParam p, MyUserDetails myuser) {
+//        try {
+//            UserEntity userEntity = userRepository.findByUserId(myuser.getUserId());
+//
+//            if (userEntity == null) {
+//                return 0; // 사용자가 존재하지 않는 경우 처리
+//            }
+//
+//            userEntity.setPhone(p.getPhone());
+//            userEntity.setAddress(p.getAddress());
+//            userEntity.setDetailAddr(p.getDetailAddr());
+//
+//            if (!StringUtils.isEmpty(p.getPw())) {
+//                // 새로운 비밀번호를 해시하고 설정
+//                userEntity.setPw(PW_ENCODER.encode(p.getPw()));
+//            }
+//
+//            if (pic != null) {
+//                // 프로필 사진 업데이트 처리
+//                String savedFileName = MyFileUtils.makeRandomFileNm(pic.getOriginalFilename());
+//                userEntity.setPic(savedFileName);
+//
+//                // 업데이트된 사용자 엔티티 저장
+//                userRepository.save(userEntity);
+//            } else {
+//                // 프로필 사진을 업데이트하지 않고 사용자 엔티티 저장
+//                userRepository.save(userEntity);
+//
+//                // 사진 파일이 없는 경우 기존 파일을 삭제합니다.
+//                String centerPath = String.format("hiSchool/userPic/%d", myuser.getUserId());
+//                String dicPath = String.format("%s/%s", MyFileUtils.getAbsolutePath(fileDir), centerPath);
+//                String OriginalFileName = myuser.getPic();
+//                if (OriginalFileName != null) {
+//                    File originFile = new File(dicPath, OriginalFileName);
+//                    if (originFile.exists()) {
+//                        originFile.delete();
+//                    }
+//                }
+//            }
+//
+//            return 1;
+//        } catch (Exception e) {
+//            // 예외 처리를 여기서 수행하세요
+//            return 0;
+//        }
+//    }
+
 
     public int pwCheck(PwDto dto) {
         Optional<UserEntity> opt = userRepository.findById(facade.getLoginUserPk());
