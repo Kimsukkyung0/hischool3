@@ -17,12 +17,12 @@ public class StudentAcaResultWithIdVo {
     private int rating;
     private int classRank;
     private int wholeRank;
-    private long vanCnt;
+    private long classCnt;
     private long wholeCnt;
 
     @QueryProjection
     public StudentAcaResultWithIdVo(Long resultId, String year, int semester, int midFinal, String cateName, String nm,
-                                    int score, int rating, int classRank, int wholeRank, long vanCnt, long wholeCnt) {
+                                    int score, int rating, int classRank, int wholeRank, long classCnt, long wholeCnt) {
         this.resultId = resultId;
         this.year = year;
         this.semester = semester;
@@ -33,7 +33,7 @@ public class StudentAcaResultWithIdVo {
         this.rating = rating;
         this.classRank = classRank;
         this.wholeRank = wholeRank;
-        this.vanCnt = vanCnt;
+        this.classCnt = classCnt;
         this.wholeCnt = wholeCnt;
     }
 }

@@ -53,7 +53,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                                         .where(v.vanId.eq(param.getVanId()),
                                                 a2.subjectEntity.subjectId.eq(a1.subjectEntity.subjectId),
                                                 a2.year.eq(a1.year), a2.semester.eq(a1.semester),
-                                                a2.midFinal.eq(a1.midFinal)),"vanCnt"),
+                                                a2.midFinal.eq(a1.midFinal)),"classCnt"),
                         ExpressionUtils.as(JPAExpressions
                                         .select(a3.resultId.count())
                                         .from(a3)

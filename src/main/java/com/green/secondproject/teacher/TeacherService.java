@@ -22,6 +22,7 @@ import com.green.secondproject.teacher.subject.model.graph.MockGraphVo;
 import com.green.secondproject.teacher.subject.model.graph.MockGraphVo2;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
@@ -297,9 +298,9 @@ public class TeacherService {
             throw new RuntimeException("로그인한 사용자 정보가 없습니다.");
         }
         Long currentVanId = currentUser.getVanEntity().getVanId();  // 로그인한 사용자의 vanId 값을 가져옴
-
-        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId);
-        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId,sort);
+        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId,sort);
 
         return NoticeTeacherListVo.builder()
                 .imptList(imptList.stream().map(noticeEntity -> NoticeTeacherVo

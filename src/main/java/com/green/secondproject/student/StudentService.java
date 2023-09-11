@@ -20,6 +20,7 @@ import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -120,9 +121,9 @@ public class StudentService {
             throw new RuntimeException("로그인한 사용자 정보가 없습니다.");
         }
         Long currentVanId = currentUser.getVanEntity().getVanId();  // 로그인한 사용자의 vanId 값을 가져옴
-
-        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId);
-        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId);
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        List<NoticeEntity> imptList = noticeRepository.findImportantNoticesByVanId(currentVanId,sort);
+        List<NoticeEntity> normalList = noticeRepository.findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(currentVanId,sort);
 
         return NoticeTeacherListVo.builder()
                 .imptList(imptList.stream().map(noticeEntity -> NoticeTeacherVo
@@ -437,7 +438,7 @@ public class StudentService {
             bodyCell.setCellStyle(bodyXssfCellStyle);
 
             bodyCell = bodyRow.createCell(7);
-            bodyCell.setCellValue(result.getClassRank() + "/" + result.getVanCnt());
+            bodyCell.setCellValue(result.getClassRank() + "/" + result.getClassCnt());
             bodyCell.setCellStyle(bodyXssfCellStyle);
 
             bodyCell = bodyRow.createCell(8);

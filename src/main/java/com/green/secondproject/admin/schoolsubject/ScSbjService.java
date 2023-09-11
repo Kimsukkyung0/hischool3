@@ -2,6 +2,7 @@ package com.green.secondproject.admin.schoolsubject;
 
 import com.green.secondproject.admin.schoolsubject.model.*;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
 import jakarta.persistence.EntityManager;
@@ -12,9 +13,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.Subject;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -120,7 +119,37 @@ public class ScSbjService {
                 .subjectId(item.getSubjectId())
                 .subjectNm(item.getNm()).build()).toList();
     }
+//            SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+//
+//            MyUserDetails userDetails = facade.getLoginUser();
+//            Long loggedInSchoolId = userDetails.getSchoolId();
+//
+//            List<SubjectEntity> sbjEntityList = sbjtRep.findSubjectsNotInScSbjByCategoryAndSchoolId(cateEnti, loggedInSchoolId);
+//
+//            return sbjEntityList.stream().map(item -> ScSbjVo.builder()
+//                    .subjectId(item.getSubjectId())
+//                    .subjectNm(item.getNm()).build()).toList();
+//    }
 
+//public Map<Integer, List<ScSbjVo>> getSubjectListByCateAndGrade(Long categoryId) {
+//    SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+//    MyUserDetails userDetails = facade.getLoginUser();
+//    Long loggedInSchoolId = userDetails.getSchoolId();
+//
+//    Map<Integer, List<ScSbjVo>> resultMap = new HashMap<>();
+//
+//    for (int grade = 1; grade <= 3; grade++) {
+//        List<SubjectEntity> sbjEntityList = sbjtRep.findSubjectsNotInScSbjByCategoryAndSchoolIdAndGrade(cateEnti, loggedInSchoolId, String.valueOf(grade));
+//        List<ScSbjVo> voList = sbjEntityList.stream().map(item -> ScSbjVo.builder()
+//                .subjectId(item.getSubjectId())
+//                .subjectNm(item.getNm())
+//                .build()).collect(Collectors.toList());
+//
+//        resultMap.put(grade, voList);
+//    }
+
+//    return resultMap;
+//}
     public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<SbjDto> dto, int grade) {
         List<ScSbjEntity> midResult = new ArrayList<>();
         List<ScSbjListVo2> finResult = new ArrayList<>();
