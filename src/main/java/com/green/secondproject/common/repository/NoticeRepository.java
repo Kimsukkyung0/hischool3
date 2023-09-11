@@ -17,13 +17,13 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
             "JOIN VanEntity v ON n.schoolEntity = v.schoolEntity " +
             "JOIN UserEntity u ON u.vanEntity = v " +
             "WHERE n.imptYn = 1 AND v.vanId = :vanId")
-    List<NoticeEntity> findImportantNoticesByVanId(@Param("vanId") Long vanId);
+    List<NoticeEntity> findImportantNoticesByVanId(@Param("vanId") Long vanId,Sort sort);
     @Query("SELECT n FROM NoticeEntity n " +
             "JOIN n.schoolEntity s " +
             "JOIN VanEntity v ON n.schoolEntity = v.schoolEntity " +
             "JOIN UserEntity u ON u.vanEntity = v " +
             "WHERE n.imptYn = 0 AND v.vanId = :vanId")
-    List<NoticeEntity> findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(@Param("vanId") Long vanId);
+    List<NoticeEntity> findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(@Param("vanId") Long vanId,Sort sort);
     NoticeEntity findByNoticeId(Long noticeId);
     List<NoticeEntity> findByImptYn(Long imptYn);
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
