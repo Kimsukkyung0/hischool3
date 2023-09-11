@@ -58,23 +58,6 @@ public class TeacherMngController {
         return ResponseEntity.ok(service.teacherListOfTheSchool(dto));
     }
 
-    @GetMapping("/all2")
-    @Operation(summary = "각 학교의 전체 교원목록222", description = """
-            요구값 : <br>(1)page(선택) : 페이지수(default : 1 )<br> 
-                       (2)search(선택) : 검색어 (이름 검색)<br>(3)enrollState(선택) : 상태값정렬 <br><br>
-            출력값 : <br>(1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>
-            (7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)
-            (11)enrollState : 재직상태<br>
-            (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
-            (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool2(Pageable page, @RequestParam(required = false) String search, @RequestParam(required = false)EnrollState enrollState){
-        return ResponseEntity.ok(service.teacherListOfTheSchool2(page,search,enrollState));
-    }
-
-
-
-
-
 
     @PutMapping
     @Operation(summary = "담당교원 승인처리" , description = """
