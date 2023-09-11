@@ -113,7 +113,7 @@ public class TeacherMngService {
         List<TeacherMngVo> subResult = new ArrayList<>();
 
         if(search != null && enrollState!=null){
-            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc
+            tcList = userRepository.findAllTeachersByEnrollAndNm
                     (search, vanEnti, RoleType.TC, enrollState, pageable);
             log.info("case 1 : {멀티 필터링}");
         } else if(search != null && enrollState == null)//검색어 O
@@ -124,7 +124,7 @@ public class TeacherMngService {
             tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(vanEnti, RoleType.TC, enrollState, pageable);
             log.info("case 3 : {상태값만 존재}");
         }else {//둘다 있을때
-            tcList = userRepository.findUsersByVanEntityAndRoleTypeOOrderByEnrollStateAscNmAsc(vanEnti, RoleType.TC, pageable);
+            tcList = userRepository.findUsersByVanEntityAndRoleTypeOrderByEnrollStateAsc(vanEnti, RoleType.TC, pageable);
             log.info("case 4 : {둘다 없을때-기본정렬}");
         }
 

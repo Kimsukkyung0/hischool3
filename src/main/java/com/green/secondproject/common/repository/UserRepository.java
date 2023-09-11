@@ -37,16 +37,19 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
     List<UserEntity> findAllByVanEntityInAndRoleType(List<VanEntity> vanEntity, RoleType roleType);
 
     //석경작업
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState")
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState order by u.nm")
     Page<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState, Pageable pageable);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType")
-    Page<UserEntity> findUsersByVanEntityAndRoleTypeOOrderByEnrollStateAscNmAsc(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType ORDER BY u.enrollState asc ,u.nm asc")
+    Page<UserEntity> findUsersByVanEntityAndRoleTypeOrderByEnrollStateAsc(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState}")
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState} ORDER BY u.enrollState asc ,u.nm asc")
     Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
 
-    Page<UserEntity> findByNmContainingAndVanEntityInAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+    //검색어 및 상태값 둘다 존재할때
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% AND u.enrollState = :enrollState ORDER BY u.enrollState asc ,u.nm asc")
+    Page<UserEntity> findAllTeachersByEnrollAndNm(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+
 
 
     //정민+수천 합체
