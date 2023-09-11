@@ -56,7 +56,7 @@ class MockResultRepositoryImplTest {
 
     @Test
     void getMockTestGraph() {
-        UserEntity userEntity = user.findByUserId(6L);
+        UserEntity userEntity = user.findByUserId(1L);
         Optional<List<StudentTestSumGraphVo>> list = Optional.of(mock.getMockTestGraph(userEntity));
         if (list.isEmpty()) {
             log.info("list : " , list);

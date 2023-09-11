@@ -37,29 +37,6 @@ public class SubjectService {
     private final SbjCategoryRepository sbjCategoryRepository;
 
 
-//    public List<SubjectVo> subcate() {
-//        return mapper.subCate();
-//    }
-    public List<SubjectVo> subcate(){
-        MyUserDetails userDetails = facade.getLoginUser();//학교마다 과목안달라지면 안해도됨이거 ㅇㅇ 혹시모르니 추가
-        Long userSchoolId = userDetails.getSchoolId();
-        List<SubjectVo> result = new ArrayList<>();
-        List<SbjCategoryEntity> list = sbjCategoryRepository.findByType(1);
-
-        for (SbjCategoryEntity e : list) {
-            result.add(SubjectVo.builder()
-                    .nm(e.getNm())
-                    .categoryId(e.getCategoryId())
-                    .build());
-        }
-        return result;
-    }
-
-    public List<SubjectDetailVo> subject(Long categoryid) {
-
-        return mapper.subject(categoryid);
-    }
-
 
     public int classnum(StudentClassDto dto) {
         return mapper.classnum(dto);
@@ -107,42 +84,60 @@ public List<MockSubjcetSmallVo> mocksmalllist(Long categoryid) {
         return mapper.mockbiglist();
     }
 
-
-    //Post(insert)
-
-
-
-    public int instcsbj(SubjectInsDto2 dto) {
-        List<SubjectInsVo> list = new LinkedList<>();
-
-        for (int i = 0; i < dto.getList().size(); i++) {
-            SubjectInsVo vo = new SubjectInsVo();
-            vo.setSubjectid(dto.getList().get(i).getSubjectId());
-            vo.setUserid(facade.getLoginUserPk());
-            list.add(vo);
-        }
-
-        return mapper.instcsbj(list);
-    }
-
     public List<StudentListVo> stulist(StudentListDto dto){
        return mapper.stulist(dto);
     };
 
-   //===================================================================================
-   public List<SubjectVo> tcslist() {
-       MyUserDetails myuser = facade.getLoginUser();
-       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
-       Long schoolId = myuser.getSchoolId();
-       return mapper.tcslist(grade,schoolId);
-   }
+   //=================================3차 과목관리 관리자 권한이전으로 인해 삭제된 부분 ==================================================
+//   public List<SubjectVo> tcslist() {
+//       MyUserDetails myuser = facade.getLoginUser();
+//       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
+//       Long schoolId = myuser.getSchoolId();
+//       return mapper.tcslist(grade,schoolId);
+//   }
+//
+//   public List<SubjectVo3> smallList(Long categoryId) {
+//       MyUserDetails myuser = facade.getLoginUser();
+//       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
+//       Long schoolId = myuser.getSchoolId();
+//        return mapper.smallList(categoryId,grade,schoolId);
+//    }
+//
+//    //    public List<SubjectVo> subcate() {
+////        return mapper.subCate();
+////    }
+//    public List<SubjectVo> subcate(){
+//        MyUserDetails userDetails = facade.getLoginUser();//학교마다 과목안달라지면 안해도됨이거 ㅇㅇ 혹시모르니 추가
+//        Long userSchoolId = userDetails.getSchoolId();
+//        List<SubjectVo> result = new ArrayList<>();
+//        List<SbjCategoryEntity> list = sbjCategoryRepository.findByType(1);
+//
+//        for (SbjCategoryEntity e : list) {
+//            result.add(SubjectVo.builder()
+//                    .nm(e.getNm())
+//                    .categoryId(e.getCategoryId())
+//                    .build());
+//        }
+//        return result;
+//    }
+//
+//
+//    public int instcsbj(SubjectInsDto2 dto) {
+//        List<SubjectInsVo> list = new LinkedList<>();
+//
+//        for (int i = 0; i < dto.getList().size(); i++) {
+//            SubjectInsVo vo = new SubjectInsVo();
+//            vo.setSubjectid(dto.getList().get(i).getSubjectId());
+//            vo.setUserid(facade.getLoginUserPk());
+//            list.add(vo);
+//        }
+//
+//        return mapper.instcsbj(list);
+//    }
 
-   public List<SubjectVo3> smallList(Long categoryId) {
-       MyUserDetails myuser = facade.getLoginUser();
-       String grade = vanRep.findByVanId(myuser.getVanId()).getGrade();
-       Long schoolId = myuser.getSchoolId();
-        return mapper.smallList(categoryId,grade,schoolId);
-    }
+//    public List<SubjectDetailVo> subject(Long categoryid) {
+//        return mapper.subject(categoryid);
+//    }
 
 }
 
