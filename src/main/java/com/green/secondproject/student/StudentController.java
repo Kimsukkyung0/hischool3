@@ -39,7 +39,9 @@ public class StudentController {
     @Operation(summary = "내신성적관리 테이블", description = "요구값(선택) : <br>" + "(1)year - 조회기준연도(yyyy) <br>(2)semester - 학기(1,2)<br>(3)midFinal - (1:중간,2:기말)<br><br>"
             + "※※요구값들은 선택사항입니다. 요구값없이 학생성적 조회시 전체조회※※<br><br>" +
             "출력값 : <br>" + "(1)year - 연도<br>(2)semester - 학기(1,2)<br>" +
-            "(3)midFinal - 1:중간2:기말<br>" + "(4)cateNm - 계열이름 <br>" + "(5)nm - 과목명 <br>" + "(6)score - 원점수<br>" + "(7)rating - 등급<br> (8)classRank - 반석차<br>(9)classRank - 전교석차<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
+            "(3)midFinal - 1:중간2:기말<br>" + "(4)cateNm - 계열이름 <br>" + "(5)nm - 과목명 <br>" + "(6)score - 원점수<br>"
+            + "(7)rating - 등급<br> (8)classRank - 반석차<br>(9)wholeRank - 전교석차<br>" +
+            "(10)classCnt - 반 학생 수<br>(11)wholeCnt - 전교생 수<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
     public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriod(@AuthenticationPrincipal MyUserDetails myuser, @RequestParam(required = false) String year, @RequestParam(required = false) Integer semester, @RequestParam(required = false) Integer midFinal) {
         StudentAcaResultsParam param = new StudentAcaResultsParam();
         param.setUserId(myuser.getUserId());

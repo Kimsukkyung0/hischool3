@@ -47,8 +47,8 @@ public class ScSbjController {
             출력값 : <br>(1)subjectId - 세부과목 pk값<br>(2)subjectNm - 과목이름<br> 
             *** 등록된 과목은 학교에 따라 과목 리스트에서 제외***<br>
                     """)
-    List<ScSbjVo> getSubjectListByCate(@PathVariable Long categoryId) {
-        return service.getSubjectListByCate(categoryId);
+    Map<Integer,List<ScSbjVo>> getSubjectListByCate(@PathVariable Long categoryId) {
+        return service.getSubjectListByCateAndGrade(categoryId);
     }
 
     @GetMapping("/category/{grade}")
