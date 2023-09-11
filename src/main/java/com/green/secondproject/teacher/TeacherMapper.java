@@ -11,28 +11,36 @@ import java.util.List;
 
 @Mapper
 public interface TeacherMapper {
-    List<SelSignedStudentVo> selSignedStudent(SelSignedStudentDto dto);
-    List<SelUnsignedStudentVo> selUnsignedStudent(SelUnsignedStudentDto dto);
+
     List<SelAcaResultVo> selAcaResult(SelAcaResultDto dto);
     List<SelMockResultVo> selMockResult(SelMockResultDto dto);
-    int acceptStudent(AcceptStudentDto dto);
-//    int rejectStudent(AcceptStudentDto dto);
-    int cancelAcceptStd(AcceptStudentDto dto);
-    int updMockResult(UpdMockResultDto dto);
     int updAcaResult(UpdAcaResultDto dto);
-    int delMockResult(DelResultDto dto);
     int delAcaResult(DelResultDto dto);
-    int classStudent(ClassStudentDto dto);
-    int aprStudent(ClassStudentDto dto);
+
 
     //===========JPA 전환완료 =================================================
     //    List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
     //    String getLatestTest();
 
+    //수천
+    //    int delMockResult(DelResultDto dto);
+    //    int classStudent(ClassStudentDto dto);
+    //    int aprStudent(ClassStudentDto dto);
+    //    int acasubject(List<AcaSubjectVo> list);
+
+    //정민
+    //    int acceptStudent(AcceptStudentDto dto);
+    //    int rejectStudent(AcceptStudentDto dto);
+    //    int cancelAcceptStd(AcceptStudentDto dto);
+    //    int updMockResult(UpdMockResultDto dto);
+    //    List<SelSignedStudentVo> selSignedStudent(SelSignedStudentDto dto);
+    //    List<SelUnsignedStudentVo> selUnsignedStudent(SelUnsignedStudentDto dto);
+
+
+
     //===============subject- > teacher ======================================
 
     int mockins(List<MockSubjectVo> list);
-    int acasubject(List<AcaSubjectVo> list);
     Integer mocktotal(Long vanId); // 모의고사 퍼센트 계산용
     List<MockGraphVo2> mockgraph(MockGraphDto dto);
     List<ResultAcaVo> selaca(ResultAcaDto dto);
