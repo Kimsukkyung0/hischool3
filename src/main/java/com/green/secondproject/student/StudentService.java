@@ -437,7 +437,7 @@ public class StudentService {
             bodyCell.setCellStyle(bodyXssfCellStyle);
 
             bodyCell = bodyRow.createCell(7);
-            bodyCell.setCellValue(result.getClassRank() + "/" + result.getVanCnt());
+            bodyCell.setCellValue(result.getClassRank() + "/" + result.getClassCnt());
             bodyCell.setCellStyle(bodyXssfCellStyle);
 
             bodyCell = bodyRow.createCell(8);
