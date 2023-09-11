@@ -66,7 +66,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 
     //정민+수천 합체
 
-
     @Query("SELECT u FROM UserEntity u JOIN u.vanEntity v WHERE "
             + "(:search IS NULL OR u.nm LIKE CONCAT('%', :search, '%')) "
             + "AND (:classNum IS NULL OR v.classNum = :classNum) "
