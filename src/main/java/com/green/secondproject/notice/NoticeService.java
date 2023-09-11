@@ -44,7 +44,7 @@ public class NoticeService {
         List<NoticeTotalVo> result = new ArrayList<>();
         int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId,sort);
         for (NoticeEntity entity : importantNotices) {
             result.add(NoticeTotalVo.builder()
                     .noticeId(entity.getNoticeId())
@@ -165,7 +165,7 @@ public class NoticeService {
         int totalPag = pageable.getPageSize();
         // 중요공지 (imptYn이 1인 공지)를 먼저 추가 만약 공지사항 -> 중요공지사항 4개 imptYn = 1 -> 0
 
-        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId);
+        List<NoticeEntity> importantNotices = noticeRepository.findByImptYnAndSchoolEntitySchoolId(1L, userSchoolId,sort);
         for (NoticeEntity entity : importantNotices) {
             result.add(NoticeTotalVo.builder()
                     .noticeId(entity.getNoticeId())

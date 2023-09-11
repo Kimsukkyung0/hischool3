@@ -4,6 +4,7 @@ import com.green.secondproject.common.entity.SchoolEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
@@ -27,7 +28,7 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     List<NoticeEntity> findByImptYn(Long imptYn);
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
     Page<NoticeEntity> findByImptYnNot(int i, Pageable pageable);
-    List<NoticeEntity> findByImptYnAndSchoolEntitySchoolId(Long imptYn, Long schoolId);
+    List<NoticeEntity> findByImptYnAndSchoolEntitySchoolId(Long imptYn, Long schoolId, Sort sort);
     Page<NoticeEntity> findByImptYnNotAndSchoolEntitySchoolId(Integer imptYn, Long schoolId, Pageable pageable);
     long countBySchoolEntitySchoolId(Long schoolId);
     long countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(String search,Long imptYn,Long schoolId);

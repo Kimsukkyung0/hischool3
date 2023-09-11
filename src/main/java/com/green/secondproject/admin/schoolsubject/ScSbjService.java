@@ -122,6 +122,7 @@ public class ScSbjService {
 //                .subjectNm(item.getNm()).build()).toList();
 
             SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+
             MyUserDetails userDetails = facade.getLoginUser();
             Long loggedInSchoolId = userDetails.getSchoolId();
 
