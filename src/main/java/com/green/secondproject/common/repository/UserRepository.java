@@ -2,7 +2,6 @@ package com.green.secondproject.common.repository;
 
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.config.etc.EnrollState;
-import com.green.secondproject.common.entity.SchoolEntity;
 import com.green.secondproject.common.entity.UserEntity;
 import com.green.secondproject.common.entity.VanEntity;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 
@@ -36,19 +34,29 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 
     List<UserEntity> findAllByVanEntityInAndRoleType(List<VanEntity> vanEntity, RoleType roleType);
 
+
+
     //석경작업
+
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.aprYn = :aprYn AND u.enrollState = :enrollState order by u.nm")
     Page<UserEntity> findUsersByConditions(List<VanEntity> vanEnti, RoleType roleType, int aprYn, EnrollState enrollState, Pageable pageable);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType ORDER BY u.enrollState asc ,u.nm asc")
-    Page<UserEntity> findUsersByVanEntityAndRoleTypeOrderByEnrollStateAsc(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
 
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState} ORDER BY u.enrollState asc ,u.nm asc")
-    Page<UserEntity> findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
-
-    //검색어 및 상태값 둘다 존재할때
+    //case1 :
     @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% AND u.enrollState = :enrollState ORDER BY u.enrollState asc ,u.nm asc")
-    Page<UserEntity> findAllTeachersByEnrollAndNm(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+    Page<UserEntity> findByCase1(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+
+    //case2 :
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% ORDER BY u.enrollState asc ,u.nm asc")
+    Page<UserEntity> findByCase2(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page);
+
+    //case 3 :
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState} ORDER BY u.enrollState asc ,u.nm asc")
+    Page<UserEntity> findByCase3(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
+
+    //case 4 :
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType ORDER BY u.enrollState asc ,u.nm asc")
+    Page<UserEntity> findByCase4(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
 
 
 

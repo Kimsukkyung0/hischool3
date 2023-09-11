@@ -106,18 +106,18 @@ public class TeacherMngService {
         List<TeacherMngVo> subResult = new ArrayList<>();
 
         if(search != null && enrollState!=null){
-            tcList = userRepository.findAllTeachersByEnrollAndNm
+            tcList = userRepository.findByCase1
                     (search, vanEnti, RoleType.TC, enrollState, pageable);
             log.info("case 1 : {멀티 필터링}");
         } else if(search != null && enrollState == null)//검색어 O
         {
-            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
+            tcList = userRepository.findByCase2(search, vanEnti, RoleType.TC, pageable);
             log.info("case 2 : {검색어만 존재}");
         } else if(enrollState != null && search == null) {//역할필터링 O
-            tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(vanEnti, RoleType.TC, enrollState, pageable);
+            tcList = userRepository.findByCase3(vanEnti, RoleType.TC, enrollState, pageable);
             log.info("case 3 : {상태값만 존재}");
         }else {//둘다 있을때
-            tcList = userRepository.findUsersByVanEntityAndRoleTypeOrderByEnrollStateAsc(vanEnti, RoleType.TC, pageable);
+            tcList = userRepository.findByCase4(vanEnti, RoleType.TC, pageable);
             log.info("case 4 : {둘다 없을때-기본정렬}");
         }
 
