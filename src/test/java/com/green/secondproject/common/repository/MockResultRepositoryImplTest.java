@@ -11,7 +11,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -50,5 +52,19 @@ class MockResultRepositoryImplTest {
             log.info("cateIds : {}",c);
         }
 
+    }
+
+    @Test
+    void getMockTestGraph() {
+        UserEntity userEntity = user.findByUserId(1L);
+        Optional<List<StudentTestSumGraphVo>> list = Optional.of(mock.getMockTestGraph(userEntity));
+        if (list.isEmpty()) {
+            log.info("list : " , list);
+        }
+        if(list.isPresent()) {
+            for (StudentTestSumGraphVo vo : list.get()) {
+                log.info("vo : {}", vo);
+            }
+        }
     }
 }

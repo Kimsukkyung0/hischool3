@@ -154,9 +154,15 @@ public class TeacherService {
 
 
     public int delAcaRusult(Long resultId) {
-        DelResultDto dto = new DelResultDto();
-        dto.setResultId(resultId);
-        return mapper.delAcaResult(dto);
+        Optional<AcaResultEntity> opt = acaResultRepository.findById(resultId);
+        if(opt.isEmpty()) {
+            return 0;
+        }
+        acaResultRepository.deleteById(resultId);
+        return 1;
+//        DelResultDto dto = new DelResultDto();
+//        dto.setResultId(resultId);
+//        return mapper.delAcaResult(dto);
     }
 
 
@@ -224,7 +230,6 @@ public class TeacherService {
                 tmpSubResult.add(tmpSubList);
             }
         }
-        //TODO:
         //acaResultRepository.getLatestTest(u)
         String date = stService.getMidFinalFormOfDateByString("202321");
         return TeacherGraphContainerVo.builder().date(date).list(subResult).build();

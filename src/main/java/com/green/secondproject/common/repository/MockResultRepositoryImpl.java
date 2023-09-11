@@ -101,7 +101,7 @@ public class MockResultRepositoryImpl implements MockResultRepositoryCustom {
                 .join(m.subjectEntity, s)
                 .join(m.subjectEntity.sbjCategoryEntity,c)
                 .where(m.userEntity.userId.eq(userEntity.getUserId())
-                        .and(c.categoryId.in(myGrade.getCateIdForAca()))
+                        .and(c.categoryId.in(myGrade.getCateIdForMockTest()))
                         .and(m.year.loe(year))
                         .and(m.mon.loe(mon)))
                 .orderBy(m.year.asc(),m.mon.asc())

@@ -14,7 +14,6 @@ import lombok.experimental.SuperBuilder;
 @EqualsAndHashCode(callSuper = false)
 public class NoticeEntity extends BaseEntity {
     @Id //pk
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //auto_increment
     @Column(updatable = false, nullable = false, columnDefinition = "BIGINT UNSIGNED")
     private Long noticeId;
 

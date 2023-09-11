@@ -20,6 +20,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,7 +31,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class NoticeService {
-    private final NoticeMapper mapper;
+
     private final NoticeRepository noticeRepository;
     private final AuthenticationFacade facade;
     private final SchoolRepository schoolRepository;
@@ -82,12 +84,26 @@ public class NoticeService {
         return list;
     }
     //en dto ->
+    @Transactional
     public NoticeVo saveByNotice(NoticeInsDto dto) {
         MyUserDetails userDetails = facade.getLoginUser();
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
-        NoticeEntity entity = NoticeEntity.builder().title(dto.getTitle()).content(dto.getContent())
-                .imptYn(dto.getImptyn()).schoolEntity(schoolEntity).build();
+
+        Long nextId = noticeRepository.findSmallestAvailableId();
+        if (nextId == null) {
+            nextId = 1L;  // 아무 데이터도 없는 경우 1부터 시작
+        }
+        NoticeEntity entity = NoticeEntity.builder()
+                .noticeId(nextId)
+                .title(dto.getTitle())
+                .content(dto.getContent())
+                .imptYn(dto.getImptyn())
+                .schoolEntity(schoolEntity).build();
+
+
         NoticeEntity result = noticeRepository.save(entity);
+
+
         return NoticeVo.builder()
                 .noticeId(result.getNoticeId())
                 .title(result.getTitle())

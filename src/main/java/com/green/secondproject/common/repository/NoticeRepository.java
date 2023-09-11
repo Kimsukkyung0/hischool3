@@ -37,6 +37,8 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
     long countBy(@Param("search") String search);
 
 
+    @Query("SELECT MIN(n.noticeId + 1) FROM NoticeEntity n WHERE NOT EXISTS (SELECT 1 FROM NoticeEntity WHERE noticeId = n.noticeId + 1)")
+    Long findSmallestAvailableId();
 }
 
 
