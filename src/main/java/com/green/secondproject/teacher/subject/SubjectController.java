@@ -6,6 +6,7 @@ import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.teacher.subject.model.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -57,7 +58,7 @@ public class SubjectController {
 
     @GetMapping("/aca-subject")
     @Operation(summary = "선택한 계열 세부과목 조회")
-    public List<AcaResultSubVo> getAcaSubject(Long categoryId) {
+    public List<AcaResultSubVo> getAcaSubject(@Parameter(description = "과목계열 PK") Long categoryId) {
         return serivce.selAcaSubject(categoryId);
     }
 
