@@ -4,6 +4,7 @@ import com.green.secondproject.common.entity.SchoolEntity;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import java.util.List;
@@ -16,18 +17,18 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
             "JOIN VanEntity v ON n.schoolEntity = v.schoolEntity " +
             "JOIN UserEntity u ON u.vanEntity = v " +
             "WHERE n.imptYn = 1 AND v.vanId = :vanId")
-    List<NoticeEntity> findImportantNoticesByVanId(@Param("vanId") Long vanId);
+    List<NoticeEntity> findImportantNoticesByVanId(@Param("vanId") Long vanId,Sort sort);
     @Query("SELECT n FROM NoticeEntity n " +
             "JOIN n.schoolEntity s " +
             "JOIN VanEntity v ON n.schoolEntity = v.schoolEntity " +
             "JOIN UserEntity u ON u.vanEntity = v " +
             "WHERE n.imptYn = 0 AND v.vanId = :vanId")
-    List<NoticeEntity> findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(@Param("vanId") Long vanId);
+    List<NoticeEntity> findTopByImptYnAndSchoolEntityOrderByNoticeIdDesc(@Param("vanId") Long vanId,Sort sort);
     NoticeEntity findByNoticeId(Long noticeId);
     List<NoticeEntity> findByImptYn(Long imptYn);
     Page<NoticeEntity> findByTitleContainingAndImptYnNot(String search, int i, Pageable pageable);
     Page<NoticeEntity> findByImptYnNot(int i, Pageable pageable);
-    List<NoticeEntity> findByImptYnAndSchoolEntitySchoolId(Long imptYn, Long schoolId);
+    List<NoticeEntity> findByImptYnAndSchoolEntitySchoolId(Long imptYn, Long schoolId, Sort sort);
     Page<NoticeEntity> findByImptYnNotAndSchoolEntitySchoolId(Integer imptYn, Long schoolId, Pageable pageable);
     long countBySchoolEntitySchoolId(Long schoolId);
     long countByTitleContainingAndImptYnNotAndSchoolEntitySchoolId(String search,Long imptYn,Long schoolId);
@@ -39,6 +40,9 @@ public interface NoticeRepository extends JpaRepository<NoticeEntity, Long> {
 
     @Query("SELECT MIN(n.noticeId + 1) FROM NoticeEntity n WHERE NOT EXISTS (SELECT 1 FROM NoticeEntity WHERE noticeId = n.noticeId + 1)")
     Long findSmallestAvailableId();
+
+    @Query("SELECT COALESCE(MAX(n.noticeId), 0) FROM NoticeEntity n")
+    Long findMaxNoticeId();
 }
 
 

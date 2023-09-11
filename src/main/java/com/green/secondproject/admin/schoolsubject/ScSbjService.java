@@ -2,6 +2,7 @@ package com.green.secondproject.admin.schoolsubject;
 
 import com.green.secondproject.admin.schoolsubject.model.*;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
+import com.green.secondproject.common.config.security.model.MyUserDetails;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
 import jakarta.persistence.EntityManager;
@@ -113,12 +114,24 @@ public class ScSbjService {
     }
 
     public List<ScSbjVo> getSubjectListByCate(Long categoryId) {
-        SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
-        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
+//        SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+//        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
+//
+//        return sbjEntityList.stream().map(item -> ScSbjVo.builder()
+//                .subjectId(item.getSubjectId())
+//                .subjectNm(item.getNm()).build()).toList();
 
-        return sbjEntityList.stream().map(item -> ScSbjVo.builder()
-                .subjectId(item.getSubjectId())
-                .subjectNm(item.getNm()).build()).toList();
+            SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+
+            MyUserDetails userDetails = facade.getLoginUser();
+            Long loggedInSchoolId = userDetails.getSchoolId();
+
+            List<SubjectEntity> sbjEntityList = sbjtRep.findSubjectsNotInScSbjByCategoryAndSchoolId(cateEnti, loggedInSchoolId);
+
+            return sbjEntityList.stream().map(item -> ScSbjVo.builder()
+                    .subjectId(item.getSubjectId())
+                    .subjectNm(item.getNm()).build()).toList();
+
     }
 
     public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<SbjDto> dto, int grade) {
