@@ -89,10 +89,8 @@ public class NoticeService {
         MyUserDetails userDetails = facade.getLoginUser();
         SchoolEntity schoolEntity = schoolRepository.getReferenceById(userDetails.getSchoolId());
 
-        Long nextId = noticeRepository.findSmallestAvailableId();
-        if (nextId == null) {
-            nextId = 1L;  // 아무 데이터도 없는 경우 1부터 시작
-        }
+        Long maxId = noticeRepository.findMaxNoticeId();
+        Long nextId = (maxId == null ? 0 : maxId) + 1;
         NoticeEntity entity = NoticeEntity.builder()
                 .noticeId(nextId)
                 .title(dto.getTitle())
@@ -100,9 +98,7 @@ public class NoticeService {
                 .imptYn(dto.getImptyn())
                 .schoolEntity(schoolEntity).build();
 
-
         NoticeEntity result = noticeRepository.save(entity);
-
 
         return NoticeVo.builder()
                 .noticeId(result.getNoticeId())
