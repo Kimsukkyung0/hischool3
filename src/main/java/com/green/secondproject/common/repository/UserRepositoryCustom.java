@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface UserRepositoryCustom {
     List<StudentVo> studentList(String name, Long vanId);
+
 }
