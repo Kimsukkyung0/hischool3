@@ -151,7 +151,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     };
 
     @Override
-    public double countStudentsNumByVanAndCate(Long classId, RoleType roleType, int aprYn, Long categoryId){
+    public double countStudentsNumByVanAndCate(Long classId, RoleType roleType, int aprYn, Long categoryId,int year, int semester, int midFinal){
         return jpaQueryFactory
                 .select(a1.count())
                 .from(a1)
@@ -161,12 +161,16 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .where(v.vanId.eq(classId)
                         .and(u.roleType.eq(RoleType.STD))
                         .and(u.aprYn.eq(1))
-                        .and(c.categoryId.eq(categoryId)))
+                        .and(c.categoryId.eq(categoryId))
+                        .and(a1.year.eq(String.valueOf(year)))
+                        .and(a1.semester.eq(semester))
+                        .and(a1.midFinal.eq(midFinal))
+                )
                 .fetchFirst();
     }
 
     @Override
-    public List<TeacherGraphVo> teacherAcaGraph(Long classId, Long categoryId){
+    public List<TeacherGraphVo> teacherAcaGraph(Long classId, Long categoryId,int year,int semester, int midFinal){
         return jpaQueryFactory
                 .select(new QTeacherGraphVo(c.nm.as("cateNm")
                         , a1.rating.as("rating")
@@ -177,9 +181,13 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
                 .join(a1.userEntity,u)
                 .join(a1.userEntity.vanEntity,v)
                 .where(v.vanId.eq(classId)
+                        .and(a1.year.eq(String.valueOf(year)))
+                        .and(a1.semester.eq(semester))
+                        .and(a1.midFinal.eq(midFinal))
                         .and(u.roleType.eq(RoleType.STD))
                         .and(u.aprYn.eq(1))
                         .and(c.categoryId.eq(categoryId)))
+                .groupBy(a1.rating)
                 .fetch();
     }
 //        <select id="teacherAcaGraph">
@@ -193,4 +201,19 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
 //    group by rating
 //            </select>
 
+    @Override
+    public int[] getLatestTest(Long classId, Long categoryId){
+
+        AcaResultEntity acaResultEntity = jpaQueryFactory.selectFrom(a1)
+                .join(a1.subjectEntity.sbjCategoryEntity, c)
+                .join(a1.userEntity,u)
+                .join(a1.userEntity.vanEntity,v)
+                .where(v.vanId.eq(classId)
+                .and(c.categoryId.eq(categoryId)))
+                .orderBy(a1.year.desc(),a1.semester.desc(),a1.midFinal.desc())
+                .fetchFirst();
+
+        int[] date = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(), acaResultEntity.getMidFinal()};
+        return date;
+    }
 }

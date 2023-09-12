@@ -184,11 +184,14 @@ public class TeacherService {
         String[] cateNm = MyGradeGraphUtils.cateNm;//국수영한
         int RATING_NUM = mg.RATING_NUM;
         List<List<TeacherGraphVo>> subResult = MyGradeGraphUtils.teacherGraphListAtb();
+        int[] latestTest ={};
         //과목 4 * 등급 9  (0%가 들어있는 리스트)
+
 
         //과목을 넣기위한 임시거처..?
         List<List<TeacherGraphVo>> tmpSubResult = new ArrayList<>();
         List<TeacherGraphVo> tmpSubList = new ArrayList<>();
+
 
         for (int i = 0; i < cateNm.length; i++) { //4번 돌것이다.
             //국수영한 4개 * 9개의 리스트 받아오기
@@ -199,24 +202,21 @@ public class TeacherService {
 
 //            acaResultRepository.getLatestTest()
 
-            double vanMemNum = acaResultRepository.countStudentsNumByVanAndCate(classId, RoleType.STD, 1,tmpCateIdForAca);
-
-//            double vanMemNum = mapper.getNumberOfStudentByCate(TeacherGraphDto.builder().
-//                    categoryId(tmpCateIdForAca)
-//                    .classId(classId)
-//                    .build());
+            latestTest = acaResultRepository.getLatestTest(classId, tmpCateIdForAca);
+            double vanMemNum = acaResultRepository.countStudentsNumByVanAndCate(classId, RoleType.STD, 1,tmpCateIdForAca,latestTest[0],latestTest[1],latestTest[2]);
             log.info("vanMemNum : {}", vanMemNum);
 
             //mapperList -  percentage = 인원수
-            List<TeacherGraphVo> tmpVoList = acaResultRepository.teacherAcaGraph(classId,tmpCateIdForAca);
+            List<TeacherGraphVo> tmpVoList = acaResultRepository.teacherAcaGraph(classId,tmpCateIdForAca,latestTest[0],latestTest[1],latestTest[2]);
             log.info("tmpVoList : {}", tmpVoList);
+            log.info("tmpVoList.size : {}", tmpVoList.size());
+
             //과목 id
             log.info("cateIdForAca[i] : {}", cateIdForAca[i]);
 
             for (int j = 0; j < RATING_NUM; j++) {
                 //0리스트 과목명/등급/명수만 갖고있는 리스트 9개로 분해
                 TeacherGraphVo subSubSubList = subSubList.get(j);
-
                 for (TeacherGraphVo voComp : tmpVoList){
                     if(subSubSubList.getRating() == voComp.getRating()){
                         subSubSubList.setPercentage(getPercentage(voComp.getPercentage()
@@ -228,14 +228,13 @@ public class TeacherService {
                 tmpSubResult.add(tmpSubList);
             }
         }
-        //acaResultRepository.getLatestTest(u)
-        String date = stService.getMidFinalFormOfDateByString("202321");
+        String date = stService.getMidFinalFormOfDate(latestTest);
         return TeacherGraphContainerVo.builder().date(date).list(subResult).build();
     }
 
     private double getPercentage (double count, double numberOfClassMembers) {
 //        double tmp = (double)(Math.round((count / numberOfClassMembers) * 100) /100);
-        double tmp =  Math.round((count/numberOfClassMembers) * 10000) / 100.0;
+        double tmp =  Math.round((count/numberOfClassMembers) * 100) ;
         return tmp;
     }
 

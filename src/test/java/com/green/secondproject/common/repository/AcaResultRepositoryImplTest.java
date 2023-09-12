@@ -4,6 +4,7 @@ import com.green.secondproject.common.config.jpa.QueryDslConfig;
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.AcaResultEntity;
 import com.green.secondproject.common.entity.UserEntity;
+import com.green.secondproject.common.entity.VanEntity;
 import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import com.green.secondproject.student.model.StudentTestSumGraphVo;
 import com.green.secondproject.teacher.model.TeacherGraphVo;
@@ -21,12 +22,14 @@ import java.util.List;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({QueryDslConfig.class,MyGradeGraphUtils.class, AcaResultEntity.class})
-
+@ActiveProfiles("test")
 class AcaResultRepositoryImplTest {
     @Autowired
     AcaResultRepository aca;
     @Autowired
     UserRepository user;
+
+
 
 //    @Autowired
 //    MyGradeGraphUtils utils;
@@ -56,15 +59,25 @@ class AcaResultRepositoryImplTest {
 
     @Test
     void countStudentsNumByVanAndCate() {
-        double num = aca.countStudentsNumByVanAndCate(1L, RoleType.STD, 1, 3L);
+        double num = aca.countStudentsNumByVanAndCate(1L, RoleType.STD, 1, 3L,2023,2,2);
         log.info("num : {}",num);
     }
 
     @Test
     void teacherAcaGraph() {
-        List<TeacherGraphVo> tmpVoList = aca.teacherAcaGraph(1L,3L);
+        List<TeacherGraphVo> tmpVoList = aca.teacherAcaGraph(1L,1L,2022,1,1);
         for(TeacherGraphVo vo : tmpVoList){
             log.info("vo : {}",vo);
         }
     }
+
+    @Test
+    void getLatestTest() {
+        int[] date = aca.getLatestTest(1L, 3L);
+        for (int d : date){
+            log.info("d : {}", d);
+        }
+    }
+
+
 }
