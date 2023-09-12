@@ -95,7 +95,6 @@ public class TeacherMngService {
 
 
     public TeacherMngVoContainer teacherListOfTheSchool(Optional<TeacherListDto> dto2) {
-//        Pageable pageable, String search, EnrollState enrollState
 
         Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
         if (scEntiOpt.isEmpty()) {
@@ -116,19 +115,19 @@ public class TeacherMngService {
         if(dto.getSearch() != null || dto.getEnrollState()!=null) {
             if (dto.getSearch() != null && dto.getEnrollState() == null)//검색어 O
             {
-                tcList = userRepository.findByCase2(dto.getSearch(), vanEnti, RoleType.TC, pageable);
+                tcList = userRepository.findByCase2(dto.getSearch(), vanEnti, RoleType.TC, pageable,1);
                 log.info("case 2 : {검색어만 존재}");
             } else if (dto.getEnrollState() != null && dto.getSearch() == null) {//역할필터링 O
-                tcList = userRepository.findByCase3(vanEnti, RoleType.TC,dto.getEnrollState(), pageable);
+                tcList = userRepository.findByCase3(vanEnti, RoleType.TC,dto.getEnrollState(), pageable, 1);
                 log.info("case 3 : {상태값만 존재}");
             } else {tcList = userRepository.findByCase1
-                    (dto.getSearch(), vanEnti, RoleType.TC, dto.getEnrollState(), pageable);
+                    (dto.getSearch(), vanEnti, RoleType.TC, dto.getEnrollState(), pageable, 1);
                 log.info("case 1 : {멀티 필터링}");}
         }
         }
         else if(dto2.isEmpty()) {//둘다 없을때
             Pageable pageable = PageRequest.of(1,16);
-            tcList = userRepository.findByCase4(vanEnti, RoleType.TC, pageable);
+            tcList = userRepository.findByCase4(vanEnti, RoleType.TC, pageable,1);
             log.info("case 4 : {둘다 없을때-기본정렬}");
         }
 

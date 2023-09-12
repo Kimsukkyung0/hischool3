@@ -43,24 +43,22 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>, UserRep
 
 
     //case1 :
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% AND u.enrollState = :enrollState " +
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% AND u.enrollState = :enrollState and u.aprYn = :aprYn " +
             "ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc ,u.nm asc")
-    Page<UserEntity> findByCase1(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page);
+    Page<UserEntity> findByCase1(String search, List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable page,int aprYn);
 
     //case2 :
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% " +
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.nm like %:#{#search}% and u.aprYn = :aprYn " +
             "ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc, u.nm asc")
-    Page<UserEntity> findByCase2(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page);
+    Page<UserEntity> findByCase2(String search, List<VanEntity> vanEntity, RoleType roleType, Pageable page,int aprYn);
 
     //case 3 :
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType AND u.enrollState = :#{#enrollState} " +
-            "ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc, u.nm asc")
-    Page<UserEntity> findByCase3(List<VanEntity> vanEnti, RoleType roleType, EnrollState enrollState, Pageable pageable);
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType AND u.enrollState = :#{#enrollState} and u.aprYn = :aprYn ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc, u.nm asc")
+    Page<UserEntity> findByCase3(List<VanEntity> vanEntity, RoleType roleType, EnrollState enrollState, Pageable pageable,int aprYn);
 
     //case 4 :
-    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEnti AND u.roleType = :roleType " +
-            "ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc, u.nm asc")
-    Page<UserEntity> findByCase4(List<VanEntity> vanEnti, RoleType roleType, Pageable pageable);
+    @Query("SELECT u FROM UserEntity u WHERE u.vanEntity IN :vanEntity AND u.roleType = :roleType and u.aprYn = :aprYn ORDER BY u.enrollState asc ,u.vanEntity.grade asc ,u.vanEntity.classNum asc, u.nm asc")
+    Page<UserEntity> findByCase4(List<VanEntity> vanEntity, RoleType roleType, Pageable pageable,int aprYn);
 
 
 
