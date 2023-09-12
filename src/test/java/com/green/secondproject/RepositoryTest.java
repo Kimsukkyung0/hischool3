@@ -243,38 +243,38 @@ public class RepositoryTest {
 //        }
     }
     @Test
-    void 모의고사_성적_등록() {
-        final long schoolId = 70L; // 청구고(3), 계성고(70)
-        final String grade = "1";
-        final String year = "2022";
-        final String mon = "3";
-        long subjectId = 4L; // 국어(4), 수학(5), 영어(7), 한국사(9)
+        void 모의고사_성적_등록() {
+            final long schoolId = 70L; // 청구고(3), 계성고(70)
+            final String grade = "1";
+            final String year = "2022";
+            final String mon = "3";
+            long subjectId = 4L; // 국어(4), 수학(5), 영어(7), 한국사(9)
 
-        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
-                SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
-        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+            List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+                    SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
+            List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-                case 1 -> subjectId = 5L;
-                case 2 -> subjectId = 7L;
-                case 3 -> subjectId = 9L;
+            for (int i = 0; i < 4; i++) {
+                switch (i) {
+                    case 1 -> subjectId = 5L;
+                    case 2 -> subjectId = 7L;
+                    case 3 -> subjectId = 9L;
+                }
+
+                for (UserEntity entity : stdList) {
+                    mockResultRepository.save(MockResultEntity.builder()
+                            .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                            .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                            .year(year)
+                            .mon(mon)
+                            .standardScore((int)(Math.random() * 201))
+                            .rating((int)(Math.random() * 9) + 1)
+                            .percent((int)(Math.random() * 101))
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .build());
+                }
             }
-
-            for (UserEntity entity : stdList) {
-                mockResultRepository.save(MockResultEntity.builder()
-                        .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
-                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-                        .year(year)
-                        .mon(mon)
-                        .standardScore((int)(Math.random() * 201))
-                        .rating((int)(Math.random() * 9) + 1)
-                        .percent((int)(Math.random() * 101))
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build());
-            }
-        }
     }
     @Test
     void 학생_등록() {

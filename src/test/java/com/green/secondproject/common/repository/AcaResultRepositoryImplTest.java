@@ -21,6 +21,7 @@ import java.util.List;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Import({QueryDslConfig.class,MyGradeGraphUtils.class, AcaResultEntity.class})
+
 class AcaResultRepositoryImplTest {
     @Autowired
     AcaResultRepository aca;

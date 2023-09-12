@@ -106,6 +106,7 @@ public class AcaResultRepositoryImpl implements AcaResultRepositoryCustom {
     public int[] getLatestTest(UserEntity userEntity) {
         AcaResultEntity acaResultEntity = jpaQueryFactory
                 .selectFrom(a1)
+                .where(a1.userEntity.eq(userEntity))
                 .orderBy(a1.year.desc(), a1.semester.desc(), a1.midFinal.desc()).fetchFirst();
      int[] stList = {Integer.parseInt(acaResultEntity.getYear()), acaResultEntity.getSemester(),acaResultEntity.getMidFinal()};
      return stList;
