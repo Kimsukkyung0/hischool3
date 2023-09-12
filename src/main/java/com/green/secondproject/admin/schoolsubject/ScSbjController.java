@@ -50,6 +50,16 @@ public class ScSbjController {
     Map<Integer,List<ScSbjVo>> getSubjectListByCate(@PathVariable Long categoryId) {
         return service.getSubjectListByCateAndGrade(categoryId);
     }
+    @GetMapping("/cate2/{categoryId}")
+    @Operation(summary = "관리자용 과목계열별 세부과목 리스트 조회(내신)",
+            description = """  
+            요구값 : <br>(1)categoryId : 과목계열 pk값 <br><br>
+            출력값 : <br>(1)subjectId - 세부과목 pk값<br>(2)subjectNm - 과목이름<br> 
+            *** 등록된 과목은 학교에 따라 과목 리스트에서 제외***<br>
+                    """)
+    List<ScSbjVo> getSubjectListByCate2(@PathVariable Long categoryId) {
+        return service.getSubjectListByCate2(categoryId);
+    }
 
     @GetMapping("/category/{grade}")
     @Operation(summary = "학년별 등록과목 리스트"

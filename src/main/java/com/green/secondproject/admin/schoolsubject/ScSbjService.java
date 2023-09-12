@@ -111,13 +111,13 @@ public class ScSbjService {
                 .categoryId(item.getCategoryId()).build()).toList();
     }
 
-//    public List<ScSbjVo> getSubjectListByCate(Long categoryId) {
-//        SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
-//        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
-//
-//        return sbjEntityList.stream().map(item -> ScSbjVo.builder()
-//                .subjectId(item.getSubjectId())
-//                .subjectNm(item.getNm()).build()).toList();
+    public List<ScSbjVo> getSubjectListByCate2(Long categoryId) {
+        SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+        List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
+
+        return sbjEntityList.stream().map(item -> ScSbjVo.builder()
+                .subjectId(item.getSubjectId())
+                .subjectNm(item.getNm()).build()).toList();
 //    }
 //            SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
 //
@@ -129,7 +129,8 @@ public class ScSbjService {
 //            return sbjEntityList.stream().map(item -> ScSbjVo.builder()
 //                    .subjectId(item.getSubjectId())
 //                    .subjectNm(item.getNm()).build()).toList();
-//    }
+    }
+
 
 public Map<Integer, List<ScSbjVo>> getSubjectListByCateAndGrade(Long categoryId) {
     SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
