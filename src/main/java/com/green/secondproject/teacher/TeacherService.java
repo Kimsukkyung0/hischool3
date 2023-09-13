@@ -346,7 +346,7 @@ public class TeacherService {
         List<MockGraphVo2> mtList = mapper.mockgraph(new MockGraphDto(classId, 4L));
         List<MockGraphVo2> enList = mapper.mockgraph(new MockGraphDto(classId, 5L));
         List<MockGraphVo2> hiList = mapper.mockgraph(new MockGraphDto(classId, 8L));
-
+        
         List<MockGraphVo2> koList1 = new ArrayList<>();
         List<MockGraphVo2> mtList1 = new ArrayList<>();
         List<MockGraphVo2> enList1 = new ArrayList<>();
@@ -456,6 +456,7 @@ public class TeacherService {
         }
 
         return MockGraphVo.builder()
+                .mocknm("2023년 9월 모의고사")
                 .koList(koList1)
                 .mtList(mtList1)
                 .enList(enList1)
