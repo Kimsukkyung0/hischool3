@@ -282,7 +282,7 @@
         INNER JOIN user D
         ON A.user_id = D.user_id
         WHERE D.van_id = #{vanId} and B.category_id = #{categoryId}
-        and A.year = year(NOW()) and mon = 6
+        and A.year = year(NOW()) and mon = 9
         GROUP BY B.nm, rating;
 
     </select>

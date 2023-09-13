@@ -15,4 +15,5 @@ public interface AcaResultRepository extends JpaRepository<AcaResultEntity, Long
             List<UserEntity> userEntity, int semester, SubjectEntity subjectEntity, int midFinal, String year);
     long countByUserEntityInAndSubjectEntityAndYearAndSemesterAndMidFinal(Collection<UserEntity> userEntity,
                 SubjectEntity subjectEntity, String year, int semester, int midFinal);
+
 }

@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
-import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
-import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
-import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
+import com.green.secondproject.admin.teachermng.model.*;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.AuthenticationFacade;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
@@ -30,8 +27,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -57,6 +57,8 @@ public class TeacherMngService {
     private String aprimgPath;
     @Value("${my-api.key}")
     private String myApiKey;
+
+    Page<UserEntity> tcList;
 
 
     public TeacherMngVoContainer teacherNotapprovedList(Pageable pageable) {
@@ -92,32 +94,40 @@ public class TeacherMngService {
     }
 
 
-    public TeacherMngVoContainer teacherListOfTheSchool(Pageable pageable, String search, EnrollState enrollState) {
+    public TeacherMngVoContainer teacherListOfTheSchool(Optional<TeacherListDto> dto2) {
 
         Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
         if (scEntiOpt.isEmpty()) {
             throw new RuntimeException("관리자 로그인 필요");
         }
+
         SchoolEntity scEnti = scEntiOpt.get();
-        pageable = PageRequest.of(pageable.getPageNumber() - 1, 16);
+
 
         List<VanEntity> vanEnti = vanRep.findDistinctBySchoolEntity(scEnti);
-        Page<UserEntity> tcList;
+
         List<TeacherMngVo> subResult = new ArrayList<>();
 
-        if(search != null && enrollState!=null){
-            tcList = userRepository.findAllTeachersByEnrollAndNm
-                    (search, vanEnti, RoleType.TC, enrollState, pageable);
-            log.info("case 1 : {멀티 필터링}");
-        } else if(search != null && enrollState == null)//검색어 O
-        {
-            tcList = userRepository.findByNmContainingAndVanEntityInAndRoleType(search, vanEnti, RoleType.TC, pageable);
-            log.info("case 2 : {검색어만 존재}");
-        } else if(enrollState != null && search == null) {//역할필터링 O
-            tcList = userRepository.findUsersByVanEntityAndRoleTypeAndEnrollStateOrderByEnrollStateAscNmAsc(vanEnti, RoleType.TC, enrollState, pageable);
-            log.info("case 3 : {상태값만 존재}");
-        }else {//둘다 있을때
-            tcList = userRepository.findUsersByVanEntityAndRoleTypeOrderByEnrollStateAsc(vanEnti, RoleType.TC, pageable);
+        if(dto2.isPresent()){
+            TeacherListDto dto = dto2.get();
+            log.info("dto : {}", dto);
+            Pageable pageable = PageRequest.of(dto.getPage() - 1, 16);
+        if(dto.getSearch() != null || dto.getEnrollState()!=null) {
+            if (dto.getSearch() != null && dto.getEnrollState() == null)//검색어 O
+            {
+                tcList = userRepository.findByCase2(dto.getSearch(), vanEnti, RoleType.TC, pageable,1);
+                log.info("case 2 : {검색어만 존재}");
+            } else if (dto.getEnrollState() != null && dto.getSearch() == null) {//역할필터링 O
+                tcList = userRepository.findByCase3(vanEnti, RoleType.TC,dto.getEnrollState(), pageable, 1);
+                log.info("case 3 : {상태값만 존재}");
+            } else {tcList = userRepository.findByCase1
+                    (dto.getSearch(), vanEnti, RoleType.TC, dto.getEnrollState(), pageable, 1);
+                log.info("case 1 : {멀티 필터링}");}
+        }
+        }
+        else if(dto2.isEmpty()) {//둘다 없을때
+            Pageable pageable = PageRequest.of(1,16);
+            tcList = userRepository.findByCase4(vanEnti, RoleType.TC, pageable,1);
             log.info("case 4 : {둘다 없을때-기본정렬}");
         }
 
@@ -144,16 +154,24 @@ public class TeacherMngService {
                 .list(subResult)
                 .totalCount((int) tcList.getTotalElements())
                 .totalPage(tcList.getTotalPages()).build();
+
     }
 
 
-    //잘 작동되는 친구^^
     public TeacherMngWithPicVo teacherDetailNotApr(Long userId) {
-        UserEntity userEnti = userRepository.findByUserId(userId);
 
-        SchoolEntity scEnti = scRep.findByCode(userEnti.getVanEntity().getVanId().toString());
+        Optional<SchoolEntity> scEntiOpt = scRep.findById(facade.getLoginUser().getSchoolId());//학교 코드로 학교 entity 가져오기
+        if (scEntiOpt.isEmpty()) {
+            throw new RuntimeException("관리자 로그인 필요");
+        }
+        Optional<UserEntity> userEntiOpt = Optional.of(userRepository.findByUserId(userId));
 
-        String aprPicPath = aprimgPath + "/" + userId + "/" + userEnti.getAprPic();
+        if (userEntiOpt.isEmpty()){
+            throw new RuntimeException("관리자 로그인 필요");
+        }
+        else {
+            UserEntity userEnti = userEntiOpt.get();
+            String aprPicPath = aprimgPath + "/" + userId + "/" + userEnti.getAprPic();
 
         return TeacherMngWithPicVo.builder()
                 .aprPic(aprPicPath)
@@ -171,6 +189,7 @@ public class TeacherMngService {
                 .aprYn(userEnti.getAprYn())
                 .enrollState(userEnti.getEnrollState())
                 .build();
+        }
 
     }
 

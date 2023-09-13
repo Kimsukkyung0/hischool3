@@ -16,7 +16,8 @@ public interface AcaResultRepositoryCustom {
     List<StudentSummarySubjectVo> getHighestRatingOfAcaTest(UserEntity userEntity);
     int[] getLatestTest(UserEntity userEntity);
     List<StudentTestSumGraphVo> getAcaTestGraph(UserEntity userEntity);
-    double countStudentsNumByVanAndCate(Long classId, RoleType roleType, int aprYn, Long categoryId);
-    List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId);
+    double countStudentsNumByVanAndCate(Long classId, RoleType roleType, int aprYn, Long categoryId,int year, int semester, int midFinal);
+    List<TeacherGraphVo> teacherAcaGraph(Long classId,Long categoryId,int year,int semester, int midFinal);
+    int[] getLatestTest(Long vanId, Long categoryId);
 
 }

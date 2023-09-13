@@ -1,10 +1,7 @@
 package com.green.secondproject.admin.teachermng;
 
 
-import com.green.secondproject.admin.teachermng.model.TeacherMngVo;
-import com.green.secondproject.admin.teachermng.model.TeacherMngVoContainer;
-import com.green.secondproject.admin.teachermng.model.TeacherMngWithPicVo;
-import com.green.secondproject.admin.teachermng.model.TeacherStatUpdDto;
+import com.green.secondproject.admin.teachermng.model.*;
 import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.config.security.model.MyUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -47,16 +45,17 @@ public class TeacherMngController {
 
     @GetMapping("/all")
     @Operation(summary = "각 학교의 전체 교원목록", description = """
-            요구값 : <br>(1)page : 페이지수(default : 1 )<br> (2)size : 한페이지당 보여줄 게시물 수 <br>
-            (3)sort : 정렬기준 컬럼(default : 이름 오름차순 / 방법 : 빈 쌍따옴표로 조회 : \"\" )<br>
-            (4)search(선택) : 검색어 (이름 검색)<br>(5)enrollState(선택) : 상태값정렬 <br><br>
+            요구값 : <br>(1)page(선택) : 페이지수(default : 1 )<br> 
+                       (2)search(선택) : 검색어 (이름 검색)<br>(3)enrollState(선택) : 상태값정렬 <br><br>
             출력값 : <br>(1)userId : 유저pk<br>(2)classId : 반 코드 <br> (3)email : 교원email <br> (4)nm : 교원이름<br> (5)birth : 생년월일<br>(6)phone :교원연락처<br>
             (7)address : 상위주소<br> (8)detailAddr : 상세주소 <br> (9)role : 권한명(TC : 선생님) <br> (10)aprYn : 승인여부(0:미승인)
             (11)enrollState : 재직상태<br>
             (ENROLL : 재직중 / LEAVE : 탈퇴 / TRANSFER : 전근)<br>
             (12)totalCount : 총 교원수<br> (13)totalPage : 총 페이지 수 """)
-    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Pageable page, @RequestParam(required = false) String search, @RequestParam(required = false)EnrollState enrollState){
-        return ResponseEntity.ok(service.teacherListOfTheSchool(page,search,enrollState));
+    ResponseEntity<TeacherMngVoContainer> allTeachersOfTheSchool(Optional<TeacherListDto> dto){
+        if(dto.isPresent()){
+        log.info("dto get:{}",dto.get());}
+        return ResponseEntity.ok(service.teacherListOfTheSchool(dto));
     }
 
 

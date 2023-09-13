@@ -138,12 +138,13 @@ public class TeacherController {
         return service.selMockTestResultByDates(dto);
     }
 
-
     @GetMapping("/aca-result")
     @Operation(summary = "선생님-학생별 내신성적관리 테이블(하단)", description = "요구값(필수) : <br>\" + \"(1)userId - 학생pk <br>요구값(선택) : <br>" + "(1)year - 조회기준연도(yyyy) <br>(2)semester - 학기(1,2)<br>(3)midFinal - (1:중간,2:기말)<br><br>"
             + "※※학생 아이디 외 요구값들은 선택사항입니다. 요구값없이 조회시 전체조회※※<br><br>" +
             "출력값 : <br>" + "(1)year - 연도<br>(2)semester - 학기(1,2)<br>" +
-            "(3)midFinal - 1:중간2:기말<br>" + "(4)cateNm - 계열이름 <br>" + "(5)nm - 과목명 <br>" + "(6)score - 원점수<br>" + "(7)rating - 등급<br> (8)classRank - 반석차<br>(9)classRank - 전교석차<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
+            "(3)midFinal - 1:중간2:기말<br>" + "(4)cateNm - 계열이름 <br>" + "(5)nm - 과목명 <br>" + "(6)score - 원점수<br>"
+            + "(7)rating - 등급<br> (8)classRank - 반석차<br>(9)wholeRank - 전교석차<br>" +
+            "(10)classCnt - 반 학생 수<br>(11)wholeCnt - 전교생 수<br><br>※ 연도-학기-시험구분 최신순으로 / 수정완료※<br>")
     public List<StudentAcaResultWithIdVo> selAcaTestResultByDatesAndPeriod(@RequestParam Long userId, @RequestParam(required = false) String year, @RequestParam(required = false) Integer semester, @RequestParam(required = false) Integer midFinal) {
         StudentAcaResultsParam param = new StudentAcaResultsParam();
         param.setUserId(userId);
@@ -198,7 +199,7 @@ public class TeacherController {
     }
 
     @GetMapping("/subject/mock-graph")
-    @Operation(summary = "6월 모의고사 성적조회",
+    @Operation(summary = "9월 모의고사 성적조회",
             description = "nm - 과목이름<br>"+
                     "rating - 등급" +
                     "ratio - 등급별 인원 퍼센트(100%기준)")

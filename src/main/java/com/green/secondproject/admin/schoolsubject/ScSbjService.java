@@ -111,14 +111,14 @@ public class ScSbjService {
                 .categoryId(item.getCategoryId()).build()).toList();
     }
 
-    public List<ScSbjVo> getSubjectListByCate(Long categoryId) {
+    public List<ScSbjVo> getSubjectListByCate2(Long categoryId) {
         SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
         List<SubjectEntity> sbjEntityList = sbjtRep.findBySbjCategoryEntityOrderByNm(cateEnti);
 
         return sbjEntityList.stream().map(item -> ScSbjVo.builder()
                 .subjectId(item.getSubjectId())
                 .subjectNm(item.getNm()).build()).toList();
-    }
+//    }
 //            SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
 //
 //            MyUserDetails userDetails = facade.getLoginUser();
@@ -129,27 +129,28 @@ public class ScSbjService {
 //            return sbjEntityList.stream().map(item -> ScSbjVo.builder()
 //                    .subjectId(item.getSubjectId())
 //                    .subjectNm(item.getNm()).build()).toList();
-//    }
+    }
 
-//public Map<Integer, List<ScSbjVo>> getSubjectListByCateAndGrade(Long categoryId) {
-//    SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
-//    MyUserDetails userDetails = facade.getLoginUser();
-//    Long loggedInSchoolId = userDetails.getSchoolId();
-//
-//    Map<Integer, List<ScSbjVo>> resultMap = new HashMap<>();
-//
-//    for (int grade = 1; grade <= 3; grade++) {
-//        List<SubjectEntity> sbjEntityList = sbjtRep.findSubjectsNotInScSbjByCategoryAndSchoolIdAndGrade(cateEnti, loggedInSchoolId, String.valueOf(grade));
-//        List<ScSbjVo> voList = sbjEntityList.stream().map(item -> ScSbjVo.builder()
-//                .subjectId(item.getSubjectId())
-//                .subjectNm(item.getNm())
-//                .build()).collect(Collectors.toList());
-//
-//        resultMap.put(grade, voList);
-//    }
 
-//    return resultMap;
-//}
+public Map<Integer, List<ScSbjVo>> getSubjectListByCateAndGrade(Long categoryId) {
+    SbjCategoryEntity cateEnti = cateRep.findById(categoryId).get();
+    MyUserDetails userDetails = facade.getLoginUser();
+    Long loggedInSchoolId = userDetails.getSchoolId();
+
+    Map<Integer, List<ScSbjVo>> resultMap = new HashMap<>();
+
+    for (int grade = 1; grade <= 3; grade++) {
+        List<SubjectEntity> sbjEntityList = sbjtRep.findSubjectsNotInScSbjByCategoryAndSchoolIdAndGrade(cateEnti, loggedInSchoolId, String.valueOf(grade));
+        List<ScSbjVo> voList = sbjEntityList.stream().map(item -> ScSbjVo.builder()
+                .subjectId(item.getSubjectId())
+                .subjectNm(item.getNm())
+                .build()).collect(Collectors.toList());
+
+        resultMap.put(grade, voList);
+    }
+
+    return resultMap;
+}
     public List<ScSbjListVo2> updSubjectsBySchoolAndGrade(List<SbjDto> dto, int grade) {
         List<ScSbjEntity> midResult = new ArrayList<>();
         List<ScSbjListVo2> finResult = new ArrayList<>();

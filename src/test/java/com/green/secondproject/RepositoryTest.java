@@ -6,6 +6,7 @@ import com.green.secondproject.common.config.security.PasswordEncoderConfigurati
 import com.green.secondproject.common.config.security.model.RoleType;
 import com.green.secondproject.common.entity.*;
 import com.green.secondproject.common.repository.*;
+import com.green.secondproject.common.utils.MyGradeGraphUtils;
 import com.green.secondproject.student.model.StudentAcaResultWithIdVo;
 import com.green.secondproject.student.model.StudentAcaResultsParam;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +25,8 @@ import java.util.List;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-//@ActiveProfiles("test")
-@Import({PasswordEncoderConfiguration.class, QueryDslConfig.class})
+@ActiveProfiles("test")
+@Import({PasswordEncoderConfiguration.class, QueryDslConfig.class, MyGradeGraphUtils.class})
 @Slf4j
 @Rollback(value = false)
 public class RepositoryTest {
@@ -194,10 +195,10 @@ public class RepositoryTest {
     }
     @Test
     void 내신성적_등록() {
-        final long schoolId = 70L; // 청구고(3), 계성고(70)
-        final String grade = "1";
-        final String year = "2022";
-        long subjectId = 1L; // 화언(1), 공통수학1(126), 공통영어1(140), 한국사1(10)
+        final long schoolId = 3; // 청구고(3), 계성고(70)
+        final String grade = "3";
+        final String year = "2023";
+        long subjectId = 15L; // 화언(1), 공통수학1(126), 공통영어1(140), 한국사1(10), 물리학(29)
         final int semester = 2;
         final int midFinal = 1;
 
@@ -205,76 +206,65 @@ public class RepositoryTest {
                 SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
         List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-                case 1 -> subjectId = 126L;
-                case 2 -> subjectId = 140L;
-                case 3 -> subjectId = 10L;
-            }
+        for (int i = 0; i < 1; i++) {
+//            switch (i) {
+//                case 1 -> subjectId = 132L;
+//                case 2 -> subjectId = 19L;
+//                case 3 -> subjectId = 85L;
+//                case 4 -> subjectId = 144L;
+//                case 5 -> subjectId = 3L;
+//                case 6 -> subjectId = 35L;
+//                case 7 -> subjectId = 153L;
+//            }
             for (UserEntity entity : stdList) {
-                acaRepository.save(AcaResultEntity.builder()
-                        .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
-                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-                        .year(year)
-                        .midFinal(midFinal)
-                        .score((int) (Math.random() * 101))
-                        .semester(semester)
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build());
+                if (entity.getVanEntity().getVanId() != 89) {
+                    acaRepository.save(AcaResultEntity.builder()
+                            .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                            .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                            .year(year)
+                            .midFinal(midFinal)
+                            .score((int) (Math.random() * 101))
+                            .semester(semester)
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .build());
+                }
             }
         }
-//        for (long classNum = 2; classNum <= 10; classNum++) {
-//            long startIdx = (classNum - 1) * 20 + 2;
-//            long endIdx = startIdx + 19;
-//
-//            for (long i = startIdx; i <= endIdx; i++) {
-//                acaRepository.save(AcaResultEntity.builder()
-//                        .userEntity(UserEntity.builder().userId(i).build())
-//                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-//                        .year(year)
-//                        .midFinal(midFinal)
-//                        .score((int)(Math.random() * 101))
-//                        .semester(semester)
-//                        .createdAt(LocalDateTime.now())
-//                        .updatedAt(LocalDateTime.now())
-//                        .build());
-//            }
-//        }
     }
     @Test
-    void 모의고사_성적_등록() {
-        final long schoolId = 70L; // 청구고(3), 계성고(70)
-        final String grade = "1";
-        final String year = "2022";
-        final String mon = "3";
-        long subjectId = 4L; // 국어(4), 수학(5), 영어(7), 한국사(9)
+        void 모의고사_성적_등록() {
+            final long schoolId = 70L; // 청구고(3), 계성고(70)
+            final String grade = "1";
+            final String year = "2022";
+            final String mon = "3";
+            long subjectId = 4L; // 국어(4), 수학(5), 영어(7), 한국사(9)
 
-        List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
-                SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
-        List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
+            List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
+                    SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
+            List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-                case 1 -> subjectId = 5L;
-                case 2 -> subjectId = 7L;
-                case 3 -> subjectId = 9L;
+            for (int i = 0; i < 4; i++) {
+                switch (i) {
+                    case 1 -> subjectId = 5L;
+                    case 2 -> subjectId = 7L;
+                    case 3 -> subjectId = 9L;
+                }
+
+                for (UserEntity entity : stdList) {
+                    mockResultRepository.save(MockResultEntity.builder()
+                            .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
+                            .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
+                            .year(year)
+                            .mon(mon)
+                            .standardScore((int)(Math.random() * 201))
+                            .rating((int)(Math.random() * 9) + 1)
+                            .percent((int)(Math.random() * 101))
+                            .createdAt(LocalDateTime.now())
+                            .updatedAt(LocalDateTime.now())
+                            .build());
+                }
             }
-
-            for (UserEntity entity : stdList) {
-                mockResultRepository.save(MockResultEntity.builder()
-                        .userEntity(UserEntity.builder().userId(entity.getUserId()).build())
-                        .subjectEntity(SubjectEntity.builder().subjectId(subjectId).build())
-                        .year(year)
-                        .mon(mon)
-                        .standardScore((int)(Math.random() * 201))
-                        .rating((int)(Math.random() * 9) + 1)
-                        .percent((int)(Math.random() * 101))
-                        .createdAt(LocalDateTime.now())
-                        .updatedAt(LocalDateTime.now())
-                        .build());
-            }
-        }
     }
     @Test
     void 학생_등록() {
