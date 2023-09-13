@@ -198,24 +198,31 @@ public class RepositoryTest {
         final long schoolId = 3; // 청구고(3), 계성고(70)
         final String grade = "3";
         final String year = "2023";
-        long subjectId = 15L; // 화언(1), 공통수학1(126), 공통영어1(140), 한국사1(10), 물리학(29)
-        final int semester = 2;
-        final int midFinal = 1;
+        //long subjectId = 0;
+        final int semester = 1;
+        final int midFinal = 2;
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
                 SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");
         List<UserEntity> stdList = userRepository.findAllByVanEntityInAndRoleType(vanList, RoleType.STD);
 
-        for (int i = 0; i < 1; i++) {
-//            switch (i) {
-//                case 1 -> subjectId = 132L;
-//                case 2 -> subjectId = 19L;
-//                case 3 -> subjectId = 85L;
-//                case 4 -> subjectId = 144L;
-//                case 5 -> subjectId = 3L;
-//                case 6 -> subjectId = 35L;
-//                case 7 -> subjectId = 153L;
-//            }
+        for (int i = 0; i < 9; i++) {
+            // 화언(1), 공통수학1(126), 공통영어1(140), 한국사1(10)
+            // 물리학(29), 미적분2(132), 동아시아 역사기행(19), 일본어(85), 영어2(144), 문학(3), 지구과학(35), 한국사2(153)
+            // 경제(23), 한국사1(10), 영어1(143), 미적분1(129), 법과 사회(158), 중국어(84), 화학(31), 생명과학(33)
+            long subjectId = switch (i) {
+                case 0 -> 23L;
+                case 1 -> 10L;
+                case 2 -> 3L;
+                case 3 -> 143L;
+                case 4 -> 129L;
+                case 5 -> 158L;
+                case 6 -> 84L;
+                case 7 -> 31L;
+                case 8 -> 33L;
+                default -> throw new IllegalStateException("Unexpected value: " + i);
+            };
+
             for (UserEntity entity : stdList) {
                 if (entity.getVanEntity().getVanId() != 89) {
                     acaRepository.save(AcaResultEntity.builder()

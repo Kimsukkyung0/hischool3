@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.09b82e3a.css",
-    "main.js": "/static/js/main.ac5c6325.js",
+    "main.js": "/static/js/main.f82a1bd1.js",
     "static/media/developer1.png": "/static/media/developer1.ce02c538e3ffd913d34c.png",
     "static/media/developer2.png": "/static/media/developer2.41021d7a170952deee93.png",
     "static/media/developer4.png": "/static/media/developer4.f1423f16863a46a90ed4.png",
@@ -15,10 +15,10 @@
     "static/media/Notion-logo.png": "/static/media/Notion-logo.31e84c09e902dcdc05dd.png",
     "index.html": "/index.html",
     "main.09b82e3a.css.map": "/static/css/main.09b82e3a.css.map",
-    "main.ac5c6325.js.map": "/static/js/main.ac5c6325.js.map"
+    "main.f82a1bd1.js.map": "/static/js/main.f82a1bd1.js.map"
   },
   "entrypoints": [
     "static/css/main.09b82e3a.css",
-    "static/js/main.ac5c6325.js"
+    "static/js/main.f82a1bd1.js"
   ]
 }
