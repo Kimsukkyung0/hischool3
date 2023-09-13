@@ -199,7 +199,7 @@ public class TeacherController {
     }
 
     @GetMapping("/subject/mock-graph")
-    @Operation(summary = "6월 모의고사 성적조회",
+    @Operation(summary = "9월 모의고사 성적조회",
             description = "nm - 과목이름<br>"+
                     "rating - 등급" +
                     "ratio - 등급별 인원 퍼센트(100%기준)")
