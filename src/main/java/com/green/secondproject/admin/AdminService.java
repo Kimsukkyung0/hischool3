@@ -205,6 +205,7 @@ public class AdminService {
                 result.add(StudentClassVo.builder()
                         .userId(entity.getUserId())
                         .schoolId(userSchool.getSchoolId())
+                        .birth(entity.getBirth())
                         .nm(entity.getNm())
                         .email(entity.getEmail())
                         .phone(entity.getPhone())
@@ -256,10 +257,7 @@ public class AdminService {
 
     public UserStateUpdVo updUserState(UserStateUpdDto dto) {
         Long schoolId = facade.getLoginUser().getSchoolId();
-//        Optional<UserEntity> optEntity = userRepository.findById(dto.getUserId());
-//        long userId = dto.getUserId();
         int grade = dto.getGrade();
-
 
         Optional<UserEntity> stdEntiOpt = userRepository.findById(dto.getUserId());
         Optional<SchoolEntity> scEntiOpt = Optional.ofNullable(stdEntiOpt.get().getVanEntity().getSchoolEntity());
@@ -272,18 +270,14 @@ public class AdminService {
 
         //관리자로그인 확인
         if (!scAdminEntiOpt.get().getSchoolEntity().getSchoolId().equals(schoolId)) {
-
             throw new RuntimeException("해당학교 소속 관리자 로그인 필요");
-
         } else if (stdEntiOpt.isEmpty() || stdEntiOpt.get().getRoleType().equals(RoleType.TC)) {
-
             throw new RuntimeException("수정대상 유저가 아닙니다");
-
         } else if (grade >= 0 && grade <= 3) { //입력된 학년 값이 0에서 3학년일 경우 이 구문이 실행됨
 
 
             //case 1: 0반이고 학교에 0반이 없을 경우
-            //case 2: 0반이고 학교에 0반이 있 경우
+            //case 2: 0반이고 학교에 0반이 있을 경우
             if (grade == 0) {
                 VanEntity vanEnti = vanRepository.findByGradeAndSchoolEntity(String.valueOf(grade), scEntiOpt.get());
                 if (vanEnti == null) {

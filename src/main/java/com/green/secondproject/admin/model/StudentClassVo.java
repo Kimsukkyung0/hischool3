@@ -5,6 +5,8 @@ import com.green.secondproject.common.config.etc.EnrollState;
 import com.green.secondproject.common.entity.SchoolEntity;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class StudentClassVo {
     private long userId;
     private Long schoolId;
+    private LocalDate birth;
     private String nm;
     private String email;
     private String phone;

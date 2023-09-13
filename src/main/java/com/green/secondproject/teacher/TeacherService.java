@@ -93,7 +93,6 @@ public class TeacherService {
         if (user.isEmpty()) {
             throw new RuntimeException("해당하는 학생이 없습니다.");
         }
-
         UserEntity userEntity = user.get();
         userEntity.setAprYn(1);
         userRepository.save(userEntity);
