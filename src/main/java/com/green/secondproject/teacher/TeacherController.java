@@ -245,7 +245,7 @@ public class TeacherController {
             semester : 학기<br>
             midFinal : 중간(1), 기말(2)
             """)
-    public int calcRank(@RequestBody CalcClassRankParam p) {
+    public double calcRank(@RequestBody CalcClassRankParam p) {
         return service.calcRank(p);
     }
 

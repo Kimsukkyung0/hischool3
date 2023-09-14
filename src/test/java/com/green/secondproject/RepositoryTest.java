@@ -200,7 +200,7 @@ public class RepositoryTest {
         final String year = "2023";
         //long subjectId = 0;
         final int semester = 1;
-        final int midFinal = 2;
+        final int midFinal = 1;
 
         List<VanEntity> vanList = vanRepository.findAllBySchoolEntityAndGradeAndYear(
                 SchoolEntity.builder().schoolId(schoolId).build(), grade, "2023");

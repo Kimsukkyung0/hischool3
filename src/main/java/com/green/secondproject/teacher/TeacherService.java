@@ -27,6 +27,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -502,7 +503,9 @@ public class TeacherService {
 //        return mapper.acasubject(list);
     }
 
-    public int calcRank(CalcClassRankParam p) {
+    public double calcRank(CalcClassRankParam p) {
+        long start = System.currentTimeMillis();
+
         String year = String.valueOf(LocalDate.now().getYear());
         MyUserDetails user = facade.getLoginUser();
 
@@ -510,13 +513,14 @@ public class TeacherService {
         p.setYear(year);
         acaResultMapper.calcClassRank(p);
 
-        return acaResultMapper.calcWholeRankAndRating(CalcWholeRankParam.builder()
+        acaResultMapper.calcWholeRankAndRating(CalcWholeRankParam.builder()
                 .semester(p.getSemester())
                 .midFinal(p.getMidFinal())
                 .year(year)
                 .schoolId(user.getSchoolId())
                 .grade(user.getGrade())
                 .build());
+        return (System.currentTimeMillis() - start) / 1000.0;
     }
 
     public List<StudentVo> getStudentList(String name) {
