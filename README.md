@@ -6,11 +6,6 @@
 
 [https://youtu.be/p0zX2h4Hq1k](https://youtu.be/p0zX2h4Hq1k)
 
-# 프로젝트 시연 영상
-(2차 - 사용자 페이지(학생/선생님)
-
-[https://youtu.be/R0n2SBrBQeA?si=Cx8AQkCY8ywQ-JLW](https://youtu.be/R0n2SBrBQeA?si=Cx8AQkCY8ywQ-JLW)
-
 # 프로젝트 개요
 
 - 고등학교 내신 성적과 모의고사 성적을 간편하게 관리할 수는 없을까?
@@ -55,9 +50,38 @@
 ### Back-End
 
 <aside>
+💁‍♀️ **석민경(총괄 팀장(3차), BE 팀장(3차))**
+
+<div>
+<a href="https://github.com/Kimsukkyung0">
+<img src="https://user-images.githubusercontent.com/118950642/269913308-c54f1133-7d5c-45c2-ba3b-ce78abcd3732.png" width="120px" height="120px">
+</a>
+</div>
+
+**Project**
+PPT작업
+회의록 작성(3차)
+요구사항명세서 작성
+
+**Pages**
+API 시간표, 급식표
+선생님 및 학생 성적관리
+내신/모의고사 점수
+관리자 교원관리
+관리자 과목관리
+
+📩 [Email](mailto:smk93021@gmail.com)  🔗 [GitHub](https://github.com/Kimsukkyung0) 
+
+</aside>
+
+<aside>
 💁‍♂️ **남규진**
 
-![developer5.png](Hi!School%20bda01938369343ef83967c966a44a6c9/developer5.png)
+<div>
+<a href="https://github.com/Minami0717">
+<img src="https://user-images.githubusercontent.com/118950642/269913315-d43fdce1-5a44-49b3-9350-ad3f2bafcb04.png" width="120px" height="120px">
+</a>
+</div>
 
 **Project**
 요구사항 명세서 작성
@@ -77,7 +101,11 @@ Spring Security, JWT 적용
 <aside>
 💁‍♂️ **노정민**
 
-![developer6.png](Hi!School%20bda01938369343ef83967c966a44a6c9/developer6.png)
+<div>
+<a href="https://github.com/Junggggggggmin">
+<img src="https://user-images.githubusercontent.com/118950642/269913319-eb923a6f-c367-4a46-9475-0461d6d68bf9.png" width="120px" height="120px">
+</a>
+</div>
 
 **Project**
 Notion, Slack 관리
@@ -119,26 +147,5 @@ BE GitHub 관리
 공지사항
 
 📩 [Email](mailto:3598ysm@gmail.com)  🔗 [GitHub](https://github.com/sucheo) 
-
-</aside>
-
-<aside>
-💁‍♀️ **석민경(총괄 팀장(3차), BE 팀장(3차))**
-
-![developer7.png](Hi!School%20bda01938369343ef83967c966a44a6c9/developer7.png)
-
-**Project**
-PPT작업
-회의록 작성(3차)
-요구사항명세서 작성
-
-**Pages**
-API 시간표, 급식표
-선생님 및 학생 성적관리
-내신/모의고사 점수
-관리자 교원관리
-관리자 과목관리
-
-📩 [Email](mailto:smk93021@gmail.com)  🔗 [GitHub](https://github.com/Kimsukkyung0) 
 
 </aside>
