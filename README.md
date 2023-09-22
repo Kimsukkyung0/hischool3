@@ -98,7 +98,9 @@ Notion, Slack 관리
 <aside>
 💁‍♂️ **성수천(BE 팀장(2차))**
 
-![developer4](https://github.com/Kimsukkyung0/hischool3/assets/118950642/c09a4fe3-397f-4f26-bf79-c1c89293d6e5)
+<a href="https://github.com/sucheo">
+<img src="/src/assets/developer4.png" width="120px" height="120px">
+</a>
 
 **Project**
 BE GitHub 관리
