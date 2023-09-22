@@ -98,9 +98,11 @@ Notion, Slack 관리
 <aside>
 💁‍♂️ **성수천(BE 팀장(2차))**
 
+<div>
 <a href="https://github.com/sucheo">
 <img src="https://user-images.githubusercontent.com/118950642/269913164-c09a4fe3-397f-4f26-bf79-c1c89293d6e5.png" width="120px" height="120px">
 </a>
+</div>
 
 **Project**
 BE GitHub 관리
