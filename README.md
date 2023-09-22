@@ -98,7 +98,7 @@ Notion, Slack 관리
 <aside>
 💁‍♂️ **성수천(BE 팀장(2차))**
 
-![developer4.png](Hi!School%20bda01938369343ef83967c966a44a6c9/developer4.png)
+![developer4](https://github.com/Kimsukkyung0/hischool3/assets/118950642/c09a4fe3-397f-4f26-bf79-c1c89293d6e5)
 
 **Project**
 BE GitHub 관리
