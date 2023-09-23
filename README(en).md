@@ -214,5 +214,5 @@ This project is developed by 2times</br> duo to the curriculum including very fi
 📩 [Email](mailto:3598ysm@gmail.com)  🔗 [GitHub](https://github.com/sucheo) 
 </tr>
 </table>
-
+<img src="https://github.com/Kimsukkyung0/hischool3/assets/129349523/f59e9c8c-b9dc-47a5-8b49-2ba409bf3445" width="1500">
 
