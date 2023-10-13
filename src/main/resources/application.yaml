@@ -17,8 +17,10 @@ spring:
     password: green502
   data:
     redis:
-      host: localhost
-      port: 6379
+      # host: localhost
+      # port: 6379
+      host: svc.sel5.cloudtype.app
+      port: 32626
   jpa:
     hibernate:
       ddl-auto: update
