@@ -278,7 +278,7 @@
         INNER JOIN subject B
         ON A.subject_id = B.subject_id
         INNER JOIN sbj_category C
-        on B.category_id = c.category_id
+        on B.category_id = C.category_id
         INNER JOIN user D
         ON A.user_id = D.user_id
         WHERE D.van_id = #{vanId} and B.category_id = #{categoryId}
