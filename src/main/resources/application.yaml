@@ -5,6 +5,8 @@ springboot:
     header-scheme-name: authorization
     token-type: Bearer
 spring:
+  profiles:
+    active: ${PROFILE}
   servlet:
     multipart:
       max-file-size: 3MB
